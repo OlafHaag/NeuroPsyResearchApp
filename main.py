@@ -320,12 +320,17 @@ class UCMManager(ScreenManager):
     
 class SettingsContainer(Widget):
     user = ConfigParserProperty('0', 'UserData', 'unique_id', 'app', val_type=str)
-    n_trials = ConfigParserProperty('20', 'CircleTask', 'n_trials', 'app', val_type=int)
-    n_blocks = ConfigParserProperty('3', 'CircleTask', 'n_blocks', 'app', val_type=int)
+    n_trials = ConfigParserProperty('20', 'CircleTask', 'n_trials', 'app', val_type=int,
+                                    verify=lambda x: x > 0, errorvalue=20)
+    n_blocks = ConfigParserProperty('3', 'CircleTask', 'n_blocks', 'app', val_type=int,
+                                    verify=lambda x: x > 0, errorvalue=3)
     constrained_block = ConfigParserProperty('3', 'CircleTask', 'constrained_block', 'app', val_type=int)
-    warm_up = ConfigParserProperty('1.0', 'CircleTask', 'warm_up_time', 'app', val_type=float)
-    trial_duration = ConfigParserProperty('1.0', 'CircleTask', 'trial_duration', 'app', val_type=float)
-    cool_down = ConfigParserProperty('0.5', 'CircleTask', 'cool_down_time', 'app', val_type=float)
+    warm_up = ConfigParserProperty('1.0', 'CircleTask', 'warm_up_time', 'app', val_type=float,
+                                   verify=lambda x: x > 0.0, errorvalue=1.0)
+    trial_duration = ConfigParserProperty('1.0', 'CircleTask', 'trial_duration', 'app', val_type=float,
+                                          verify=lambda x: x > 0.0, errorvalue=1.0)
+    cool_down = ConfigParserProperty('0.5', 'CircleTask', 'cool_down_time', 'app', val_type=float,
+                                     verify=lambda x: x > 0.0, errorvalue=0.5)
 
     def __init__(self, **kwargs):
         super(SettingsContainer, self).__init__(**kwargs)
@@ -405,7 +410,7 @@ class UncontrolledManifoldApp(App):
             if not self.write_permit:
                 request_permissions([Permission.WRITE_EXTERNAL_STORAGE])
             
-            # FixMe: wait until permission granted. Popup?
+            # FixMe: wait until permission granted.
             self.write_permit = check_permission(Permission.WRITE_EXTERNAL_STORAGE)
             if not dest.exists() and self.write_permit:
                 # Make sure the path exists.

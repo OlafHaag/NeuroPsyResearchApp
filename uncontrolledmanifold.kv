@@ -1,0 +1,178 @@
+#:kivy 1.10.1
+
+<UCMManager>:
+    settings: app.settings
+    ScreenHome:
+    ScreenInstruct:
+    ScreenCircleTask:
+    ScreenOutro:
+
+<ScreenHome>:
+    name: 'Home'
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            text: root.home_msg
+            markup: True
+            text_size: root.width, None
+            size: self.texture_size
+            halign: 'center'
+            valign: 'middle'
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 0.2
+            Button:
+                text: "Settings"
+                on_release:
+                    root.manager.transition.direction = 'up'
+                    root.manager.transition.duration = 0.5
+                    app.open_settings()
+            Button:
+                text: "Next"
+                on_release:
+                    root.manager.transition.direction = 'up'
+                    root.manager.transition.duration = 0.5
+                    root.manager.current = 'Instructions'
+
+<ScreenInstruct>:
+    name: 'Instructions'
+    settings: app.settings
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            text: root.instruction_msg
+            markup: True
+            text_size: root.width, None
+            size: self.texture_size
+            halign: 'center'
+            valign: 'middle'
+        Button:
+            id: ok_btn
+            text: "Start"
+            size_hint_y: 0.2
+            on_release:
+                root.manager.transition.direction = 'up'
+                root.manager.transition.duration = 0.5
+                root.manager.current = 'Circle Task'
+
+<ScreenCircleTask>:
+    name: 'Circle Task'
+    count_down: anim_label
+    settings: app.settings
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.1
+
+            #Label:
+            #    text: 'df2 = {}'.format(df2.value)
+            #    size_hint_x: None
+            #    size_hint_y: 0.1
+            #    size: self.texture_size
+            #    pos_hint: {'left': 1}
+
+            ScaleSlider:
+                id: df2
+                min: 0
+                max: 100
+                value: self.max * 0.1
+                orientation: 'vertical'
+                cursor_size: [sp(64)]*2
+                sensitivity: 'handle'
+                #on_release: pass
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.15
+
+            #Label:
+            #    text: 'df1 = {}'.format(df1.value)
+
+            ScaleSlider:
+                id: df1
+                min: 0
+                max: 100
+                value: self.max * 0.1
+                orientation: 'horizontal'
+                cursor_size: [sp(64)]*2
+                sensitivity: 'handle'
+                #on_release: print(f"released {root}")
+
+    FloatLayout:
+        canvas:
+            Color:
+                rgb: 1, 1, 1
+            Ellipse:
+                size: [(df1.value_normalized + df2.value_normalized) * min(self.width, self.height) * 0.4] * 2
+                pos:
+                    [self.center_x - (df1.value_normalized + df2.value_normalized) * min(self.width, self.height) * 0.2,
+                    self.center_y - (df1.value_normalized + df2.value_normalized) * min(self.width, self.height) * 0.2]
+
+    FloatLayout:
+        canvas:
+            Color:
+                rgba: 0, 0.5, 0, .9
+            Line:
+                width: 2.
+                circle: self.center_x, self.center_y, min(self.width, self.height) * 0.25
+
+    CountDownLbl:
+        id: anim_label
+        text: str(int(self.start_count - (self.angle*self.start_count//360)))
+        font_size: 50
+        color: [1, 0, 1, 1]
+        canvas:
+            Color:
+                rgba: 0.3, 0, 0.3, 0.7
+            Line:
+                circle: self.center_x, self.center_y, min(self.width, self.height) * 0.4, 0, self.angle % 360
+                width: 5
+
+    BoxLayout:
+        AnchorLayout:
+            anchor_x: 'right'
+            anchor_y: 'top'
+            Label:
+                text: root.progress
+                text_size: root.width, None
+                size: self.texture_size
+                halign: 'right'
+                valign: 'middle'
+                size_hint: None, None
+
+    #Debug
+    #FloatLayout:
+    #    Label:
+    #        text: 'Radius = {}'.format(df1.value_normalized + df2.value_normalized)
+    #        pos_hint: {'right': 1}
+    #        color: [0, 1, 1, 1]
+
+<ScreenOutro>:
+    name: 'Outro'
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            text: root.outro_msg
+            markup: True
+            text_size: root.width, None
+            size: self.texture_size
+            halign: 'center'
+            valign: 'middle'
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 0.2
+            Button:
+                text: "Home"
+                on_release:
+                    app.settings.reset_current()
+                    root.manager.go_home()
+            Button:
+                text: "Quit"
+                on_release: root.manager.quit()

@@ -114,6 +114,7 @@
                     [self.center_x - (df1.value_normalized + df2.value_normalized) * min(self.width, self.height) * 0.2,
                     self.center_y - (df1.value_normalized + df2.value_normalized) * min(self.width, self.height) * 0.2]
 
+    # Goal Circle Task
     FloatLayout:
         canvas:
             Color:
@@ -121,6 +122,17 @@
             Line:
                 width: 2.
                 circle: self.center_x, self.center_y, min(self.width, self.height) * 0.25
+
+    # Goal Circle Task constrained
+    FloatLayout:
+        opacity: int(root.is_constrained)
+        canvas:
+            Color:
+                rgb: 1, 0, 1
+            Line:
+                width: 2.
+                # Todo: Find less visually overloaded representation.
+                points: self.center_x, self.center_y, self.center_x + int(not root.is_target2_up) * min(self.width, self.height) * 0.25 * df1.value_normalized, self.center_y + int(root.is_target2_up) * min(self.width, self.height) * 0.25 * df2.value_normalized
 
     CountDownLbl:
         id: anim_label

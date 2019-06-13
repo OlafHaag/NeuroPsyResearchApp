@@ -13,7 +13,7 @@ from kivy.uix.settings import SettingsWithSpinner
 from kivy.uix.label import Label
 from kivy.uix.slider import Slider
 from kivy.uix.widget import Widget
-from kivy.properties import ObjectProperty, NumericProperty, StringProperty
+from kivy.properties import ObjectProperty, NumericProperty, StringProperty, BooleanProperty
 from kivy.properties import ConfigParserProperty
 from kivy.animation import Animation
 from kivy.clock import Clock
@@ -45,7 +45,7 @@ class ScreenOutro(Screen):
     """ Display that gives general information. """
     outro_msg = StringProperty('[color=ff00ff][b]Thank you[/b][/color] for participating!\n')  # Todo: Outro Information
     
-    def on_kv_post(self, base_widget):
+    def on_pre_enter(self, *args):
         dest = App.get_running_app().get_data_path()
         self.outro_msg += "\nFiles were {1}saved to {0}".format(dest, "" if dest.exists() else "[b]not[/b] ")
 
@@ -62,26 +62,18 @@ class ScreenInstruct(Screen):
         
     def on_pre_enter(self, *args):
         self.update_messages()
-        self.set_constraint_setting()
         self.set_instruction_msg()
     
     def update_messages(self):
         self.df_unconstraint_msg = "Use the [b]2 sliders[/b] to match the size of the [b]white circle[/b] to the " \
                                    "[color=008000]green ring[/color].\n You have time to do so until the the outer " \
                                    "[color=ff00ff]purple ring[/color] reaches 100% (closed circle) and the countdown " \
-                                   "reaches 0.\n The next trial will begin shortly thereafter.\n" \
-                                   "There are a total of {} trials in this block.".format(self.settings.n_trials)
+                                   "reaches 0.\n Shortly thereafter you will be notified about the imminent start of " \
+                                   "the next trial.\n There are a total of {} trials in this block.".format(
+                                    self.settings.n_trials)
         # Todo: Text for constraint task.
-        self.df_constraint_msg = "Not implemented yet.\n Still same task.\n" \
-                                 "There are a total of {} trials in this block.".format(self.settings.n_trials)
+        self.df_constraint_msg = "Additional task, not sure how exactly yet.\n\n".format(self.settings.n_trials) + self.df_unconstraint_msg
             
-    def set_constraint_setting(self):
-        if self.settings.current_block == self.settings.constrained_block:
-            self.settings.constraint = True
-            # Todo: if self.settings.constraint: constrain task
-        else:
-            self.settings.constraint = False
-        
     def set_instruction_msg(self):
         """ Change displayed text on instruction screen. """
         if self.settings.constraint:
@@ -94,9 +86,11 @@ class ScreenCircleTask(Screen):
     """ This class handles all the logic for the circle size matching task. """
     settings = ObjectProperty()
     progress = StringProperty("Trial: 0/0")
+    is_constrained = BooleanProperty(False)  # Workaround, since self.settings.constraint doesn't seem to exist at init.
     
     def __init__(self, **kwargs):
         super(ScreenCircleTask, self).__init__(**kwargs)
+        self.is_target2_up = False
         self.register_event_type('on_task_stopped')
         self.schedule = None
         self.df1_touch = None
@@ -110,6 +104,18 @@ class ScreenCircleTask(Screen):
         self.ids.df1.bind(on_grab=self.slider_grab)
         self.ids.df2.bind(on_grab=self.slider_grab)
         # todo: save screen size/resolution, initial circle/ring size, slider size and slider value to file
+    
+    def on_pre_enter(self, *args):
+        self.is_constrained = self.settings.constraint
+        # Direction of 2nd target line chosen randomly between up and right.
+        self.is_target2_up = np.random.choice([True, False])
+        self.data = np.zeros((self.settings.n_trials, 2))
+        # FixMe: Not loading sound files on Windows. (Unable to find a loader)
+        self.sound_start = SoundLoader.load('res/start.ogg')
+        self.sound_stop = SoundLoader.load('res/stop.ogg')
+        self.count_down.start_count = self.settings.trial_duration
+        self.count_down.set_label("PREPARE")
+        self.start_task()
     
     # FixMe: only last touch ungrabbed, ungrab all lingering touches!
     def slider_grab(self, instance, touch):
@@ -136,15 +142,6 @@ class ScreenCircleTask(Screen):
     def reset_sliders(self):
         self.ids.df1.value = self.ids.df1.max * 0.1
         self.ids.df2.value = self.ids.df2.max * 0.1
-    
-    def on_pre_enter(self, *args):
-        self.data = np.zeros((self.settings.n_trials, 2))
-        # FixMe: Not loading sound files on Windows.
-        self.sound_start = SoundLoader.load('res/start.ogg')
-        self.sound_stop = SoundLoader.load('res/stop.ogg')
-        self.count_down.start_count = self.settings.trial_duration
-        self.count_down.set_label("PREPARE")
-        self.start_task()
     
     def start_task(self):
         self.disable_sliders()
@@ -198,6 +195,16 @@ class ScreenCircleTask(Screen):
             self.write_data()
             self.dispatch("on_task_stopped")
         
+    def on_task_stopped(self):
+        pass
+        
+    def release_audio(self):
+        for sound in [self.sound_start, self.sound_stop]:
+            if sound:
+                sound.stop()
+                sound.unload()
+                sound = None
+    
     def write_data(self):
         # Save endpoint values in app.user_data_dir with unique file name.
         t = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
@@ -209,16 +216,6 @@ class ScreenCircleTask(Screen):
         dest = app.get_data_path()
         if self.data is not None and app.write_permit:
             np.savetxt(dest / file_name, self.data*100, fmt='%10.5f', delimiter=",", header="df1, df2", comments='')
-        
-    def on_task_stopped(self):
-        pass
-    
-    def release_audio(self):
-        for sound in [self.sound_start, self.sound_stop]:
-            if sound:
-                sound.stop()
-                sound.unload()
-                sound = None
 
 
 class ScaleSlider(Slider):
@@ -307,6 +304,7 @@ class UCMManager(ScreenManager):
         
     def task_finished(self):
         self.settings.next_block()
+        self.settings.set_constraint_setting()
         # Outro after last block.
         if self.settings.current_block > self.settings.n_blocks:
             self.current = 'Outro'
@@ -331,19 +329,22 @@ class SettingsContainer(Widget):
                                           verify=lambda x: x > 0.0, errorvalue=1.0)
     cool_down = ConfigParserProperty('0.5', 'CircleTask', 'cool_down_time', 'app', val_type=float,
                                      verify=lambda x: x > 0.0, errorvalue=0.5)
-
+    
     def __init__(self, **kwargs):
         super(SettingsContainer, self).__init__(**kwargs)
         self.reset_current()
-        
+    
     def reset_current(self):
-        self.constraint = False
         self.current_block = 1
         self.current_trial = 0
-        
+        self.set_constraint_setting()
+    
     def next_block(self):
         self.current_trial = 0
         self.current_block += 1
+    
+    def set_constraint_setting(self):
+        self.constraint = self.current_block == self.constrained_block
         
 
 class UncontrolledManifoldApp(App):

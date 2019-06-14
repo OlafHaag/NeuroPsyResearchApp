@@ -221,7 +221,7 @@ class ScreenCircleTask(Screen):
         app = App.get_running_app()
         dest = app.get_data_path()
         if self.data is not None and app.write_permit:
-            np.savetxt(dest / file_name, self.data*100, fmt='%10.5f', delimiter=",", header="df1, df2", comments='')
+            np.savetxt(dest / file_name, self.data*100, fmt='%10.5f', delimiter=",", header="df1,df2", comments='')
 
 
 class ScaleSlider(Slider):

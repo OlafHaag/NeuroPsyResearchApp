@@ -39,6 +39,11 @@ class ScreenHome(Screen):
     
     def on_pre_enter(self, *args):
         App.get_running_app().settings.reset_current()
+        
+    def on_leave(self, *args):
+        # We need to ask for write permission before trying to write, otherwise we lose data. There's no callback for
+        # permissions granted yet.
+        data_dest = App.get_running_app().get_data_path()
 
 
 class ScreenOutro(Screen):

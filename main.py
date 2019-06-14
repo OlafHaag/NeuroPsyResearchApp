@@ -65,14 +65,19 @@ class ScreenInstruct(Screen):
         self.set_instruction_msg()
     
     def update_messages(self):
-        self.df_unconstraint_msg = "Use the [b]2 sliders[/b] to match the size of the [b]white circle[/b] to the " \
-                                   "[color=008000]green ring[/color].\n You have time to do so until the the outer " \
-                                   "[color=ff00ff]purple ring[/color] reaches 100% (closed circle) and the countdown " \
-                                   "reaches 0.\n Shortly thereafter you will be notified about the imminent start of " \
-                                   "the next trial.\n There are a total of {} trials in this block.".format(
-                                    self.settings.n_trials)
-        # Todo: Text for constraint task.
-        self.df_constraint_msg = "Additional task, not sure how exactly yet.\n\n".format(self.settings.n_trials) + self.df_unconstraint_msg
+        n_trials_msg = f"There are a total of {self.settings.n_trials} trials in this block."
+        n_tasks = int(self.settings.constraint) + 1
+        task_suffix = self.settings.constraint * 's'
+        n_tasks_msg = f"You have {n_tasks} task{task_suffix} in this block.\n\n"
+        time_limit_msg = "A trial ends when the outer [color=ff00ff]purple ring[/color] reaches 100% (circle closes)"\
+                         " and the countdown reaches 0.\n Shortly thereafter you will be prompted to get ready for "\
+                         "the next trial.\n\n"
+        task1_msg = "Use the [b]2 sliders[/b] to match the size of the [b]white disk[/b] to the " \
+                    "[color=008000]green ring[/color].\n\n"
+        task2_msg = "Concurrently bring the [color=3f84f2]blue arch[/color] to the [color=3f84f2]blue disc[/color] " \
+                    f"by using one of the sliders. It will be the same slider during the block.\n\n"
+        self.df_unconstraint_msg = n_tasks_msg + task1_msg + time_limit_msg + n_trials_msg
+        self.df_constraint_msg = n_tasks_msg + task1_msg + task2_msg + time_limit_msg + n_trials_msg
             
     def set_instruction_msg(self):
         """ Change displayed text on instruction screen. """
@@ -90,7 +95,7 @@ class ScreenCircleTask(Screen):
     
     def __init__(self, **kwargs):
         super(ScreenCircleTask, self).__init__(**kwargs)
-        self.is_target2_up = False
+        self.target2_switch = False
         self.register_event_type('on_task_stopped')
         self.schedule = None
         self.df1_touch = None
@@ -107,8 +112,8 @@ class ScreenCircleTask(Screen):
     
     def on_pre_enter(self, *args):
         self.is_constrained = self.settings.constraint
-        # Direction of 2nd target line chosen randomly between up and right.
-        self.is_target2_up = np.random.choice([True, False])
+        # df that is constrained is randomly chosen.
+        self.target2_switch = np.random.choice([True, False])
         self.data = np.zeros((self.settings.n_trials, 2))
         # FixMe: Not loading sound files on Windows. (Unable to find a loader)
         self.sound_start = SoundLoader.load('res/start.ogg')
@@ -208,9 +213,10 @@ class ScreenCircleTask(Screen):
     def write_data(self):
         # Save endpoint values in app.user_data_dir with unique file name.
         t = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        constrained_df = "cosntrained_df2" if self.target2_switch else "constrained_df1"
         file_name = "{id}-CT-Block{block}-{type}-{time}.csv".format(id=self.settings.user,
                                                                     block=self.settings.current_block,
-                                                                    type="constrained" if self.settings.constraint else "unconstraint",
+                                                                    type=constrained_df if self.settings.constraint else "unconstraint",
                                                                     time=t)
         app = App.get_running_app()
         dest = app.get_data_path()

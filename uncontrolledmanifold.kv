@@ -85,7 +85,10 @@
                 max: 100
                 value: self.max * 0.1
                 orientation: 'vertical'
+                cursor_image: 'res/sliderhandle_vertical.png'
+                cursor_disabled_image: 'res/sliderhandle_vertical_disabled.png'
                 cursor_size: [sp(64)]*2
+                padding: sp(48)
                 sensitivity: 'handle'
                 #on_release: pass
 
@@ -102,7 +105,10 @@
                 max: 100
                 value: self.max * 0.1
                 orientation: 'horizontal'
+                cursor_image: 'res/sliderhandle_horizontal.png'
+                cursor_disabled_image: 'res/sliderhandle_horizontal_disabled.png'
                 cursor_size: [sp(64)]*2
+                padding: sp(32)
                 sensitivity: 'handle'
                 #on_release: print(f"released {root}")
 

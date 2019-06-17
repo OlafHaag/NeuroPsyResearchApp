@@ -9,17 +9,27 @@
 
 <ScreenHome>:
     name: 'Home'
+    on_leave: home_scroll.scroll_y = 1
+
     BoxLayout:
         orientation: 'vertical'
 
-        Label:
-            text: root.home_msg
-            markup: True
-            text_size: root.width, None
-            font_size: sp(24)
-            size: self.texture_size
-            halign: 'center'
-            valign: 'middle'
+        ScrollView:
+            id: home_scroll
+            do_scroll_x: False
+            do_scroll_y: True
+
+            Label:
+                text: root.home_msg
+                markup: True
+                text_size: root.width, None
+                font_size: sp(24)
+                size: self.texture_size
+                size_hint_y: None
+                padding: 10, 10
+                halign: 'center'
+                valign: 'middle'
+
         BoxLayout:
             orientation: 'horizontal'
             size_hint_y: 0.2
@@ -39,20 +49,27 @@
 <ScreenInstruct>:
     name: 'Instructions'
     settings: app.settings
+    on_leave: instruct_scroll.scroll_y = 1
 
     BoxLayout:
         orientation: 'vertical'
-        # Todo: scrollable text.
-        Label:
-            text: root.instruction_msg
-            markup: True
-            text_size: root.width, None
-            font_size: sp(24)
-            size: self.texture_size
-            halign: 'center'
-            valign: 'middle'
+
+        ScrollView:
+            id: instruct_scroll
+            do_scroll_x: False
+            do_scroll_y: True
+
+            Label:
+                text: root.instruction_msg
+                markup: True
+                text_size: root.width, None
+                font_size: sp(24)
+                size: self.texture_size
+                size_hint_y: None
+                padding: 10, 10
+                halign: 'center'
+                valign: 'middle'
         Button:
-            id: ok_btn
             text: _("Start")
             size_hint_y: 0.2
             on_release:

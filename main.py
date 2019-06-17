@@ -2,6 +2,7 @@
 Research app to study uncontrolled manifold and optimal feedback control paradigms.
 """
 
+import json
 from pathlib import Path
 from datetime import datetime
 from hashlib import md5
@@ -9,7 +10,6 @@ from hashlib import md5
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.uix.settings import SettingsWithSpinner
 from kivy.uix.label import Label
 from kivy.uix.slider import Slider
 from kivy.uix.widget import Widget
@@ -19,6 +19,7 @@ from kivy.animation import Animation
 from kivy.clock import Clock
 from kivy.core.audio import SoundLoader
 from kivy.utils import platform
+from kivy.lang import global_idmap
 
 from plyer import vibrator
 from plyer import uniqueid
@@ -28,17 +29,26 @@ from plyer import notification
 import numpy as np
 
 from settingsjson import settings_json
+from i18n import _, list_languages, change_language_to, current_language, language_code_to_translation
+from i18n.settings import Settings
 
 if platform == 'android':
     from android.permissions import request_permissions, check_permission, Permission
 
+# i18n
+LANGUAGE_CODE = "language"
+LANGUAGE_SECTION = "Localization"
+global_idmap['_'] = _
+
 
 class ScreenHome(Screen):
     """ Display that gives general information. """
-    home_msg = StringProperty('[color=ff00ff][b]Hello![/b][/color]')  # Todo: General Information
+    # As a workaround for internationalization to work set actual message in on_pre_enter().
+    home_msg = StringProperty(_('Initiating...'))
     
     def on_pre_enter(self, *args):
         App.get_running_app().settings.reset_current()
+        self.home_msg = _('Welcome!')  # Todo: General Information
         
     def on_leave(self, *args):
         # We need to ask for write permission before trying to write, otherwise we lose data. There's no callback for
@@ -48,11 +58,13 @@ class ScreenHome(Screen):
 
 class ScreenOutro(Screen):
     """ Display that gives general information. """
-    outro_msg = StringProperty('[color=ff00ff][b]Thank you[/b][/color] for participating!\n')  # Todo: Outro Information
+    outro_msg = StringProperty(_('Initiating...'))
     
     def on_pre_enter(self, *args):
         dest = App.get_running_app().get_data_path()
-        self.outro_msg += "\nFiles were {1}saved to {0}".format(dest, "" if dest.exists() else "[b]not[/b] ")
+        self.outro_msg = _('[color=ff00ff][b]Thank you[/b][/color] for participating!') + "\n"  # Workaround for i18n.
+        self.outro_msg += "\n" + _("Files were {}saved to [i]{}[/i].").format('' if dest.exists() else _('[b]not[/b]')
+                                                                              + ' ', dest)
 
 
 class ScreenInstruct(Screen):
@@ -62,25 +74,26 @@ class ScreenInstruct(Screen):
 
     def __init__(self, **kwargs):
         super(ScreenInstruct, self).__init__(**kwargs)
-        self.df_unconstraint_msg = 'Initiating...'
-        self.df_constraint_msg = 'Initiating...'
+        self.df_unconstraint_msg = _("Initiating...")
+        self.df_constraint_msg = _("Initiating...")
         
     def on_pre_enter(self, *args):
         self.update_messages()
         self.set_instruction_msg()
     
     def update_messages(self):
-        n_trials_msg = f"There are a total of {self.settings.n_trials} trials in this block."
+        n_trials_msg = _("There are a total of {} trials in this block.").format(self.settings.n_trials)
         n_tasks = int(self.settings.constraint) + 1
-        task_suffix = self.settings.constraint * 's'
-        n_tasks_msg = f"You have {n_tasks} task{task_suffix} in this block.\n\n"
-        time_limit_msg = "A trial ends when the outer [color=ff00ff]purple ring[/color] reaches 100% (circle closes)"\
-                         " and the countdown reaches 0.\n Shortly thereafter you will be prompted to get ready for "\
-                         "the next trial.\n\n"
-        task1_msg = "Use the [b]2 sliders[/b] to match the size of the [b]white disk[/b] to the " \
-                    "[color=008000]green ring[/color].\n\n"
-        task2_msg = "Concurrently bring the [color=3f84f2]blue arch[/color] to the [color=3f84f2]blue disc[/color] " \
-                    f"by using one of the sliders. It will be the same slider during the block.\n\n"
+        # Todo: ngettext for plurals
+        task_suffix = self.settings.constraint * _("s")
+        n_tasks_msg = _("You have {} task{} in this block.").format(n_tasks, task_suffix) + "\n\n"
+        time_limit_msg = _("A trial ends when the outer [color=ff00ff]purple ring[/color] reaches 100% (circle closes)"
+                           " and the countdown reaches 0.\nShortly thereafter you will be prompted to get ready for "
+                           "the next trial.") + "\n\n"
+        task1_msg = _("Use the [b]2 sliders[/b] to match the size of the [b]white disk[/b] to the "
+                      "[color=008000]green ring[/color].") + "\n\n"
+        task2_msg = _("Concurrently bring the [color=3f84f2]blue arch[/color] to the [color=3f84f2]blue disc[/color] "
+                      "by using one of the sliders. It will be the same slider during the block.") + "\n\n"
         self.df_unconstraint_msg = n_tasks_msg + task1_msg + time_limit_msg + n_trials_msg
         self.df_constraint_msg = n_tasks_msg + task1_msg + task2_msg + time_limit_msg + n_trials_msg
             
@@ -95,7 +108,7 @@ class ScreenInstruct(Screen):
 class ScreenCircleTask(Screen):
     """ This class handles all the logic for the circle size matching task. """
     settings = ObjectProperty()
-    progress = StringProperty("Trial: 0/0")
+    progress = StringProperty(_("Trial: ") + "0/0")
     is_constrained = BooleanProperty(False)  # Workaround, since self.settings.constraint doesn't seem to exist at init.
     
     def __init__(self, **kwargs):
@@ -124,7 +137,7 @@ class ScreenCircleTask(Screen):
         self.sound_start = SoundLoader.load('res/start.ogg')
         self.sound_stop = SoundLoader.load('res/stop.ogg')
         self.count_down.start_count = self.settings.trial_duration
-        self.count_down.set_label("PREPARE")
+        self.count_down.set_label(_("PREPARE"))
         self.start_task()
     
     # FixMe: only last touch ungrabbed, ungrab all lingering touches!
@@ -158,16 +171,16 @@ class ScreenCircleTask(Screen):
         # Repeatedly start trials each inter-trial-interval.
         iti = self.settings.warm_up + self.settings.trial_duration + self.settings.cool_down
         self.schedule = Clock.schedule_interval(self.get_ready, iti)
-        self.progress = "Trial {}/{}".format(self.settings.current_trial, self.settings.n_trials)
+        self.progress = _("Trial: ") + f"{self.settings.current_trial}/{self.settings.n_trials}"
     
     def get_ready(self, *args):
         if self.settings.current_trial == self.settings.n_trials:
             self.stop_task()
         else:
             self.settings.current_trial += 1
-            self.progress = "Trial {}/{}".format(self.settings.current_trial, self.settings.n_trials)
+            self.progress = _("Trial: ") + f"{self.settings.current_trial}/{self.settings.n_trials}"
             self.reset_sliders()
-            self.count_down.set_label("GET READY")
+            self.count_down.set_label(_("GET READY"))
             Clock.schedule_once(lambda dt: self.start_trial(), self.settings.warm_up)
     
     def vibrate(self, t=0.1):
@@ -190,7 +203,7 @@ class ScreenCircleTask(Screen):
         if self.sound_stop:
             self.sound_stop.play()
         self.disable_sliders()
-        self.count_down.set_label("FINISHED")
+        self.count_down.set_label(_("FINISHED"))
         self.vibrate()
         self.data[self.settings.current_trial-1, :] = (self.ids.df1.value_normalized, self.ids.df2.value_normalized)
     
@@ -203,7 +216,7 @@ class ScreenCircleTask(Screen):
         self.release_audio()
         if not interrupt:
             self.write_data()
-            self.dispatch("on_task_stopped")
+            self.dispatch('on_task_stopped')
         
     def on_task_stopped(self):
         pass
@@ -218,15 +231,15 @@ class ScreenCircleTask(Screen):
     def write_data(self):
         # Save endpoint values in app.user_data_dir with unique file name.
         t = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        constrained_df = "cosntrained_df2" if self.target2_switch else "constrained_df1"
-        file_name = "{id}-CT-Block{block}-{type}-{time}.csv".format(id=self.settings.user,
+        constrained_df = 'cosntrained_df2' if self.target2_switch else 'constrained_df1'
+        file_name = '{id}-CT-Block{block}-{type}-{time}.csv'.format(id=self.settings.user,
                                                                     block=self.settings.current_block,
                                                                     type=constrained_df if self.settings.constraint else "unconstraint",
                                                                     time=t)
         app = App.get_running_app()
         dest = app.get_data_path()
         if self.data is not None and app.write_permit:
-            np.savetxt(dest / file_name, self.data*100, fmt='%10.5f', delimiter=",", header="df1,df2", comments='')
+            np.savetxt(dest / file_name, self.data*100, fmt='%10.5f', delimiter=',', header='df1,df2', comments='')
 
 
 class ScaleSlider(Slider):
@@ -294,7 +307,7 @@ class UCMManager(ScreenManager):
                 # When on home screen we want to be able to quit the app after 2 presses.
                 self.n_home_esc += 1
                 if self.n_home_esc == 1:
-                    notification.notify(message="Press again to quit.", toast=True)
+                    notification.notify(message=_("Press again to quit."), toast=True)
                 if self.n_home_esc > 1:
                     self.quit()
             elif self.current == 'Settings':
@@ -328,6 +341,7 @@ class UCMManager(ScreenManager):
     
     
 class SettingsContainer(Widget):
+    #language = ConfigParserProperty('en', 'Localization', 'language', 'app', val_type=str)
     user = ConfigParserProperty('0', 'UserData', 'unique_id', 'app', val_type=str)
     n_trials = ConfigParserProperty('20', 'CircleTask', 'n_trials', 'app', val_type=int,
                                     verify=lambda x: x > 0, errorvalue=20)
@@ -363,6 +377,7 @@ class UncontrolledManifoldApp(App):
 
     def build_config(self, config):
         """ Configure initial settings. """
+        config.setdefaults(LANGUAGE_SECTION, {LANGUAGE_CODE: current_language()})
         config.setdefaults('UserData', {'unique_id': self.create_identifier()})
         config.setdefaults('CircleTask', {
             'n_trials': 20,
@@ -376,6 +391,32 @@ class UncontrolledManifoldApp(App):
         settings.add_json_panel('Circle Task Settings',
                                 self.config,
                                 data=settings_json)
+        settings.add_json_panel('Language',
+                                self.config,
+                                data=self.language_settings_specification)
+
+    @property
+    def language_settings_specification(self):
+        """The settings specification as JSON string.
+        :rtype: str
+        :return: a JSON string
+        """
+        settings = [
+            {"type": "optionmapping",
+             "title": _("Language"),
+             "desc": _("Display language for user instructions."),
+             "section": LANGUAGE_SECTION,
+             "key": LANGUAGE_CODE,
+             "options": {code: language_code_to_translation(code)
+                         for code in list_languages()}}
+        ]
+        return json.dumps(settings)
+
+    def update_language_from_config(self):
+        """Set the current language of the application from the configuration.
+        """
+        config_language = self.config.get(LANGUAGE_SECTION, LANGUAGE_CODE)
+        change_language_to(config_language)
 
     def display_settings(self, settings):
         manager = self.manager
@@ -393,12 +434,17 @@ class UncontrolledManifoldApp(App):
             self.manager.n_home_esc -= 1
 
     def on_config_change(self, config, section, key, value):
-        pass
+        if section == 'Localization' and key == 'language':
+            self.switch_language(value)
+        
+    def switch_language(self, lang='en'):
+        change_language_to(lang)
         
     def build(self):
-        self.settings_cls = SettingsWithSpinner
+        self.settings_cls = Settings
         self.use_kivy_settings = False
         self.settings = SettingsContainer()
+        self.update_language_from_config()
         self.write_permit = True
         root = UCMManager()
         self.manager = root

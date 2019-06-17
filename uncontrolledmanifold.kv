@@ -24,13 +24,13 @@
             orientation: 'horizontal'
             size_hint_y: 0.2
             Button:
-                text: "Settings"
+                text: _("Settings")
                 on_release:
                     root.manager.transition.direction = 'up'
                     root.manager.transition.duration = 0.5
                     app.open_settings()
             Button:
-                text: "Next"
+                text: _("Proceed")
                 on_release:
                     root.manager.transition.direction = 'up'
                     root.manager.transition.duration = 0.5
@@ -42,7 +42,7 @@
 
     BoxLayout:
         orientation: 'vertical'
-
+        # Todo: scrollable text.
         Label:
             text: root.instruction_msg
             markup: True
@@ -53,7 +53,7 @@
             valign: 'middle'
         Button:
             id: ok_btn
-            text: "Start"
+            text: _("Start")
             size_hint_y: 0.2
             on_release:
                 root.manager.transition.direction = 'up'
@@ -191,10 +191,10 @@
             orientation: 'horizontal'
             size_hint_y: 0.2
             Button:
-                text: "Home"
+                text: _("Home")
                 on_release:
                     app.settings.reset_current()
                     root.manager.go_home()
             Button:
-                text: "Quit"
+                text: _("Quit")
                 on_release: root.manager.quit()

@@ -48,7 +48,7 @@ class ScreenHome(Screen):
     
     def on_pre_enter(self, *args):
         App.get_running_app().settings.reset_current()
-        self.home_msg = _('Welcome!')  # Todo: General Information
+        self.home_msg = _('Welcome!')  # ToDo: General Information
         
     def on_leave(self, *args):
         # We need to ask for write permission before trying to write, otherwise we lose data. There's no callback for
@@ -84,7 +84,7 @@ class ScreenInstruct(Screen):
     def update_messages(self):
         n_trials_msg = _("There are a total of {} trials in this block.").format(self.settings.n_trials)
         n_tasks = int(self.settings.constraint) + 1
-        # Todo: ngettext for plurals
+        # ToDo: ngettext for plurals
         task_suffix = self.settings.constraint * _("s")
         n_tasks_msg = _("You have {} task{} in this block.").format(n_tasks, task_suffix) + "\n\n"
         time_limit_msg = _("A trial ends when the outer [color=ff00ff]purple ring[/color] reaches 100% (circle closes)"
@@ -126,7 +126,6 @@ class ScreenCircleTask(Screen):
         self.count_down.bind(on_count_down_finished=lambda obj: self.trial_finished())
         self.ids.df1.bind(on_grab=self.slider_grab)
         self.ids.df2.bind(on_grab=self.slider_grab)
-        # todo: save screen size/resolution, initial circle/ring size, slider size and slider value to file
     
     def on_pre_enter(self, *args):
         self.is_constrained = self.settings.constraint
@@ -480,6 +479,7 @@ class UncontrolledManifoldApp(App):
         return dest
     
     # todo pause App.on_pause(), App.on_resume()
+    # ToDo pause App.on_pause(), App.on_resume()
     def on_pause(self):
         # Here you can save data if needed
         return True

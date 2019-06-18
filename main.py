@@ -3,8 +3,10 @@ Research app to study uncontrolled manifold and optimal feedback control paradig
 """
 
 import json
+import pickle
+import datetime
+import time
 from pathlib import Path
-from datetime import datetime
 from hashlib import md5
 
 from kivy.app import App
@@ -25,6 +27,7 @@ from plyer import vibrator
 from plyer import uniqueid
 from plyer import storagepath
 from plyer import notification
+from plyer import email
 
 import numpy as np
 
@@ -53,7 +56,10 @@ class ScreenHome(Screen):
     def on_leave(self, *args):
         # We need to ask for write permission before trying to write, otherwise we lose data. There's no callback for
         # permissions granted yet.
-        data_dest = App.get_running_app().get_data_path()
+        app = App.get_running_app()
+        data_dest = app.get_data_path()
+        # Reset data collection each time a new task is started.
+        app.data.clear()
 
 
 class ScreenOutro(Screen):
@@ -213,6 +219,7 @@ class ScreenCircleTask(Screen):
             self.schedule = None
         self.reset_sliders()
         self.release_audio()
+        self.collect_data()
         if not interrupt:
             self.write_data()
             self.dispatch('on_task_stopped')
@@ -227,18 +234,41 @@ class ScreenCircleTask(Screen):
                 sound.unload()
                 sound = None
     
+    def collect_data(self):
+        """ Collect data to be sent via e-mail. """
+        constraint = 'None'
+        if self.settings.constraint:
+            if self.target2_switch:
+                constraint = 'df2'
+            else:
+                constraint = 'df1'
+        
+        data_x_100 = self.data*100
+        d = {'id': self.settings.user,
+             'task': 'Circle Task',
+             'block': self.settings.current_block,
+             'constraint': constraint,
+             'time': datetime.datetime.now(datetime.timezone(datetime.timedelta(seconds=time.localtime().tm_gmtoff))
+                                           ).replace(microsecond=0).isoformat(),
+             'data': pickle.dumps(data_x_100),
+             'hash': md5(data_x_100).hexdigest()}
+        
+        app = App.get_running_app()
+        app.data.append(d)
+        # ToDo: save screen size/resolution, initial circle/ring size, slider size and slider value to file
+        
     def write_data(self):
         # Save endpoint values in app.user_data_dir with unique file name.
-        t = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        t = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         constrained_df = 'cosntrained_df2' if self.target2_switch else 'constrained_df1'
         file_name = '{id}-CT-Block{block}-{type}-{time}.csv'.format(id=self.settings.user,
                                                                     block=self.settings.current_block,
                                                                     type=constrained_df if self.settings.constraint else "unconstraint",
                                                                     time=t)
         app = App.get_running_app()
-        dest = app.get_data_path()
+        dest_path = app.get_data_path()
         if self.data is not None and app.write_permit:
-            np.savetxt(dest / file_name, self.data*100, fmt='%10.5f', delimiter=',', header='df1,df2', comments='')
+            np.savetxt(dest_path / file_name, self.data*100, fmt='%10.5f', delimiter=',', header='df1,df2', comments='')
 
 
 class ScaleSlider(Slider):
@@ -447,6 +477,7 @@ class UncontrolledManifoldApp(App):
         self.write_permit = True
         root = UCMManager()
         self.manager = root
+        self.data = list()
         return root
 
     @staticmethod
@@ -478,7 +509,27 @@ class UncontrolledManifoldApp(App):
             #dest = dest.resolve()  # Resolve any symlinks.
         return dest
     
-    # todo pause App.on_pause(), App.on_resume()
+    def send_email(self):
+        """ Send the data via e-mail. """
+        recipient = ''
+        subject = 'New UCM Data Set'
+        disclaimer = _("Disclaimer:\n"
+                       "Below data will be extracted from the received e-mail and the e-mail itself will be deleted "
+                       "within 3 days to separate the sender from the data for anonymization.\n"
+                       "After this time frame you can request deletion of the data collected from you by providing"
+                       "your unique identification code (id).\n"
+                       "If you deleted this e-mail from your sent folder, you can look up your unique id in the"
+                       "settings panel of the app. It's based on your hardware but doesn't contain any identifiable "
+                       "information about it or yourself.") + "\n\n"
+        
+        text = "### Data ###\n\n"
+        for d in self.data:
+            text += "\n".join(k + ": " + str(v) for k, v in d.items())
+            text += "\n\n"
+        
+        create_chooser = True
+        email.send(recipient=recipient, subject=subject, text=disclaimer + text, create_chooser=create_chooser)
+    
     # ToDo pause App.on_pause(), App.on_resume()
     def on_pause(self):
         # Here you can save data if needed

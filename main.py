@@ -489,7 +489,7 @@ class UncontrolledManifoldApp(App):
         ident = hashed[::4]
         return ident
 
-    def get_data_path(self):
+    def get_data_path(self, timeout=5):
         if platform == 'android':
             #dest = Path(storagepath.get_documents_dir())
             dest = Path(storagepath.get_external_storage_dir()) / App.get_running_app().name
@@ -498,8 +498,12 @@ class UncontrolledManifoldApp(App):
             if not self.write_permit:
                 request_permissions([Permission.WRITE_EXTERNAL_STORAGE])
             
-            # FixMe: wait until permission granted.
-            self.write_permit = check_permission(Permission.WRITE_EXTERNAL_STORAGE)
+            # Wait a bit until permission granted.
+            t0 = time.time()
+            while time.time() - t0 < timeout and not self.write_permit:
+                self.write_permit = check_permission(Permission.WRITE_EXTERNAL_STORAGE)
+                time.sleep(0.5)
+                
             if not dest.exists() and self.write_permit:
                 # Make sure the path exists.
                 dest.mkdir(parents=True, exist_ok=True)

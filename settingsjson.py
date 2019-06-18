@@ -1,6 +1,6 @@
 import json
 
-settings_json = json.dumps([
+settings_circle_task_json = json.dumps([
     {'type': 'title',
      'title': 'User Data'},
     {'type': 'string',

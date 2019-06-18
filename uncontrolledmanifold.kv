@@ -3,7 +3,8 @@
 <UCMManager>:
     settings: app.settings
     ScreenHome:
-    ScreenInstruct:
+    ScreenInstructCircleTask:
+        name: 'Instructions CT'
     ScreenCircleTask:
     ScreenOutro:
 
@@ -44,10 +45,9 @@
                 on_release:
                     root.manager.transition.direction = 'up'
                     root.manager.transition.duration = 0.5
-                    root.manager.current = 'Instructions'
+                    root.manager.current = root.manager.task_instructions[app.settings.task]
 
-<ScreenInstruct>:
-    name: 'Instructions'
+<ScreenInstructCircleTask>:  # When adding new task instruction, to share style add class like so: <TaskOne, TaskTwo>:
     settings: app.settings
     on_leave: instruct_scroll.scroll_y = 1
 
@@ -75,7 +75,7 @@
             on_release:
                 root.manager.transition.direction = 'up'
                 root.manager.transition.duration = 0.5
-                root.manager.current = 'Circle Task'
+                root.manager.current = app.settings.task
 
 <ScreenCircleTask>:
     name: 'Circle Task'

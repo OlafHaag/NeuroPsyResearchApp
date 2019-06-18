@@ -31,7 +31,7 @@ from plyer import email
 
 import numpy as np
 
-from settingsjson import settings_json
+from settingsjson import settings_circle_task_json
 from i18n import _, list_languages, change_language_to, current_language, language_code_to_translation
 from i18n.settings import Settings
 
@@ -64,22 +64,22 @@ class ScreenHome(Screen):
 
 class ScreenOutro(Screen):
     """ Display that gives general information. """
-    outro_msg = StringProperty(_('Initiating...'))
+    outro_msg = StringProperty(_("Initiating..."))
     
     def on_pre_enter(self, *args):
         dest = App.get_running_app().get_data_path()
-        self.outro_msg = _('[color=ff00ff][b]Thank you[/b][/color] for participating!') + "\n"  # Workaround for i18n.
-        self.outro_msg += "\n" + _("Files were {}saved to [i]{}[/i].").format('' if dest.exists() else _('[b]not[/b]')
-                                                                              + ' ', dest)
+        self.outro_msg = _('[color=ff00ff][b]Thank you[/b][/color] for participating!') + "\n\n"  # Workaround for i18n.
+        self.outro_msg += _("Files were {}saved to [i]{}[/i].").format('' if dest.exists() else _('[b]not[/b]')
+                                                                       + ' ', dest)  # FixMe: Not translated.
 
 
-class ScreenInstruct(Screen):
+class ScreenInstructCircleTask(Screen):
     """ Display that tells the user what to in next task. """
     settings = ObjectProperty()
-    instruction_msg = StringProperty('Instructions')
+    instruction_msg = StringProperty(_("Initiating..."))
 
     def __init__(self, **kwargs):
-        super(ScreenInstruct, self).__init__(**kwargs)
+        super(ScreenInstructCircleTask, self).__init__(**kwargs)
         self.df_unconstraint_msg = _("Initiating...")
         self.df_constraint_msg = _("Initiating...")
         
@@ -88,10 +88,10 @@ class ScreenInstruct(Screen):
         self.set_instruction_msg()
     
     def update_messages(self):
-        n_trials_msg = _("There are a total of {} trials in this block.").format(self.settings.n_trials)
-        n_tasks = int(self.settings.constraint) + 1
+        n_trials_msg = _("There are a total of {} trials in this block.").format(self.settings.circle_task.n_trials)
+        n_tasks = int(self.settings.circle_task.constraint) + 1
         # ToDo: ngettext for plurals
-        task_suffix = self.settings.constraint * _("s")
+        task_suffix = self.settings.circle_task.constraint * _("s")
         n_tasks_msg = _("You have {} task{} in this block.").format(n_tasks, task_suffix) + "\n\n"
         time_limit_msg = _("A trial ends when the outer [color=ff00ff]purple ring[/color] reaches 100% (circle closes)"
                            " and the countdown reaches 0.\nShortly thereafter you will be prompted to get ready for "
@@ -105,7 +105,7 @@ class ScreenInstruct(Screen):
             
     def set_instruction_msg(self):
         """ Change displayed text on instruction screen. """
-        if self.settings.constraint:
+        if self.settings.circle_task.constraint:
             self.instruction_msg = self.df_constraint_msg
         else:
             self.instruction_msg = self.df_unconstraint_msg
@@ -134,14 +134,14 @@ class ScreenCircleTask(Screen):
         self.ids.df2.bind(on_grab=self.slider_grab)
     
     def on_pre_enter(self, *args):
-        self.is_constrained = self.settings.constraint
+        self.is_constrained = self.settings.circle_task.constraint
         # df that is constrained is randomly chosen.
         self.target2_switch = np.random.choice([True, False])
-        self.data = np.zeros((self.settings.n_trials, 2))
+        self.data = np.zeros((self.settings.circle_task.n_trials, 2))
         # FixMe: Not loading sound files on Windows. (Unable to find a loader)
         self.sound_start = SoundLoader.load('res/start.ogg')
         self.sound_stop = SoundLoader.load('res/stop.ogg')
-        self.count_down.start_count = self.settings.trial_duration
+        self.count_down.start_count = self.settings.circle_task.trial_duration
         self.count_down.set_label(_("PREPARE"))
         self.start_task()
     
@@ -171,22 +171,27 @@ class ScreenCircleTask(Screen):
         self.ids.df1.value = self.ids.df1.max * 0.1
         self.ids.df2.value = self.ids.df2.max * 0.1
     
+    def get_progress(self):
+        progress = _("Trial: ") + f"{self.settings.current_trial}/{self.settings.circle_task.n_trials}"
+        return progress
+        
     def start_task(self):
         self.disable_sliders()
         # Repeatedly start trials each inter-trial-interval.
-        iti = self.settings.warm_up + self.settings.trial_duration + self.settings.cool_down
+        iti = self.settings.circle_task.warm_up + self.settings.circle_task.trial_duration\
+              + self.settings.circle_task.cool_down
+        self.progress = self.get_progress()
         self.schedule = Clock.schedule_interval(self.get_ready, iti)
-        self.progress = _("Trial: ") + f"{self.settings.current_trial}/{self.settings.n_trials}"
     
     def get_ready(self, *args):
-        if self.settings.current_trial == self.settings.n_trials:
+        if self.settings.current_trial == self.settings.circle_task.n_trials:
             self.stop_task()
         else:
             self.settings.current_trial += 1
-            self.progress = _("Trial: ") + f"{self.settings.current_trial}/{self.settings.n_trials}"
+            self.progress = self.get_progress()
             self.reset_sliders()
             self.count_down.set_label(_("GET READY"))
-            Clock.schedule_once(lambda dt: self.start_trial(), self.settings.warm_up)
+            Clock.schedule_once(lambda dt: self.start_trial(), self.settings.circle_task.warm_up)
     
     def vibrate(self, t=0.1):
         # FixMe: bug in plyer vibrate - argument mismatch
@@ -222,9 +227,10 @@ class ScreenCircleTask(Screen):
         self.collect_data()
         if not interrupt:
             self.write_data()
-            self.dispatch('on_task_stopped')
+            last_block = self.settings.current_block == self.settings.circle_task.n_blocks
+            self.dispatch('on_task_stopped', last_block)
         
-    def on_task_stopped(self):
+    def on_task_stopped(self, last_block=False):
         pass
         
     def release_audio(self):
@@ -237,7 +243,7 @@ class ScreenCircleTask(Screen):
     def collect_data(self):
         """ Collect data to be sent via e-mail. """
         constraint = 'None'
-        if self.settings.constraint:
+        if self.settings.circle_task.constraint:
             if self.target2_switch:
                 constraint = 'df2'
             else:
@@ -263,7 +269,7 @@ class ScreenCircleTask(Screen):
         constrained_df = 'cosntrained_df2' if self.target2_switch else 'constrained_df1'
         file_name = '{id}-CT-Block{block}-{type}-{time}.csv'.format(id=self.settings.user,
                                                                     block=self.settings.current_block,
-                                                                    type=constrained_df if self.settings.constraint else "unconstraint",
+                                                                    type=constrained_df if self.settings.circle_task.constraint else "unconstraint",
                                                                     time=t)
         app = App.get_running_app()
         dest_path = app.get_data_path()
@@ -317,10 +323,11 @@ class UCMManager(ScreenManager):
     def __init__(self, **kwargs):
         super(UCMManager, self).__init__(**kwargs)
         self.n_home_esc = 0  # Counter on how many times the back button was pressed on home screen.
+        self.task_instructions = {'Circle Task': 'Instructions CT'}
         
     def on_kv_post(self, base_widget):
         Window.bind(on_keyboard=self.key_input)
-        self.get_screen('Circle Task').bind(on_task_stopped=lambda obj: self.task_finished())
+        self.get_screen('Circle Task').bind(on_task_stopped=lambda obj, last: self.task_finished(last))
 
     def on_current(self, instance, value):
         """ When switching screens reset counter on back button presses on home screen. """
@@ -342,8 +349,9 @@ class UCMManager(ScreenManager):
             elif self.current == 'Settings':
                 # Never gets called, screen already changed to 'Home' through app.close_settings() on esc.
                 App.get_running_app().close_settings()
-            elif self.current == 'Circle Task':
-                self.get_screen('Circle Task').stop_task(interrupt=True)
+            # If we are in a task, stop that task.
+            elif self.current in ['Circle Task']:
+                self.get_screen(self.current).stop_task(interrupt=True)
                 self.go_home()
             else:
                 self.go_home()
@@ -355,51 +363,75 @@ class UCMManager(ScreenManager):
         self.transition.direction = 'down'
         self.current = 'Home'
         
-    def task_finished(self):
+    def task_finished(self, last_block=False):
         self.settings.next_block()
-        self.settings.set_constraint_setting()
         # Outro after last block.
-        if self.settings.current_block > self.settings.n_blocks:
+        if last_block:
             self.current = 'Outro'
         else:
             self.transition.direction = 'down'
-            self.current = 'Instructions'
+            self.current = self.task_instructions[self.settings.task]
     
     def quit(self, *args):
         App.get_running_app().stop()
     
     
 class SettingsContainer(Widget):
+    """ For now put all the settings for each task in here for simplicity.
+        When (or if) more tasks get implemented and the need arises to separate them, come up with a better,
+        modular solution.
+    """
+    # General properties.
     #language = ConfigParserProperty('en', 'Localization', 'language', 'app', val_type=str)
+    task = ConfigParserProperty('Circle Task', 'General', 'task', 'app', val_type=str)
     user = ConfigParserProperty('0', 'UserData', 'unique_id', 'app', val_type=str)
-    n_trials = ConfigParserProperty('20', 'CircleTask', 'n_trials', 'app', val_type=int,
-                                    verify=lambda x: x > 0, errorvalue=20)
-    n_blocks = ConfigParserProperty('3', 'CircleTask', 'n_blocks', 'app', val_type=int,
-                                    verify=lambda x: x > 0, errorvalue=3)
-    constrained_block = ConfigParserProperty('3', 'CircleTask', 'constrained_block', 'app', val_type=int)
-    warm_up = ConfigParserProperty('1.0', 'CircleTask', 'warm_up_time', 'app', val_type=float,
-                                   verify=lambda x: x > 0.0, errorvalue=1.0)
-    trial_duration = ConfigParserProperty('1.0', 'CircleTask', 'trial_duration', 'app', val_type=float,
-                                          verify=lambda x: x > 0.0, errorvalue=1.0)
-    cool_down = ConfigParserProperty('0.5', 'CircleTask', 'cool_down_time', 'app', val_type=float,
-                                     verify=lambda x: x > 0.0, errorvalue=0.5)
+    
+    # Properties that change over the course of all tasks and are not set by config.
+    current_trial = NumericProperty(0)
+    current_block = NumericProperty(1)
+    
+    # Circle Task properties.
+    class CircleTask(Widget):
+        n_trials = ConfigParserProperty('20', 'CircleTask', 'n_trials', 'app', val_type=int,
+                                        verify=lambda x: x > 0, errorvalue=20)
+        n_blocks = ConfigParserProperty('3', 'CircleTask', 'n_blocks', 'app', val_type=int,
+                                        verify=lambda x: x > 0, errorvalue=3)
+        constrained_block = ConfigParserProperty('3', 'CircleTask', 'constrained_block', 'app', val_type=int)
+        warm_up = ConfigParserProperty('1.0', 'CircleTask', 'warm_up_time', 'app', val_type=float,
+                                       verify=lambda x: x > 0.0, errorvalue=1.0)
+        trial_duration = ConfigParserProperty('1.0', 'CircleTask', 'trial_duration', 'app', val_type=float,
+                                              verify=lambda x: x > 0.0, errorvalue=1.0)
+        cool_down = ConfigParserProperty('0.5', 'CircleTask', 'cool_down_time', 'app', val_type=float,
+                                         verify=lambda x: x > 0.0, errorvalue=0.5)
+        
+        def __init__(self, **kwargs):
+            super(SettingsContainer.CircleTask, self).__init__(**kwargs)
+            self.constraint = False
+        
+        def set_constraint_setting(self, current_block):
+            self.constraint = current_block == self.constrained_block
     
     def __init__(self, **kwargs):
         super(SettingsContainer, self).__init__(**kwargs)
+        self.circle_task = self.CircleTask()
         self.reset_current()
     
     def reset_current(self):
         self.current_block = 1
         self.current_trial = 0
-        self.set_constraint_setting()
     
     def next_block(self):
         self.current_trial = 0
         self.current_block += 1
     
-    def set_constraint_setting(self):
-        self.constraint = self.current_block == self.constrained_block
-        
+    def on_current_trial(self, instance, value):
+        """ Bound to change in current trial. """
+    
+    def on_current_block(self, instance, value):
+        """ Bound to change in current block. """
+        if self.task == 'Circle Task':
+            self.circle_task.set_constraint_setting(value)
+
 
 class UncontrolledManifoldApp(App):
     manager = ObjectProperty(None, allownone=True)
@@ -407,6 +439,7 @@ class UncontrolledManifoldApp(App):
     def build_config(self, config):
         """ Configure initial settings. """
         config.setdefaults(LANGUAGE_SECTION, {LANGUAGE_CODE: current_language()})
+        config.setdefaults('General', {'task': 'Circle Task'})
         config.setdefaults('UserData', {'unique_id': self.create_identifier()})
         config.setdefaults('CircleTask', {
             'n_trials': 20,
@@ -417,27 +450,33 @@ class UncontrolledManifoldApp(App):
             'cool_down_time': 0.5})
 
     def build_settings(self, settings):
+        settings.add_json_panel('General',
+                                self.config,
+                                data=self.general_settings_json)
         settings.add_json_panel('Circle Task Settings',
                                 self.config,
-                                data=settings_json)
-        settings.add_json_panel('Language',
-                                self.config,
-                                data=self.language_settings_specification)
+                                data=settings_circle_task_json)
 
     @property
-    def language_settings_specification(self):
+    def general_settings_json(self):
         """The settings specification as JSON string.
         :rtype: str
         :return: a JSON string
         """
         settings = [
-            {"type": "optionmapping",
-             "title": _("Language"),
-             "desc": _("Display language for user instructions."),
-             "section": LANGUAGE_SECTION,
-             "key": LANGUAGE_CODE,
-             "options": {code: language_code_to_translation(code)
-                         for code in list_languages()}}
+            {'type': 'optionmapping',
+             'title': _("Language"),
+             'desc': _("Display language for user instructions."),
+             'section': LANGUAGE_SECTION,
+             'key': LANGUAGE_CODE,
+             'options': {code: language_code_to_translation(code)
+                         for code in list_languages()}},
+            {'type': 'options',
+             'title': 'Task',
+             'desc': 'Which task should be run.',
+             'section': 'General',
+             'key': 'task',
+             'options': ['Circle Task']}
         ]
         return json.dumps(settings)
 

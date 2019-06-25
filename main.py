@@ -376,6 +376,7 @@ class ScreenCircleTask(Screen):
              'constraint': constraint,
              'time': datetime.datetime.now(datetime.timezone(datetime.timedelta(seconds=time.localtime().tm_gmtoff))
                                            ).replace(microsecond=0).isoformat(),
+             'header': 'df1,df2',
              'data': pickle.dumps(data_x_100),
              'hash': md5(data_x_100).hexdigest()}
         

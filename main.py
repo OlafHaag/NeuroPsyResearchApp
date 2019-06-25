@@ -1,6 +1,32 @@
 """
-Research app to study uncontrolled manifold and optimal feedback control paradigms.
+Substantial portions of ScreenWebView class copyright (c) 2016 suchyDev (MIT License)
+with code by Micheal Hines.
+
+MIT License
+
+Copyright (c) 2019 Olaf Haag
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
 """
+
+"""Research app to study uncontrolled manifold and optimal feedback control paradigms."""
 
 import json
 import pickle
@@ -18,7 +44,7 @@ from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty, NumericProperty, StringProperty, BooleanProperty
 from kivy.properties import ConfigParserProperty
 from kivy.animation import Animation
-from kivy.clock import Clock
+from kivy.clock import Clock, mainthread
 from kivy.core.audio import SoundLoader
 from kivy.utils import platform
 from kivy.lang import global_idmap
@@ -37,6 +63,20 @@ from i18n.settings import Settings
 
 if platform == 'android':
     from android.permissions import request_permissions, check_permission, Permission
+    from android.runnable import run_on_ui_thread
+    from jnius import autoclass
+
+    WebView = autoclass('android.webkit.WebView')
+    CookieManager = autoclass('android.webkit.CookieManager')
+    WebViewClient = autoclass('android.webkit.WebViewClient')
+    activity = autoclass('org.kivy.android.PythonActivity').mActivity
+else:
+    def run_on_ui_thread(func):
+        """ dummy wrapper for desktop compatibility """
+        return func
+    
+if platform == 'win':
+    import subprocess
 
 # i18n
 LANGUAGE_CODE = "language"
@@ -70,9 +110,89 @@ class ScreenOutro(Screen):
         dest = App.get_running_app().get_data_path()
         self.outro_msg = _('[color=ff00ff][b]Thank you[/b][/color] for participating!') + "\n\n"  # Workaround for i18n.
         self.outro_msg += _("Files were {}saved to [i]{}[/i].").format('' if dest.exists() else _('[b]not[/b]')
-                                                                       + ' ', dest)  # FixMe: Not translated.
+                                                                       + ' ', dest)
 
 
+class ScreenWebView(Screen):
+    """ Currently out of order. Crashes on create_webview! """
+    view_cached = None
+    webview = None
+    wvc = None
+    webview_lock = False  # simple lock to avoid launching two webviews
+    url = StringProperty('https://google.com')  # Todo URL
+    
+    def __init__(self, **kwargs):
+        super(ScreenWebView, self).__init__(**kwargs)
+        self.register_event_type('on_quit_screen')
+        
+    def on_enter(self, *args):
+        super(ScreenWebView, self).on_enter(*args)
+        if platform == 'win':
+            subprocess.Popen(r'explorer "{}"'.format(App.get_running_app().get_data_path()))
+            
+        if platform == 'android':
+            # On android create webview for webpage.
+            self.ids['info_label'].text = _("Please wait\nAttaching WebView")
+            self.webview_lock = True
+            Clock.schedule_once(self.create_webview, 0)  # Call after the next frame.
+        else:
+            # On desktop just launch web browser.
+            self.ids['info_label'].text = _("Please wait\nLaunching browser\nPlease Drag and Drop the data files from "
+                                            "the file explorer window that just opened to the Drag & Drop input field "
+                                            "of the accompanied website that was just opened in your browser.")
+            import webbrowser
+            webbrowser.open_new(self.url)
+
+    @run_on_ui_thread
+    def key_back_handler(self, *args):
+        if self.webview:
+            Clock.schedule_once(self.detach_webview, 0)  # Call after the next frame.
+    
+    @mainthread
+    def quit_screen(self, *args):
+        self.dispatch('on_quit_screen')
+
+    def on_quit_screen(self, *args):
+        pass
+    
+    @run_on_ui_thread
+    def create_webview(self, *args):  # FixMe: Crash no attribute f2
+        if self.view_cached is None:
+            self.view_cached = activity.currentFocus
+        self.webview = WebView(activity)
+
+        cookie_manager = CookieManager.getInstance()
+        cookie_manager.removeAllCookie()
+
+        settings = self.webview.getSettings()
+        settings.setJavaScriptEnabled(True)
+        settings.setUseWideViewPort(True)  # enables viewport html meta tags
+        settings.setLoadWithOverviewMode(True)  # uses viewport
+        settings.setSupportZoom(True)  # enables zoom
+        settings.setBuiltInZoomControls(True)  # enables zoom controls
+        settings.setSavePassword(False)
+        settings.setSaveFormData(False)
+
+        self.wvc = WebViewClient()
+        self.webview.setWebViewClient(self.wvc)
+        activity.setContentView(self.webview)
+        self.webview.loadUrl(self.url)
+        self.webview_lock = False
+        
+    @run_on_ui_thread
+    def detach_webview(self, *args):
+        if not self.webview_lock:
+            if self.webview:
+                self.webview.loadUrl("about:blank")
+                self.webview.clearHistory()  # refer to android webview api
+                self.webview.clearCache(True)
+                self.webview.clearFormData()
+                self.webview.freeMemory()
+                # self.webview.pauseTimers()
+                activity.setContentView(self.view_cached)
+            Clock.schedule_once(self.quit_screen, 0)  # Call after the next frame.
+            
+            
 class ScreenInstructCircleTask(Screen):
     """ Display that tells the user what to in next task. """
     settings = ObjectProperty()
@@ -328,6 +448,7 @@ class UCMManager(ScreenManager):
     def on_kv_post(self, base_widget):
         Window.bind(on_keyboard=self.key_input)
         self.get_screen('Circle Task').bind(on_task_stopped=lambda obj, last: self.task_finished(last))
+        #self.get_screen('Webview').bind(on_quit_screen=lambda obj: self.go_home())
 
     def on_current(self, instance, value):
         """ When switching screens reset counter on back button presses on home screen. """
@@ -353,12 +474,15 @@ class UCMManager(ScreenManager):
             elif self.current in ['Circle Task']:
                 self.get_screen(self.current).stop_task(interrupt=True)
                 self.go_home()
+            elif self.current == 'Webview':
+                self.get_screen('Webview').key_back_handler()
+                self.go_home()
             else:
                 self.go_home()
             return True  # override the default behaviour
         else:  # the key now does nothing
             return False
-        
+            
     def go_home(self):
         self.transition.direction = 'down'
         self.current = 'Home'

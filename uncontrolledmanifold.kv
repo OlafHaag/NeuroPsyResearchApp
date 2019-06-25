@@ -208,11 +208,17 @@
             size: self.texture_size
             halign: 'center'
             valign: 'middle'
-        Button:
-            text: _("Send via E-Mail")
+        BoxLayout:
+            orientation: 'horizontal'
             size_hint_y: 0.2
-            on_release:
-                app.send_email()
+            Button:
+                text: _("Send via E-Mail")
+                on_release:
+                    app.send_email()
+            Button:
+                text: _("Upload")
+                # Todo: upload callback
+                on_release:
         BoxLayout:
             orientation: 'horizontal'
             size_hint_y: 0.2
@@ -224,3 +230,10 @@
             Button:
                 text: _("Quit")
                 on_release: root.manager.quit()
+
+<ScreenWebView>:
+	name: 'Webview'
+	BoxLayout:
+		Label:
+			id: info_label
+			halign: 'center'

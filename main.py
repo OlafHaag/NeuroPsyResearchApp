@@ -682,13 +682,15 @@ class UncontrolledManifoldApp(App):
         recipient = ''
         subject = 'New UCM Data Set'
         disclaimer = _("Disclaimer:\n"
-                       "Below data will be extracted from the received e-mail and the e-mail itself will be deleted "
-                       "within 3 days to separate the sender from the data for anonymization.\n"
-                       "After this time frame you can request deletion of the data collected from you by providing"
-                       "your unique identification code (id).\n"
-                       "If you deleted this e-mail from your sent folder, you can look up your unique id in the"
-                       "settings panel of the app. It's based on your hardware but doesn't contain any identifiable "
-                       "information about it or yourself.") + "\n\n"
+                       "By submitting this e-mail you agree to the data processing and evaluation for the purpose of "
+                       "this scientific investigation.\nThe data below will be copied and saved from the received "
+                       "e-mail. The email itself will be deleted within 3 days to separate the sender address from the "
+                       "data for the purpose of anonymisation.\n If you wish to revoke your consent to data processing "
+                       "and storage, please send an e-mail to the address specified in the address line and provide "
+                       "your identification code [b]{}[/b] so that I can assign and delete your record.\n"
+                       "If you deleted this email from your [i]Sent[/i] folder, you can look up your unique ID in "
+                       "the App Settings window. It is based on your hardware but does not contain any identifiable "
+                       "information about it or about yourself.").format(self.settings.user) + "\n\n"
         
         text = "### Data ###\n\n"
         for d in self.data:

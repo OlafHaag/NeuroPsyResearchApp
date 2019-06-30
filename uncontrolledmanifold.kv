@@ -102,14 +102,12 @@
                 max: 100
                 value: self.max * 0.1
                 orientation: 'vertical'
-                value_track: root.is_constrained and root.target2_switch
                 value_track_color: [0.25, 0.52, 0.95, 1]
                 cursor_image: 'res/sliderhandle_vertical.png'
                 cursor_disabled_image: 'res/sliderhandle_vertical_disabled.png'
                 cursor_size: [sp(64)]*2
                 padding: sp(48)
                 sensitivity: 'handle'
-                #on_release: pass
 
         BoxLayout:
             orientation: 'vertical'
@@ -124,14 +122,12 @@
                 max: 100
                 value: self.max * 0.1
                 orientation: 'horizontal'
-                value_track: root.is_constrained and not root.target2_switch
                 value_track_color: [0.25, 0.52, 0.95, 1]
                 cursor_image: 'res/sliderhandle_horizontal.png'
                 cursor_disabled_image: 'res/sliderhandle_horizontal_disabled.png'
                 cursor_size: [sp(64)]*2
                 padding: sp(32)
                 sensitivity: 'handle'
-                #on_release: print(f"released {root}")
 
     FloatLayout:
         canvas:
@@ -198,6 +194,8 @@
 
 <ScreenOutro>:
     name: 'Outro'
+    settings: app.settings
+
     BoxLayout:
         orientation: 'vertical'
 
@@ -213,12 +211,13 @@
             size_hint_y: 0.2
             Button:
                 text: _("Send via E-Mail")
+                disabled: not app.settings.is_email_enabled
                 on_release:
                     app.send_email()
             Button:
                 text: _("Upload")
-                # Todo: upload callback
-                on_release:
+                disabled: not app.upload_btn_enabled
+                on_release: app.upload_data()
         BoxLayout:
             orientation: 'horizontal'
             size_hint_y: 0.2

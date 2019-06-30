@@ -28,12 +28,14 @@ SOFTWARE.
 
 """Research app to study uncontrolled manifold and optimal feedback control paradigms."""
 
+import io
 import json
 import pickle
 import datetime
 import time
 from pathlib import Path
 from hashlib import md5
+import base64
 
 from kivy.app import App
 from kivy.core.window import Window
@@ -60,6 +62,8 @@ import numpy as np
 from settingsjson import settings_circle_task_json
 from i18n import _, list_languages, change_language_to, current_language, language_code_to_translation
 from i18n.settings import Settings
+
+import requests
 
 if platform == 'android':
     from android.permissions import request_permissions, check_permission, Permission
@@ -94,23 +98,29 @@ class ScreenHome(Screen):
         self.home_msg = _('Welcome!')  # ToDo: General Information
         
     def on_leave(self, *args):
-        # We need to ask for write permission before trying to write, otherwise we lose data. There's no callback for
-        # permissions granted yet.
+        """ Reset data collection each time a new task is started. """
         app = App.get_running_app()
-        data_dest = app.get_data_path()
-        # Reset data collection each time a new task is started.
-        app.data.clear()
+        app.data_upload.clear()
+        app.data_email.clear()
 
 
 class ScreenOutro(Screen):
     """ Display that gives general information. """
+    settings = ObjectProperty()
     outro_msg = StringProperty(_("Initiating..."))
     
     def on_pre_enter(self, *args):
-        dest = App.get_running_app().get_data_path()
         self.outro_msg = _('[color=ff00ff][b]Thank you[/b][/color] for participating!') + "\n\n"  # Workaround for i18n.
-        self.outro_msg += _("Files were {}saved to [i]{}[/i].").format('' if dest.exists() else _('[b]not[/b]')
-                                                                       + ' ', dest)
+        if self.settings.is_local_storage_enabled:
+            dest = App.get_running_app().get_data_path()
+            self.outro_msg += _("Files were {}saved to [i]{}[/i].").format('' if dest.exists() else _('[b]not[/b]')
+                                                                           + ' ', dest)
+        else:
+            self.outro_msg += _("Results were [b]not[/b] locally stored as files.\n"
+                                "You can enable this in the settings.")
+            
+        app = App.get_running_app()
+        app.upload_btn_enabled = self.settings.is_upload_enabled
 
 
 class ScreenWebView(Screen):
@@ -119,7 +129,7 @@ class ScreenWebView(Screen):
     webview = None
     wvc = None
     webview_lock = False  # simple lock to avoid launching two webviews
-    url = StringProperty('https://google.com')  # Todo URL
+    url = StringProperty('http://127.0.0.1:5000/dashboard/')  # Todo URL
     
     def __init__(self, **kwargs):
         super(ScreenWebView, self).__init__(**kwargs)
@@ -127,21 +137,21 @@ class ScreenWebView(Screen):
         
     def on_enter(self, *args):
         super(ScreenWebView, self).on_enter(*args)
-        if platform == 'win':
-            subprocess.Popen(r'explorer "{}"'.format(App.get_running_app().get_data_path()))
-            
+        
         if platform == 'android':
-            # On android create webview for webpage.
+            # On android create webview for website.
             self.ids['info_label'].text = _("Please wait\nAttaching WebView")
             self.webview_lock = True
             Clock.schedule_once(self.create_webview, 0)  # Call after the next frame.
         else:
             # On desktop just launch web browser.
-            self.ids['info_label'].text = _("Please wait\nLaunching browser\nPlease Drag and Drop the data files from "
-                                            "the file explorer window that just opened to the Drag & Drop input field "
-                                            "of the accompanied website that was just opened in your browser.")
+            self.ids['info_label'].text = _("Please wait\nLaunching browser")
             import webbrowser
             webbrowser.open_new(self.url)
+            
+            # Only if we would want to manually upload data files.
+            # if platform == 'win':
+            #    subprocess.Popen(r'explorer "{}"'.format(App.get_running_app().get_data_path()))
 
     @run_on_ui_thread
     def key_back_handler(self, *args):
@@ -156,7 +166,7 @@ class ScreenWebView(Screen):
         pass
     
     @run_on_ui_thread
-    def create_webview(self, *args):  # FixMe: Crash no attribute f2
+    def create_webview(self, *args):  # FixMe: Crash - no attribute f2
         if self.view_cached is None:
             self.view_cached = activity.currentFocus
         self.webview = WebView(activity)
@@ -204,6 +214,7 @@ class ScreenInstructCircleTask(Screen):
         self.df_constraint_msg = _("Initiating...")
         
     def on_pre_enter(self, *args):
+        self.settings.next_block()
         self.update_messages()
         self.set_instruction_msg()
     
@@ -239,24 +250,35 @@ class ScreenCircleTask(Screen):
     
     def __init__(self, **kwargs):
         super(ScreenCircleTask, self).__init__(**kwargs)
-        self.target2_switch = False
+        # Procedure related.
         self.register_event_type('on_task_stopped')
         self.schedule = None
+        # Control related.
+        self.target2_switch = False  # Which slider is controlling the second target.
         self.df1_touch = None
         self.df2_touch = None
+        # Feedback related.
         self.sound_start = None
         self.sound_stop = None
-        self.data = None
+        # Data collection related.
+        self.data = None  # For numerical data.
+        self.meta_data = dict()  # For context of numerical data acquisition, e.g. treatment/condition.
     
     def on_kv_post(self, base_widget):
+        """ Bind events. """
         self.count_down.bind(on_count_down_finished=lambda obj: self.trial_finished())
         self.ids.df1.bind(on_grab=self.slider_grab)
         self.ids.df2.bind(on_grab=self.slider_grab)
     
     def on_pre_enter(self, *args):
+        """ Setup this run of the task and initiate start. """
         self.is_constrained = self.settings.circle_task.constraint
         # df that is constrained is randomly chosen.
         self.target2_switch = np.random.choice([True, False])
+        # Set visual indicator for which df is constrained.
+        self.ids.df2.value_track = self.is_constrained and self.target2_switch
+        self.ids.df1.value_track = self.is_constrained and not self.target2_switch
+        
         self.data = np.zeros((self.settings.circle_task.n_trials, 2))
         # FixMe: Not loading sound files on Windows. (Unable to find a loader)
         self.sound_start = SoundLoader.load('res/start.ogg')
@@ -267,6 +289,7 @@ class ScreenCircleTask(Screen):
     
     # FixMe: only last touch ungrabbed, ungrab all lingering touches!
     def slider_grab(self, instance, touch):
+        """ Set reference to touch event for sliders. """
         if instance == self.ids.df1:
             self.df1_touch = touch
         elif instance == self.ids.df2:
@@ -288,14 +311,17 @@ class ScreenCircleTask(Screen):
         self.ids.df1.disabled = False
     
     def reset_sliders(self):
+        """ Set sliders to initial position. """
         self.ids.df1.value = self.ids.df1.max * 0.1
         self.ids.df2.value = self.ids.df2.max * 0.1
     
     def get_progress(self):
+        """ Return a string for the number of trials out of total that are already done. """
         progress = _("Trial: ") + f"{self.settings.current_trial}/{self.settings.circle_task.n_trials}"
         return progress
         
     def start_task(self):
+        """ Start the time interval for the repetition of trials. """
         self.disable_sliders()
         # Repeatedly start trials each inter-trial-interval.
         iti = self.settings.circle_task.warm_up + self.settings.circle_task.trial_duration\
@@ -304,6 +330,7 @@ class ScreenCircleTask(Screen):
         self.schedule = Clock.schedule_interval(self.get_ready, iti)
     
     def get_ready(self, *args):
+        """ Prepare the next trial or stop if the total amount of trials are reached. """
         if self.settings.current_trial == self.settings.circle_task.n_trials:
             self.stop_task()
         else:
@@ -323,6 +350,7 @@ class ScreenCircleTask(Screen):
         pass
 
     def start_trial(self):
+        """ Start the trial. """
         if self.sound_start:
             self.sound_start.play()
         self.enable_sliders()
@@ -330,72 +358,88 @@ class ScreenCircleTask(Screen):
         self.count_down.start()
     
     def trial_finished(self):
+        """ Callback for when a trial ends. Collect data. """
         if self.sound_stop:
             self.sound_stop.play()
         self.disable_sliders()
         self.count_down.set_label(_("FINISHED"))
         self.vibrate()
+        # Record data for current trial.
         self.data[self.settings.current_trial-1, :] = (self.ids.df1.value_normalized, self.ids.df2.value_normalized)
     
     def stop_task(self, interrupt=False):
+        """ Stop time interval that starts new trials.
+        When the task wasn't cancelled start data processing.
+        """
         # Unschedule trials.
         if self.schedule:
             self.schedule.cancel()
             self.schedule = None
         self.reset_sliders()
         self.release_audio()
-        self.collect_data()
         if not interrupt:
-            self.write_data()
-            last_block = self.settings.current_block == self.settings.circle_task.n_blocks
-            self.dispatch('on_task_stopped', last_block)
+            # Scale normalized data to 0-100.
+            self.data *= 100
+            self.collect_meta_data()
+            
+            if self.settings.is_local_storage_enabled:
+                self.write_data()
+            if self.settings.is_upload_enabled:
+                self.collect_data_upload()
+            if self.settings.is_email_enabled:
+                self.collect_data_email()
+                
+            was_last_block = self.settings.current_block == self.settings.circle_task.n_blocks
+            self.dispatch('on_task_stopped', was_last_block)
         
-    def on_task_stopped(self, last_block=False):
+    def on_task_stopped(self, was_last_block=False):
         pass
         
     def release_audio(self):
+        """ Unload audio sources from memory. """
         for sound in [self.sound_start, self.sound_stop]:
             if sound:
                 sound.stop()
                 sound.unload()
                 sound = None
     
-    def collect_data(self):
-        """ Collect data to be sent via e-mail. """
-        constraint = 'None'
-        if self.settings.circle_task.constraint:
-            if self.target2_switch:
-                constraint = 'df2'
-            else:
-                constraint = 'df1'
-        
-        data_x_100 = self.data*100
-        d = {'id': self.settings.user,
-             'task': 'Circle Task',
-             'block': self.settings.current_block,
-             'constraint': constraint,
-             'time': datetime.datetime.now(datetime.timezone(datetime.timedelta(seconds=time.localtime().tm_gmtoff))
-                                           ).replace(microsecond=0).isoformat(),
-             'header': 'df1,df2',
-             'data': pickle.dumps(data_x_100),
-             'hash': md5(data_x_100).hexdigest()}
+    def collect_meta_data(self):
+        """ Collect information about context of data acquisition. """
+        constrained_df = 'constrained_df2' if self.target2_switch else 'constrained_df1'
+
+        self.meta_data['id'] = self.settings.user
+        self.meta_data['task'] = 'CT'  # Short for Circle Task.
+        self.meta_data['block'] = self.settings.current_block
+        self.meta_data['type'] = constrained_df if self.is_constrained else "unconstrained"
+        self.meta_data['time_iso'] = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        self.meta_data['time'] = time.time()
+        self.meta_data['columns'] = ['df1', 'df2']
+        self.meta_data['hash'] = md5(self.data).hexdigest()
+    
+    def collect_data_upload(self):
+        """ Add data to be uploaded to a server. """
+        d = self.meta_data.copy()
+        d['data'] = self.data
+        app = App.get_running_app()
+        app.data_upload.append(d)
+    
+    def collect_data_email(self):
+        """ Add data to be sent via e-mail. """
+        d = self.meta_data.copy()
+        d['data'] = pickle.dumps(self.data)
         
         app = App.get_running_app()
-        app.data.append(d)
+        app.data_email.append(d)
         # ToDo: save screen size/resolution, initial circle/ring size, slider size and slider value to file
         
     def write_data(self):
-        # Save endpoint values in app.user_data_dir with unique file name.
-        t = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        constrained_df = 'cosntrained_df2' if self.target2_switch else 'constrained_df1'
-        file_name = '{id}-CT-Block{block}-{type}-{time}.csv'.format(id=self.settings.user,
-                                                                    block=self.settings.current_block,
-                                                                    type=constrained_df if self.settings.circle_task.constraint else "unconstraint",
-                                                                    time=t)
+        """ Save endpoint values in app.user_data_dir with unique file name. """
         app = App.get_running_app()
+        file_name = app.compile_filename(self.meta_data)
         dest_path = app.get_data_path()
         if self.data is not None and app.write_permit:
-            np.savetxt(dest_path / file_name, self.data*100, fmt='%10.5f', delimiter=',', header='df1,df2', comments='')
+            np.savetxt(dest_path / file_name, self.data, fmt='%10.5f', delimiter=',',
+                       header=','.join(self.meta_data['columns']), comments='')
 
 
 class ScaleSlider(Slider):
@@ -488,10 +532,9 @@ class UCMManager(ScreenManager):
         self.transition.direction = 'down'
         self.current = 'Home'
         
-    def task_finished(self, last_block=False):
-        self.settings.next_block()
+    def task_finished(self, was_last_block=False):
         # Outro after last block.
-        if last_block:
+        if was_last_block:
             self.current = 'Outro'
         else:
             self.transition.direction = 'down'
@@ -510,11 +553,25 @@ class SettingsContainer(Widget):
     #language = ConfigParserProperty('en', 'Localization', 'language', 'app', val_type=str)
     task = ConfigParserProperty('Circle Task', 'General', 'task', 'app', val_type=str)
     user = ConfigParserProperty('0', 'UserData', 'unique_id', 'app', val_type=str)
+    # Data Collection.
+    is_local_storage_enabled = ConfigParserProperty('0', 'DataCollection', 'is_local_storage_enabled', 'app',
+                                                    val_type=int)  # Bool properties return string by default.
+    is_upload_enabled = ConfigParserProperty('1', 'DataCollection', 'is_upload_enabled', 'app', val_type=int)
+    server_url = ConfigParserProperty('', 'DataCollection', 'dashserver', 'app', val_type=str)
+    is_email_enabled = ConfigParserProperty('0', 'DataCollection', 'is_email_enabled', 'app', val_type=int)
+    email_recipient = ConfigParserProperty('', 'DataCollection', 'email_recipient', 'app', val_type=str)
     
     # Properties that change over the course of all tasks and are not set by config.
     current_trial = NumericProperty(0)
-    current_block = NumericProperty(1)
+    current_block = NumericProperty(0)
     
+    def on_is_local_storage_enabled(self, instance, value):
+        # We need to ask for write permission before trying to write, otherwise we lose data.
+        # There's no callback for permissions granted yet.
+        if value:
+            app = App.get_running_app()
+            data_dest = app.get_data_path()
+        
     # Circle Task properties.
     class CircleTask(Widget):
         n_trials = ConfigParserProperty('20', 'CircleTask', 'n_trials', 'app', val_type=int,
@@ -542,7 +599,7 @@ class SettingsContainer(Widget):
         self.reset_current()
     
     def reset_current(self):
-        self.current_block = 1
+        self.current_block = 0
         self.current_trial = 0
     
     def next_block(self):
@@ -551,20 +608,29 @@ class SettingsContainer(Widget):
     
     def on_current_trial(self, instance, value):
         """ Bound to change in current trial. """
+        pass
     
     def on_current_block(self, instance, value):
-        """ Bound to change in current block. """
+        """ Bound to change in current block property. """
         if self.task == 'Circle Task':
             self.circle_task.set_constraint_setting(value)
 
 
 class UncontrolledManifoldApp(App):
     manager = ObjectProperty(None, allownone=True)
-
+    upload_btn_enabled = BooleanProperty(True)
+    
     def build_config(self, config):
         """ Configure initial settings. """
         config.setdefaults(LANGUAGE_SECTION, {LANGUAGE_CODE: current_language()})
         config.setdefaults('General', {'task': 'Circle Task'})
+        config.setdefaults('DataCollection', {
+            'is_local_storage_enabled': 0,
+            'is_upload_enabled': 1,
+            'dashserver': 'http://127.0.0.1:5000/dashboard/_dash-update-component',  # ToDo: change server address.
+            'is_email_enabled': 0,
+            'email_recipient': '',
+        })
         config.setdefaults('UserData', {'unique_id': self.create_identifier()})
         config.setdefaults('CircleTask', {
             'n_trials': 20,
@@ -596,12 +662,41 @@ class UncontrolledManifoldApp(App):
              'key': LANGUAGE_CODE,
              'options': {code: language_code_to_translation(code)
                          for code in list_languages()}},
+            {'type': 'title',
+             'title': 'Data Collection'},
+            {'type': 'bool',
+             'title': _('Local Storage'),
+             'desc': _('Save data locally on device.'),
+             'section': 'DataCollection',
+             'key': 'is_local_storage_enabled'},
+            {'type': 'bool',
+             'title': _('Upload Data'),
+             'desc': _('Send collected data to server.'),
+             'section': 'DataCollection',
+             'key': 'is_upload_enabled'},
+            {'type': 'string',
+             'title': _('Upload Server'),
+             'desc': _('Target server address to upload data to.'),
+             'section': 'DataCollection',
+             'key': 'dashserver'},
+            {'type': 'bool',
+             'title': _('Send E-Mail'),
+             'desc': _('Offer to send data via e-mail.'),
+             'section': 'DataCollection',
+             'key': 'is_email_enabled'},
+            {'type': 'string',
+             'title': _('E-Mail Recipient'),
+             'desc': _('E-mail address to send data to.'),
+             'section': 'DataCollection',
+             'key': 'email_recipient'},
+            {'type': 'title',
+             'title': 'Task'},
             {'type': 'options',
-             'title': 'Task',
+             'title': _('Current Task'),
              'desc': 'Which task should be run.',
              'section': 'General',
              'key': 'task',
-             'options': ['Circle Task']}
+             'options': ['Circle Task']},
         ]
         return json.dumps(settings)
 
@@ -638,10 +733,11 @@ class UncontrolledManifoldApp(App):
         self.use_kivy_settings = False
         self.settings = SettingsContainer()
         self.update_language_from_config()
-        self.write_permit = True
+        self.write_permit = True  # Set to true as default for platforms other than android.
         root = UCMManager()
         self.manager = root
-        self.data = list()
+        self.data_upload = list()
+        self.data_email = list()
         return root
 
     @staticmethod
@@ -653,21 +749,28 @@ class UncontrolledManifoldApp(App):
         ident = hashed[::4]
         return ident
 
-    def get_data_path(self, timeout=5):
+    def ask_write_permission(self, timeout=5):
         if platform == 'android':
-            #dest = Path(storagepath.get_documents_dir())
-            dest = Path(storagepath.get_external_storage_dir()) / App.get_running_app().name
-            # We may need to ask permission to write to the external storage.
             self.write_permit = check_permission(Permission.WRITE_EXTERNAL_STORAGE)
             if not self.write_permit:
                 request_permissions([Permission.WRITE_EXTERNAL_STORAGE])
             
-            # Wait a bit until permission granted.
+            # Wait a bit until user granted permission.
             t0 = time.time()
             while time.time() - t0 < timeout and not self.write_permit:
                 self.write_permit = check_permission(Permission.WRITE_EXTERNAL_STORAGE)
                 time.sleep(0.5)
-                
+            
+    def get_data_path(self):
+        """ Return writable path.
+        If it does not exist on android, make directory.
+        """
+        if platform == 'android':
+            #dest = Path(storagepath.get_documents_dir())
+            dest = Path(storagepath.get_external_storage_dir()) / App.get_running_app().name
+            # We may need to ask permission to write to the external storage. Permission could have been revoked.
+            self.ask_write_permission()
+            
             if not dest.exists() and self.write_permit:
                 # Make sure the path exists.
                 dest.mkdir(parents=True, exist_ok=True)
@@ -677,9 +780,59 @@ class UncontrolledManifoldApp(App):
             #dest = dest.resolve()  # Resolve any symlinks.
         return dest
     
+    def data2bytes(self, data):
+        """ Takes numpy array and returns it as bytes. """
+        bio = io.BytesIO()
+        np.savetxt(bio, data, delimiter=',', fmt="%.5f", encoding='utf-8')
+        b = bio.getvalue()
+        return b
+    
+    def compile_filename(self, meta_data):
+        file_name = f"{meta_data['id']}-{meta_data['task']}-Block{meta_data['block']}-{meta_data['type']}-{meta_data['time_iso']}.csv"
+        return file_name
+
+    def upload_data(self):
+        """ Upload collected data to server. """
+        file_names = list()
+        last_modified = list()
+        data = list()
+    
+        for d in self.data_upload:
+            # Build fake file name.
+            file_names.append(self.compile_filename(d))
+            last_modified.append(d['time'])
+            # Convert data to base64.
+            header = (','.join(d['columns']) + '\n').encode('utf-8')
+            data_bytes = self.data2bytes(d['data'])
+            data_b64 = base64.b64encode(header + data_bytes)
+            data.append(data_b64)
+    
+        post_data = {'output': 'output-data-upload.children',
+                     'changedPropIds': ['upload-data.contents'],
+                     'inputs': [{'id': 'upload-data',
+                                 'property': 'contents',
+                                 'value': [f'data:application/octet-stream;base64,{d.decode()}' for d in data]}],
+                     'state': [{'id': 'upload-data',
+                                'property': 'filename',
+                                'value': file_names},
+                               {'id': 'upload-data',
+                                'property': 'last_modified',
+                                'value': last_modified}]}
+    
+        # ToDo: error handling after uploading.
+        try:
+            response = requests.post(self.settings.server_url, json=post_data)
+            r_txt = response.text
+        except:
+            r_txt = 'There was an error processing this file.'
+        if 'There was an error processing this file.' not in r_txt:
+            self.upload_btn_enabled = False
+        else:
+            pass
+    
     def send_email(self):
         """ Send the data via e-mail. """
-        recipient = ''
+        recipient = self.settings.email_recipient
         subject = 'New UCM Data Set'
         disclaimer = _("Disclaimer:\n"
                        "By submitting this e-mail you agree to the data processing and evaluation for the purpose of "
@@ -693,7 +846,7 @@ class UncontrolledManifoldApp(App):
                        "information about it or about yourself.").format(self.settings.user) + "\n\n"
         
         text = "### Data ###\n\n"
-        for d in self.data:
+        for d in self.data_email:
             text += "\n".join(k + ": " + str(v) for k, v in d.items())
             text += "\n\n"
         

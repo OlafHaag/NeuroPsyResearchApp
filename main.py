@@ -25,8 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 """
-
-"""Research app to study uncontrolled manifold and optimal feedback control paradigms."""
+# """Research app to study uncontrolled manifold and optimal feedback control paradigms."""
 
 import io
 import json
@@ -552,10 +551,10 @@ class SettingsContainer(Widget):
     # General properties.
     #language = ConfigParserProperty('en', 'Localization', 'language', 'app', val_type=str)
     task = ConfigParserProperty('Circle Task', 'General', 'task', 'app', val_type=str)
-    user = ConfigParserProperty('0', 'UserData', 'unique_id', 'app', val_type=str)
+    user = ConfigParserProperty('test', 'UserData', 'unique_id', 'app', val_type=str)
     # Data Collection.
     is_local_storage_enabled = ConfigParserProperty('0', 'DataCollection', 'is_local_storage_enabled', 'app',
-                                                    val_type=int)  # Bool properties return string by default.
+                                                    val_type=int)  # Converts string to int.
     is_upload_enabled = ConfigParserProperty('1', 'DataCollection', 'is_upload_enabled', 'app', val_type=int)
     server_url = ConfigParserProperty('', 'DataCollection', 'dashserver', 'app', val_type=str)
     is_email_enabled = ConfigParserProperty('0', 'DataCollection', 'is_email_enabled', 'app', val_type=int)
@@ -565,13 +564,34 @@ class SettingsContainer(Widget):
     current_trial = NumericProperty(0)
     current_block = NumericProperty(0)
     
+    def get_settings_widget(self, panel_name, key):
+        """ Helper function to get a widget from a SettingsPanel that contains a config value. """
+        app = App.get_running_app()
+        panels = app._app_settings.interface.content.panels
+        gen_panel = [k for k, v in panels.items() if v.title == panel_name][0]
+        widgets = panels[gen_panel].children
+        for w in widgets:
+            try:
+                if w.key == key:
+                    return w.children[0].children[0].children[0]
+            except AttributeError:
+                pass
+        return None
+        
     def on_is_local_storage_enabled(self, instance, value):
-        # We need to ask for write permission before trying to write, otherwise we lose data.
-        # There's no callback for permissions granted yet.
+        """ We need to ask for write permission before trying to write, otherwise we lose data.
+        There's no callback for permissions granted yet.
+        """
         if value:
             app = App.get_running_app()
-            data_dest = app.get_data_path()
-        
+            app.ask_write_permission(5)
+            if not app.write_permit:
+                self.is_local_storage_enabled = 0
+                # Hack to change the visual switch after value was set. ConfigParserProperty doesn't work here. (1.11.0)
+                switch = self.get_settings_widget('General', 'is_local_storage_enabled')
+                if switch:
+                    switch.active = self.is_local_storage_enabled
+    
     # Circle Task properties.
     class CircleTask(Widget):
         n_trials = ConfigParserProperty('20', 'CircleTask', 'n_trials', 'app', val_type=int,
@@ -730,6 +750,7 @@ class UncontrolledManifoldApp(App):
         
     def build(self):
         self.settings_cls = Settings
+        self.settings_ref = None
         self.use_kivy_settings = False
         self.settings = SettingsContainer()
         self.update_language_from_config()

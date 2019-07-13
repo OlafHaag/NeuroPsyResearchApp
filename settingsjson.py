@@ -1,15 +1,6 @@
 import json
 
 settings_circle_task_json = json.dumps([
-    {'type': 'title',
-     'title': 'User Data'},
-    {'type': 'string',
-     'title': 'Unique Identifier',
-     'desc': 'Anonymous identifier for the current user.',
-     'section': 'UserData',
-     'key': 'unique_id'},
-    {'type': 'title',
-     'title': 'Task Settings'},
     {'type': 'numeric',
      'title': 'Number of trials',
      'desc': 'Trials per block.',

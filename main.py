@@ -106,7 +106,7 @@ class ScreenHome(Screen):
 
 
 class ScreenOutro(Screen):
-    """ Display that gives general information. """
+    """ Display at the end of a session. """
     settings = ObjectProperty()
     outro_msg = StringProperty(_("Initiating..."))
     
@@ -764,7 +764,6 @@ class UncontrolledManifoldApp(App):
         
     def build(self):
         self.settings_cls = Settings
-        self.settings_ref = None
         self.use_kivy_settings = False
         self.settings = SettingsContainer()
         self.update_language_from_config()

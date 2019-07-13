@@ -56,13 +56,14 @@ from plyer import storagepath
 from plyer import notification
 from plyer import email
 
-import numpy as np
-
 from settingsjson import settings_circle_task_json
 from i18n import _, list_languages, change_language_to, current_language, language_code_to_translation
 from i18n.settings import Settings
 
 import requests
+import numpy as np
+
+from config import WEBSERVER
 
 if platform == 'android':
     from android.permissions import request_permissions, check_permission, Permission
@@ -123,12 +124,14 @@ class ScreenOutro(Screen):
 
 
 class ScreenWebView(Screen):
-    """ Currently out of order. Crashes on create_webview! """
+    """ Currently out of order. Crashes on create_webview!
+    Shall display the analysed data after a session for individual feedback.
+    """
     view_cached = None
     webview = None
     wvc = None
-    webview_lock = False  # simple lock to avoid launching two webviews
-    url = StringProperty('http://127.0.0.1:5000/dashboard/')  # Todo URL
+    webview_lock = False  # simple lock to avoid launching two webviews.
+    url = StringProperty(WEBSERVER)
     
     def __init__(self, **kwargs):
         super(ScreenWebView, self).__init__(**kwargs)
@@ -556,7 +559,7 @@ class SettingsContainer(Widget):
     is_local_storage_enabled = ConfigParserProperty('0', 'DataCollection', 'is_local_storage_enabled', 'app',
                                                     val_type=int)  # Converts string to int.
     is_upload_enabled = ConfigParserProperty('1', 'DataCollection', 'is_upload_enabled', 'app', val_type=int)
-    server_url = ConfigParserProperty('', 'DataCollection', 'dashserver', 'app', val_type=str)
+    server_uri = ConfigParserProperty(WEBSERVER, 'DataCollection', 'webserver', 'app', val_type=str)
     is_email_enabled = ConfigParserProperty('0', 'DataCollection', 'is_email_enabled', 'app', val_type=int)
     email_recipient = ConfigParserProperty('', 'DataCollection', 'email_recipient', 'app', val_type=str)
     
@@ -647,7 +650,7 @@ class UncontrolledManifoldApp(App):
         config.setdefaults('DataCollection', {
             'is_local_storage_enabled': 0,
             'is_upload_enabled': 1,
-            'dashserver': 'http://127.0.0.1:5000/dashboard/_dash-update-component',  # ToDo: change server address.
+            'webserver': WEBSERVER,
             'is_email_enabled': 0,
             'email_recipient': '',
         })

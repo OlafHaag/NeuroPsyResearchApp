@@ -140,6 +140,8 @@ class ScreenWebView(Screen):
     def on_enter(self, *args):
         super(ScreenWebView, self).on_enter(*args)
         
+        self.url = App.get_running_app().settings.server_uri
+        
         if platform == 'android':
             # On android create webview for website.
             self.ids['info_label'].text = _("Please wait\nAttaching WebView")

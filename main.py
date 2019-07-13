@@ -34,6 +34,7 @@ import datetime
 import time
 from pathlib import Path
 from hashlib import md5
+from uuid import uuid4
 import base64
 
 from kivy.app import App
@@ -411,7 +412,8 @@ class ScreenCircleTask(Screen):
         """ Collect information about context of data acquisition. """
         constrained_df = 'constrained_df2' if self.target2_switch else 'constrained_df1'
 
-        self.meta_data['id'] = self.settings.user
+        self.meta_data['device'] = App.get_running_app().create_device_identifier()
+        self.meta_data['user'] = self.settings.user
         self.meta_data['task'] = 'CT'  # Short for Circle Task.
         self.meta_data['block'] = self.settings.current_block
         self.meta_data['type'] = constrained_df if self.is_constrained else "unconstrained"
@@ -420,6 +422,7 @@ class ScreenCircleTask(Screen):
         self.meta_data['columns'] = ['df1', 'df2']
         self.meta_data['hash'] = md5(self.data).hexdigest()
     
+    # ToDo: save screen size/resolution, initial circle/ring size, slider size and slider value to file
     def collect_data_upload(self):
         """ Add data to be uploaded to a server. """
         d = self.meta_data.copy()
@@ -434,7 +437,6 @@ class ScreenCircleTask(Screen):
         
         app = App.get_running_app()
         app.data_email.append(d)
-        # ToDo: save screen size/resolution, initial circle/ring size, slider size and slider value to file
         
     def write_data(self):
         """ Save endpoint values in app.user_data_dir with unique file name. """
@@ -656,7 +658,7 @@ class UncontrolledManifoldApp(App):
             'is_email_enabled': 0,
             'email_recipient': '',
         })
-        config.setdefaults('UserData', {'unique_id': self.create_identifier()})
+        config.setdefaults('UserData', {'unique_id': self.create_user_identifier()})
         config.setdefaults('CircleTask', {
             'n_trials': 20,
             'n_blocks': 3,
@@ -718,7 +720,7 @@ class UncontrolledManifoldApp(App):
              'title': _('Upload Server'),
              'desc': _('Target server address to upload data to.'),
              'section': 'DataCollection',
-             'key': 'dashserver'},
+             'key': 'webserver'},
             {'type': 'bool',
              'title': _('Send E-Mail'),
              'desc': _('Offer to send data via e-mail.'),
@@ -774,13 +776,19 @@ class UncontrolledManifoldApp(App):
         return root
 
     @staticmethod
-    def create_identifier(**kwargs):
+    def create_device_identifier(**kwargs):
         """ Returns an identifier for the hardware. """
         uid = uniqueid.get_uid().encode()
         hashed = md5(uid).hexdigest()
         # Shorten and lose information.
         ident = hashed[::4]
         return ident
+    
+    @staticmethod
+    def create_user_identifier(**kwargs):
+        """ Return unique identifier for user. """
+        uuid = uuid4().hex
+        return uuid
 
     def ask_write_permission(self, timeout=5):
         if platform == 'android':
@@ -821,7 +829,8 @@ class UncontrolledManifoldApp(App):
         return b
     
     def compile_filename(self, meta_data):
-        file_name = f"{meta_data['id']}-{meta_data['task']}-Block{meta_data['block']}-{meta_data['type']}-{meta_data['time_iso']}.csv"
+        # ToDo: different filenames for different types of tables.
+        file_name = f"{meta_data['user']}-{meta_data['task']}-Block{meta_data['block']}-{meta_data['type']}-{meta_data['time_iso']}.csv"
         return file_name
 
     def upload_data(self):

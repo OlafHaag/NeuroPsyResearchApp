@@ -82,52 +82,51 @@
     count_down: anim_label
     settings: app.settings
 
-    BoxLayout:
-        orientation: 'horizontal'
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'center'
 
-        BoxLayout:
+        #Label:
+        #    text: 'df2 = {}'.format(df2.value)
+        #    size_hint_x: None
+        #    size_hint_y: 0.1
+        #    size: self.texture_size
+        #    pos_hint: {'left': 1}
+
+        ScaleSlider:
+            id: df1
+            min: 0
+            max: 100
+            value: self.max * 0.1
             orientation: 'vertical'
-            size_hint_x: 0.15
+            value_track_color: [0.25, 0.52, 0.95, 1]
+            cursor_image: 'res/sliderhandle_vertical.png'
+            cursor_disabled_image: 'res/sliderhandle_vertical_disabled.png'
+            cursor_size: [sp(64)]*2
+            padding: sp(48)
+            sensitivity: 'handle'
+            size_hint: None, 1
 
-            #Label:
-            #    text: 'df2 = {}'.format(df2.value)
-            #    size_hint_x: None
-            #    size_hint_y: 0.1
-            #    size: self.texture_size
-            #    pos_hint: {'left': 1}
+    AnchorLayout:
+        anchor_x: 'right'
+        anchor_y: 'center'
 
-            ScaleSlider:
-                id: df2
-                min: 0
-                max: 100
-                value: self.max * 0.1
-                orientation: 'vertical'
-                value_track_color: [0.25, 0.52, 0.95, 1]
-                cursor_image: 'res/sliderhandle_vertical.png'
-                cursor_disabled_image: 'res/sliderhandle_vertical_disabled.png'
-                cursor_size: [sp(64)]*2
-                padding: sp(48)
-                sensitivity: 'handle'
+        #Label:
+        #    text: 'df1 = {}'.format(df1.value)
 
-        BoxLayout:
+        ScaleSlider:
+            id: df2
+            min: 0
+            max: 100
+            value: self.max * 0.1
             orientation: 'vertical'
-            size_hint_y: 0.2
-
-            #Label:
-            #    text: 'df1 = {}'.format(df1.value)
-
-            ScaleSlider:
-                id: df1
-                min: 0
-                max: 100
-                value: self.max * 0.1
-                orientation: 'horizontal'
-                value_track_color: [0.25, 0.52, 0.95, 1]
-                cursor_image: 'res/sliderhandle_horizontal.png'
-                cursor_disabled_image: 'res/sliderhandle_horizontal_disabled.png'
-                cursor_size: [sp(64)]*2
-                padding: sp(32)
-                sensitivity: 'handle'
+            value_track_color: [0.25, 0.52, 0.95, 1]
+            cursor_image: 'res/sliderhandle_horizontal.png'
+            cursor_disabled_image: 'res/sliderhandle_horizontal_disabled.png'
+            cursor_size: [sp(64)]*2
+            padding: sp(48)
+            sensitivity: 'handle'
+            size_hint: None, 1
 
     FloatLayout:
         canvas:
@@ -173,17 +172,16 @@
                 circle: self.center_x, self.center_y, min(self.width, self.height) * 0.4, 0, self.angle % 360
                 width: 5
 
-    BoxLayout:
-        AnchorLayout:
-            anchor_x: 'right'
-            anchor_y: 'top'
-            Label:
-                text: root.progress
-                text_size: root.width, None
-                size: self.texture_size
-                halign: 'right'
-                valign: 'middle'
-                size_hint: None, None
+    AnchorLayout:
+        anchor_x: 'center'
+        anchor_y: 'top'
+        Label:
+            text: root.progress
+            text_size: root.width, None
+            size: self.texture_size
+            halign: 'center'
+            valign: 'middle'
+            size_hint: None, None
 
     #Debug
     #FloatLayout:

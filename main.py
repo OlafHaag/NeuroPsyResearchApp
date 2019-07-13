@@ -832,8 +832,11 @@ class UncontrolledManifoldApp(App):
         file_name = f"{meta_data['user']}-{meta_data['task']}-Block{meta_data['block']}-{meta_data['type']}-{meta_data['time_iso']}.csv"
         return file_name
 
-    def upload_data(self):
-        """ Upload collected data to server. """
+    def get_dash_post(self):
+        """ Build a json string to post to a dash update component.
+        
+        :return: post request json string.
+        """
         file_names = list()
         last_modified = list()
         data = list()
@@ -860,16 +863,34 @@ class UncontrolledManifoldApp(App):
                                 'property': 'last_modified',
                                 'value': last_modified}]}
     
-        # ToDo: error handling after uploading.
+        return post_data
+    
+    def upload_data(self):
+        """ Upload collected data to server. """
+        
+        # Upload address depends on current task. One dash application per task.
+        if self.settings.task == 'Circle Task':
+            upload_route = '/circletask/_dash-update-component'
+        # Map other tasks to their respective dash-app here.
+        else:
+            upload_route = ''
+        server_uri = self.settings.server_uri.strip('/') + upload_route
+        
+        post_data = self.get_dash_post()
+        
+        # ToDo: upload error handling.
         try:
-            response = requests.post(self.settings.server_url, json=post_data)
+            response = requests.post(server_uri, json=post_data)
             r_txt = response.text
         except:
             r_txt = 'There was an error processing this file.'
         if 'There was an error processing this file.' not in r_txt:
             self.upload_btn_enabled = False
         else:
+            r_txt = 'Something went wrong.'
             pass
+        # ToDo: Feedback (e.g. popup) after uploading.
+        print(r_txt)
     
     def send_email(self):
         """ Send the data via e-mail. """

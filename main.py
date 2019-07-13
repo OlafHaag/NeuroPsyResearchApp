@@ -57,14 +57,14 @@ from plyer import storagepath
 from plyer import notification
 from plyer import email
 
-from settingsjson import settings_circle_task_json
-from i18n import _, list_languages, change_language_to, current_language, language_code_to_translation
-from i18n.settings import Settings
-
 import requests
 import numpy as np
 
+from i18n import _, list_languages, change_language_to, current_language, language_code_to_translation
 from config import WEBSERVER
+from settings import Settings
+from settingsjson import settings_circle_task_json
+
 
 if platform == 'android':
     from android.permissions import request_permissions, check_permission, Permission
@@ -696,6 +696,12 @@ class UncontrolledManifoldApp(App):
              'desc': 'Anonymous identifier for the current user.',
              'section': 'UserData',
              'key': 'unique_id'},
+            {'type': 'buttons',
+             'title': "New User",
+             "desc": "Generates a new unique identifier.",
+             "section": "UserData",
+             'key': 'configchangebuttons',
+             'buttons': [{'title': _("New UUID"), 'id': 'btn_new_uuid'}]},
             {'type': 'title',
              'title': 'Task'},
             {'type': 'options',
@@ -758,6 +764,14 @@ class UncontrolledManifoldApp(App):
     def on_config_change(self, config, section, key, value):
         if section == 'Localization' and key == 'language':
             self.switch_language(value)
+        if section == 'UserData' and key == 'configchangebuttons':
+            if value == 'btn_new_uuid':
+                self.settings.user = self.create_user_identifier()
+                # Update User Label.
+                user_label = self.settings.get_settings_widget('General', 'unique_id')
+                # We need the parent SettingString object of the label.
+                setting_string = user_label.parent.parent.parent
+                setting_string.value = self.settings.user
         
     def switch_language(self, lang='en'):
         change_language_to(lang)

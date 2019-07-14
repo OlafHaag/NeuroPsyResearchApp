@@ -1,6 +1,6 @@
 import json
 
-from src.i18n import _, list_languages, language_code_to_translation
+from .i18n import _, list_languages, language_code_to_translation
 
 LANGUAGE_CODE = "language"
 LANGUAGE_SECTION = "Localization"

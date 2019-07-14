@@ -8,7 +8,7 @@ from kivy.properties import NumericProperty
 
 
 from .i18n.settings import SettingOptionMapping
-from src.config import WEBSERVER
+from .config import WEBSERVER
 
 
 class SettingButtons(SettingItem):

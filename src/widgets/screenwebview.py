@@ -31,7 +31,7 @@ from kivy.properties import StringProperty
 from kivy.clock import Clock, mainthread
 from kivy.utils import platform
 
-from src.config import WEBSERVER
+from ..config import WEBSERVER
 
 if platform == 'android':
     from android.runnable import run_on_ui_thread

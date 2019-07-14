@@ -1,7 +1,7 @@
 from kivy.uix.screenmanager import Screen
 from kivy.properties import ObjectProperty, StringProperty
 
-from src.i18n import _
+from ..i18n import _
 
 
 class ScreenInstructCircleTask(Screen):

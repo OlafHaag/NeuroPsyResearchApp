@@ -1,7 +1,7 @@
 from kivy.uix.popup import Popup
 from kivy.properties import StringProperty
 
-from src.i18n import _
+from ..i18n import _
 
 
 class SimplePopup(Popup):

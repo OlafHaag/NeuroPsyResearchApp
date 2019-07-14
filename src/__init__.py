@@ -1,1 +1,1 @@
-from src.app import UncontrolledManifoldApp as App
+from .app import UncontrolledManifoldApp as App

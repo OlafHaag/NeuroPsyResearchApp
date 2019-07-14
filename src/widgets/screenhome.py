@@ -2,7 +2,7 @@ from kivy.app import App
 from kivy.uix.screenmanager import Screen
 from kivy.properties import StringProperty
 
-from src.i18n import _
+from ..i18n import _
 
 
 class ScreenHome(Screen):

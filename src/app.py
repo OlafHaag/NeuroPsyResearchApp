@@ -20,10 +20,10 @@ from plyer import email
 import requests
 import numpy as np
 
-from src.i18n import _, change_language_to, current_language
-from src.config import WEBSERVER
-from src.settings import Settings, SettingsContainer
-from src.settingsjson import LANGUAGE_CODE, LANGUAGE_SECTION, settings_general_json, settings_circle_task_json
+from .i18n import _, change_language_to, current_language
+from .config import WEBSERVER
+from .settings import Settings, SettingsContainer
+from .settingsjson import LANGUAGE_CODE, LANGUAGE_SECTION, settings_general_json, settings_circle_task_json
 
 from .widgets import UCMManager, SimplePopup
 

@@ -11,7 +11,7 @@ from kivy.clock import Clock
 
 import numpy as np
 
-from src.i18n import _
+from ..i18n import _
 
 
 class ScreenCircleTask(Screen):

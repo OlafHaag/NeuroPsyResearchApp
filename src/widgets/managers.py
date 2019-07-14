@@ -5,7 +5,7 @@ from kivy.properties import ObjectProperty
 
 from plyer import notification
 
-from src.i18n import _
+from ..i18n import _
 
 
 class UCMManager(ScreenManager):

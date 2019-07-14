@@ -160,7 +160,7 @@
                 size: [min(self.width, self.height) * 0.05] * 2
                 pos: [self.center_x - min(self.width, self.height) * 0.025, self.center_y - min(self.width, self.height) * 0.275]
 
-    CountDownLbl:
+    CountDownCircle:
         id: anim_label
         text: str(int(self.start_count - (self.angle*self.start_count//360)))
         font_size: 50

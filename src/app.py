@@ -118,6 +118,7 @@ class UncontrolledManifoldApp(App):
         self.settings = SettingsContainer()
         self.update_language_from_config()
         self.write_permit = True  # Set to true as default for platforms other than android.
+        self.internet_permit = True
         root = UCMManager()
         self.manager = root
         self.data_upload = list()
@@ -138,8 +139,24 @@ class UncontrolledManifoldApp(App):
         """ Return unique identifier for user. """
         uuid = uuid4().hex
         return uuid
-    
+
+    def ask_internet_permission(self, timeout=5):
+        """Necessary on android to post data to the server.
+        Yet, no prompt appears, nor a setting in the app's permissions...
+        """
+        if platform == 'android':
+            self.internet_permit = check_permission(Permission.INTERNET)
+            if not self.internet_permit:
+                request_permissions([Permission.INTERNET])
+        
+            # Wait a bit until user granted permission.
+            t0 = time.time()
+            while time.time() - t0 < timeout and not self.internet_permit:
+                self.internet_permit = check_permission(Permission.INTERNET)
+                time.sleep(0.5)
+                
     def ask_write_permission(self, timeout=5):
+        """ Necessary on Android to write to the file system. """
         if platform == 'android':
             self.write_permit = check_permission(Permission.WRITE_EXTERNAL_STORAGE)
             if not self.write_permit:
@@ -170,17 +187,17 @@ class UncontrolledManifoldApp(App):
             # dest = dest.resolve()  # Resolve any symlinks.
         return dest
     
+    def compile_filename(self, meta_data):
+        # ToDo: different filenames for different types of tables.
+        file_name = f"{meta_data['user']}-{meta_data['task']}-Block{meta_data['block']}-{meta_data['type']}-{meta_data['time_iso']}.csv"
+        return file_name
+    
     def data2bytes(self, data):
         """ Takes numpy array and returns it as bytes. """
         bio = io.BytesIO()
         np.savetxt(bio, data, delimiter=',', fmt="%.5f", encoding='utf-8')
         b = bio.getvalue()
         return b
-    
-    def compile_filename(self, meta_data):
-        # ToDo: different filenames for different types of tables.
-        file_name = f"{meta_data['user']}-{meta_data['task']}-Block{meta_data['block']}-{meta_data['type']}-{meta_data['time_iso']}.csv"
-        return file_name
     
     def get_dash_post(self):
         """ Build a json string to post to a dash update component.
@@ -217,6 +234,8 @@ class UncontrolledManifoldApp(App):
     
     def upload_data(self):
         """ Upload collected data to server. """
+        if platform == 'android':
+            self.ask_internet_permission(2)
         
         # Upload address depends on current task. One dash application per task.
         if self.settings.task == 'Circle Task':

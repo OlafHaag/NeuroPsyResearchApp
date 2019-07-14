@@ -85,7 +85,7 @@ fullscreen = 1
 #android.presplash_color = #FFFFFF
 
 # (list) Permissions
-android.permissions = WRITE_EXTERNAL_STORAGE,VIBRATE
+android.permissions = WRITE_EXTERNAL_STORAGE,INTERNET,VIBRATE
 
 # (int) Target Android API, should be as high as possible.
 #android.api = 27

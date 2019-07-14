@@ -903,16 +903,17 @@ class UncontrolledManifoldApp(App):
         # ToDo: upload error handling.
         try:
             response = requests.post(server_uri, json=post_data)
-            feedback_txt = response.text
+            returned_txt = response.text
         except:
-            feedback_txt = 'There was an error processing this file.'
+            returned_txt = 'There was an error processing this file.'
             
-        if 'There was an error processing this file.' not in feedback_txt:
+        if 'There was an error processing this file.' not in returned_txt:
             feedback_title = _("Success!")
+            feedback_txt = _("Upload successful!")
             self.upload_btn_enabled = False
         else:
             feedback_title = _("Error!")
-            feedback_txt = 'Something went wrong.'
+            feedback_txt = _("Upload failed.\nSomething went wrong.")
             
         # Feedback after uploading.
         self.show_feedback(feedback_title, feedback_txt)

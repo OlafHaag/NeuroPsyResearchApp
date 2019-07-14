@@ -261,9 +261,12 @@ class UncontrolledManifoldApp(App):
         else:
             feedback_title = _("Error!")
             feedback_txt = _("Upload failed.\nSomething went wrong.")
-        
+    
         # Feedback after uploading.
         self.show_feedback(feedback_title, feedback_txt)
+        # Change button label back. Heroku dyno sleeps so it can take some time for the response.
+        upload_btn = self.manager.get_screen('Outro').ids.upload_btn
+        upload_btn.text = _("Upload")
     
     def show_feedback(self, title, msg):
         pop = SimplePopup(title=title)

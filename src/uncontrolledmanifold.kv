@@ -213,9 +213,10 @@
                 on_release:
                     app.send_email()
             Button:
+                id: upload_btn
                 text: _("Upload")
                 disabled: not app.upload_btn_enabled
-                on_release: app.upload_data()
+                on_release: upload_btn.text = _("Uploading...");app.upload_data()
         BoxLayout:
             orientation: 'horizontal'
             size_hint_y: 0.2

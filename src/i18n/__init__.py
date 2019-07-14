@@ -12,7 +12,7 @@ from pathlib import Path
 
 from .observable_translation import ObservableTranslation
 
-_locale_dir = Path(__file__).resolve().parent.parent / "locales"
+_locale_dir = Path(__file__).resolve().parent.parent.parent / "locales"
 _current_language = None
 _locales = None
 DOMAIN = "UCMResearchApp"  #: the name of the .po files

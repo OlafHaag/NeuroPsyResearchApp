@@ -25,7 +25,7 @@ from src.config import WEBSERVER
 from src.settings import Settings, SettingsContainer
 from src.settingsjson import LANGUAGE_CODE, LANGUAGE_SECTION, settings_general_json, settings_circle_task_json
 
-from widgets import UCMManager, SimplePopup
+from .widgets import UCMManager, SimplePopup
 
 if platform == 'android':
     from android.permissions import request_permissions, check_permission, Permission

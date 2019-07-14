@@ -23,7 +23,7 @@ SOFTWARE.
 
 """
 
-from src.app import UncontrolledManifoldApp
+from src import App
 
 if __name__ in ('__main__', '__android__'):
-    UncontrolledManifoldApp().run()
+    App().run()

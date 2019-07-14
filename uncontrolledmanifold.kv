@@ -234,3 +234,22 @@
 		Label:
 			id: info_label
 			halign: 'center'
+
+<SimplePopup>:
+    id:pop
+    size_hint: .4, .4
+    auto_dismiss: True
+    title: 'Hello world!!'
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            id: pop_text
+            text: root.msg
+            text_size: root.width, None
+            size: self.texture_size
+            halign: 'center'
+            valign: 'middle'
+        Button:
+            text: _("Close")
+            on_release: pop.dismiss()

@@ -43,6 +43,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.label import Label
 from kivy.uix.slider import Slider
 from kivy.uix.widget import Widget
+from kivy.uix.popup import Popup
 from kivy.properties import ObjectProperty, NumericProperty, StringProperty, BooleanProperty
 from kivy.properties import ConfigParserProperty
 from kivy.animation import Animation
@@ -122,6 +123,13 @@ class ScreenOutro(Screen):
             
         app = App.get_running_app()
         app.upload_btn_enabled = self.settings.is_upload_enabled
+
+
+class SimplePopup(Popup):
+    msg = StringProperty(_('Initiating...'))
+
+    def __init__(self, **kwargs):
+        super(SimplePopup, self).__init__(**kwargs)
 
 
 class ScreenWebView(Screen):
@@ -881,7 +889,7 @@ class UncontrolledManifoldApp(App):
     
     def upload_data(self):
         """ Upload collected data to server. """
-        
+    
         # Upload address depends on current task. One dash application per task.
         if self.settings.task == 'Circle Task':
             upload_route = '/circletask/_dash-update-component'
@@ -889,23 +897,31 @@ class UncontrolledManifoldApp(App):
         else:
             upload_route = ''
         server_uri = self.settings.server_uri.strip('/') + upload_route
-        
+    
         post_data = self.get_dash_post()
-        
+    
         # ToDo: upload error handling.
         try:
             response = requests.post(server_uri, json=post_data)
-            r_txt = response.text
+            feedback_txt = response.text
         except:
-            r_txt = 'There was an error processing this file.'
-        if 'There was an error processing this file.' not in r_txt:
+            feedback_txt = 'There was an error processing this file.'
+            
+        if 'There was an error processing this file.' not in feedback_txt:
+            feedback_title = _("Success!")
             self.upload_btn_enabled = False
         else:
-            r_txt = 'Something went wrong.'
-            pass
-        # ToDo: Feedback (e.g. popup) after uploading.
-        print(r_txt)
+            feedback_title = _("Error!")
+            feedback_txt = 'Something went wrong.'
+            
+        # Feedback after uploading.
+        self.show_feedback(feedback_title, feedback_txt)
     
+    def show_feedback(self, title, msg):
+        pop = SimplePopup(title=title)
+        pop.msg = msg
+        pop.open()
+        
     def send_email(self):
         """ Send the data via e-mail. """
         recipient = self.settings.email_recipient

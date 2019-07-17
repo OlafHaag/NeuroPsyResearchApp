@@ -49,7 +49,9 @@ class UncontrolledManifoldApp(App):
             return super(UncontrolledManifoldApp, self).get_application_config()  # Use default.
     
     def build_config(self, config):
-        """ Configure initial settings. """
+        """ This method is called before the application is initialized to construct the ConfigParser object.
+        The configuration will be automatically saved in the file returned by get_application_config().
+        """
         config.setdefaults(LANGUAGE_SECTION, {LANGUAGE_CODE: current_language()})
         config.setdefaults('General', {'task': 'Circle Task'})
         config.setdefaults('DataCollection', {
@@ -69,6 +71,7 @@ class UncontrolledManifoldApp(App):
             'cool_down_time': 0.5})
     
     def build_settings(self, settings):
+        """ Populate settings panel. """
         settings.add_json_panel('General',
                                 self.config,
                                 data=settings_general_json)
@@ -83,6 +86,7 @@ class UncontrolledManifoldApp(App):
         change_language_to(config_language)
     
     def display_settings(self, settings):
+        """ Display the settings panel. """
         manager = self.manager
         if not manager.has_screen('Settings'):
             s = Screen(name='Settings')
@@ -98,6 +102,7 @@ class UncontrolledManifoldApp(App):
             self.manager.n_home_esc -= 1
     
     def on_config_change(self, config, section, key, value):
+        """ Fired when the section's key-value pair of a ConfigParser changes. """
         if section == 'Localization' and key == 'language':
             self.switch_language(value)
         if section == 'UserData' and key == 'configchangebuttons':
@@ -110,9 +115,13 @@ class UncontrolledManifoldApp(App):
                 setting_string.value = self.settings.user
     
     def switch_language(self, lang='en'):
+        """ Change displayed translation. """
         change_language_to(lang)
     
     def build(self):
+        """ Initializes the application; it will be called only once.
+        If this method returns a widget (tree), it will be used as the root widget and added to the window.
+        """
         self.settings_cls = Settings
         self.use_kivy_settings = False
         self.settings = SettingsContainer()

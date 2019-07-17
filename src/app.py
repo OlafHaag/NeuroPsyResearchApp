@@ -125,8 +125,7 @@ class UncontrolledManifoldApp(App):
         self.data_email = list()
         return root
     
-    @staticmethod
-    def create_device_identifier(**kwargs):
+    def create_device_identifier(self, **kwargs):
         """ Returns an identifier for the hardware. """
         uid = uniqueid.get_uid().encode()
         hashed = md5(uid).hexdigest()
@@ -134,8 +133,7 @@ class UncontrolledManifoldApp(App):
         ident = hashed[::4]
         return ident
     
-    @staticmethod
-    def create_user_identifier(**kwargs):
+    def create_user_identifier(self, **kwargs):
         """ Return unique identifier for user. """
         uuid = uuid4().hex
         return uuid

@@ -79,7 +79,7 @@ class ScreenWebView(Screen):
             
             # Only if we would want to manually upload data files.
             # if platform == 'win':
-            #    subprocess.Popen(r'explorer "{}"'.format(App.get_running_app().get_data_path()))
+            #    subprocess.Popen(r'explorer "{}"'.format(App.get_running_app().get_storage_path()))
     
     @run_on_ui_thread
     def key_back_handler(self, *args):

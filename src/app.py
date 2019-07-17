@@ -166,7 +166,7 @@ class UncontrolledManifoldApp(App):
                 self.write_permit = check_permission(Permission.WRITE_EXTERNAL_STORAGE)
                 time.sleep(0.5)
     
-    def get_data_path(self):
+    def get_storage_path(self):
         """ Return writable path.
         If it does not exist on android, make directory.
         """

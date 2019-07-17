@@ -209,7 +209,7 @@ class ScreenCircleTask(Screen):
         """ Save endpoint values in app.user_data_dir with unique file name. """
         app = App.get_running_app()
         file_name = app.compile_filename(self.meta_data)
-        dest_path = app.get_data_path()
+        dest_path = app.get_storage_path()
         if self.data is not None and app.write_permit:
             np.savetxt(dest_path / file_name, self.data, fmt='%10.5f', delimiter=',',
                        header=','.join(self.meta_data['columns']), comments='')

@@ -155,7 +155,7 @@ class ScreenCircleTask(Screen):
             self.collect_meta_data()
             
             if self.settings.is_local_storage_enabled:
-                self.write_data()
+                self.collect_data_storage()
             if self.settings.is_upload_enabled:
                 self.collect_data_upload()
             if self.settings.is_email_enabled:
@@ -177,25 +177,34 @@ class ScreenCircleTask(Screen):
     
     def collect_meta_data(self):
         """ Collect information about context of data acquisition. """
-        constrained_df = 'constrained_df2' if self.target2_switch else 'constrained_df1'
+        constrained_df = 'df2' if self.target2_switch else 'df1'
         
+        self.meta_data['table'] = 'trials'
         self.meta_data['device'] = App.get_running_app().create_device_identifier()
         self.meta_data['user'] = self.settings.user
-        self.meta_data['task'] = 'CT'  # Short for Circle Task.
+        self.meta_data['task'] = self.settings.task
         self.meta_data['block'] = self.settings.current_block
-        self.meta_data['type'] = constrained_df if self.is_constrained else "unconstrained"
+        self.meta_data['treatment'] = constrained_df if self.is_constrained else ''
         self.meta_data['time_iso'] = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         self.meta_data['time'] = time.time()
         self.meta_data['columns'] = ['df1', 'df2']
         self.meta_data['hash'] = md5(self.data).hexdigest()
     
-    # ToDo: save screen size/resolution, initial circle/ring size, slider size and slider value to file
+    # ToDo: collect screen size/resolution, initial circle/ring size, slider size and slider value, etc.
     def collect_data_upload(self):
         """ Add data to be uploaded to a server. """
         d = self.meta_data.copy()
         d['data'] = self.data
         app = App.get_running_app()
         app.data_upload.append(d)
+    
+    def collect_data_storage(self):
+        """ Add data to be saved to disk. """
+        d = self.meta_data.copy()
+        app = App.get_running_app()
+        header = ','.join(self.meta_data['columns'])
+        d['data'] = app.data2bytes(self.data, header=header)
+        app.data_storage.append(d)
     
     def collect_data_email(self):
         """ Add data to be sent via e-mail. """
@@ -204,12 +213,3 @@ class ScreenCircleTask(Screen):
         
         app = App.get_running_app()
         app.data_email.append(d)
-    
-    def write_data(self):
-        """ Save endpoint values in app.user_data_dir with unique file name. """
-        app = App.get_running_app()
-        file_name = app.compile_filename(self.meta_data)
-        dest_path = app.get_storage_path()
-        if self.data is not None and app.write_permit:
-            np.savetxt(dest_path / file_name, self.data, fmt='%10.5f', delimiter=',',
-                       header=','.join(self.meta_data['columns']), comments='')

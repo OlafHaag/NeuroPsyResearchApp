@@ -6,6 +6,7 @@ from pathlib import Path
 from hashlib import md5
 from uuid import uuid4
 import base64
+from datetime import datetime
 
 from kivy.app import App
 from kivy.uix.screenmanager import Screen
@@ -130,6 +131,7 @@ class UncontrolledManifoldApp(App):
         self.internet_permit = True
         root = UCMManager()
         self.manager = root
+        self.data_storage = list()
         self.data_upload = list()
         self.data_email = list()
         return root
@@ -194,15 +196,84 @@ class UncontrolledManifoldApp(App):
             # dest = dest.resolve()  # Resolve any symlinks.
         return dest
     
+    def create_subfolder(self, subpath):
+        """ Create a user folder inside storage_path.
+        
+        :param subpath: Path relative to get_storage_path()'s return value.
+        :type subpath: Union[str,pathlib.Path]
+        """
+        storage_path = self.get_storage_path()
+        destination = storage_path / subpath
+        if not destination.exists() and self.write_permit:
+            destination.mkdir(parents=True, exist_ok=True)  # We assume this works.
+
     def compile_filename(self, meta_data):
-        # ToDo: different filenames for different types of tables.
-        file_name = f"{meta_data['user']}-{meta_data['task']}-Block{meta_data['block']}-{meta_data['type']}-{meta_data['time_iso']}.csv"
+        """ Returns file name based on provided meta data.
+        Uses current time if meta data is incomplete.
+        """
+        # Different filenames for different types of tables.
+        try:
+            if meta_data['table'] == 'session':
+                file_name = f"session-{meta_data['time_iso']}.csv"
+            elif meta_data['table'] == 'trials':
+                file_name = f"trials-{meta_data['time_iso']}-Block_{meta_data['block']}.csv"
+            else:
+                # Fall back to current time when table unknown.
+                file_name = f'{datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f")}.csv'
+        except KeyError:
+            file_name = f'{datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f")}.csv'
+            
         return file_name
+
+    def write_file(self, path, content):
+        """ Save content to path.
+        
+        :param path: Path to file.
+        :type path: pathlib.Path
+        :param content: Content to write to file.
+        :type content: Union[bytes,str]
+        
+        :return: Whether writing to file was successful.
+        :rtype: bool
+        """
+        if self.write_permit:
+            if isinstance(content, bytes):
+                path.write_bytes(content)
+                return True
+            elif isinstance(content, str):
+                path.write_text(content)
+                return True
+            else:
+                self.show_feedback(_("Error!"),
+                                   _("Unable to write to file:\n{}\nUnknown data format.").format(path.name))
+        return False
+        
+    def write_data_to_files(self):
+        """ Writes content of data_storage to disk. """
+        storage = self.get_storage_path()
+        for d in self.data_storage:
+            try:
+                sub_folder = Path(d['task'].replace(" ", "_")) / d['user']
+            except KeyError:
+                self.show_feedback(_("Error!"), _("KeyError in Meta Data."))
+                continue
+            
+            self.create_subfolder(sub_folder)
+            file_name = self.compile_filename(d)
+            file_path = storage / sub_folder / file_name
+            try:
+                self.write_file(file_path, d['data'])
+            except KeyError:
+                self.show_feedback(_("Error!"), _("Data missing.\nFailed to write\n{}.").format(file_name))
     
-    def data2bytes(self, data):
+    def data2bytes(self, data, header=None):
         """ Takes numpy array and returns it as bytes. """
         bio = io.BytesIO()
-        np.savetxt(bio, data, delimiter=',', fmt="%.5f", encoding='utf-8')
+        if header:
+            np.savetxt(bio, data, delimiter=',', fmt="%.5f", encoding='utf-8', header=header, comments='')
+        else:
+            np.savetxt(bio, data, delimiter=',', fmt="%.5f", encoding='utf-8')
+            
         b = bio.getvalue()
         return b
     
@@ -217,11 +288,17 @@ class UncontrolledManifoldApp(App):
         
         for d in data_collection:
             # Build fake file name.
-            file_names.append(self.compile_filename(d))
-            last_modified.append(d['time'])
-            # Convert data to base64.
-            header = (','.join(d['columns']) + '\n').encode('utf-8')
-            data_bytes = self.data2bytes(d['data'])
+            name = self.compile_filename(d)
+            file_names.append(name)
+            try:
+                last_modified.append(d['time'])
+                # Convert data to base64.
+                header = (','.join(d['columns']) + '\n').encode('utf-8')
+                data_bytes = self.data2bytes(d['data'])
+            except KeyError:
+                self.show_feedback(_("Error!"), _("KeyError in Meta Data."))
+                continue
+                
             data_b64 = base64.b64encode(header + data_bytes)
             data.append(data_b64)
         
@@ -304,8 +381,7 @@ class UncontrolledManifoldApp(App):
                        "and storage, please send an e-mail to the address specified in the address line and provide "
                        "your identification code [b]{}[/b] so that I can assign and delete your record.\n"
                        "If you deleted this email from your [i]Sent[/i] folder, you can look up your unique ID in "
-                       "the App Settings window. It is based on your hardware but does not contain any identifiable "
-                       "information about it or about yourself.").format(self.settings.user) + "\n\n"
+                       "the App Settings window.").format(self.settings.user) + "\n\n"
         
         text = "### Data ###\n\n"
         for d in self.data_email:

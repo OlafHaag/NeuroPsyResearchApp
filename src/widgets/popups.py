@@ -9,3 +9,10 @@ class SimplePopup(Popup):
     
     def __init__(self, **kwargs):
         super(SimplePopup, self).__init__(**kwargs)
+
+
+class BlockingPopup(Popup):
+    msg = StringProperty(_('Initiating...'))
+    
+    def __init__(self, **kwargs):
+        super(BlockingPopup, self).__init__(**kwargs)

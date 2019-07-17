@@ -216,7 +216,7 @@
                 id: upload_btn
                 text: _("Upload")
                 disabled: not app.upload_btn_enabled
-                on_release: upload_btn.text = _("Uploading...");app.upload_data()
+                on_release: root.on_update()
         BoxLayout:
             orientation: 'horizontal'
             size_hint_y: 0.2
@@ -239,8 +239,8 @@
 <SimplePopup>:
     id:pop
     size_hint: .4, .4
-    auto_dismiss: True
-    title: 'Hello world!!'
+    auto_dismiss: False
+    title: _("Information")
     BoxLayout:
         orientation: 'vertical'
 
@@ -254,3 +254,19 @@
         Button:
             text: _("Close")
             on_release: pop.dismiss()
+
+<BlockingPopup>:
+    id:pop_block
+    size_hint: .4, .4
+    auto_dismiss: False
+    title: _("Information")
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            id: pop_block_text
+            text: root.msg
+            text_size: root.width, None
+            size: self.texture_size
+            halign: 'center'
+            valign: 'middle'

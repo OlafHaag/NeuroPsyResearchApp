@@ -197,7 +197,7 @@ class UncontrolledManifoldApp(App):
         b = bio.getvalue()
         return b
     
-    def get_dash_post(self):
+    def get_dash_post(self, data_collection):
         """ Build a json string to post to a dash update component.
 
         :return: post request json string.
@@ -206,7 +206,7 @@ class UncontrolledManifoldApp(App):
         last_modified = list()
         data = list()
         
-        for d in self.data_upload:
+        for d in data_collection:
             # Build fake file name.
             file_names.append(self.compile_filename(d))
             last_modified.append(d['time'])
@@ -230,11 +230,10 @@ class UncontrolledManifoldApp(App):
         
         return post_data
     
-    def upload_data(self):
-        """ Upload collected data to server. """
+    def get_upload_route(self):
         if platform == 'android':
             self.ask_internet_permission(2)
-        
+    
         # Upload address depends on current task. One dash application per task.
         if self.settings.task == 'Circle Task':
             upload_route = '/circletask/_dash-update-component'
@@ -242,29 +241,42 @@ class UncontrolledManifoldApp(App):
         else:
             upload_route = ''
         server_uri = self.settings.server_uri.strip('/') + upload_route
-        
-        post_data = self.get_dash_post()
-        
+        return server_uri
+    
+    def get_response(self, server, data):
+        """ Upload collected data to server. """
         # ToDo: upload error handling.
         try:
-            response = requests.post(server_uri, json=post_data)
+            response = requests.post(server, json=data)
             returned_txt = response.text
         except:
             returned_txt = 'There was an error processing this file.'
+        return returned_txt
+    
+    def get_uploaded_status(self, response):
+        if 'There was an error processing this file.' not in response:
+            return True
+        else:
+            return False
         
-        if 'There was an error processing this file.' not in returned_txt:
+    def get_feedback(self, upload_status):
+        if upload_status is True:
             feedback_title = _("Success!")
             feedback_txt = _("Upload successful!")
-            self.upload_btn_enabled = False
         else:
             feedback_title = _("Error!")
             feedback_txt = _("Upload failed.\nSomething went wrong.")
+        return feedback_title, feedback_txt
     
+    def upload_data(self):
+        """ Upload collected data to server. """
+        res = self.get_response(self.get_upload_route(), self.get_dash_post(self.data_upload))
+        status = self.get_uploaded_status(res)
+        if status is True:
+            self.upload_btn_enabled = False
+
         # Feedback after uploading.
-        self.show_feedback(feedback_title, feedback_txt)
-        # Change button label back. Heroku dyno sleeps so it can take some time for the response.
-        upload_btn = self.manager.get_screen('Outro').ids.upload_btn
-        upload_btn.text = _("Upload")
+        self.show_feedback(*self.get_feedback(status))
     
     def show_feedback(self, title, msg):
         pop = SimplePopup(title=title)

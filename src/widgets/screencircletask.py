@@ -183,7 +183,7 @@ class ScreenCircleTask(Screen):
         self.meta_data['task'] = self.settings.task
         self.meta_data['block'] = self.settings.current_block
         self.meta_data['treatment'] = constrained_df if self.is_constrained else ''
-        self.meta_data['time_iso'] = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        self.meta_data['time_iso'] = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
         self.meta_data['time'] = time.time()
         self.meta_data['hash'] = md5(self.data).hexdigest()
         self.meta_data['columns'] = ['df1', 'df2']

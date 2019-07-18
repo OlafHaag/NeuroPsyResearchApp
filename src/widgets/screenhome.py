@@ -11,11 +11,9 @@ class ScreenHome(Screen):
     home_msg = StringProperty(_('Initiating...'))
     
     def on_pre_enter(self, *args):
+        """ Reset data collection each time before a new task is started. """
         App.get_running_app().settings.reset_current()
         self.home_msg = _('Welcome!')  # ToDo: General Information
     
-    def on_leave(self, *args):
-        """ Reset data collection each time a new task is started. """
         app = App.get_running_app()
-        app.data_upload.clear()
-        app.data_email.clear()
+        app.reset_data_collection()

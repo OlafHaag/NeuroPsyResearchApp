@@ -154,10 +154,8 @@ class ScreenCircleTask(Screen):
             self.data *= 100
             self.collect_meta_data()
             
-            if self.settings.is_local_storage_enabled:
-                self.collect_data_storage()
-            if self.settings.is_upload_enabled:
-                self.collect_data_upload()
+            if self.settings.is_local_storage_enabled or self.settings.is_upload_enabled:
+                self.collect_data()
             if self.settings.is_email_enabled:
                 self.collect_data_email()
             
@@ -187,24 +185,18 @@ class ScreenCircleTask(Screen):
         self.meta_data['treatment'] = constrained_df if self.is_constrained else ''
         self.meta_data['time_iso'] = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         self.meta_data['time'] = time.time()
-        self.meta_data['columns'] = ['df1', 'df2']
         self.meta_data['hash'] = md5(self.data).hexdigest()
+        self.meta_data['columns'] = ['df1', 'df2']
     
-    # ToDo: collect screen size/resolution, initial circle/ring size, slider size and slider value, etc.
-    def collect_data_upload(self):
-        """ Add data to be uploaded to a server. """
-        d = self.meta_data.copy()
-        d['data'] = self.data
-        app = App.get_running_app()
-        app.data_upload.append(d)
-    
-    def collect_data_storage(self):
-        """ Add data to be saved to disk. """
-        d = self.meta_data.copy()
+    # ToDo: put task settings in session CSV.
+    def collect_data(self):
+        """ Add data to be written or uploaded to app data member. """
         app = App.get_running_app()
         header = ','.join(self.meta_data['columns'])
-        d['data'] = app.data2bytes(self.data, header=header)
-        app.data_storage.append(d)
+        data_b = app.data2bytes(self.data, header=header)
+        d = self.meta_data.copy()
+        d['data'] = data_b
+        app.data.append(d)
     
     def collect_data_email(self):
         """ Add data to be sent via e-mail. """

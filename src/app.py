@@ -1,6 +1,7 @@
 """"Research application aimed at studying uncontrolled manifold and optimal feedback control paradigms."""
 
 import io
+import pickle
 import time
 from pathlib import Path
 from hashlib import md5
@@ -12,6 +13,8 @@ from kivy.app import App
 from kivy.uix.screenmanager import Screen
 from kivy.properties import ObjectProperty, BooleanProperty
 from kivy.utils import platform
+from kivy.core.window import Window
+from kivy.metrics import Metrics
 from kivy.lang import global_idmap
 
 from plyer import uniqueid
@@ -32,10 +35,22 @@ if platform == 'android':
     from android.permissions import request_permissions, check_permission, Permission
 
 if platform == 'win':
-    pass
+    def get_screensize():
+        import ctypes
+        user32 = ctypes.windll.user32
+        user32.SetProcessDPIAware()
+        screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
+        return screensize
+else:
+    def get_screensize():
+        return Window.width, Window.height
 
 # i18n
 global_idmap['_'] = _
+
+# Todo: uncomment for release.
+#Window.borderless = True
+#Window.fullscreen = 'auto'
 
 
 class UncontrolledManifoldApp(App):
@@ -53,6 +68,7 @@ class UncontrolledManifoldApp(App):
         """ This method is called before the application is initialized to construct the ConfigParser object.
         The configuration will be automatically saved in the file returned by get_application_config().
         """
+        
         config.setdefaults(LANGUAGE_SECTION, {LANGUAGE_CODE: current_language()})
         config.setdefaults('General', {'task': 'Circle Task'})
         config.setdefaults('DataCollection', {
@@ -123,17 +139,21 @@ class UncontrolledManifoldApp(App):
         """ Initializes the application; it will be called only once.
         If this method returns a widget (tree), it will be used as the root widget and added to the window.
         """
+        # Settings.
         self.settings_cls = Settings
         self.use_kivy_settings = False
         self.settings = SettingsContainer()
         self.update_language_from_config()
         self.write_permit = True  # Set to true as default for platforms other than android.
         self.internet_permit = True
+        
+        # Containers for data.
+        self.data = list()
+        self.data_email = list()
+        
+        # GUI.
         root = UCMManager()
         self.manager = root
-        self.data_storage = list()
-        self.data_upload = list()
-        self.data_email = list()
         return root
     
     def create_device_identifier(self, **kwargs):
@@ -148,7 +168,52 @@ class UncontrolledManifoldApp(App):
         """ Return unique identifier for user. """
         uuid = uuid4().hex
         return uuid
-
+    
+    def reset_data_collection(self):
+        self.data.clear()
+        self.data_email.clear()
+        # Start new data collection with device information.
+        self.add_device_data()
+        
+    def get_device_data(self):
+        """ Acquire properties of the device in use. """
+        inch2cm = 2.54
+        screen_x, screen_y = get_screensize()
+        
+        device_properties = dict()
+        device_properties['device'] = self.create_device_identifier()
+        device_properties['screen_x'] = screen_x
+        device_properties['screen_y'] = screen_y
+        device_properties['dpi'] = Metrics.dpi
+        device_properties['density'] = Metrics.density
+        device_properties['aspect_ratio'] = screen_x / screen_y
+        device_properties['size_x'] = screen_x / Window.dpi * inch2cm
+        device_properties['size_y'] = screen_y / Window.dpi * inch2cm
+        device_properties['platform'] = platform
+        return device_properties
+        
+    def add_device_data(self):
+        props = self.get_device_data()
+        columns = props.keys()
+        
+        meta_data = dict()
+        meta_data['table'] = 'device'
+        meta_data['device'] = self.create_device_identifier()
+        meta_data['time'] = time.time()
+        
+        if self.settings.is_upload_enabled or self.settings.is_local_storage_enabled:
+            # Data for storage and upload.
+            data = np.array([props[k] for k in columns]).reshape((1, len(columns)))
+            header = ','.join(columns)
+            meta_data['data'] = self.data2bytes(data, header=header, fmt='%s')
+            self.data.append(meta_data)
+        
+        if self.settings.is_email_enabled:
+            # Data for e-mail.
+            meta_data_email = meta_data.copy()
+            meta_data_email['data'] = pickle.dumps(props)
+            self.data_email.append(meta_data)
+        
     def ask_internet_permission(self, timeout=5):
         """Necessary on android to post data to the server.
         Yet, no prompt appears, nor a setting in the app's permissions...
@@ -205,7 +270,7 @@ class UncontrolledManifoldApp(App):
         storage_path = self.get_storage_path()
         destination = storage_path / subpath
         if not destination.exists() and self.write_permit:
-            destination.mkdir(parents=True, exist_ok=True)  # We assume this works.
+            destination.mkdir(parents=True, exist_ok=True)  # Assume this works and we have permissions.
 
     def compile_filename(self, meta_data):
         """ Returns file name based on provided meta data.
@@ -213,7 +278,9 @@ class UncontrolledManifoldApp(App):
         """
         # Different filenames for different types of tables.
         try:
-            if meta_data['table'] == 'session':
+            if meta_data['table'] == 'device':
+                file_name = f"device-{meta_data['device']}.csv"
+            elif meta_data['table'] == 'session':
                 file_name = f"session-{meta_data['time_iso']}.csv"
             elif meta_data['table'] == 'trials':
                 file_name = f"trials-{meta_data['time_iso']}-Block_{meta_data['block']}.csv"
@@ -249,30 +316,35 @@ class UncontrolledManifoldApp(App):
         return False
         
     def write_data_to_files(self):
-        """ Writes content of data_storage to disk. """
+        """ Writes content of data to disk. """
         storage = self.get_storage_path()
-        for d in self.data_storage:
+        for d in self.data:
             try:
-                sub_folder = Path(d['task'].replace(" ", "_")) / d['user']
+                if d['table'] in ['session', 'trials']:
+                    sub_folder = Path(d['task'].replace(" ", "_")) / d['user']
+                    self.create_subfolder(sub_folder)
+                    dir_path = storage / sub_folder
+                else:
+                    dir_path = storage
             except KeyError:
                 self.show_feedback(_("Error!"), _("KeyError in Meta Data."))
                 continue
             
-            self.create_subfolder(sub_folder)
             file_name = self.compile_filename(d)
-            file_path = storage / sub_folder / file_name
+            file_path = dir_path / file_name
             try:
                 self.write_file(file_path, d['data'])
             except KeyError:
                 self.show_feedback(_("Error!"), _("Data missing.\nFailed to write\n{}.").format(file_name))
     
-    def data2bytes(self, data, header=None):
+    def data2bytes(self, data, header=None, fmt="%.5f"):
         """ Takes numpy array and returns it as bytes. """
         bio = io.BytesIO()
         if header:
-            np.savetxt(bio, data, delimiter=',', fmt="%.5f", encoding='utf-8', header=header, comments='')
+            #header = header.encode('utf-8')
+            np.savetxt(bio, data, delimiter=',', fmt=fmt, encoding='utf-8', header=header, comments='')
         else:
-            np.savetxt(bio, data, delimiter=',', fmt="%.5f", encoding='utf-8')
+            np.savetxt(bio, data, delimiter=',', fmt=fmt, encoding='utf-8')
             
         b = bio.getvalue()
         return b
@@ -292,14 +364,11 @@ class UncontrolledManifoldApp(App):
             file_names.append(name)
             try:
                 last_modified.append(d['time'])
-                # Convert data to base64.
-                header = (','.join(d['columns']) + '\n').encode('utf-8')
-                data_bytes = self.data2bytes(d['data'])
+                data_b64 = base64.b64encode(d['data'])
             except KeyError:
                 self.show_feedback(_("Error!"), _("KeyError in Meta Data."))
                 continue
                 
-            data_b64 = base64.b64encode(header + data_bytes)
             data.append(data_b64)
         
         post_data = {'output': 'output-data-upload.children',
@@ -345,7 +414,7 @@ class UncontrolledManifoldApp(App):
         else:
             return False
         
-    def get_feedback(self, upload_status):
+    def get_upload_feedback(self, upload_status):
         if upload_status is True:
             feedback_title = _("Success!")
             feedback_txt = _("Upload successful!")
@@ -356,13 +425,13 @@ class UncontrolledManifoldApp(App):
     
     def upload_data(self):
         """ Upload collected data to server. """
-        res = self.get_response(self.get_upload_route(), self.get_dash_post(self.data_upload))
+        res = self.get_response(self.get_upload_route(), self.get_dash_post(self.data))
         status = self.get_uploaded_status(res)
         if status is True:
             self.upload_btn_enabled = False
 
         # Feedback after uploading.
-        self.show_feedback(*self.get_feedback(status))
+        self.show_feedback(*self.get_upload_feedback(status))
     
     def show_feedback(self, title, msg):
         pop = SimplePopup(title=title)

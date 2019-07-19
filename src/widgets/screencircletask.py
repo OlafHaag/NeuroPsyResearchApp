@@ -234,6 +234,7 @@ class ScreenCircleTask(Screen):
     def add_block_to_session(self):
         """ Collects meta data about the current block. """
         data = [self.meta_data['task'],
+                self.meta_data['time'],
                 self.meta_data['time_iso'],
                 self.meta_data['block'],
                 self.meta_data['treatment'],
@@ -245,8 +246,7 @@ class ScreenCircleTask(Screen):
     
     def add_session_data(self):
         data = np.array(self.session_data)
-        header = 'task,time_iso,block,treatment,hash,warm_up,trial_duration,cool_down'
-        fmt = "%s %s %d %s %s %f %f %f"
+        header = 'task,time,time_iso,block,treatment,hash,warm_up,trial_duration,cool_down'
         meta_data = dict()
         meta_data['table'] = 'session'
         meta_data['time'] = time.time()

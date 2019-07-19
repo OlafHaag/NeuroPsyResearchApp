@@ -193,6 +193,7 @@ class UncontrolledManifoldApp(App):
         return device_properties
         
     def collect_device_data(self):
+        """ Add properties of device to data collection. """
         props = self.get_device_data()
         columns = props.keys()
         
@@ -213,6 +214,16 @@ class UncontrolledManifoldApp(App):
             meta_data_email = meta_data.copy()
             meta_data_email['data'] = pickle.dumps(props)
             self.data_email.append(meta_data_email)
+    
+    def get_user_data(self):
+        """ Create a dataset to identify current user. """
+        d = dict()
+        d['table'] = 'user'
+        d['time'] = time.time()
+        header = 'id, device'
+        data = np.array([self.settings.user, self.create_device_identifier()])
+        d['data'] = self.data2bytes(data.reshape((1, len(data))), header=header, fmt='%s')
+        return d
         
     def ask_internet_permission(self, timeout=5):
         """Necessary on android to post data to the server.
@@ -280,6 +291,8 @@ class UncontrolledManifoldApp(App):
         try:
             if meta_data['table'] == 'device':
                 file_name = f"device-{meta_data['device']}.csv"
+            elif meta_data['table'] == 'user':
+                file_name = f"user.csv"
             elif meta_data['table'] == 'session':
                 file_name = f"session-{meta_data['time_iso']}.csv"
             elif meta_data['table'] == 'trials':
@@ -357,6 +370,11 @@ class UncontrolledManifoldApp(App):
         file_names = list()
         last_modified = list()
         data = list()
+        
+        # When writing data to files, we create a folder with the user's identifier.
+        # We need to add user identification to the post as well.
+        user_data = self.get_user_data()
+        data_collection.insert(1, user_data)  # After device data, before session.
         
         for d in data_collection:
             # Build fake file name.

@@ -187,8 +187,8 @@ class UncontrolledManifoldApp(App):
         device_properties['dpi'] = Metrics.dpi
         device_properties['density'] = Metrics.density
         device_properties['aspect_ratio'] = screen_x / screen_y
-        device_properties['size_x'] = screen_x / Window.dpi * inch2cm
-        device_properties['size_y'] = screen_y / Window.dpi * inch2cm
+        device_properties['size_x'] = screen_x / Metrics.dpi * inch2cm
+        device_properties['size_y'] = screen_y / Metrics.dpi * inch2cm
         device_properties['platform'] = platform
         return device_properties
         

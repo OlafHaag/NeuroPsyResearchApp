@@ -35,6 +35,7 @@ class ScreenCircleTask(Screen):
         # Data collection related.
         self.data = None  # For numerical data.
         self.meta_data = dict()  # For context of numerical data acquisition, e.g. treatment/condition.
+        self.session_data = list()  # For description of a block if  numerical data.
     
     def on_kv_post(self, base_widget):
         """ Bind events. """
@@ -150,20 +151,15 @@ class ScreenCircleTask(Screen):
         self.reset_sliders()
         self.release_audio()
         if not interrupt:
-            # Scale normalized data to 0-100.
-            self.data *= 100
-            self.collect_meta_data()
-            
-            if self.settings.is_local_storage_enabled or self.settings.is_upload_enabled:
-                self.collect_data()
-            if self.settings.is_email_enabled:
-                self.collect_data_email()
-            
+            self.data_collection()
             was_last_block = self.settings.current_block == self.settings.circle_task.n_blocks
+            if was_last_block:
+                self.add_session_data()
             self.dispatch('on_task_stopped', was_last_block)
     
     def on_task_stopped(self, was_last_block=False):
-        pass
+        if was_last_block:
+            self.clear_data()
     
     def release_audio(self):
         """ Unload audio sources from memory. """
@@ -172,6 +168,10 @@ class ScreenCircleTask(Screen):
                 sound.stop()
                 sound.unload()
                 sound = None
+    
+    def get_current_time_iso(self):
+        t = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+        return t
     
     def collect_meta_data(self):
         """ Collect information about context of data acquisition. """
@@ -183,12 +183,21 @@ class ScreenCircleTask(Screen):
         self.meta_data['task'] = self.settings.task
         self.meta_data['block'] = self.settings.current_block
         self.meta_data['treatment'] = constrained_df if self.is_constrained else ''
-        self.meta_data['time_iso'] = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+        self.meta_data['time_iso'] = self.get_current_time_iso()
         self.meta_data['time'] = time.time()
         self.meta_data['hash'] = md5(self.data).hexdigest()
         self.meta_data['columns'] = ['df1', 'df2']
     
-    # ToDo: put task settings in session CSV.
+    def data_collection(self):
+        # Scale normalized data to 0-100.
+        self.data *= 100
+        self.collect_meta_data()
+        self.add_block_to_session()
+        if self.settings.is_local_storage_enabled or self.settings.is_upload_enabled:
+            self.collect_data()
+        if self.settings.is_email_enabled:
+            self.collect_data_email()
+    
     def collect_data(self):
         """ Add data to be written or uploaded to app data member. """
         app = App.get_running_app()
@@ -205,3 +214,40 @@ class ScreenCircleTask(Screen):
         
         app = App.get_running_app()
         app.data_email.append(d)
+    
+    def add_block_to_session(self):
+        """ Collects meta data about the current block. """
+        data = [self.meta_data['task'],
+                self.meta_data['time_iso'],
+                self.meta_data['block'],
+                self.meta_data['treatment'],
+                self.meta_data['hash'],
+                self.settings.circle_task.warm_up,
+                self.settings.circle_task.trial_duration,
+                self.settings.circle_task.cool_down]
+        self.session_data.append(data)
+    
+    def add_session_data(self):
+        data = np.array(self.session_data)
+        header = 'task,time_iso,block,treatment,hash,warm_up,trial_duration,cool_down'
+        fmt = "%s %s %d %s %s %f %f %f"
+        meta_data = dict()
+        meta_data['table'] = 'session'
+        meta_data['time'] = time.time()
+        meta_data['time_iso'] = self.get_current_time_iso()
+        meta_data['task'] = self.settings.task
+        meta_data['user'] = self.settings.user
+        app = App.get_running_app()
+        if self.settings.is_local_storage_enabled or self.settings.is_upload_enabled:
+            meta_data['data'] = app.data2bytes(data, header=header, fmt='%s')
+            app.data.append(meta_data)
+        if self.settings.is_email_enabled:
+            email_data = meta_data.copy()
+            email_data['data'] = pickle.dumps([header.split(',')] + self.session_data)
+            app.data_email.append(meta_data)
+    
+    def clear_data(self):
+        """ Clear data for the next session. """
+        self.session_data.clear()
+        self.meta_data.clear()
+        self.data = None

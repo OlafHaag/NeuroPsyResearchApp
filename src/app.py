@@ -212,7 +212,7 @@ class UncontrolledManifoldApp(App):
             # Data for e-mail.
             meta_data_email = meta_data.copy()
             meta_data_email['data'] = pickle.dumps(props)
-            self.data_email.append(meta_data)
+            self.data_email.append(meta_data_email)
         
     def ask_internet_permission(self, timeout=5):
         """Necessary on android to post data to the server.

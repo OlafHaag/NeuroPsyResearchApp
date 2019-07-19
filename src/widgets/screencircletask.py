@@ -260,7 +260,7 @@ class ScreenCircleTask(Screen):
         if self.settings.is_email_enabled:
             email_data = meta_data.copy()
             email_data['data'] = pickle.dumps([header.split(',')] + self.session_data)
-            app.data_email.append(meta_data)
+            app.data_email.append(email_data)
     
     def clear_data(self):
         """ Clear data for the next session. """

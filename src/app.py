@@ -48,9 +48,9 @@ else:
 # i18n
 global_idmap['_'] = _
 
-# Todo: uncomment for release.
-#Window.borderless = True
-#Window.fullscreen = 'auto'
+# Go fullscreen. # FixMe: On android status bar still re-appears.
+Window.borderless = True
+Window.fullscreen = 'auto'
 
 
 class UncontrolledManifoldApp(App):

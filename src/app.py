@@ -173,7 +173,7 @@ class UncontrolledManifoldApp(App):
         self.data.clear()
         self.data_email.clear()
         # Start new data collection with device information.
-        self.add_device_data()
+        self.collect_device_data()
         
     def get_device_data(self):
         """ Acquire properties of the device in use. """
@@ -192,7 +192,7 @@ class UncontrolledManifoldApp(App):
         device_properties['platform'] = platform
         return device_properties
         
-    def add_device_data(self):
+    def collect_device_data(self):
         props = self.get_device_data()
         columns = props.keys()
         

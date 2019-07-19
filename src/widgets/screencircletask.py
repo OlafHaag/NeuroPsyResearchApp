@@ -43,15 +43,31 @@ class ScreenCircleTask(Screen):
         self.ids.df1.bind(on_grab=self.slider_grab)
         self.ids.df2.bind(on_grab=self.slider_grab)
     
+    def set_slider_colors(self, slider, status=False):
+        if slider.orientation == 'vertical':
+            o = 'v'
+        else:
+            o = 'h'
+        slider.value_track = status
+        if status:
+            slider.cursor_image = f'res/sliderhandle_{o}_on_color.png'
+            slider.cursor_disabled_image = f'res/sliderhandle_{o}_off_color.png'
+        else:
+            slider.cursor_image = f'res/sliderhandle_{o}_on.png'
+            slider.cursor_disabled_image = f'res/sliderhandle_{o}_off.png'
+            
     def on_pre_enter(self, *args):
         """ Setup this run of the task and initiate start. """
         self.is_constrained = self.settings.circle_task.constraint
         # df that is constrained is randomly chosen.
         self.target2_switch = np.random.choice([True, False])
         # Set visual indicator for which df is constrained.
-        self.ids.df2.value_track = self.is_constrained and self.target2_switch
-        self.ids.df1.value_track = self.is_constrained and not self.target2_switch
+        df1_colored = self.is_constrained and not self.target2_switch
+        df2_colored = self.is_constrained and self.target2_switch
+        self.set_slider_colors(self.ids.df1, df1_colored)
+        self.set_slider_colors(self.ids.df2, df2_colored)
         
+        # Initiate data container for this block.
         self.data = np.zeros((self.settings.circle_task.n_trials, 2))
         # FixMe: Not loading sound files on Windows. (Unable to find a loader)
         self.sound_start = SoundLoader.load('res/start.ogg')

@@ -220,7 +220,7 @@ class UncontrolledManifoldApp(App):
         d = dict()
         d['table'] = 'user'
         d['time'] = time.time()
-        header = 'id, device'
+        header = 'id,device'
         data = np.array([self.settings.user, self.create_device_identifier()])
         d['data'] = self.data2bytes(data.reshape((1, len(data))), header=header, fmt='%s')
         return d

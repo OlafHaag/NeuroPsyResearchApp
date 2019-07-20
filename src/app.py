@@ -181,7 +181,7 @@ class UncontrolledManifoldApp(App):
         screen_x, screen_y = get_screensize()
         
         device_properties = dict()
-        device_properties['device'] = self.create_device_identifier()
+        device_properties['id'] = self.create_device_identifier()
         device_properties['screen_x'] = screen_x
         device_properties['screen_y'] = screen_y
         device_properties['dpi'] = Metrics.dpi
@@ -199,7 +199,7 @@ class UncontrolledManifoldApp(App):
         
         meta_data = dict()
         meta_data['table'] = 'device'
-        meta_data['device'] = self.create_device_identifier()
+        meta_data['id'] = self.create_device_identifier()
         meta_data['time'] = time.time()
         
         if self.settings.is_upload_enabled or self.settings.is_local_storage_enabled:
@@ -290,7 +290,7 @@ class UncontrolledManifoldApp(App):
         # Different filenames for different types of tables.
         try:
             if meta_data['table'] == 'device':
-                file_name = f"device-{meta_data['device']}.csv"
+                file_name = f"device-{meta_data['id']}.csv"
             elif meta_data['table'] == 'user':
                 file_name = f"user.csv"
             elif meta_data['table'] == 'session':

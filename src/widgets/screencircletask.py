@@ -206,7 +206,7 @@ class ScreenCircleTask(Screen):
     
     def data_collection(self):
         # Scale normalized data to 0-100.
-        self.data *= 100
+        self.data = np.around(self.data * 100, decimals=5)  # When writing we save as %.5f. For hashing this must match.
         self.collect_meta_data()
         self.add_block_to_session()
         if self.settings.is_local_storage_enabled or self.settings.is_upload_enabled:

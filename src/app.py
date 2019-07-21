@@ -423,22 +423,24 @@ class UncontrolledManifoldApp(App):
             response = requests.post(server, json=data)
             returned_txt = response.text
         except:
-            returned_txt = 'There was an error processing this file.'
+            returned_txt = 'ERROR: There was an error processing the upload.'
         return returned_txt
     
     def get_uploaded_status(self, response):
-        if 'There was an error processing this file.' not in response:
+        if not response.startswith('ERROR:'):
             return True
         else:
             return False
         
-    def get_upload_feedback(self, upload_status):
+    def get_upload_feedback(self, upload_status, error_msg=None):
+        if not error_msg:
+            error_msg = _("Upload failed.\nSomething went wrong.")
         if upload_status is True:
             feedback_title = _("Success!")
             feedback_txt = _("Upload successful!")
         else:
             feedback_title = _("Error!")
-            feedback_txt = _("Upload failed.\nSomething went wrong.")
+            feedback_txt = _(error_msg)
         return feedback_title, feedback_txt
     
     def upload_data(self):
@@ -449,7 +451,7 @@ class UncontrolledManifoldApp(App):
             self.upload_btn_enabled = False
 
         # Feedback after uploading.
-        self.show_feedback(*self.get_upload_feedback(status))
+        self.show_feedback(*self.get_upload_feedback(status, res))
     
     def show_feedback(self, title, msg):
         pop = SimplePopup(title=title)

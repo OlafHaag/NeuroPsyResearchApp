@@ -28,7 +28,7 @@ class ScreenOutro(Screen):
     
         app.upload_btn_enabled = self.settings.is_upload_enabled
         
-    def on_update(self):
+    def on_upload(self):
         # Show we're busy. Heroku dyno sleeps so it can take some time for the response.
         upload_info = BlockingPopup(title=_("Uploading..."))
         upload_info.msg = _("Waking up server.\nPlease be patient.")

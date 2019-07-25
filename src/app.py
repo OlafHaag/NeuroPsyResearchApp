@@ -26,7 +26,7 @@ import requests
 import numpy as np
 
 from .i18n import _, change_language_to, current_language
-from .config import WEBSERVER
+from .config import WEBSERVER, time_fmt
 from .settings import Settings, SettingsContainer
 from .settingsjson import LANGUAGE_CODE, LANGUAGE_SECTION, settings_general_json, settings_circle_task_json
 
@@ -288,9 +288,9 @@ class UncontrolledManifoldApp(App):
                 file_name = f"trials-{meta_data['time_iso']}-Block_{meta_data['block']}.csv"
             else:
                 # Fall back to current time when table unknown.
-                file_name = f'{datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f")}.csv'
+                file_name = f'{datetime.now().strftime(time_fmt)}.csv'
         except KeyError:
-            file_name = f'{datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f")}.csv'
+            file_name = f'{datetime.now().strftime(time_fmt)}.csv'
             
         return file_name
 

@@ -1,5 +1,5 @@
 import pickle
-import datetime
+from datetime import datetime
 import time
 from hashlib import md5
 
@@ -13,6 +13,7 @@ import numpy as np
 
 from . import SimplePopup
 from ..i18n import _
+from ..config import time_fmt
 
 
 class ScreenCircleTask(Screen):
@@ -220,8 +221,18 @@ class ScreenCircleTask(Screen):
                 sound.unload()
                 sound = None
     
-    def get_current_time_iso(self):
-        t = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+    def get_current_time_iso(self, fmt=None):
+        """ Returns the current datetime as string.
+        
+        :param fmt: Format to return, e.g. "%Y-%m-%d".
+        :type fmt: str|None
+        :return: Current time as string.
+        :rtype: str
+        """
+        if fmt:
+            t = datetime.now().strftime(time_fmt)
+        else:
+            t = datetime.now().isoformat()
         return t
     
     def collect_meta_data(self):

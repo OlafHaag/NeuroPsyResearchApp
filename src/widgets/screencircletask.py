@@ -11,6 +11,7 @@ from kivy.clock import Clock
 
 import numpy as np
 
+from . import SimplePopup
 from ..i18n import _
 
 
@@ -29,6 +30,9 @@ class ScreenCircleTask(Screen):
         self.target2_switch = False  # Which slider is controlling the second target.
         self.df1_touch = None
         self.df2_touch = None
+        # Save defaults in order to check if sliders have been used at all. Set in on_kv_post.
+        self.df1_default = 0.0
+        self.df2_default = 0.0
         # Feedback related.
         self.sound_start = None
         self.sound_stop = None
@@ -42,8 +46,16 @@ class ScreenCircleTask(Screen):
         self.count_down.bind(on_count_down_finished=lambda obj: self.trial_finished())
         self.ids.df1.bind(on_grab=self.slider_grab)
         self.ids.df2.bind(on_grab=self.slider_grab)
+        # Save starting positions of sliders.
+        self.df1_default = self.ids.df1.value_normalized
+        self.df2_default = self.ids.df2.value_normalized
     
     def set_slider_colors(self, slider, status=False):
+        """ Set the slider's handle and track colors depending on status.
+        
+        :param slider: Slider instance.
+        :param status: True if colored, False if not.
+        """
         if slider.orientation == 'vertical':
             o = 'v'
         else:
@@ -153,8 +165,20 @@ class ScreenCircleTask(Screen):
         self.disable_sliders()
         self.count_down.set_label(_("FINISHED"))
         self.vibrate()
+        self.check_slider_use()
         # Record data for current trial.
         self.data[self.settings.current_trial - 1, :] = (self.ids.df1.value_normalized, self.ids.df2.value_normalized)
+        
+    def check_slider_use(self):
+        """ Checks if the slider values are still at their defaults and displays warning where appropriate."""
+        if self.ids.df1.value_normalized == self.df1_default:
+            self.ids.df1_warning.opacity = 1.0
+        else:
+            self.ids.df1_warning.opacity = 0.0
+        if self.ids.df2.value_normalized == self.df2_default:
+            self.ids.df2_warning.opacity = 1.0
+        else:
+            self.ids.df2_warning.opacity = 0.0
     
     def stop_task(self, interrupt=False):
         """ Stop time interval that starts new trials.
@@ -167,6 +191,17 @@ class ScreenCircleTask(Screen):
         self.reset_sliders()
         self.release_audio()
         if not interrupt:
+            # Check if task was properly done, i.e. values are not all at default.
+            if (self.data[:, 0] == self.df1_default).all() and (self.data[:, 1] == self.df2_default).all():
+                self.clear_data()
+                # Feedback and reset/abort.
+                pop = SimplePopup(title=_("Warning"))
+                pop.msg = _("Please read instructions again carefully and perform task accordingly.\n"
+                            "Aborting Session...")
+                pop.open()
+                # Abort session.
+                self.dispatch('on_task_stopped', True)
+                return
             self.data_collection()
             was_last_block = self.settings.current_block == self.settings.circle_task.n_blocks
             if was_last_block:

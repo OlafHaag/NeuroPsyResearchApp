@@ -86,12 +86,20 @@
         anchor_x: 'left'
         anchor_y: 'center'
 
+        # Debug Label
         #Label:
-        #    text: 'df2 = {}'.format(df2.value)
+        #    text: 'df1 = {:.2f}'.format(df1.value)
         #    size_hint_x: None
         #    size_hint_y: 0.1
         #    size: self.texture_size
         #    pos_hint: {'left': 1}
+        #    canvas.before:
+        #        PushMatrix
+        #        Rotate:
+        #            angle: 90
+        #            origin: self.center
+        #    canvas.after:
+        #        PopMatrix
 
         ScaleSlider:
             id: df1
@@ -100,19 +108,45 @@
             value: self.max * 0.1
             orientation: 'vertical'
             value_track_color: [0.25, 0.52, 0.95, 1]
-            #cursor_image: 'res/sliderhandle_v_on.png'
-            #cursor_disabled_image: 'res/sliderhandle_v_off.png'
             cursor_size: [sp(64)]*2
             padding: sp(48)
             sensitivity: 'handle'
             size_hint: None, 1
 
     AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'bottom'
+
+        Label:
+            id: df1_warning
+            opacity: 0.0
+            text: "[color=ff0000]" + _("Please use this slider.[/color]") + "[/color]"
+            markup: True
+            size_hint_x: None
+            size_hint_y: 0.1
+            size: self.texture_size
+            padding: 10, 10
+            halign: 'center'
+            valign: 'middle'
+
+    AnchorLayout:
         anchor_x: 'right'
         anchor_y: 'center'
 
+        # Debug Label
         #Label:
-        #    text: 'df1 = {}'.format(df1.value)
+        #    text: 'df2 = {:.2f}'.format(df2.value)
+        #    size_hint_x: None
+        #    size_hint_y: 0.1
+        #    size: self.texture_size
+        #    pos_hint: {'right': 1}
+        #    canvas.before:
+        #        PushMatrix
+        #        Rotate:
+        #            angle: 90
+        #            origin: self.center
+        #    canvas.after:
+        #        PopMatrix
 
         ScaleSlider:
             id: df2
@@ -121,12 +155,26 @@
             value: self.max * 0.1
             orientation: 'vertical'
             value_track_color: [0.25, 0.52, 0.95, 1]
-            #cursor_image: 'res/sliderhandle_v_on.png'
-            #cursor_disabled_image: 'res/sliderhandle_v_off.png'
             cursor_size: [sp(64)]*2
             padding: sp(48)
             sensitivity: 'handle'
             size_hint: None, 1
+
+    AnchorLayout:
+        anchor_x: 'right'
+        anchor_y: 'bottom'
+
+        Label:
+            id: df2_warning
+            opacity: 0.0
+            text: "[color=ff0000]" + _("Please use this slider.[/color]") + "[/color]"
+            markup: True
+            size_hint_x: None
+            size_hint_y: 0.1
+            size: self.texture_size
+            padding: 10, 10
+            halign: 'center'
+            valign: 'middle'
 
     FloatLayout:
         canvas:

@@ -443,10 +443,12 @@ class UncontrolledManifoldApp(App):
         :return: Was the upload successful?
         :rtype: bool
         """
-        if not response.startswith('ERROR:'):
-            return True
-        else:
-            return False
+        try:
+            if response.startswith('ERROR:'):
+                return False
+        except AttributeError:
+            pass
+        return True
         
     def get_upload_feedback(self, upload_status, error_msg=None):
         """ Generate arguments for a popup depending on the success of the upload.

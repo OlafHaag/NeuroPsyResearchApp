@@ -2,6 +2,7 @@
 
 import io
 import pickle
+import json
 import time
 from pathlib import Path
 from hashlib import md5
@@ -416,16 +417,47 @@ class UncontrolledManifoldApp(App):
             response = requests.post(server, json=data)
             returned_txt = response.text
         except:
-            returned_txt = 'ERROR: There was an error processing the upload.'
+            returned_txt = "ERROR: There was an error processing the upload."
         return returned_txt
     
+    def parse_response(self, response):
+        """
+        
+        :param response: JSON formatted string.
+        :type response: str
+        :return:
+        :rtype: str
+        """
+        res_json = json.loads(response)
+        try:
+            msg = res_json['response']['props']['children'][0]['props']['children']
+        except (KeyError, IndexError):
+            msg = 'Not the usual error response.'
+        return msg
+    
     def get_uploaded_status(self, response):
+        """ Determine success of upload.
+        
+        :param response: Message received from server.
+        :type response: str
+        :return: Was the upload successful?
+        :rtype: bool
+        """
         if not response.startswith('ERROR:'):
             return True
         else:
             return False
         
     def get_upload_feedback(self, upload_status, error_msg=None):
+        """ Generate arguments for a popup depending on the success of the upload.
+        
+        :param upload_status: Was the upload successful?
+        :type upload_status: bool
+        :param error_msg: Message in case upload failed.
+        :type error_msg: str
+        :return: Title and message for the popup feedback.
+        :rtype: tuple
+        """
         if not error_msg:
             error_msg = _("Upload failed.\nSomething went wrong.")
         if upload_status is True:
@@ -439,12 +471,13 @@ class UncontrolledManifoldApp(App):
     def upload_data(self):
         """ Upload collected data to server. """
         res = self.get_response(self.get_upload_route(), self.get_dash_post(self.data))
-        status = self.get_uploaded_status(res)
+        res_msg = self.parse_response(res)
+        status = self.get_uploaded_status(res_msg)
         if status is True:
             self.upload_btn_enabled = False
 
         # Feedback after uploading.
-        self.show_feedback(*self.get_upload_feedback(status, res))
+        self.show_feedback(*self.get_upload_feedback(status, res_msg))
     
     def show_feedback(self, title, msg):
         pop = SimplePopup(title=title)

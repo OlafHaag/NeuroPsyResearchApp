@@ -5,10 +5,16 @@ from kivy.uix.button import Button
 from kivy.uix.widget import Widget
 from kivy.properties import ConfigParserProperty
 from kivy.properties import NumericProperty
-
+from kivy.utils import platform
 
 from .i18n.settings import SettingOptionMapping
 from .config import WEBSERVER
+
+if platform == 'android':
+    from android.permissions import Permission
+    WRITE_PERMISSION = Permission.WRITE_EXTERNAL_STORAGE
+else:
+    WRITE_PERMISSION = None
 
 
 class SettingButtons(SettingItem):
@@ -90,7 +96,7 @@ class SettingsContainer(Widget):
         """
         if value:
             app = App.get_running_app()
-            app.ask_write_permission(5)
+            app.write_permit = app.ask_permission(WRITE_PERMISSION, timeout=5)
             if not app.write_permit:
                 self.is_local_storage_enabled = 0
                 # Hack to change the visual switch after value was set. ConfigParserProperty doesn't work here. (1.11.0)

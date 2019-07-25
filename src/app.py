@@ -224,35 +224,23 @@ class UncontrolledManifoldApp(App):
         data = np.array([self.settings.user, self.create_device_identifier()])
         d['data'] = self.data2bytes(data.reshape((1, len(data))), header=header, fmt='%s')
         return d
-        
-    def ask_internet_permission(self, timeout=5):
-        """Necessary on android to post data to the server.
-        Yet, no prompt appears, nor a setting in the app's permissions...
-        """
+
+    def ask_permission(self, permission, timeout=5):
+        """ Necessary on Android to request permission for certain actions. """
         if platform == 'android':
-            self.internet_permit = check_permission(Permission.INTERNET)
-            if not self.internet_permit:
-                request_permissions([Permission.INTERNET])
+            got_permission = check_permission(permission)
+            if not got_permission:
+                request_permissions([permission])
         
             # Wait a bit until user granted permission.
             t0 = time.time()
-            while time.time() - t0 < timeout and not self.internet_permit:
-                self.internet_permit = check_permission(Permission.INTERNET)
+            while time.time() - t0 < timeout and not got_permission:
+                got_permission = check_permission(permission)
                 time.sleep(0.5)
+            return got_permission
+        # For any other platform assume given permission.
+        return True
                 
-    def ask_write_permission(self, timeout=5):
-        """ Necessary on Android to write to the file system. """
-        if platform == 'android':
-            self.write_permit = check_permission(Permission.WRITE_EXTERNAL_STORAGE)
-            if not self.write_permit:
-                request_permissions([Permission.WRITE_EXTERNAL_STORAGE])
-            
-            # Wait a bit until user granted permission.
-            t0 = time.time()
-            while time.time() - t0 < timeout and not self.write_permit:
-                self.write_permit = check_permission(Permission.WRITE_EXTERNAL_STORAGE)
-                time.sleep(0.5)
-    
     def get_storage_path(self):
         """ Return writable path.
         If it does not exist on android, make directory.
@@ -261,7 +249,7 @@ class UncontrolledManifoldApp(App):
             # dest = Path(storagepath.get_documents_dir())
             dest = Path(storagepath.get_external_storage_dir()) / App.get_running_app().name
             # We may need to ask permission to write to the external storage. Permission could have been revoked.
-            self.ask_write_permission()
+            self.write_permit = self.ask_permission(Permission.WRITE_EXTERNAL_STORAGE)
             
             if not dest.exists() and self.write_permit:
                 # Make sure the path exists.
@@ -404,8 +392,13 @@ class UncontrolledManifoldApp(App):
         return post_data
     
     def get_upload_route(self):
+        """ Generate the destination URI dependent on the current task.
+        
+        :return: Destination URI for data upload.
+        :rtype: str
+        """
         if platform == 'android':
-            self.ask_internet_permission(2)
+            self.internet_permit = self.ask_permission(Permission.INTERNET, timeout=2)
     
         # Upload address depends on current task. One dash application per task.
         if self.settings.task == 'Circle Task':

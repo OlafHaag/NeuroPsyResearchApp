@@ -416,8 +416,10 @@ class UncontrolledManifoldApp(App):
         try:
             response = requests.post(server, json=data)
             returned_txt = response.text
-        except:
-            returned_txt = "ERROR: There was an error processing the upload."
+        except (requests.exceptions.InvalidSchema, requests.exceptions.ConnectionError):
+            returned_txt = _("ERROR: Server not reachable:") + f"\n{server}"
+        except Exception:
+            returned_txt = _("ERROR: There was an error processing the upload.")
         return returned_txt
     
     def parse_response(self, response):
@@ -428,7 +430,10 @@ class UncontrolledManifoldApp(App):
         :return:
         :rtype: str
         """
-        res_json = json.loads(response)
+        try:
+            res_json = json.loads(response)
+        except json.decoder.JSONDecodeError:
+            return response
         try:
             msg = res_json['response']['props']['children'][0]['props']['children']
         except (KeyError, IndexError):

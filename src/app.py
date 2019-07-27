@@ -378,11 +378,15 @@ class UncontrolledManifoldApp(App):
                 
             data.append(data_b64)
         
-        post_data = {'output': 'output-data-upload.children',
+        post_data = {'output': '..output-data-upload.children...datastore.data..',
                      'changedPropIds': ['upload-data.contents'],
                      'inputs': [{'id': 'upload-data',
                                  'property': 'contents',
-                                 'value': [f'data:application/octet-stream;base64,{d.decode()}' for d in data]}],
+                                 'value': [f'data:application/octet-stream;base64,{d.decode()}' for d in data]},
+                                {'id': 'user-IDs',
+                                 'property': 'value',
+                                 'value': []}
+                                ],
                      'state': [{'id': 'upload-data',
                                 'property': 'filename',
                                 'value': file_names},

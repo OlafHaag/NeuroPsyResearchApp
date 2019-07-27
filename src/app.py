@@ -433,11 +433,14 @@ class UncontrolledManifoldApp(App):
         try:
             res_json = json.loads(response)
         except json.decoder.JSONDecodeError:
+            # If it's not JSON and not the usual error message length, something else went wrong.
+            if len(response) > 150:
+                return _("ERROR: There was an unexpected error during upload.")
             return response
         try:
             msg = res_json['response']['props']['children'][0]['props']['children']
         except (KeyError, IndexError):
-            msg = 'Not the usual error response.'
+            msg = _("Not the usual error response.")
         return msg
     
     def get_uploaded_status(self, response):
@@ -449,7 +452,7 @@ class UncontrolledManifoldApp(App):
         :rtype: bool
         """
         try:
-            if response.startswith('ERROR:'):
+            if response.startswith('ERROR:') or 'Error' in response:
                 return False
         except AttributeError:
             pass

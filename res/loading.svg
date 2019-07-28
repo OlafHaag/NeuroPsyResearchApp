@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="256"
+   height="256"
+   viewBox="0 0 256 256"
+   version="1.1"
+   id="SVGRoot"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="loading.svg"
+   inkscape:export-filename="D:\eigene_Werke\Software\DataScience\UCMResearchApp\res\loading.png"
+   inkscape:export-xdpi="192"
+   inkscape:export-ydpi="192">
+  <defs
+     id="defs5069" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2"
+     inkscape:cx="82.001166"
+     inkscape:cy="116.38889"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:grid-bbox="true" />
+  <metadata
+     id="metadata5072">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,240)">
+    <rect
+       style="opacity:1;fill:#1f7d82;fill-opacity:1;stroke:none;stroke-width:254.50920105;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect5629"
+       width="256"
+       height="256"
+       x="0"
+       y="-240" />
+    <g
+       id="g4530"
+       inkscape:label="icon"
+       transform="matrix(11.974573,0,0,11.974573,32.203413,-231.63465)">
+      <text
+         id="text5627"
+         y="10.6673"
+         x="-0.45184407"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.20000029px;font-family:'Reem Kufi';-inkscape-font-specification:'Reem Kufi';fill:#ffffff;fill-opacity:1"
+           y="10.6673"
+           x="-0.45184407"
+           id="tspan5625"
+           sodipodi:role="line">UCM</tspan></text>
+      <path
+         d="M 8.7764262,9.2097804 A 1.4375,1.4375 0 0 1 6.9230559,8.9521542 1.4375,1.4375 0 0 1 6.8944773,7.0811824 1.4375,1.4375 0 0 1 8.7391144,6.7670701 L 8,8 Z"
+         sodipodi:end="5.2524246"
+         sodipodi:start="1.0002136"
+         sodipodi:ry="1.4375"
+         sodipodi:rx="1.4375"
+         sodipodi:cy="8"
+         sodipodi:cx="8"
+         sodipodi:type="arc"
+         id="path5637"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:16;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:1.00226557px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M 0.21875001,13.226004 H 15.789063"
+         id="path5647"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path5649"
+         d="M 0.21875001,2.7733672 H 15.789063"
+         style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:1.00226557px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <circle
+         r="1.28125"
+         cy="2.7733672"
+         cx="12.003906"
+         id="path5655"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:16;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <circle
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:16;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="circle5657"
+         cx="4.0039062"
+         cy="13.226004"
+         r="1.28125" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="28.925068"
+       y="-19.662148"
+       id="text4534"
+       inkscape:label="Loading"><tspan
+         sodipodi:role="line"
+         id="tspan4532"
+         x="28.925068"
+         y="-19.662148"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:45.33333206px;font-family:'Reem Kufi';-inkscape-font-specification:'Reem Kufi';fill:#ffffff;fill-opacity:1">Loading...</tspan></text>
+  </g>
+</svg>

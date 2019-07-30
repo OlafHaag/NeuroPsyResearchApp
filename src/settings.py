@@ -126,13 +126,14 @@ class SettingsContainer(Widget):
             self.practice_block = 0
         
         def set_practice_block(self, block):
-            # Don't advance practice_block when the current block gets reset to 0.
-            if self.n_practice_trials and 0 < block <= 3:
-                self.practice_block += 1
+            if self.n_practice_trials:
+                # Don't advance practice_block when the current block gets reset to 0.
+                if 0 < block <= 3:
+                    self.practice_block += 1
                 # If we've done our 2 practice blocks, we're ready for the big leagues.
-                if self.practice_block > 2:
+                if self.practice_block > 2 or block == 0:
                     self.practice_block = 0
-            
+
         def set_constraint_setting(self, block):
             # Second practice block and adjusted constrained block.
             self.constraint = (self.practice_block == 2)\

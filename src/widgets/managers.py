@@ -1,5 +1,6 @@
 from kivy.app import App
 from kivy.core.window import Window
+from kivy.utils import platform
 from kivy.uix.screenmanager import ScreenManager
 from kivy.properties import ObjectProperty
 
@@ -30,7 +31,11 @@ class UCMManager(ScreenManager):
     
     def key_input(self, window, key, scancode, codepoint, modifier):
         """ Handle escape key / back button presses. """
-        if key in [8, 27, 278]:  # backspace, escape, home keys.
+        if platform == "android":
+            back_keys = [27]
+        else:
+            back_keys = [27, 278]  # backspace = 8, but would need to check if we're typing in an input mask.
+        if key in back_keys:  # backspace, escape, home keys.
             if self.current == 'Home':
                 # When on home screen we want to be able to quit the app after 2 presses.
                 self.n_home_esc += 1

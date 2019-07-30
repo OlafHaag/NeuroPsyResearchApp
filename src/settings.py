@@ -110,7 +110,9 @@ class SettingsContainer(Widget):
                                         verify=lambda x: x > 0, errorvalue=20)
         n_blocks = ConfigParserProperty('3', 'CircleTask', 'n_blocks', 'app', val_type=int,
                                         verify=lambda x: x > 0, errorvalue=3)
-        constrained_block = ConfigParserProperty('3', 'CircleTask', 'constrained_block', 'app', val_type=int)
+        n_practice_trials = ConfigParserProperty('5', 'CircleTask', 'n_practice_trials', 'app', val_type=int,
+                                                 verify=lambda x: x >= 0, errorvalue=5)
+        constrained_block = ConfigParserProperty('2', 'CircleTask', 'constrained_block', 'app', val_type=int)
         warm_up = ConfigParserProperty('1.0', 'CircleTask', 'warm_up_time', 'app', val_type=float,
                                        verify=lambda x: x > 0.0, errorvalue=1.0)
         trial_duration = ConfigParserProperty('1.0', 'CircleTask', 'trial_duration', 'app', val_type=float,
@@ -121,9 +123,25 @@ class SettingsContainer(Widget):
         def __init__(self, **kwargs):
             super(SettingsContainer.CircleTask, self).__init__(**kwargs)
             self.constraint = False
+            self.practice_block = 0
         
-        def set_constraint_setting(self, current_block):
-            self.constraint = current_block == self.constrained_block
+        def set_practice_block(self, block):
+            # Don't advance practice_block when the current block gets reset to 0.
+            if self.n_practice_trials and 0 < block <= 3:
+                self.practice_block += 1
+                # If we've done our 2 practice blocks, we're ready for the big leagues.
+                if self.practice_block > 2:
+                    self.practice_block = 0
+            
+        def set_constraint_setting(self, block):
+            # Second practice block and adjusted constrained block.
+            self.constraint = (self.practice_block == 2)\
+                              or (block == (self.constrained_block + bool(self.n_practice_trials) * 2))
+            
+        def on_new_block(self, new_block):
+            # We don't count practice blocks.
+            self.set_practice_block(new_block)
+            self.set_constraint_setting(new_block)
     
     def __init__(self, **kwargs):
         super(SettingsContainer, self).__init__(**kwargs)
@@ -145,4 +163,4 @@ class SettingsContainer(Widget):
     def on_current_block(self, instance, value):
         """ Bound to change in current block property. """
         if self.task == 'Circle Task':
-            self.circle_task.set_constraint_setting(value)
+            self.circle_task.on_new_block(value)

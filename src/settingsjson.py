@@ -65,6 +65,11 @@ settings_general_json = json.dumps([
 
 settings_circle_task_json = json.dumps([
     {'type': 'numeric',
+     'title': 'Number of practice trials',
+     'desc': 'Practice trials per condition.',
+     'section': 'CircleTask',
+     'key': 'n_practice_trials'},
+    {'type': 'numeric',
      'title': 'Number of trials',
      'desc': 'Trials per block.',
      'section': 'CircleTask',

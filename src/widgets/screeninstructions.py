@@ -1,5 +1,5 @@
 from kivy.uix.screenmanager import Screen
-from kivy.properties import ObjectProperty, StringProperty
+from kivy.properties import ObjectProperty, StringProperty, BooleanProperty
 
 from ..i18n import _
 

@@ -20,13 +20,17 @@ class ScreenCircleTask(Screen):
     """ This class handles all the logic for the circle size matching task. """
     settings = ObjectProperty()
     progress = StringProperty(_("Trial: ") + "0/0")
-    is_constrained = BooleanProperty(False)  # Workaround, since self.settings.constraint doesn't seem to exist at init.
+    # Workaround, since self.settings.circle_task.constraint doesn't seem to exist at init.
+    is_constrained = BooleanProperty(False)
+    is_practice = BooleanProperty(True)
     
     def __init__(self, **kwargs):
         super(ScreenCircleTask, self).__init__(**kwargs)
         # Procedure related.
         self.register_event_type('on_task_stopped')
         self.schedule = None
+        self.max_trials = 0
+        self.max_blocks = 0
         # Control related.
         self.target2_switch = False  # Which slider is controlling the second target.
         self.df1_touch = None
@@ -71,6 +75,12 @@ class ScreenCircleTask(Screen):
             
     def on_pre_enter(self, *args):
         """ Setup this run of the task and initiate start. """
+        # Do we do practice trials?
+        self.is_practice = bool(self.settings.circle_task.practice_block)
+        if self.is_practice:
+            self.max_trials = self.settings.circle_task.n_practice_trials
+        else:
+            self.max_trials = self.settings.circle_task.n_trials
         self.is_constrained = self.settings.circle_task.constraint
         # df that is constrained is randomly chosen.
         self.target2_switch = np.random.choice([True, False])
@@ -89,7 +99,7 @@ class ScreenCircleTask(Screen):
         self.count_down.set_label(_("PREPARE"))
         self.start_task()
     
-    # FixMe: only last touch ungrabbed, ungrab all lingering touches!
+    # ToDo: only last touch ungrabbed, ungrab all lingering touches. Doesn't appear to cause problems so far.
     def slider_grab(self, instance, touch):
         """ Set reference to touch event for sliders. """
         if instance == self.ids.df1:
@@ -119,7 +129,7 @@ class ScreenCircleTask(Screen):
     
     def get_progress(self):
         """ Return a string for the number of trials out of total that are already done. """
-        progress = _("Trial: ") + f"{self.settings.current_trial}/{self.settings.circle_task.n_trials}"
+        progress = _("Trial: ") + f"{self.settings.current_trial}/{self.max_trials}"
         return progress
     
     def start_task(self):
@@ -133,7 +143,7 @@ class ScreenCircleTask(Screen):
     
     def get_ready(self, *args):
         """ Prepare the next trial or stop if the total amount of trials are reached. """
-        if self.settings.current_trial == self.settings.circle_task.n_trials:
+        if self.settings.current_trial == self.max_trials:
             self.stop_task()
         else:
             self.settings.current_trial += 1
@@ -203,10 +213,15 @@ class ScreenCircleTask(Screen):
                 # Abort session.
                 self.dispatch('on_task_stopped', True)
                 return
-            self.data_collection()
-            was_last_block = self.settings.current_block == self.settings.circle_task.n_blocks
-            if was_last_block:
-                self.add_session_data()
+            
+            was_last_block = self.settings.current_block == (self.settings.circle_task.n_blocks
+                                                             + bool(self.settings.circle_task.n_practice_trials) * 2)
+            # Only add data of session if we're not practicing anymore.
+            if not self.is_practice:
+                self.data_collection()
+                if was_last_block:
+                    self.add_session_data()
+                
             self.dispatch('on_task_stopped', was_last_block)
     
     def on_task_stopped(self, was_last_block=False):
@@ -243,7 +258,12 @@ class ScreenCircleTask(Screen):
         self.meta_data['device'] = App.get_running_app().create_device_identifier()
         self.meta_data['user'] = self.settings.user
         self.meta_data['task'] = self.settings.task
-        self.meta_data['block'] = self.settings.current_block
+        # Practice blocks don't count. Make them zero.
+        if self.is_practice:
+            self.meta_data['block'] = 0
+        else:
+            self.meta_data['block'] = self.settings.current_block \
+                                      - (bool(self.settings.circle_task.n_practice_trials) * 2)
         self.meta_data['treatment'] = constrained_df if self.is_constrained else ''
         self.meta_data['time_iso'] = self.get_current_time_iso(time_fmt)
         self.meta_data['time'] = time.time()

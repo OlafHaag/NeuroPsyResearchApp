@@ -30,7 +30,7 @@ class UCMManager(ScreenManager):
     
     def key_input(self, window, key, scancode, codepoint, modifier):
         """ Handle escape key / back button presses. """
-        if key == 27:
+        if key in [8, 27, 278]:  # backspace, escape, home keys.
             if self.current == 'Home':
                 # When on home screen we want to be able to quit the app after 2 presses.
                 self.n_home_esc += 1

@@ -89,7 +89,10 @@ class ScreenCircleTask(Screen):
         df2_colored = self.is_constrained and self.target2_switch
         self.set_slider_colors(self.ids.df1, df1_colored)
         self.set_slider_colors(self.ids.df2, df2_colored)
-        
+        # Remind to use sliders.
+        self.ids.df1_warning.opacity = 1.0
+        self.ids.df2_warning.opacity = 1.0
+
         # Initiate data container for this block.
         self.data = np.zeros((self.settings.circle_task.n_trials, 2))
         # FixMe: Not loading sound files on Windows. (Unable to find a loader)
@@ -104,8 +107,10 @@ class ScreenCircleTask(Screen):
         """ Set reference to touch event for sliders. """
         if instance == self.ids.df1:
             self.df1_touch = touch
+            self.ids.df1_warning.opacity = 0.0
         elif instance == self.ids.df2:
             self.df2_touch = touch
+            self.ids.df2_warning.opacity = 0.0
     
     def disable_sliders(self):
         self.ids.df2.disabled = True

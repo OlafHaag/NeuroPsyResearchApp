@@ -1,5 +1,15 @@
 #:kivy 1.10.1
 
+<RoundedButton@Button>:
+    background_color: 0,0,0,0  # Make invisible.
+    canvas.before:
+        Color:
+            rgba: (.4,.4,.4,1) if self.state=='normal' else (0,.7,.7,1)  # Visual feedback of press.
+        RoundedRectangle:
+            size: [self.size[0]*0.98, self.size[1]*0.9]
+            pos: [self.pos[0]+self.size[0]*0.01, self.pos[1]+self.size[1]*0.05]
+            radius: [30,]
+
 <UCMManager>:
     settings: app.settings
     ScreenHome:
@@ -34,13 +44,13 @@
         BoxLayout:
             orientation: 'horizontal'
             size_hint_y: 0.2
-            Button:
+            RoundedButton:
                 text: _("Settings")
                 on_release:
                     root.manager.transition.direction = 'up'
                     root.manager.transition.duration = 0.5
                     app.open_settings()
-            Button:
+            RoundedButton:
                 text: _("Proceed")
                 on_release:
                     root.manager.transition.direction = 'up'
@@ -69,7 +79,7 @@
                 padding: 10, 10
                 halign: 'center'
                 valign: 'middle'
-        Button:
+        RoundedButton:
             text: _("Start")
             size_hint_y: 0.2
             on_release:
@@ -255,12 +265,12 @@
         BoxLayout:
             orientation: 'horizontal'
             size_hint_y: 0.2
-            Button:
+            RoundedButton:
                 text: _("Send via E-Mail")
                 disabled: not app.settings.is_email_enabled
                 on_release:
                     app.send_email()
-            Button:
+            RoundedButton:
                 id: upload_btn
                 text: _("Upload")
                 disabled: not app.upload_btn_enabled
@@ -268,12 +278,12 @@
         BoxLayout:
             orientation: 'horizontal'
             size_hint_y: 0.2
-            Button:
+            RoundedButton:
                 text: _("Home")
                 on_release:
                     app.settings.reset_current()
                     root.manager.go_home()
-            Button:
+            RoundedButton:
                 text: _("Quit")
                 on_release: root.manager.quit()
 
@@ -299,7 +309,7 @@
             size: self.texture_size
             halign: 'center'
             valign: 'middle'
-        Button:
+        RoundedButton:
             text: _("Close")
             size_hint_y: 0.3
             on_release: pop.dismiss()

@@ -216,7 +216,9 @@
                 circle: self.center_x, self.center_y, min(self.width, self.height) * 0.25, 0, (int(not root.target2_switch) * df1.value_normalized + int(root.target2_switch) * df2.value_normalized) * 360
             Ellipse:
                 size: [min(self.width, self.height) * 0.05] * 2
-                pos: [self.center_x - min(self.width, self.height) * 0.025, self.center_y - min(self.width, self.height) * 0.275]
+                # Target should be at half of 125=62.5, so that df1=df2. That's an arc of 360°*0.625=225°.
+                # x=r*cos(angle), y=r*sin(angle), add to center position and subtract radius.
+                pos: [(self.center_x + min(self.width, self.height) * 0.25 * math.cos(math.radians(225)))-min(self.width, self.height) * 0.025, (self.center_y + min(self.width, self.height) * 0.25 * math.sin(math.radians(225)))-min(self.width, self.height) * 0.025]
 
     CountDownCircle:
         id: anim_label

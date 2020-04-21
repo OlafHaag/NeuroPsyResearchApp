@@ -1,4 +1,5 @@
 #:kivy 1.10.1
+#:import math math
 
 <RoundedButton@Button>:
     background_color: 0,0,0,0  # Make invisible.
@@ -116,16 +117,31 @@
             do_scroll_x: False
             do_scroll_y: True
 
-            Label:
-                text: root.instruction_msg
-                markup: True
-                text_size: root.width, None
-                font_size: sp(24)
-                size: self.texture_size
+            GridLayout:
+                cols: 1
+                rows: 2
                 size_hint_y: None
-                padding: 10, 10
-                halign: 'center'
-                valign: 'middle'
+                height: self.minimum_height
+
+                Label:
+                    text: root.instruction_msg
+                    markup: True
+                    text_size: root.width, None
+                    font_size: sp(24)
+                    size: self.texture_size
+                    size_hint_y: None
+                    padding: 10, 10
+                    halign: 'center'
+                    valign: 'top'
+
+                Image:
+                    id: CT_instruct_img
+                    source: 'res/CT_1task_trial.png'
+                    allow_stretch: False
+                    keep_ratio: True
+                    size: self.texture_size
+                    size_hint: (1, None)
+
         RoundedButton:
             text: _("Start")
             size_hint_y: 0.2

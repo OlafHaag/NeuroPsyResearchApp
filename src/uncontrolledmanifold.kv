@@ -13,6 +13,8 @@
 <UCMManager>:
     settings: app.settings
     ScreenHome:
+    ScreenConsentCircleTask:
+        name: 'Consent CT'
     ScreenInstructCircleTask:
         name: 'Instructions CT'
     ScreenCircleTask:
@@ -52,6 +54,51 @@
                     app.open_settings()
             RoundedButton:
                 text: _("Proceed")
+                on_release:
+                    root.manager.transition.direction = 'up'
+                    root.manager.transition.duration = 0.5
+                    root.manager.current = root.manager.task_consents[app.settings.task]
+
+<ScreenConsentCircleTask>:  # When adding new consent forms, to share style add class like so: <ConsentOne, ConsentTwo>:
+    settings: app.settings
+    on_leave: consent_scroll.scroll_y = 1
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        ScrollView:
+            id: consent_scroll
+            do_scroll_x: False
+            do_scroll_y: True
+
+            GridLayout:
+                cols: 1
+                rows: 2
+                size_hint_y: None
+                height: self.minimum_height
+
+                Label:
+                    text: root.consent_msg
+                    markup: True
+                    text_size: root.width, None
+                    font_size: sp(24)
+                    size: self.texture_size
+                    size_hint_y: None
+                    padding: 10, 10
+                    halign: 'center'
+                    valign: 'top'
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 0.2
+            RoundedButton:
+                text: _("Decline")
+                on_release:
+                    root.manager.transition.direction = 'up'
+                    root.manager.transition.duration = 0.5
+                    root.manager.go_home()
+            RoundedButton:
+                text: _("Agree")
                 on_release:
                     root.manager.transition.direction = 'up'
                     root.manager.transition.duration = 0.5

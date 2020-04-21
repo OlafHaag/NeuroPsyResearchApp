@@ -3,6 +3,7 @@ from .countdowns import CountDownCircle
 from .sliders import ScaleSlider
 from .managers import UCMManager
 from .screenhome import ScreenHome
+from .screenconsents import ScreenConsentCircleTask
 from .screeninstructions import ScreenInstructCircleTask
 from .screencircletask import ScreenCircleTask
 from .screenoutro import ScreenOutro

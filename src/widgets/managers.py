@@ -15,6 +15,7 @@ class UCMManager(ScreenManager):
     def __init__(self, **kwargs):
         super(UCMManager, self).__init__(**kwargs)
         self.n_home_esc = 0  # Counter on how many times the back button was pressed on home screen.
+        self.task_consents = {'Circle Task': 'Consent CT'}
         self.task_instructions = {'Circle Task': 'Instructions CT'}
     
     def on_kv_post(self, base_widget):

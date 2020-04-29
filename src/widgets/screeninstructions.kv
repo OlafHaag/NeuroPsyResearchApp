@@ -1,0 +1,47 @@
+# screeninstructions.kv
+#:kivy 1.11.1
+
+<ScreenInstructCircleTask>:  # When adding new task instruction, to share style add class like so: <TaskOne, TaskTwo>:
+    settings: app.settings
+    on_leave: instruct_scroll.scroll_y = 1
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        ScrollView:
+            id: instruct_scroll
+            do_scroll_x: False
+            do_scroll_y: True
+
+            GridLayout:
+                cols: 1
+                rows: 2
+                size_hint_y: None
+                height: self.minimum_height
+
+                Label:
+                    text: root.instruction_msg
+                    markup: True
+                    text_size: root.width, None
+                    font_size: sp(24)
+                    size: self.texture_size
+                    size_hint_y: None
+                    padding: 10, 10
+                    halign: 'center'
+                    valign: 'top'
+
+                Image:
+                    id: CT_instruct_img
+                    source: 'res/CT_1task_trial.png'
+                    allow_stretch: False
+                    keep_ratio: True
+                    size: self.texture_size
+                    size_hint: (1, None)
+
+        RoundedButton:
+            text: _("Start")
+            size_hint_y: 0.2
+            on_release:
+                root.manager.transition.direction = 'up'
+                root.manager.transition.duration = 0.5
+                root.manager.current = app.settings.task

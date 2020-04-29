@@ -1,0 +1,78 @@
+# popups.kv
+#:kivy 1.11.1
+
+<SimplePopup>:
+    id: pop
+    size_hint: .6, .6
+    auto_dismiss: False
+    title: _("Information")
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            id: pop_text
+            text: root.msg
+            text_size: root.width, None
+            size: self.texture_size
+            halign: 'center'
+            valign: 'middle'
+        RoundedButton:
+            text: _("Close")
+            size_hint_y: 0.3
+            on_release: pop.dismiss()
+
+<BlockingPopup>:
+    id: pop_block
+    size_hint: .6, .6
+    auto_dismiss: False
+    title: _("Information")
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            id: pop_block_text
+            text: root.msg
+            text_size: root.width, None
+            size: self.texture_size
+            halign: 'center'
+            valign: 'middle'
+
+<LanguagePopup>:
+    id: pop_lang
+    size_hint: .6, .6
+    auto_dismiss: False
+    title: _("Choose Language")
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            id: pop_lang_text
+            text: root.msg
+            text_size: root.width, None
+            size: self.texture_size
+            halign: 'center'
+            valign: 'middle'
+        RoundedButton:
+            text: _("Close")
+            size_hint_y: 0.3
+            on_release: pop_lang.dismiss()
+
+<TermsPopup>:
+    id: pop_terms
+    size_hint: .6, .6
+    auto_dismiss: False
+    title: _("Terms")
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            id: pop_terms_text
+            text: root.msg
+            text_size: root.width, None
+            size: self.texture_size
+            halign: 'center'
+            valign: 'middle'
+        RoundedButton:  # ToDo: Decline button to quit.
+            text: _("Close")
+            size_hint_y: 0.3
+            on_release: pop.dismiss()

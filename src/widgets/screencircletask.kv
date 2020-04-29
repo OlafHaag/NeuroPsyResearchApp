@@ -1,0 +1,166 @@
+# screencircletask.kv
+#:kivy 1.11.1
+#:import math math
+
+<ScreenCircleTask>:
+    name: 'Circle Task'
+    count_down: anim_label
+    settings: app.settings
+
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'center'
+
+        # Debug Label
+        #Label:
+        #    text: 'df1 = {:.2f}'.format(df1.value)
+        #    size_hint_x: None
+        #    size_hint_y: 0.1
+        #    size: self.texture_size
+        #    pos_hint: {'left': 1}
+        #    canvas.before:
+        #        PushMatrix
+        #        Rotate:
+        #            angle: 90
+        #            origin: self.center
+        #    canvas.after:
+        #        PopMatrix
+
+        ScaleSlider:
+            id: df1
+            min: 0
+            max: 100
+            value: self.max * 0.1
+            orientation: 'vertical'
+            value_track_color: [0.25, 0.52, 0.95, 1]
+            cursor_size: [sp(64)]*2
+            padding: sp(48)
+            sensitivity: 'handle'
+            size_hint: None, 1
+
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'bottom'
+
+        Label:
+            id: df1_warning
+            opacity: 1.0
+            text: "[color=ff0000]" + _("Please use this slider.[/color]") + "[/color]"
+            markup: True
+            size_hint_x: None
+            size_hint_y: 0.1
+            size: self.texture_size
+            padding: 10, 10
+            halign: 'center'
+            valign: 'middle'
+
+    AnchorLayout:
+        anchor_x: 'right'
+        anchor_y: 'center'
+
+        # Debug Label
+        #Label:
+        #    text: 'df2 = {:.2f}'.format(df2.value)
+        #    size_hint_x: None
+        #    size_hint_y: 0.1
+        #    size: self.texture_size
+        #    pos_hint: {'right': 1}
+        #    canvas.before:
+        #        PushMatrix
+        #        Rotate:
+        #            angle: 90
+        #            origin: self.center
+        #    canvas.after:
+        #        PopMatrix
+
+        ScaleSlider:
+            id: df2
+            min: 0
+            max: 100
+            value: self.max * 0.1
+            orientation: 'vertical'
+            value_track_color: [0.25, 0.52, 0.95, 1]
+            cursor_size: [sp(64)]*2
+            padding: sp(48)
+            sensitivity: 'handle'
+            size_hint: None, 1
+
+    AnchorLayout:
+        anchor_x: 'right'
+        anchor_y: 'bottom'
+
+        Label:
+            id: df2_warning
+            opacity: 1.0
+            text: "[color=ff0000]" + _("Please use this slider.[/color]") + "[/color]"
+            markup: True
+            size_hint_x: None
+            size_hint_y: 0.1
+            size: self.texture_size
+            padding: 10, 10
+            halign: 'center'
+            valign: 'middle'
+
+    FloatLayout:
+        canvas:
+            Color:
+                rgb: 1, 1, 1
+            Ellipse:
+                size: [(df1.value_normalized + df2.value_normalized) * min(self.width, self.height) * 0.4] * 2
+                pos:
+                    [self.center_x - (df1.value_normalized + df2.value_normalized) * min(self.width, self.height) * 0.2,
+                    self.center_y - (df1.value_normalized + df2.value_normalized) * min(self.width, self.height) * 0.2]
+
+    # Goal Circle Task
+    FloatLayout:
+        canvas:
+            Color:
+                rgba: 0, 0.5, 0, .9
+            Line:
+                width: 2.
+                circle: self.center_x, self.center_y, min(self.width, self.height) * 0.25
+
+    # Goal Circle Task constrained
+    FloatLayout:
+        opacity: int(root.is_constrained)
+        canvas:
+            Color:
+                rgb: 0.25, 0.52, 0.95
+            Line:
+                width: 5
+                circle: self.center_x, self.center_y, min(self.width, self.height) * 0.25, 0, (int(not root.target2_switch) * df1.value_normalized + int(root.target2_switch) * df2.value_normalized) * 360
+            Ellipse:
+                size: [min(self.width, self.height) * 0.05] * 2
+                # Target should be at half of 125=62.5, so that df1=df2. That's an arc of 360°*0.625=225°.
+                # x=r*cos(angle), y=r*sin(angle), add to center position and subtract radius.
+                pos: [(self.center_x + min(self.width, self.height) * 0.25 * math.cos(math.radians(225)))-min(self.width, self.height) * 0.025, (self.center_y + min(self.width, self.height) * 0.25 * math.sin(math.radians(225)))-min(self.width, self.height) * 0.025]
+
+    CountDownCircle:
+        id: anim_label
+        text: str(int(self.start_count - (self.angle*self.start_count//360)))
+        font_size: 50
+        color: [1, 0, 1, 1]
+        canvas:
+            Color:
+                rgba: 0.3, 0, 0.3, 0.7
+            Line:
+                circle: self.center_x, self.center_y, min(self.width, self.height) * 0.4, 0, self.angle % 360
+                width: 5
+
+    AnchorLayout:
+        anchor_x: 'center'
+        anchor_y: 'top'
+        Label:
+            text: root.progress
+            text_size: root.width, None
+            size: self.texture_size
+            halign: 'center'
+            valign: 'middle'
+            size_hint: None, None
+
+    #Debug
+    #FloatLayout:
+    #    Label:
+    #        text: 'Radius = {}'.format(df1.value_normalized + df2.value_normalized)
+    #        pos_hint: {'right': 1}
+    #        color: [0, 1, 1, 1]

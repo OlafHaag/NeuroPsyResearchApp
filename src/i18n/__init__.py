@@ -104,7 +104,7 @@ def language_code_to_translation(language_code):
 
 
 def translation_to_language_code(translated_language_code):
-    """Translate a language back to a langugage code.
+    """Translate a language back to a language code.
 
     :param str translated_language_code: a language returned by
       :func:`language_code_to_translation`

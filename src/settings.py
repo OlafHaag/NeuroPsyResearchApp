@@ -47,8 +47,8 @@ class Settings(SettingsWithSidebar):
     def __init__(self, *args, **kwargs):
         """Create a new settings instance.
 
-        The :class:`SettingOptionMapping` is added an can be used with the ``"optionmapping"`` type.
-        The :class:`SettingButtons` is added an can be used with the ``"buttons"`` type.
+        The :class:`SettingOptionMapping` is added and can be used with the ``"optionmapping"`` type.
+        The :class:`SettingButtons` is added and can be used with the ``"buttons"`` type.
         """
         super().__init__(*args, **kwargs)
         self.register_type("optionmapping", SettingOptionMapping)

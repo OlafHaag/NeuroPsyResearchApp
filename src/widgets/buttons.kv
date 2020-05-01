@@ -10,3 +10,30 @@
             size: [self.size[0]*0.98, self.size[1]*0.9]
             pos: [self.pos[0]+self.size[0]*0.01, self.pos[1]+self.size[1]*0.05]
             radius: [30,]
+
+<BtnLabel@ButtonBehavior+Label>:
+    text_size: self.size
+    size: self.texture_size
+    valign: 'center'
+
+<LabeledCheckBox@BoxLayout>:
+    text: ''
+    group: ''
+    active: cb.active
+    on_active: cb.active = self.active
+
+    AnchorLayout:
+        anchor_x: 'right'
+        padding: 15, 15
+        size_hint_x:  0.8
+        CheckBox:
+            id: cb
+            group: root.group
+            allow_no_selection: False
+            size_hint_x: 0.1
+
+    BtnLabel:
+        text: root.text
+        halign: 'left'
+        font_size: sp(24)
+        on_press: cb._do_press()

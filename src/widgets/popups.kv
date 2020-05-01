@@ -1,6 +1,7 @@
 # popups.kv
 #:kivy 1.11.1
 
+#FixMe: How to handle garbage collection of Popups to avoid ReferenceError because of translations?
 <SimplePopup>:
     id: pop
     size_hint: .6, .6
@@ -44,35 +45,23 @@
     title: _("Choose Language")
     BoxLayout:
         orientation: 'vertical'
+        spacing: 10
 
         Label:
             id: pop_lang_text
             text: root.msg
             text_size: root.width, None
             size: self.texture_size
+            size_hint_y: 0.2
             halign: 'center'
             valign: 'middle'
+        BoxLayout:
+            id: lang_btn_layout
+            orientation: 'vertical'
+            valign: 'center'
+            #padding: 20, 20
+
         RoundedButton:
             text: _("Close")
-            size_hint_y: 0.3
+            size_hint_y: 0.4
             on_release: pop_lang.dismiss()
-
-<TermsPopup>:
-    id: pop_terms
-    size_hint: .6, .6
-    auto_dismiss: False
-    title: _("Terms")
-    BoxLayout:
-        orientation: 'vertical'
-
-        Label:
-            id: pop_terms_text
-            text: root.msg
-            text_size: root.width, None
-            size: self.texture_size
-            halign: 'center'
-            valign: 'middle'
-        RoundedButton:  # ToDo: Decline button to quit.
-            text: _("Close")
-            size_hint_y: 0.3
-            on_release: pop.dismiss()

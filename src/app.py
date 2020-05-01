@@ -30,7 +30,7 @@ from .config import WEBSERVER, time_fmt
 from .settings import Settings, SettingsContainer
 from .settingsjson import LANGUAGE_CODE, LANGUAGE_SECTION, settings_general_json, settings_circle_task_json
 
-from .widgets import UCMManager, SimplePopup
+from .widgets import UCMManager, SimplePopup, LanguagePopup
 
 if platform == 'android':
     from android.permissions import request_permissions, check_permission, Permission
@@ -57,7 +57,7 @@ Window.fullscreen = 'auto'
 class UncontrolledManifoldApp(App):
     manager = ObjectProperty(None, allownone=True)
     upload_btn_enabled = BooleanProperty(True)
-
+    
     def get_application_config(self, defaultpath='%(appdir)s/%(appname)s.ini'):
         """ Override path to application configuration. """
         if platform == 'win':
@@ -69,9 +69,9 @@ class UncontrolledManifoldApp(App):
         """ This method is called before the application is initialized to construct the ConfigParser object.
         The configuration will be automatically saved in the file returned by get_application_config().
         """
-        
+    
         config.setdefaults(LANGUAGE_SECTION, {LANGUAGE_CODE: current_language()})
-        config.setdefaults('General', {'task': 'Circle Task'})
+        config.setdefaults('General', {'is_first_run': 1, 'task': 'Circle Task'})
         config.setdefaults('DataCollection', {
             'is_local_storage_enabled': 0,
             'is_upload_enabled': 1,
@@ -134,7 +134,11 @@ class UncontrolledManifoldApp(App):
     
     def switch_language(self, lang='en'):
         """ Change displayed translation. """
-        change_language_to(lang)
+        try:
+            change_language_to(lang)
+        except ReferenceError:
+            # I spent hours trying to fix it. Now I just don't care anymore.
+            print(f"WARNING: Couldn't translate everything. Possible weakref popups that don't exist anymore.")
     
     def build(self):
         """ Initializes the application; it will be called only once.
@@ -175,7 +179,7 @@ class UncontrolledManifoldApp(App):
         self.data_email.clear()
         # Start new data collection with device information.
         self.collect_device_data()
-        
+    
     def get_device_data(self):
         """ Acquire properties of the device in use. """
         inch2cm = 2.54
@@ -192,7 +196,7 @@ class UncontrolledManifoldApp(App):
         device_properties['size_y'] = screen_y / Metrics.dpi * inch2cm
         device_properties['platform'] = platform
         return device_properties
-        
+    
     def collect_device_data(self):
         """ Add properties of device to data collection. """
         props = self.get_device_data()
@@ -225,14 +229,14 @@ class UncontrolledManifoldApp(App):
         data = np.array([self.settings.user, self.create_device_identifier()])
         d['data'] = self.data2bytes(data.reshape((1, len(data))), header=header, fmt='%s')
         return d
-
+    
     def ask_permission(self, permission, timeout=5):
         """ Necessary on Android to request permission for certain actions. """
         if platform == 'android':
             got_permission = check_permission(permission)
             if not got_permission:
                 request_permissions([permission])
-        
+            
             # Wait a bit until user granted permission.
             t0 = time.time()
             while time.time() - t0 < timeout and not got_permission:
@@ -241,7 +245,7 @@ class UncontrolledManifoldApp(App):
             return got_permission
         # For any other platform assume given permission.
         return True
-                
+    
     def get_storage_path(self):
         """ Return writable path.
         If it does not exist on android, make directory.
@@ -271,7 +275,7 @@ class UncontrolledManifoldApp(App):
         destination = storage_path / subpath
         if not destination.exists() and self.write_permit:
             destination.mkdir(parents=True, exist_ok=True)  # Assume this works and we have permissions.
-
+    
     def compile_filename(self, meta_data):
         """ Returns file name based on provided meta data.
         Uses current time if meta data is incomplete.
@@ -291,9 +295,9 @@ class UncontrolledManifoldApp(App):
                 file_name = f'{datetime.now().strftime(time_fmt)}.csv'
         except KeyError:
             file_name = f'{datetime.now().strftime(time_fmt)}.csv'
-            
+        
         return file_name
-
+    
     def write_file(self, path, content):
         """ Save content to path.
         
@@ -316,7 +320,7 @@ class UncontrolledManifoldApp(App):
                 self.show_feedback(_("Error!"),
                                    _("Unable to write to file:\n{}\nUnknown data format.").format(path.name))
         return False
-        
+    
     def write_data_to_files(self):
         """ Writes content of data to disk. """
         storage = self.get_storage_path()
@@ -347,7 +351,7 @@ class UncontrolledManifoldApp(App):
             np.savetxt(bio, data, delimiter=',', fmt=fmt, encoding='utf-8', header=header, comments='')
         else:
             np.savetxt(bio, data, delimiter=',', fmt=fmt, encoding='utf-8')
-            
+        
         b = bio.getvalue()
         return b
     
@@ -375,7 +379,7 @@ class UncontrolledManifoldApp(App):
             except KeyError:
                 self.show_feedback(_("Error!"), _("KeyError in Meta Data."))
                 continue
-                
+            
             data.append(data_b64)
         
         post_data = {'output': 'output-data-upload.children',
@@ -400,7 +404,7 @@ class UncontrolledManifoldApp(App):
         """
         if platform == 'android':
             self.internet_permit = self.ask_permission(Permission.INTERNET, timeout=2)
-    
+        
         # Upload address depends on current task. One dash application per task.
         if self.settings.task == 'Circle Task':
             upload_route = '/circletask/_dash-update-component'
@@ -457,7 +461,7 @@ class UncontrolledManifoldApp(App):
         except AttributeError:
             pass
         return True
-        
+    
     def get_upload_feedback(self, upload_status, error_msg=None):
         """ Generate arguments for a popup depending on the success of the upload.
         
@@ -485,7 +489,7 @@ class UncontrolledManifoldApp(App):
         status = self.get_uploaded_status(res_msg)
         if status is True:
             self.upload_btn_enabled = False
-
+        
         # Feedback after uploading.
         self.show_feedback(*self.get_upload_feedback(status, res_msg))
     

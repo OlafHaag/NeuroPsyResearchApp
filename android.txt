@@ -1,3 +1,4 @@
 title=UCMResearch
-author=Olaf Haag
+author=Your Name
+contact=you@yourdomain.com
 orientation=landscape

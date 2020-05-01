@@ -20,9 +20,14 @@ class UCMManager(ScreenManager):
     
     def on_kv_post(self, base_widget):
         Window.bind(on_keyboard=self.key_input)
+        self.get_screen('Home').bind(on_language_changed=self.on_language_changed_callback)
         self.get_screen('Circle Task').bind(on_task_stopped=lambda obj, last: self.task_finished(last))
         # self.get_screen('Webview').bind(on_quit_screen=lambda obj: self.go_home())
     
+    def on_language_changed_callback(self, *args):
+        self.transition.direction = 'down'
+        self.current = 'Terms'
+        
     def on_current(self, instance, value):
         """ When switching screens reset counter on back button presses on home screen. """
         screen = self.get_screen(value)
@@ -47,6 +52,12 @@ class UCMManager(ScreenManager):
             elif self.current == 'Settings':
                 # Never gets called, screen already changed to 'Home' through app.close_settings() on esc.
                 App.get_running_app().close_settings()
+            elif self.current == 'Terms':
+                # If this is the first time seeing the terms, it means we don't accept, so quit.
+                if self.get_screen('Terms').is_first_run:
+                    self.quit()
+                else:
+                    self.go_home()
             # If we are in a task, stop that task.
             elif self.current in ['Circle Task']:
                 self.get_screen(self.current).stop_task(interrupt=True)
@@ -60,8 +71,8 @@ class UCMManager(ScreenManager):
         else:  # the key now does nothing
             return False
     
-    def go_home(self):
-        self.transition.direction = 'down'
+    def go_home(self, dir='down'):
+        self.transition.direction = dir
         self.current = 'Home'
     
     def task_finished(self, was_last_block=False):

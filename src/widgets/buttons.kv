@@ -16,24 +16,10 @@
     size: self.texture_size
     valign: 'center'
 
-<LabeledCheckBox@BoxLayout>:
-    text: ''
-    group: ''
-    active: cb.active
-    on_active: cb.active = self.active
+<ItemConfirm>
+    on_release: root.set_icon(check)
 
-    AnchorLayout:
-        anchor_x: 'right'
-        padding: 15, 15
-        size_hint_x:  0.8
-        CheckBox:
-            id: cb
-            group: root.group
-            allow_no_selection: False
-            size_hint_x: 0.1
-
-    BtnLabel:
-        text: root.text
-        halign: 'left'
-        font_size: sp(24)
-        on_press: cb._do_press()
+    CheckboxRightWidget:
+        id: check
+        group: "check"
+        on_active: root.active=self.active

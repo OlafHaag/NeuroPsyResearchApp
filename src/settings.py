@@ -1,11 +1,11 @@
 """ Defines kivy Settings classes. """
 from kivy.app import App
 from kivy.uix.settings import SettingItem, SettingsWithSidebar
-from kivy.uix.button import Button
 from kivy.uix.widget import Widget
 from kivy.properties import ConfigParserProperty
 from kivy.properties import NumericProperty
 from kivy.utils import platform
+from kivymd.uix.button import MDRaisedButton
 
 from .i18n.settings import SettingOptionMapping
 from .config import WEBSERVER
@@ -25,7 +25,7 @@ class SettingButtons(SettingItem):
         kw.pop('buttons', None)
         super(SettingItem, self).__init__(**kw)
         for button in kwargs['buttons']:
-            btn_widget = Button(text=button['title'], font_size='15sp')
+            btn_widget = MDRaisedButton(text=button['title'])
             btn_widget.ID = button['id']
             self.add_widget(btn_widget)
             btn_widget.bind(on_release=self.on_button_pressed)

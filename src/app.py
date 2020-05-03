@@ -10,7 +10,7 @@ from uuid import uuid4
 import base64
 from datetime import datetime
 
-from kivy.app import App
+from kivymd.app import MDApp
 from kivy.uix.screenmanager import Screen
 from kivy.properties import ObjectProperty, BooleanProperty
 from kivy.utils import platform
@@ -54,7 +54,7 @@ Window.borderless = True
 Window.fullscreen = 'auto'
 
 
-class UncontrolledManifoldApp(App):
+class UncontrolledManifoldApp(MDApp):
     manager = ObjectProperty(None, allownone=True)
     upload_btn_enabled = BooleanProperty(True)
     
@@ -144,6 +144,8 @@ class UncontrolledManifoldApp(App):
         """ Initializes the application; it will be called only once.
         If this method returns a widget (tree), it will be used as the root widget and added to the window.
         """
+        # Theme.
+        self.theme_cls.theme_style = "Dark"
         # Settings.
         self.settings_cls = Settings
         self.use_kivy_settings = False

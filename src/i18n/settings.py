@@ -4,13 +4,13 @@ Most of this file is copied from :class:`kivy.uix.settings.SettingOptions`.
 """
 from kivy.properties import DictProperty, ObjectProperty
 from kivy.uix.settings import SettingItem, SettingsWithSidebar
-from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
-from kivy.uix.widget import Widget
-from kivy.uix.popup import Popup
-from kivy.uix.togglebutton import ToggleButton
 from kivy.metrics import dp
-from kivy.uix.button import Button
+from kivymd.uix.button import MDRaisedButton, MDFlatButton
+from kivymd.uix.dialog import MDDialog
+
+from . import _
+from ..widgets import ItemConfirm
 
 
 class SettingOptionMapping(SettingItem):
@@ -40,39 +40,56 @@ class SettingOptionMapping(SettingItem):
         """The panel is set. Bind to open a popup when it is clicked."""
         if value is None:
             return
-        self.fbind('on_release', self._create_popup)
+        self.fbind('on_release', self._show_confirmation_dialog)
 
     def _set_option(self, value):
         self.value = value
+
+    def _show_confirmation_dialog(self, instance):
+        """ Layout a popup with single-choice items. """
+        
+        if not self.popup:
+            # Gather options.
+            items = list()
+            for option, text in sorted(self.options.items(), key=lambda t: t[1]):
+                opt = ItemConfirm(text=text, value=option)
+                items.append(opt)
+
+            self.popup = MDDialog(
+                title=self.title,
+                type="confirmation",
+                items=items,
+                auto_dismiss=False,  # Otherwise the callbacks don't fire?!
+                buttons=[
+                    MDFlatButton(
+                        text=_("CANCEL"),
+                        on_release=self.cancel_handler
+                    ),
+                    MDRaisedButton(
+                        text=_("OK"),
+                        on_release=self.confirm_handler
+                    ),
+                ],
+                width=min(0.95 * Window.width, dp(500)),
+            )
+        # Make SettingItem's value the active item.
+        for item in self.popup.items:
+            if item.value == self.value:
+                item.set_icon(item.ids.check)
+                break
+                
+        self.popup.open()
+    
+    def confirm_handler(self, widget):
+        for item in self.popup.items:
+            if item.active:
+                # It's a single-choice selection, stop when we find it.
+                self._set_option(item.value)
+                break
         self.popup.dismiss()
 
-    def _create_popup(self, instance):
-        # create the popup
-        content = BoxLayout(orientation='vertical', spacing='5dp')
-        popup_width = min(0.95 * Window.width, dp(500))
-        self.popup = popup = Popup(
-            content=content, title=self.title, size_hint=(None, None),
-            size=(popup_width, '400dp'))
-        popup.height = len(self.options) * dp(55) + dp(150)
-
-        # add all the options
-        content.add_widget(Widget(size_hint_y=None, height=1))
-        uid = str(self.uid)
-        for option, text in sorted(self.options.items(), key=lambda t: t[1]):
-            state = 'down' if option == self.value else 'normal'
-            btn = ToggleButton(text=text, state=state, group=uid)
-            btn.bind(on_release=lambda instance,
-                     option=option: self._set_option(option))
-            content.add_widget(btn)
-
-        # finally, add a cancel button to return on the previous panel
-        content.add_widget(Widget())  # SettingSpacer
-        btn = Button(text='Cancel', size_hint_y=None, height=dp(50))
-        btn.bind(on_release=popup.dismiss)
-        content.add_widget(btn)
-
-        # and open the popup !
-        popup.open()
+    def cancel_handler(self, widget):
+        self.popup.dismiss()
 
 
 class Settings(SettingsWithSidebar):

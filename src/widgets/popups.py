@@ -1,11 +1,12 @@
 from kivy.app import App
 from kivy.uix.popup import Popup
 from kivy.properties import StringProperty, ConfigParserProperty
-from kivy.factory import Factory
+from kivymd.uix.button import MDRaisedButton
+from kivymd.uix.dialog import MDDialog
 
+from . import ItemConfirm
 from ..i18n import (_,
                     list_translated_languages,
-                    language_code_to_translation,
                     translation_to_language_code,
                     DEFAULT_LANGUAGE)
 
@@ -24,41 +25,50 @@ class BlockingPopup(Popup):
         super(BlockingPopup, self).__init__(**kwargs)
 
 
-class LanguagePopup(Popup):
-    msg = StringProperty(_('Initiating...'))
+class LanguagePopup(MDDialog):
+    """ For first run ask which language to use. """
     current_language = ConfigParserProperty(DEFAULT_LANGUAGE, 'Localization', 'language', 'app', val_type=str)
     
     def __init__(self, **kwargs):
-        super(LanguagePopup, self).__init__(**kwargs)
-        
-        btn_layout = self.ids.lang_btn_layout
+        # Gather options.
         languages = list_translated_languages()
-        self.btns = dict()
-        for lang in languages:
-            btn = Factory.LabeledCheckBox()
-            btn.text = lang
-            btn.group = 'lang'
-            btn_layout.add_widget(btn)
-            self.btns[lang] = btn
-        # Select default language.
-        if language_code_to_translation(DEFAULT_LANGUAGE) in languages:
-            self.btns[language_code_to_translation(DEFAULT_LANGUAGE)].active = True
-        else:
-            # If English is not found, just use the first one.
-            self.btns[languages[0]].active = True
+        languages.sort()
+        items = [ItemConfirm(text=lang, value=translation_to_language_code(lang)) for lang in languages]
+        default_kwargs = dict(
+            title=_("Choose Language"),
+            text=_("You can also change the language in the settings later."),
+            type="confirmation",
+            auto_dismiss=False,  # Otherwise the callback doesn't fire?!
+            items=items,
+            buttons=[MDRaisedButton(
+                text=_("OK"),
+                on_release=self.dismiss
+            ),
+            ]
+        )
+        default_kwargs.update(kwargs)
+        super(LanguagePopup, self).__init__(**default_kwargs)
     
+    def select_current_language(self):
+        """ Activate item for currently chosen language. """
+        for item in self.items:
+            if item.value == self.current_language:
+                item.set_icon(item.ids.check)
+                break
+        
     def change_language(self):
-        selected_language = [lang for lang, btn in self.btns.items() if btn.active][0]  # Being bold here with indexing.
-        lang_code = translation_to_language_code(selected_language)
+        for item in self.items:
+            if item.active:
+                lang_code = item.value  # There's at least the default language.
+                break
         # Use the app's function to change language instead of i18n's just in case we do something special there.
         app = App.get_running_app()
         app.switch_language(lang=lang_code)
         # Now also update the config.
         self.current_language = lang_code
-    
+
+    def on_open(self):
+        self.select_current_language()
+
     def on_dismiss(self):
         self.change_language()
-
-    def on_language_changed(self):
-        """ Default handler for event. """
-        pass

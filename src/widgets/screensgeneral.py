@@ -16,6 +16,7 @@ class ScreenHome(Screen):
     # As a workaround for internationalization to work set actual message in on_pre_enter().
     home_msg = StringProperty(_('Initiating...'))
     is_first_run = ConfigParserProperty('1', 'General', 'is_first_run', 'app', val_type=int)
+    popup_lang = ObjectProperty(None, allownone=True)
     
     def __init__(self, **kwargs):
         super(ScreenHome, self).__init__(**kwargs)
@@ -35,10 +36,10 @@ class ScreenHome(Screen):
             Clock.schedule_once(lambda dt: self.first_run_language_choice(), 1)
 
     def first_run_language_choice(self):
-        pop = LanguagePopup()
-        pop.msg = _("You can also change the language in the settings later.")
-        pop.bind(on_dismiss=lambda obj: self.dispatch('on_language_changed'))
-        pop.open()
+        if not self.popup_lang:
+            self.popup_lang = LanguagePopup()
+            self.popup_lang.bind(on_dismiss=lambda obj: self.dispatch('on_language_changed'))
+        self.popup_lang.open()
 
     def on_language_changed(self):
         pass

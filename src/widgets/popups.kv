@@ -1,7 +1,23 @@
 # popups.kv
 #:kivy 1.11.1
 
-#FixMe: How to handle garbage collection of Popups to avoid ReferenceError because of translations?
+<ScrollText>
+    orientation: 'vertical'
+    size_hint_y: None
+
+    ScrollView:
+        id: scroll
+        do_scroll_x: False
+        do_scroll_y: True
+
+        MDLabel:
+            text: root.text
+            markup: True
+            halign: "justify"
+            size_hint_y: None
+            size: self.texture_size
+
+#FixMe: How to handle garbage collection of Popups to avoid ReferenceError because of translations? Save a reference in root.
 <SimplePopup>:
     id: pop
     size_hint: .6, .6

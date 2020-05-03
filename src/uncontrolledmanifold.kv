@@ -10,7 +10,6 @@
     settings: app.settings
     # The first screen added, will be initially displayed.
     ScreenHome:
-    ScreenTerms:
     ScreenConsentCircleTask:
         name: 'Consent CT'
     ScreenInstructCircleTask:
@@ -103,42 +102,3 @@
             RoundedButton:
                 text: _("Quit")
                 on_release: root.manager.quit()
-
-
-<ScreenTerms>:
-    name: 'Terms'
-    on_leave: terms_scroll.scroll_y = 1
-
-    BoxLayout:
-        orientation: 'vertical'
-
-        ScrollView:
-            id: terms_scroll
-            do_scroll_x: False
-            do_scroll_y: True
-
-            Label:
-                text: root.terms_msg
-                markup: True
-                text_size: root.width, None
-                font_size: sp(24)
-                size: self.texture_size
-                size_hint_y: None
-                padding: 10, 10
-                halign: 'justify'
-                valign: 'middle'
-
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint_y: 0.2
-            RoundedButton:
-                id: terms_decline_btn
-                text: _("Decline")
-                on_release: root.manager.quit()
-            RoundedButton:
-                text: _("Accept") if root.is_first_run else _("Close")
-                on_release:
-                    root.dispatch('on_terms_close')
-                    root.manager.transition.direction = 'left'
-                    root.manager.transition.duration = 0.5
-                    root.manager.go_home(dir='up')

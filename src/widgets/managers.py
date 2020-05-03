@@ -6,12 +6,14 @@ from kivy.properties import ObjectProperty
 
 from plyer import notification
 
+from . import TermsPopup
 from ..i18n import _
 
 
 class UCMManager(ScreenManager):
     settings = ObjectProperty()
-    
+    popup_terms = ObjectProperty(None, allownone=True)
+
     def __init__(self, **kwargs):
         super(UCMManager, self).__init__(**kwargs)
         self.n_home_esc = 0  # Counter on how many times the back button was pressed on home screen.
@@ -25,8 +27,9 @@ class UCMManager(ScreenManager):
         # self.get_screen('Webview').bind(on_quit_screen=lambda obj: self.go_home())
     
     def on_language_changed_callback(self, *args):
-        self.transition.direction = 'down'
-        self.current = 'Terms'
+        if not self.popup_terms:
+            self.popup_terms = TermsPopup()
+        self.popup_terms.open()
         
     def on_current(self, instance, value):
         """ When switching screens reset counter on back button presses on home screen. """
@@ -52,12 +55,6 @@ class UCMManager(ScreenManager):
             elif self.current == 'Settings':
                 # Never gets called, screen already changed to 'Home' through app.close_settings() on esc.
                 App.get_running_app().close_settings()
-            elif self.current == 'Terms':
-                # If this is the first time seeing the terms, it means we don't accept, so quit.
-                if self.get_screen('Terms').is_first_run:
-                    self.quit()
-                else:
-                    self.go_home()
             # If we are in a task, stop that task.
             elif self.current in ['Circle Task']:
                 self.get_screen(self.current).stop_task(interrupt=True)

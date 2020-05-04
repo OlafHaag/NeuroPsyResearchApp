@@ -125,6 +125,7 @@ class UCMManager(ScreenManager):
     def go_home(self, dir='down'):
         self.transition.direction = dir
         self.current = 'Home'
+        self.sidebar.set_state('close')
         
     def task_finished(self, was_last_block=False):
         # Outro after last block.

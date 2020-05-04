@@ -6,13 +6,14 @@
     name: 'Circle Task'
     count_down: anim_label
     settings: app.settings
+    md_bg_color: 0,0,0,1
 
     AnchorLayout:
         anchor_x: 'left'
         anchor_y: 'center'
 
         # Debug Label
-        #Label:
+        #MDLabel:
         #    text: 'df1 = {:.2f}'.format(df1.value)
         #    size_hint_x: None
         #    size_hint_y: 0.1
@@ -59,7 +60,7 @@
         anchor_y: 'center'
 
         # Debug Label
-        #Label:
+        #MDLabel:
         #    text: 'df2 = {:.2f}'.format(df2.value)
         #    size_hint_x: None
         #    size_hint_y: 0.1
@@ -150,7 +151,7 @@
     AnchorLayout:
         anchor_x: 'center'
         anchor_y: 'top'
-        Label:
+        MDLabel:
             text: root.progress
             text_size: root.width, None
             size: self.texture_size
@@ -160,7 +161,7 @@
 
     #Debug
     #FloatLayout:
-    #    Label:
+    #    MDLabel:
     #        text: 'Radius = {}'.format(df1.value_normalized + df2.value_normalized)
     #        pos_hint: {'right': 1}
     #        color: [0, 1, 1, 1]

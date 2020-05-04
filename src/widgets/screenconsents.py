@@ -1,10 +1,10 @@
-from kivy.uix.screenmanager import Screen
 from kivy.properties import StringProperty
 
+from . import BaseScreen
 from ..i18n import _
 
 
-class ScreenConsentCircleTask(Screen):
+class ScreenConsentCircleTask(BaseScreen):
     """ Tell the user about conditions of participation and require consent. """
     consent_msg = StringProperty(_("Initiating..."))
     

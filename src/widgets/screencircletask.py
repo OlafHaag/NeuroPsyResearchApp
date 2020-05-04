@@ -4,19 +4,20 @@ import time
 from hashlib import md5
 
 from kivy.app import App
-from kivy.uix.screenmanager import Screen
 from kivy.properties import ObjectProperty, StringProperty, BooleanProperty
 from kivy.core.audio import SoundLoader
 from kivy.clock import Clock
 
+from kivymd.uix.behaviors import BackgroundColorBehavior
+
 import numpy as np
 
-from . import SimplePopup
+from . import BaseScreen, SimplePopup
 from ..i18n import _
 from ..config import time_fmt
 
 
-class ScreenCircleTask(Screen):
+class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
     """ This class handles all the logic for the circle size matching task. """
     settings = ObjectProperty()
     progress = StringProperty(_("Trial: ") + "0/0")

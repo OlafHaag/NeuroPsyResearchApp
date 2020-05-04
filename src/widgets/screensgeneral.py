@@ -1,17 +1,16 @@
 from configparser import ConfigParser
-import webbrowser
 
 from kivy.app import App
-from kivy.uix.screenmanager import Screen
 from kivy.properties import ObjectProperty, StringProperty, ConfigParserProperty
 from kivy.clock import Clock
 
+from . import BaseScreen
 from . import LanguagePopup, BlockingPopup
 
 from ..i18n import _
 
 
-class ScreenHome(Screen):
+class ScreenHome(BaseScreen):
     """ Display that gives general information. """
     # As a workaround for internationalization to work set actual message in on_pre_enter().
     home_msg = StringProperty(_('Initiating...'))
@@ -22,7 +21,7 @@ class ScreenHome(Screen):
         super(ScreenHome, self).__init__(**kwargs)
         # Procedure related.
         self.register_event_type('on_language_changed')
-        
+    
     def on_pre_enter(self, *args):
         """ Reset data collection each time before a new task is started. """
         App.get_running_app().settings.reset_current()
@@ -45,7 +44,7 @@ class ScreenHome(Screen):
         pass
 
 
-class ScreenOutro(Screen):
+class ScreenOutro(BaseScreen):
     """ Display at the end of a session. """
     settings = ObjectProperty()
     outro_msg = StringProperty(_("Initiating..."))
@@ -74,6 +73,3 @@ class ScreenOutro(Screen):
         # Workaround to make info popup show up.
         Clock.schedule_once(lambda dt: app.upload_data(), 0)
         upload_info.dismiss()
-
-    def visit_website(self):
-        webbrowser.open_new(self.settings.server_uri)

@@ -1,3 +1,5 @@
+import webbrowser
+
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.utils import platform
@@ -11,7 +13,9 @@ from ..i18n import _
 
 
 class UCMManager(ScreenManager):
+    """ This class handles all major screen changes, popups and callbacks related to that. """
     settings = ObjectProperty()
+    sidebar = ObjectProperty(None, allownone=True)
     popup_terms = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
@@ -22,18 +26,47 @@ class UCMManager(ScreenManager):
     
     def on_kv_post(self, base_widget):
         Window.bind(on_keyboard=self.key_input)
+        # Handle sidebar item callbacks.
+        app = App.get_running_app()
+        root = self.parent.parent
+        nav = root.ids.content_drawer
+        nav.bind(on_home=self.go_home)
+        nav.bind(on_users=lambda x: print("Users clicked!"))
+        nav.bind(on_settings=app.open_settings)
+        nav.bind(on_website=lambda x: self.open_website(self.settings.server_uri))
+        nav.bind(on_about=lambda x: print("About clicked!"))
+        nav.bind(on_terms=self.show_terms)
+        nav.bind(on_exit=self.quit)
+        # Handle screen callbacks.
         self.get_screen('Home').bind(on_language_changed=self.on_language_changed_callback)
         self.get_screen('Circle Task').bind(on_task_stopped=lambda obj, last: self.task_finished(last))
         # self.get_screen('Webview').bind(on_quit_screen=lambda obj: self.go_home())
     
+    def open_website(self, url):
+        webbrowser.open_new(url)
+        
     def on_language_changed_callback(self, *args):
+        # ToDo: Redraw sidebar and home screen somehow.
         if not self.popup_terms:
             self.popup_terms = TermsPopup()
+        self.show_terms()
+        
+    def show_terms(self):
         self.popup_terms.open()
         
     def on_current(self, instance, value):
         """ When switching screens reset counter on back button presses on home screen. """
         screen = self.get_screen(value)
+        # Handle navbar access.
+        try:
+            if screen.navbar_enabled:
+                self.sidebar.set_disabled(False)
+            else:
+                self.sidebar.set_disabled(True)
+        except AttributeError:
+            pass
+        
+        # Handle reset of back button presses on home screen.
         if screen != self.current_screen:
             self.n_home_esc = 0
         super(UCMManager, self).on_current(instance, value)
@@ -45,7 +78,17 @@ class UCMManager(ScreenManager):
         else:
             back_keys = [27, 278]  # backspace = 8, but would need to check if we're typing in an input mask.
         if key in back_keys:  # backspace, escape, home keys.
-            if self.current == 'Home':
+            # Handle back button on popup dialogs:
+            if App.get_running_app().root_window.children[0] == self.popup_terms:
+                if self.popup_terms.is_first_run:
+                    self.quit()
+                else:
+                    self.popup_terms.dismiss()
+            # ToDo: handle other popups on back key.
+            #elif isinstance(App.get_running_app().root_window.children[0], SimplePopup):
+                #App.get_running_app().root_window.children[0].dismiss()
+            # Handle back button on screens.
+            elif self.current == 'Home':
                 # When on home screen we want to be able to quit the app after 2 presses.
                 self.n_home_esc += 1
                 if self.n_home_esc == 1:
@@ -71,7 +114,7 @@ class UCMManager(ScreenManager):
     def go_home(self, dir='down'):
         self.transition.direction = dir
         self.current = 'Home'
-    
+        
     def task_finished(self, was_last_block=False):
         # Outro after last block.
         if was_last_block:

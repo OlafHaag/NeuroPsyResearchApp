@@ -30,7 +30,7 @@ from .config import WEBSERVER, time_fmt
 from .settings import Settings, SettingsContainer
 from .settingsjson import LANGUAGE_CODE, LANGUAGE_SECTION, settings_general_json, settings_circle_task_json
 
-from .widgets import UCMManager, SimplePopup, LanguagePopup
+from .widgets import BaseScreen, SimplePopup
 
 if platform == 'android':
     from android.permissions import request_permissions, check_permission, Permission
@@ -52,6 +52,10 @@ global_idmap['_'] = _
 # Go fullscreen. # FixMe: On android status bar still re-appears.
 Window.borderless = True
 Window.fullscreen = 'auto'
+
+
+class Root(Screen):
+    pass
 
 
 class UncontrolledManifoldApp(MDApp):
@@ -107,7 +111,7 @@ class UncontrolledManifoldApp(MDApp):
         """ Display the settings panel. """
         manager = self.manager
         if not manager.has_screen('Settings'):
-            s = Screen(name='Settings')
+            s = BaseScreen(name='Settings')
             s.add_widget(settings)
             manager.add_widget(s)
         manager.current = 'Settings'
@@ -145,7 +149,8 @@ class UncontrolledManifoldApp(MDApp):
         If this method returns a widget (tree), it will be used as the root widget and added to the window.
         """
         # Theme.
-        self.theme_cls.theme_style = "Dark"
+        self.theme_cls.theme_style = "Light"
+        self.theme_cls.primary_palette = "Teal"
         # Settings.
         self.settings_cls = Settings
         self.use_kivy_settings = False
@@ -159,8 +164,8 @@ class UncontrolledManifoldApp(MDApp):
         self.data_email = list()
         
         # GUI.
-        root = UCMManager()
-        self.manager = root
+        root = Root()
+        self.manager = root.ids.mgr
         return root
     
     def create_device_identifier(self, **kwargs):
@@ -254,7 +259,7 @@ class UncontrolledManifoldApp(MDApp):
         """
         if platform == 'android':
             # dest = Path(storagepath.get_documents_dir())
-            dest = Path(storagepath.get_external_storage_dir()) / App.get_running_app().name
+            dest = Path(storagepath.get_external_storage_dir()) / MDApp.get_running_app().name
             # We may need to ask permission to write to the external storage. Permission could have been revoked.
             self.write_permit = self.ask_permission(Permission.WRITE_EXTERNAL_STORAGE)
             
@@ -262,7 +267,7 @@ class UncontrolledManifoldApp(MDApp):
                 # Make sure the path exists.
                 dest.mkdir(parents=True, exist_ok=True)
         else:
-            app = App.get_running_app()
+            app = MDApp.get_running_app()
             dest = Path(app.user_data_dir)
             # dest = dest.resolve()  # Resolve any symlinks.
         return dest

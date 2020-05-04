@@ -6,6 +6,22 @@
 #:include src/widgets/screeninstructions.kv
 #:include src/widgets/screencircletask.kv
 
+<Root>:
+    name: 'Root'
+    manager: mgr
+
+    NavigationLayout:
+
+        UCMManager:
+            id: mgr
+            sidebar: nav_drawer
+
+        NavigationDrawer:
+            id: nav_drawer
+
+            ContentNavigationDrawer:
+                id: content_drawer
+
 <UCMManager>:
     settings: app.settings
     # The first screen added, will be initially displayed.
@@ -17,19 +33,109 @@
     ScreenCircleTask:
     ScreenOutro:
 
+<ContentNavigationDrawer>:
+    orientation: "vertical"
+    padding: "8dp"
+    spacing: "8dp"
+
+    AnchorLayout:
+        anchor_x: "left"
+        size_hint_y: None
+        height: avatar.height
+
+        BoxLayout:
+            Image:
+                id: avatar
+                size: "56dp", "56dp"
+                size_hint: None, None
+                source: "res/icons/mipmap-mdpi/ucmicon.png"
+                elevation: 0.1
+
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: 5
+                Widget:  # Spacer.
+                MDLabel:
+                    text: "App Title"
+                    font_style: "Button"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: "Subtitle"
+                    font_style: "Caption"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                Widget:  # Spacer.
+
+    ScrollView:
+
+        MDList:
+            ItemDrawer:
+                text: _("Home")
+                icon: 'home'
+                on_release: root.dispatch('on_home')
+
+            ItemDrawer:
+                text: _("Users")
+                icon: 'account-group'
+                on_release: root.dispatch('on_users')
+
+            ItemDrawer:
+                text: _("Settings")
+                icon: 'settings'
+                on_release: root.dispatch('on_settings')
+
+            ItemDrawer:
+                text: _("Visit Analyses")
+                icon: 'chart-bar'
+                on_release: root.dispatch('on_website')
+
+            ItemDrawer:
+                text: _("About")
+                icon: 'information'
+                on_release: root.dispatch('on_about')
+
+            ItemDrawer:
+                text: _("Terms & Conditions")
+                icon: 'script-text'
+                on_release: root.dispatch('on_terms')
+
+            ItemDrawer:
+                text: _("Exit")
+                icon: 'close-box'
+                on_release: root.dispatch('on_exit')
+
+<ItemDrawer>:
+    #theme_text_color: "Custom"
+    #on_release: self.parent.set_color_item(self)
+
+    IconLeftWidget:
+        id: icon
+        icon: root.icon
+        on_release: root.on_release
+        #theme_text_color: "Custom"
+        #text_color: root.text_color
+
 <ScreenHome>:
     name: 'Home'
     on_leave: home_scroll.scroll_y = 1
+    navbar_enabled: True
 
     BoxLayout:
         orientation: 'vertical'
+
+        MDToolbar:
+            title: "Navigation Drawer"
+            elevation: 10
+            left_action_items: [['menu', lambda x: root.manager.sidebar.set_state()]]
 
         ScrollView:
             id: home_scroll
             do_scroll_x: False
             do_scroll_y: True
 
-            Label:
+            MDLabel:
                 text: root.home_msg
                 markup: True
                 text_size: root.width, None
@@ -59,18 +165,19 @@
 <ScreenOutro>:
     name: 'Outro'
     settings: app.settings
+    navbar_enabled: True
 
     BoxLayout:
         orientation: 'vertical'
 
-        Label:
+        MDLabel:
             text: root.outro_msg
             markup: True
             text_size: root.width, None
             size: self.texture_size
             halign: 'center'
             valign: 'middle'
-        Label:
+        MDLabel:
             text: "[b]" + _("Personal Identifier:") + "[/b]\n" + app.settings.user
             markup: True
             text_size: root.width, None

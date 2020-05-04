@@ -21,7 +21,7 @@
                 padding: [0, 10, 0, 100]
                 spacing: [0, 20]
 
-                Label:
+                MDLabel:
                     text: root.consent_msg
                     markup: True
                     text_size: root.width, None
@@ -31,7 +31,7 @@
                     padding: 10, 10
                     halign: 'justify'
                     valign: 'top'
-                Label:
+                MDLabel:
                     text: "[b]" + _("Personal Identifier:") + "[/b]"
                     markup: True
                     padding: 10, 10
@@ -40,7 +40,7 @@
                     size: self.texture_size
                     halign: 'center'
                     valign: 'middle'
-                Label:
+                MDLabel:
                     text: app.settings.user
                     markup: False
                     text_size: root.width, None

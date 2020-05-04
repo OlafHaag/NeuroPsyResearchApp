@@ -1,10 +1,10 @@
-from kivy.uix.screenmanager import Screen
-from kivy.properties import ObjectProperty, StringProperty, BooleanProperty
+from kivy.properties import ObjectProperty, StringProperty
 
+from . import BaseScreen
 from ..i18n import _
 
 
-class ScreenInstructCircleTask(Screen):
+class ScreenInstructCircleTask(BaseScreen):
     """ Display that tells the user what to in next task. """
     settings = ObjectProperty()
     instruction_msg = StringProperty(_("Initiating..."))

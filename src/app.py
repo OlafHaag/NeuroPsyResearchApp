@@ -111,7 +111,7 @@ class UncontrolledManifoldApp(MDApp):
         """ Display the settings panel. """
         manager = self.manager
         if not manager.has_screen('Settings'):
-            s = BaseScreen(name='Settings')
+            s = BaseScreen(name='Settings', navbar_enabled=True)
             s.add_widget(settings)
             manager.add_widget(s)
         manager.current = 'Settings'

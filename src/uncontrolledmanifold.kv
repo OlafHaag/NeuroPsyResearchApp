@@ -150,12 +150,6 @@
             orientation: 'horizontal'
             size_hint_y: 0.2
             RoundedButton:
-                text: _("Settings")
-                on_release:
-                    root.manager.transition.direction = 'up'
-                    root.manager.transition.duration = 0.5
-                    app.open_settings()
-            RoundedButton:
                 text: _("Proceed")
                 on_release:
                     root.manager.transition.direction = 'up'

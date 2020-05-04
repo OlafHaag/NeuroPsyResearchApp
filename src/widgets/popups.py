@@ -205,9 +205,12 @@ class TermsPopup(MDDialog):
         return text
     
     def on_dismiss(self):
-        # When the terms are dismissed the first time, it means they were accepted.
         if self.is_first_run:
             self.is_first_run = 0
+            
+    def on_open(self):
+        # When the terms are dismissed the first time, it means they were accepted.
+        if not self.is_first_run:
             self.ids.button_box.remove_widget(self.__reject_btn)
             self.__accept_btn.text = _("CLOSE")
         self.content_cls.ids.scroll.scroll_y = 1

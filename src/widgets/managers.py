@@ -5,6 +5,7 @@ from kivy.core.window import Window
 from kivy.utils import platform
 from kivy.uix.screenmanager import ScreenManager
 from kivy.properties import ObjectProperty
+from kivy.clock import Clock
 
 from plyer import notification
 
@@ -26,32 +27,42 @@ class UCMManager(ScreenManager):
     
     def on_kv_post(self, base_widget):
         Window.bind(on_keyboard=self.key_input)
-        # Handle sidebar item callbacks.
-        app = App.get_running_app()
-        root = self.parent.parent
-        nav = root.ids.content_drawer
-        nav.bind(on_home=self.go_home)
-        nav.bind(on_users=lambda x: print("Users clicked!"))
-        nav.bind(on_settings=app.open_settings)
-        nav.bind(on_website=lambda x: self.open_website(self.settings.server_uri))
-        nav.bind(on_about=lambda x: print("About clicked!"))
-        nav.bind(on_terms=self.show_terms)
-        nav.bind(on_exit=self.quit)
+        
         # Handle screen callbacks.
         self.get_screen('Home').bind(on_language_changed=self.on_language_changed_callback)
         self.get_screen('Circle Task').bind(on_task_stopped=lambda obj, last: self.task_finished(last))
         # self.get_screen('Webview').bind(on_quit_screen=lambda obj: self.go_home())
+        # NOTE: This seems to have be executed after on_kv_post, otherwise it tries to bind not yet registered events.
+        Clock.schedule_once(lambda dt: self.bind_sidebar_callbacks(), 1)
     
+    def bind_sidebar_callbacks(self):
+        """ Bind events in navigation drawer to actions. """
+        # Handle sidebar item callbacks.
+        root = self.parent.parent
+        nav = root.ids.content_drawer
+        nav.bind(on_home=lambda x: self.go_home())
+        nav.bind(on_users=lambda x: print("Users clicked!"))
+        nav.bind(on_settings=lambda x: self.open_settings())
+        nav.bind(on_website=lambda x: self.open_website(self.settings.server_uri))
+        nav.bind(on_about=lambda x: print("About clicked!"))
+        nav.bind(on_terms=lambda x: self.show_terms())
+        nav.bind(on_exit=lambda x: self.quit())
+    
+    def open_settings(self):
+        app = App.get_running_app()
+        app.open_settings()
+        self.sidebar.set_state('close')
+
     def open_website(self, url):
         webbrowser.open_new(url)
         
     def on_language_changed_callback(self, *args):
-        # ToDo: Redraw sidebar and home screen somehow.
-        if not self.popup_terms:
-            self.popup_terms = TermsPopup()
+        # ToDo: Redraw home screen somehow. _trigger_layout()?
         self.show_terms()
         
     def show_terms(self):
+        if not self.popup_terms:
+            self.popup_terms = TermsPopup()
         self.popup_terms.open()
         
     def on_current(self, instance, value):

@@ -22,7 +22,7 @@ class ScreenConsentCircleTask(BaseScreen):
                              "der Ausführung einer Bewegungsaufgabe ändert, wenn gleichzeitig eine weitere Aufgabe mit "
                              "der Bewegung bewältigt wird. Die jeweilige Aufgabe wird Ihnen zuvor genau beschrieben "
                              "und erklärt. Bei der Ausführung der Aufgaben sind keinerlei besondere Belastungen oder "
-                             "gar Schäden zu erwarten.\n\n"
+                             "gar Schäden zu erwarten.\n\n"
                              
                              "[b]Freiwilligkeit:[/b]\n"
                              "Die Teilnahme an der Studie ist freiwillig. "

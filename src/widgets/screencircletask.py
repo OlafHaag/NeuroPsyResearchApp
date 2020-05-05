@@ -12,9 +12,10 @@ from kivymd.uix.behaviors import BackgroundColorBehavior
 
 import numpy as np
 
-from . import BaseScreen, SimplePopup
-from ..i18n import _
+from . import BaseScreen
 from ..config import time_fmt
+from ..i18n import _
+from ..utility import create_device_identifier, data2bytes
 
 
 class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
@@ -212,10 +213,8 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
             if (self.data[:, 0] == self.df1_default).all() and (self.data[:, 1] == self.df2_default).all():
                 self.clear_data()
                 # Feedback and reset/abort.
-                pop = SimplePopup(title=_("Warning"))
-                pop.msg = _("Please read instructions again carefully and perform task accordingly.\n"
-                            "Aborting Session...")
-                pop.open()
+                msg = _("Please read instructions again carefully and perform task accordingly.\nAborting Session...")
+                self.manager.dispatch('on_warning', text=msg)
                 # Abort session.
                 self.dispatch('on_task_stopped', True)
                 return
@@ -261,7 +260,7 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         constrained_df = 'df2' if self.target2_switch else 'df1'
         
         self.meta_data['table'] = 'trials'
-        self.meta_data['device'] = App.get_running_app().create_device_identifier()
+        self.meta_data['device'] = create_device_identifier()
         self.meta_data['user'] = self.settings.user
         self.meta_data['task'] = self.settings.task
         # Practice blocks don't count. Make them zero.
@@ -290,7 +289,7 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         """ Add data to be written or uploaded to app data member. """
         app = App.get_running_app()
         header = ','.join(self.meta_data['columns'])
-        data_b = app.data2bytes(self.data, header=header)
+        data_b = data2bytes(self.data, header=header)
         d = self.meta_data.copy()
         d['data'] = data_b
         app.data.append(d)
@@ -327,7 +326,7 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         meta_data['user'] = self.settings.user
         app = App.get_running_app()
         if self.settings.is_local_storage_enabled or self.settings.is_upload_enabled:
-            meta_data['data'] = app.data2bytes(data, header=header, fmt='%s')
+            meta_data['data'] = data2bytes(data, header=header, fmt='%s')
             app.data.append(meta_data)
         if self.settings.is_email_enabled:
             email_data = meta_data.copy()

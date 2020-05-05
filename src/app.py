@@ -1,148 +1,58 @@
 """"Research application aimed at studying uncontrolled manifold and optimal feedback control paradigms."""
 
-import io
 import pickle
 import json
 import time
 from pathlib import Path
-from hashlib import md5
-from uuid import uuid4
 import base64
-from datetime import datetime
 
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import Screen
 from kivy.properties import ObjectProperty, BooleanProperty
 from kivy.utils import platform
 from kivy.core.window import Window
-from kivy.metrics import Metrics
 from kivy.lang import global_idmap
 
-from plyer import uniqueid
 from plyer import storagepath
 from plyer import email
 
 import requests
 import numpy as np
 
-from .i18n import _, change_language_to, current_language
-from .config import WEBSERVER, time_fmt
+from .utility import (create_device_identifier,
+                      create_user_identifier,
+                      get_device_data,
+                      compile_filename,
+                      ask_permission,
+                      data2bytes,
+                      switch_language
+                      )
+from .i18n import _, current_language
+from .config import WEBSERVER
 from .settings import Settings, SettingsContainer
 from .settingsjson import LANGUAGE_CODE, LANGUAGE_SECTION, settings_general_json, settings_circle_task_json
 
-from .widgets import BaseScreen, SimplePopup
+from .widgets import BaseScreen
 
 if platform == 'android':
-    from android.permissions import request_permissions, check_permission, Permission
-
-if platform == 'win':
-    def get_screensize():
-        import ctypes
-        user32 = ctypes.windll.user32
-        user32.SetProcessDPIAware()
-        screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
-        return screensize
-else:
-    def get_screensize():
-        return Window.width, Window.height
+    from android.permissions import Permission
 
 # i18n
 global_idmap['_'] = _
 
 # Go fullscreen. # FixMe: On android status bar still re-appears.
-Window.borderless = True
-Window.fullscreen = 'auto'
+#Window.borderless = True
+#Window.fullscreen = 'auto'
 
 
 class Root(Screen):
+    """ Root widget, child of Window. """
     pass
 
 
 class UncontrolledManifoldApp(MDApp):
     manager = ObjectProperty(None, allownone=True)
     upload_btn_enabled = BooleanProperty(True)
-    
-    def get_application_config(self, defaultpath='%(appdir)s/%(appname)s.ini'):
-        """ Override path to application configuration. """
-        if platform == 'win':
-            return super(UncontrolledManifoldApp, self).get_application_config('~/.%(appname)s.ini')  # User directory.
-        else:
-            return super(UncontrolledManifoldApp, self).get_application_config()  # Use default.
-    
-    def build_config(self, config):
-        """ This method is called before the application is initialized to construct the ConfigParser object.
-        The configuration will be automatically saved in the file returned by get_application_config().
-        """
-    
-        config.setdefaults(LANGUAGE_SECTION, {LANGUAGE_CODE: current_language()})
-        config.setdefaults('General', {'is_first_run': 1, 'task': 'Circle Task'})
-        config.setdefaults('DataCollection', {
-            'is_local_storage_enabled': 0,
-            'is_upload_enabled': 1,
-            'webserver': WEBSERVER,
-            'is_email_enabled': 0,
-            'email_recipient': '',
-        })
-        config.setdefaults('UserData', {'unique_id': self.create_user_identifier()})
-        config.setdefaults('CircleTask', {
-            'n_trials': 20,
-            'n_blocks': 3,
-            'constrained_block': 2,
-            'warm_up_time': 1.0,
-            'trial_duration': 3.0,
-            'cool_down_time': 0.5})
-    
-    def build_settings(self, settings):
-        """ Populate settings panel. """
-        settings.add_json_panel('General',
-                                self.config,
-                                data=settings_general_json)
-        settings.add_json_panel('Circle Task Settings',
-                                self.config,
-                                data=settings_circle_task_json)
-    
-    def update_language_from_config(self):
-        """Set the current language of the application from the configuration.
-        """
-        config_language = self.config.get(LANGUAGE_SECTION, LANGUAGE_CODE)
-        change_language_to(config_language)
-    
-    def display_settings(self, settings):
-        """ Display the settings panel. """
-        manager = self.manager
-        if not manager.has_screen('Settings'):
-            s = BaseScreen(name='Settings', navbar_enabled=True)
-            s.add_widget(settings)
-            manager.add_widget(s)
-        manager.current = 'Settings'
-    
-    def close_settings(self, *args):
-        """ Always gets called on escape regardless of current screen. """
-        if self.manager.current == 'Settings':
-            self.manager.go_home()
-            # Hack, since after this manager.key_input is executed and screen is 'home' by then.
-            self.manager.n_home_esc -= 1
-    
-    def on_config_change(self, config, section, key, value):
-        """ Fired when the section's key-value pair of a ConfigParser changes. """
-        if section == 'Localization' and key == 'language':
-            self.switch_language(value)
-        if section == 'UserData' and key == 'configchangebuttons':
-            if value == 'btn_new_uuid':
-                self.settings.user = self.create_user_identifier()
-                # Update User Label.
-                user_label = self.settings.get_settings_widget('General', 'unique_id')
-                # We need the parent SettingString object of the label.
-                setting_string = user_label.parent.parent.parent
-                setting_string.value = self.settings.user
-    
-    def switch_language(self, lang='en'):
-        """ Change displayed translation. """
-        try:
-            change_language_to(lang)
-        except ReferenceError:
-            # I spent hours trying to fix it. Now I just don't care anymore.
-            print(f"WARNING: Couldn't translate everything. Possible weakref popups that don't exist anymore.")
     
     def build(self):
         """ Initializes the application; it will be called only once.
@@ -168,57 +78,101 @@ class UncontrolledManifoldApp(MDApp):
         self.manager = root.ids.mgr
         return root
     
-    def create_device_identifier(self, **kwargs):
-        """ Returns an identifier for the hardware. """
-        uid = uniqueid.get_uid().encode()
-        hashed = md5(uid).hexdigest()
-        # Shorten and lose information.
-        ident = hashed[::4]
-        return ident
+    def get_application_config(self, defaultpath='%(appdir)s/%(appname)s.ini'):
+        """ Override path to application configuration. """
+        if platform == 'win':
+            return super(UncontrolledManifoldApp, self).get_application_config('~/.%(appname)s.ini')  # User directory.
+        else:
+            return super(UncontrolledManifoldApp, self).get_application_config()  # Use default.
     
-    def create_user_identifier(self, **kwargs):
-        """ Return unique identifier for user. """
-        uuid = uuid4().hex
-        return uuid
+    def build_config(self, config):
+        """ This method is called before the application is initialized to construct the ConfigParser object.
+        The configuration will be automatically saved in the file returned by get_application_config().
+        """
     
+        config.setdefaults(LANGUAGE_SECTION, {LANGUAGE_CODE: current_language()})
+        config.setdefaults('General', {'is_first_run': 1, 'task': 'Circle Task'})
+        config.setdefaults('DataCollection', {
+            'is_local_storage_enabled': 0,
+            'is_upload_enabled': 1,
+            'webserver': WEBSERVER,
+            'is_email_enabled': 0,
+            'email_recipient': '',
+        })
+        config.setdefaults('UserData', {'unique_id': create_user_identifier()})
+        config.setdefaults('CircleTask', {
+            'n_trials': 20,
+            'n_blocks': 3,
+            'constrained_block': 2,
+            'warm_up_time': 1.0,
+            'trial_duration': 3.0,
+            'cool_down_time': 0.5})
+    
+    def build_settings(self, settings):
+        """ Populate settings panel. """
+        settings.add_json_panel('General',
+                                self.config,
+                                data=settings_general_json)
+        settings.add_json_panel('Circle Task Settings',
+                                self.config,
+                                data=settings_circle_task_json)
+    
+    def display_settings(self, settings):
+        """ Display the settings panel. """
+        manager = self.manager
+        if not manager.has_screen('Settings'):
+            s = BaseScreen(name='Settings', navbar_enabled=True)
+            s.add_widget(settings)
+            manager.add_widget(s)
+        manager.current = 'Settings'
+    
+    def close_settings(self, *args):
+        """ Always gets called on escape regardless of current screen. """
+        if self.manager.current == 'Settings':
+            self.manager.go_home()
+            # Hack, since after this manager.key_input is executed and screen is 'home' by then.
+            self.manager.n_home_esc -= 1
+    
+    def on_config_change(self, config, section, key, value):
+        """ Fired when the section's key-value pair of a ConfigParser changes. """
+        if section == 'Localization' and key == 'language':
+            switch_language(value)
+        if section == 'UserData' and key == 'configchangebuttons':
+            if value == 'btn_new_uuid':
+                self.settings.user = create_user_identifier()
+                # Update User Label.
+                user_label = self.settings.get_settings_widget('General', 'unique_id')
+                # We need the parent SettingString object of the label.
+                setting_string = user_label.parent.parent.parent
+                setting_string.value = self.settings.user
+
+    def update_language_from_config(self):
+        """Set the current language of the application from the configuration.
+        """
+        config_language = self.config.get(LANGUAGE_SECTION, LANGUAGE_CODE)
+        switch_language(lang=config_language)
+
     def reset_data_collection(self):
         self.data.clear()
         self.data_email.clear()
         # Start new data collection with device information.
         self.collect_device_data()
-    
-    def get_device_data(self):
-        """ Acquire properties of the device in use. """
-        inch2cm = 2.54
-        screen_x, screen_y = get_screensize()
-        
-        device_properties = dict()
-        device_properties['id'] = self.create_device_identifier()
-        device_properties['screen_x'] = screen_x
-        device_properties['screen_y'] = screen_y
-        device_properties['dpi'] = Metrics.dpi
-        device_properties['density'] = Metrics.density
-        device_properties['aspect_ratio'] = screen_x / screen_y
-        device_properties['size_x'] = screen_x / Metrics.dpi * inch2cm
-        device_properties['size_y'] = screen_y / Metrics.dpi * inch2cm
-        device_properties['platform'] = platform
-        return device_properties
-    
+
     def collect_device_data(self):
         """ Add properties of device to data collection. """
-        props = self.get_device_data()
+        props = get_device_data()
         columns = props.keys()
         
         meta_data = dict()
         meta_data['table'] = 'device'
-        meta_data['id'] = self.create_device_identifier()
+        meta_data['id'] = create_device_identifier()
         meta_data['time'] = time.time()
         
         if self.settings.is_upload_enabled or self.settings.is_local_storage_enabled:
             # Data for storage and upload.
             data = np.array([props[k] for k in columns]).reshape((1, len(columns)))
             header = ','.join(columns)
-            meta_data['data'] = self.data2bytes(data, header=header, fmt='%s')
+            meta_data['data'] = data2bytes(data, header=header, fmt='%s')
             self.data.append(meta_data)
         
         if self.settings.is_email_enabled:
@@ -233,41 +187,25 @@ class UncontrolledManifoldApp(MDApp):
         d['table'] = 'user'
         d['time'] = time.time()
         header = 'id,device_id'
-        data = np.array([self.settings.user, self.create_device_identifier()])
-        d['data'] = self.data2bytes(data.reshape((1, len(data))), header=header, fmt='%s')
+        data = np.array([self.settings.user, create_device_identifier()])
+        d['data'] = data2bytes(data.reshape((1, len(data))), header=header, fmt='%s')
         return d
-    
-    def ask_permission(self, permission, timeout=5):
-        """ Necessary on Android to request permission for certain actions. """
-        if platform == 'android':
-            got_permission = check_permission(permission)
-            if not got_permission:
-                request_permissions([permission])
-            
-            # Wait a bit until user granted permission.
-            t0 = time.time()
-            while time.time() - t0 < timeout and not got_permission:
-                got_permission = check_permission(permission)
-                time.sleep(0.5)
-            return got_permission
-        # For any other platform assume given permission.
-        return True
-    
+
     def get_storage_path(self):
         """ Return writable path.
         If it does not exist on android, make directory.
         """
         if platform == 'android':
             # dest = Path(storagepath.get_documents_dir())
-            dest = Path(storagepath.get_external_storage_dir()) / MDApp.get_running_app().name
+            dest = Path(storagepath.get_external_storage_dir()) / MDApp.get_running_app().name  # ToDo: Isn't that self.name?!
             # We may need to ask permission to write to the external storage. Permission could have been revoked.
-            self.write_permit = self.ask_permission(Permission.WRITE_EXTERNAL_STORAGE)
+            self.write_permit = ask_permission(Permission.WRITE_EXTERNAL_STORAGE)
             
             if not dest.exists() and self.write_permit:
                 # Make sure the path exists.
                 dest.mkdir(parents=True, exist_ok=True)
         else:
-            app = MDApp.get_running_app()
+            app = MDApp.get_running_app()  # ToDo: Isn't that self?!
             dest = Path(app.user_data_dir)
             # dest = dest.resolve()  # Resolve any symlinks.
         return dest
@@ -282,29 +220,7 @@ class UncontrolledManifoldApp(MDApp):
         destination = storage_path / subpath
         if not destination.exists() and self.write_permit:
             destination.mkdir(parents=True, exist_ok=True)  # Assume this works and we have permissions.
-    
-    def compile_filename(self, meta_data):
-        """ Returns file name based on provided meta data.
-        Uses current time if meta data is incomplete.
-        """
-        # Different filenames for different types of tables.
-        try:
-            if meta_data['table'] == 'device':
-                file_name = f"device-{meta_data['id']}.csv"
-            elif meta_data['table'] == 'user':
-                file_name = f"user.csv"
-            elif meta_data['table'] == 'session':
-                file_name = f"session-{meta_data['time_iso']}.csv"
-            elif meta_data['table'] == 'trials':
-                file_name = f"trials-{meta_data['time_iso']}-Block_{meta_data['block']}.csv"
-            else:
-                # Fall back to current time when table unknown.
-                file_name = f'{datetime.now().strftime(time_fmt)}.csv'
-        except KeyError:
-            file_name = f'{datetime.now().strftime(time_fmt)}.csv'
-        
-        return file_name
-    
+
     def write_file(self, path, content):
         """ Save content to path.
         
@@ -324,8 +240,8 @@ class UncontrolledManifoldApp(MDApp):
                 path.write_text(content)
                 return True
             else:
-                self.show_feedback(_("Error!"),
-                                   _("Unable to write to file:\n{}\nUnknown data format.").format(path.name))
+                self.manager.dispatch('on_error',
+                                      _("Unable to write to file:\n{}\nUnknown data format.").format(path.name))
         return False
     
     def write_data_to_files(self):
@@ -340,28 +256,18 @@ class UncontrolledManifoldApp(MDApp):
                 else:
                     dir_path = storage
             except KeyError:
-                self.show_feedback(_("Error!"), _("KeyError in Meta Data."))
+                self.manager.dispatch('on_error',
+                                      _("KeyError in Meta Data."))
                 continue
             
-            file_name = self.compile_filename(d)
+            file_name = compile_filename(d)
             file_path = dir_path / file_name
             try:
                 self.write_file(file_path, d['data'])
             except KeyError:
-                self.show_feedback(_("Error!"), _("Data missing.\nFailed to write\n{}.").format(file_name))
-    
-    def data2bytes(self, data, header=None, fmt="%.5f"):
-        """ Takes numpy array and returns it as bytes. """
-        bio = io.BytesIO()
-        if header:
-            #header = header.encode('utf-8')
-            np.savetxt(bio, data, delimiter=',', fmt=fmt, encoding='utf-8', header=header, comments='')
-        else:
-            np.savetxt(bio, data, delimiter=',', fmt=fmt, encoding='utf-8')
-        
-        b = bio.getvalue()
-        return b
-    
+                self.manager.dispatch('on_error',
+                                      _("Data missing.\nFailed to write\n{}.").format(file_name))
+
     def get_dash_post(self, data_collection):
         """ Build a json string to post to a dash update component.
 
@@ -378,13 +284,14 @@ class UncontrolledManifoldApp(MDApp):
         
         for d in data_collection:
             # Build fake file name.
-            name = self.compile_filename(d)
+            name = compile_filename(d)
             file_names.append(name)
             try:
                 last_modified.append(d['time'])
                 data_b64 = base64.b64encode(d['data'])
             except KeyError:
-                self.show_feedback(_("Error!"), _("KeyError in Meta Data."))
+                self.manager.dispatch('on_error',
+                                      _("KeyError in Meta Data."))
                 continue
             
             data.append(data_b64)
@@ -410,7 +317,7 @@ class UncontrolledManifoldApp(MDApp):
         :rtype: str
         """
         if platform == 'android':
-            self.internet_permit = self.ask_permission(Permission.INTERNET, timeout=2)
+            self.internet_permit = ask_permission(Permission.INTERNET, timeout=2)
         
         # Upload address depends on current task. One dash application per task.
         if self.settings.task == 'Circle Task':
@@ -498,12 +405,8 @@ class UncontrolledManifoldApp(MDApp):
             self.upload_btn_enabled = False
         
         # Feedback after uploading.
-        self.show_feedback(*self.get_upload_feedback(status, res_msg))
-    
-    def show_feedback(self, title, msg):
-        pop = SimplePopup(title=title)
-        pop.msg = msg
-        pop.open()
+        title, text = self.get_upload_feedback(status, res_msg)
+        self.manager.dispatch('on_info', title=title, text=text)
     
     def send_email(self):
         """ Send the data via e-mail. """

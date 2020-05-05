@@ -9,7 +9,7 @@ from kivy.clock import Clock
 
 from plyer import notification
 
-from . import TermsPopup
+from . import SimplePopup, TermsPopup
 from ..i18n import _
 
 
@@ -17,26 +17,34 @@ class UCMManager(ScreenManager):
     """ This class handles all major screen changes, popups and callbacks related to that. """
     settings = ObjectProperty()
     sidebar = ObjectProperty(None, allownone=True)
+    # Different kinds of popups, objects stay in memory and only show with replaced content.
+    # To avoid garbage collection of Popups and resulting ReferenceError because of translations, keep a reference.
     popup_terms = ObjectProperty(None, allownone=True)
+    popup_info = ObjectProperty(None, allownone=True)
+    popup_warning = ObjectProperty(None, allownone=True)
+    popup_error = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
         super(UCMManager, self).__init__(**kwargs)
         self.n_home_esc = 0  # Counter on how many times the back button was pressed on home screen.
         self.task_consents = {'Circle Task': 'Consent CT'}
         self.task_instructions = {'Circle Task': 'Instructions CT'}
+        # Events
+        self.register_event_type('on_info')
+        self.register_event_type('on_warning')
+        self.register_event_type('on_error')
     
     def on_kv_post(self, base_widget):
         Window.bind(on_keyboard=self.key_input)
-        
-        # Handle screen callbacks.
-        self.get_screen('Home').bind(on_language_changed=self.on_language_changed_callback)
-        self.get_screen('Circle Task').bind(on_task_stopped=lambda obj, last: self.task_finished(last))
-        # self.get_screen('Webview').bind(on_quit_screen=lambda obj: self.go_home())
-        # NOTE: This seems to have be executed after on_kv_post, otherwise it tries to bind not yet registered events.
-        Clock.schedule_once(lambda dt: self.bind_sidebar_callbacks(), 1)
+        # Binds need to be executed 1 frame after on_kv_post, otherwise it tries to bind to not yet registered events.
+        Clock.schedule_once(lambda dt: self.bind_callbacks(), 1)
+    
+    def bind_callbacks(self):
+        self.bind_sidebar_callbacks()
+        self.bind_screen_callbacks()
     
     def bind_sidebar_callbacks(self):
-        """ Bind events in navigation drawer to actions. """
+        """ Handle events in navigation drawer. """
         # Handle sidebar item callbacks.
         root = self.parent.parent
         nav = root.ids.content_drawer
@@ -47,15 +55,25 @@ class UCMManager(ScreenManager):
         nav.bind(on_about=lambda x: print("About clicked!"))
         nav.bind(on_terms=lambda x: self.show_terms())
         nav.bind(on_exit=lambda x: self.quit())
+        
+    def bind_screen_callbacks(self):
+        """ Handle screen callbacks here. """
+        # Home
+        self.get_screen('Home').bind(on_language_changed=self.on_language_changed_callback)
+        # Circle Task
+        self.get_screen('Circle Task').bind(on_task_stopped=lambda obj, last: self.task_finished(last))
+        self.get_screen('Circle Task').bind(on_warning=lambda obj, text: self.show_warning(text))
+        # Webview
+        # self.get_screen('Webview').bind(on_quit_screen=lambda obj: self.go_home())
     
     def open_settings(self):
         app = App.get_running_app()
         app.open_settings()
         self.sidebar.set_state('close')
-
+        
     def open_website(self, url):
         webbrowser.open_new(url)
-        
+
     def on_language_changed_callback(self, *args):
         # ToDo: Redraw home screen somehow. _trigger_layout()?
         self.show_terms()
@@ -64,6 +82,38 @@ class UCMManager(ScreenManager):
         if not self.popup_terms:
             self.popup_terms = TermsPopup()
         self.popup_terms.open()
+        
+    def on_info(self, title=None, text=None):
+        self.show_info(title=title, text=text)
+    
+    def show_info(self, title=None, text=None):
+        if not self.popup_info:
+            self.popup_info = SimplePopup()
+        if title:
+            self.popup_info.title = title
+        if text:
+            self.popup_info.text = text
+        self.popup_info.open()
+    
+    def on_warning(self, text):
+        self.show_warning(text)
+        
+    def show_warning(self, text=None):
+        if not self.popup_warning:
+            self.popup_warning = SimplePopup(title=_("Warning"))
+        if text:
+            self.popup_warning.text = text
+        self.popup_warning.open()
+    
+    def on_error(self, text):
+        self.show_error(text)
+    
+    def show_error(self, text=None):
+        if not self.popup_error:
+            self.popup_error = SimplePopup(title=_("Error"))
+        if text:
+            self.popup_error.text = text
+        self.popup_error.open()
         
     def on_current(self, instance, value):
         """ When switching screens reset counter on back button presses on home screen. """
@@ -122,8 +172,8 @@ class UCMManager(ScreenManager):
         else:  # the key now does nothing
             return False
     
-    def go_home(self, dir='down'):
-        self.transition.direction = dir
+    def go_home(self, transition='down'):
+        self.transition.direction = transition
         self.current = 'Home'
         self.sidebar.set_state('close')
         

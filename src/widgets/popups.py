@@ -14,19 +14,22 @@ from ..i18n import (_,
                     list_translated_languages,
                     translation_to_language_code,
                     DEFAULT_LANGUAGE)
+from ..utility import switch_language
 
 
-class SimplePopup(Popup):
-    msg = StringProperty(_('Initiating...'))
+# ToDo: Distinguish Info, Warning and Error by icon or color.
+class SimplePopup(MDDialog):
     
     def __init__(self, **kwargs):
+        kwargs.update(buttons=[MDRaisedButton(text=_("OK"), on_release=self.dismiss)], auto_dismiss=False)
         super(SimplePopup, self).__init__(**kwargs)
 
 
-class BlockingPopup(Popup):
-    msg = StringProperty(_('Initiating...'))
+class BlockingPopup(MDDialog):
     
     def __init__(self, **kwargs):
+        kwargs.update(auto_dismiss=False)
+        # ToDo: Display progress indicator.
         super(BlockingPopup, self).__init__(**kwargs)
 
 
@@ -68,7 +71,7 @@ class LanguagePopup(MDDialog):
                 break
         # Use the app's function to change language instead of i18n's just in case we do something special there.
         app = App.get_running_app()
-        app.switch_language(lang=lang_code)
+        switch_language(lang=lang_code)
         # Now also update the config.
         self.current_language = lang_code
 

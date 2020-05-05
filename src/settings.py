@@ -7,6 +7,7 @@ from kivy.properties import NumericProperty
 from kivy.utils import platform
 from kivymd.uix.button import MDRaisedButton
 
+from .utility import ask_permission
 from .i18n.settings import SettingOptionMapping
 from .config import WEBSERVER
 
@@ -96,7 +97,7 @@ class SettingsContainer(Widget):
         """
         if value:
             app = App.get_running_app()
-            app.write_permit = app.ask_permission(WRITE_PERMISSION, timeout=5)
+            app.write_permit = ask_permission(WRITE_PERMISSION, timeout=5)
             if not app.write_permit:
                 self.is_local_storage_enabled = 0
                 # Hack to change the visual switch after value was set. ConfigParserProperty doesn't work here. (1.11.0)

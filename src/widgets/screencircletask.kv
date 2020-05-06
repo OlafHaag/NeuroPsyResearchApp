@@ -4,6 +4,7 @@
 
 <ScreenCircleTask>:
     name: 'Circle Task'
+    color: [0, 0, 0, 1]
     count_down: anim_label
     settings: app.settings
     md_bg_color: 0,0,0,1
@@ -13,7 +14,7 @@
         anchor_y: 'center'
 
         # Debug Label
-        #MDLabel:
+        #Label:
         #    text: 'df1 = {:.2f}'.format(df1.value)
         #    size_hint_x: None
         #    size_hint_y: 0.1
@@ -43,24 +44,24 @@
         anchor_x: 'left'
         anchor_y: 'bottom'
 
-        Label:
+        MDLabel:
             id: df1_warning
             opacity: 1.0
-            text: "[color=ff0000]" + _("Please use this slider.[/color]") + "[/color]"
-            markup: True
-            size_hint_x: None
+            text: _("Please use this slider.")
             size_hint_y: 0.1
             size: self.texture_size
             padding: 10, 10
-            halign: 'center'
+            halign: 'left'
             valign: 'middle'
+            theme_text_color: "Error"
+            font_style: 'Subtitle2'
 
     AnchorLayout:
         anchor_x: 'right'
         anchor_y: 'center'
 
         # Debug Label
-        #MDLabel:
+        #Label:
         #    text: 'df2 = {:.2f}'.format(df2.value)
         #    size_hint_x: None
         #    size_hint_y: 0.1
@@ -90,17 +91,17 @@
         anchor_x: 'right'
         anchor_y: 'bottom'
 
-        Label:
+        MDLabel:
             id: df2_warning
             opacity: 1.0
-            text: "[color=ff0000]" + _("Please use this slider.[/color]") + "[/color]"
-            markup: True
-            size_hint_x: None
+            text: _("Please use this slider.")
             size_hint_y: 0.1
             size: self.texture_size
             padding: 10, 10
-            halign: 'center'
+            halign: 'right'
             valign: 'middle'
+            theme_text_color: "Error"
+            font_style: 'Subtitle2'
 
     FloatLayout:
         canvas:
@@ -140,7 +141,8 @@
         id: anim_label
         text: str(int(self.start_count - (self.angle*self.start_count//360)))
         font_size: 50
-        color: [1, 0, 1, 1]
+        theme_text_color: 'Custom'
+        text_color: [1, 0, 1, 1]
         canvas:
             Color:
                 rgba: 0.3, 0, 0.3, 0.7
@@ -157,11 +159,14 @@
             size: self.texture_size
             halign: 'center'
             valign: 'middle'
+            theme_text_color: "Custom"
+            text_color: 1, 1, 1, 1
+            font_style: 'Body1'
             size_hint: None, None
 
     #Debug
     #FloatLayout:
-    #    MDLabel:
+    #    Label:
     #        text: 'Radius = {}'.format(df1.value_normalized + df2.value_normalized)
     #        pos_hint: {'right': 1}
     #        color: [0, 1, 1, 1]

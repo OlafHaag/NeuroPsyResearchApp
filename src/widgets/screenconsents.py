@@ -6,7 +6,7 @@ from ..i18n import _
 
 class ScreenConsentCircleTask(BaseScreen):
     """ Tell the user about conditions of participation and require consent. """
-    consent_msg = StringProperty(_("Initiating..."))
+    consent_msg = StringProperty(_("Loading..."))
     
     def __init__(self, **kwargs):
         super(ScreenConsentCircleTask, self).__init__(**kwargs)

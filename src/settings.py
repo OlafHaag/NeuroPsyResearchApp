@@ -3,7 +3,7 @@ from kivy.app import App
 from kivy.uix.settings import SettingItem, SettingsWithSidebar
 from kivy.uix.widget import Widget
 from kivy.properties import ConfigParserProperty
-from kivy.properties import NumericProperty
+from kivy.properties import NumericProperty, StringProperty
 from kivy.utils import platform
 from kivymd.uix.button import MDRaisedButton
 
@@ -62,9 +62,7 @@ class SettingsContainer(Widget):
         modular solution.
     """
     # General properties.
-    # language = ConfigParserProperty('en', 'Localization', 'language', 'app', val_type=str)
-    task = ConfigParserProperty('Circle Task', 'General', 'task', 'app', val_type=str)
-    user = ConfigParserProperty('test', 'UserData', 'unique_id', 'app', val_type=str)
+    user_id = ConfigParserProperty('Default', 'General', 'current_user', 'app', val_type=str)
     # Data Collection.
     is_local_storage_enabled = ConfigParserProperty('0', 'DataCollection', 'is_local_storage_enabled', 'app',
                                                     val_type=int)  # Converts string to int.
@@ -74,6 +72,7 @@ class SettingsContainer(Widget):
     email_recipient = ConfigParserProperty('', 'DataCollection', 'email_recipient', 'app', val_type=str)
     
     # Properties that change over the course of all tasks and are not set by config.
+    current_task = StringProperty()
     current_trial = NumericProperty(0)
     current_block = NumericProperty(0)
     
@@ -164,5 +163,5 @@ class SettingsContainer(Widget):
     
     def on_current_block(self, instance, value):
         """ Bound to change in current block property. """
-        if self.task == 'Circle Task':
+        if self.current_task == 'Circle Task':
             self.circle_task.on_new_block(value)

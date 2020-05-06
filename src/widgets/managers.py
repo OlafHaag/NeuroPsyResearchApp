@@ -26,13 +26,17 @@ class UCMManager(ScreenManager):
 
     def __init__(self, **kwargs):
         super(UCMManager, self).__init__(**kwargs)
+        self.app = App.get_running_app()
         self.n_home_esc = 0  # Counter on how many times the back button was pressed on home screen.
+        # Keep track of what study we're currently performing.
         self.task_consents = {'Circle Task': 'Consent CT'}
         self.task_instructions = {'Circle Task': 'Instructions CT'}
         # Events
         self.register_event_type('on_info')
         self.register_event_type('on_warning')
         self.register_event_type('on_error')
+        self.register_event_type('on_upload_response')
+        self.register_event_type('on_upload_successful')
     
     def on_kv_post(self, base_widget):
         Window.bind(on_keyboard=self.key_input)
@@ -48,27 +52,29 @@ class UCMManager(ScreenManager):
         # Handle sidebar item callbacks.
         root = self.parent.parent
         nav = root.ids.content_drawer
-        nav.bind(on_home=lambda x: self.go_home())
-        nav.bind(on_users=lambda x: print("Users clicked!"))
-        nav.bind(on_settings=lambda x: self.open_settings())
-        nav.bind(on_website=lambda x: self.open_website(self.settings.server_uri))
-        nav.bind(on_about=lambda x: print("About clicked!"))
-        nav.bind(on_terms=lambda x: self.show_terms())
-        nav.bind(on_exit=lambda x: self.quit())
+        nav.bind(on_home=lambda x: self.go_home(),
+                 on_users=lambda x: print("Users clicked!"),
+                 on_settings=lambda x: self.open_settings(),
+                 on_website=lambda x: self.open_website(self.settings.server_uri),
+                 on_about=lambda x: print("About clicked!"),
+                 on_terms=lambda x: self.show_terms(),
+                 on_exit=lambda x: self.quit(),
+                 )
         
     def bind_screen_callbacks(self):
         """ Handle screen callbacks here. """
         # Home
         self.get_screen('Home').bind(on_language_changed=self.on_language_changed_callback)
         # Circle Task
-        self.get_screen('Circle Task').bind(on_task_stopped=lambda obj, last: self.task_finished(last))
-        self.get_screen('Circle Task').bind(on_warning=lambda obj, text: self.show_warning(text))
+        self.get_screen('Circle Task').bind(
+            on_task_stopped=lambda obj, last: self.task_finished(last),
+            on_warning=lambda obj, text: self.show_warning(text),
+        )
         # Webview
         # self.get_screen('Webview').bind(on_quit_screen=lambda obj: self.go_home())
     
     def open_settings(self):
-        app = App.get_running_app()
-        app.open_settings()
+        self.app.open_settings()
         self.sidebar.set_state('close')
         
     def open_website(self, url):
@@ -132,6 +138,20 @@ class UCMManager(ScreenManager):
             self.n_home_esc = 0
         super(UCMManager, self).on_current(instance, value)
     
+    def on_upload_response(self, status, error_msg=None):
+        if status is True:
+            self.show_info(title=_("Success!"), text=_("Upload successful!"))
+            # Inform whatever widget needs to act now.
+            self.dispatch('on_upload_successful')
+        else:
+            if not error_msg:
+                error_msg = _("Upload failed.\nSomething went wrong.")
+            self.show_error(text=error_msg)
+    
+    def on_upload_successful(self):
+        # ToDo: disable upload button.
+        pass
+    
     def key_input(self, window, key, scancode, codepoint, modifier):
         """ Handle escape key / back button presses. """
         if platform == "android":
@@ -140,14 +160,14 @@ class UCMManager(ScreenManager):
             back_keys = [27, 278]  # backspace = 8, but would need to check if we're typing in an input mask.
         if key in back_keys:  # backspace, escape, home keys.
             # Handle back button on popup dialogs:
-            if App.get_running_app().root_window.children[0] == self.popup_terms:
+            if self.app.root_window.children[0] == self.popup_terms:
                 if self.popup_terms.is_first_run:
                     self.quit()
                 else:
                     self.popup_terms.dismiss()
             # ToDo: handle other popups on back key.
-            #elif isinstance(App.get_running_app().root_window.children[0], SimplePopup):
-                #App.get_running_app().root_window.children[0].dismiss()
+            #elif isinstance(self.app.root_window.children[0], SimplePopup):
+                #self.app.root_window.children[0].dismiss()
             # Handle back button on screens.
             elif self.current == 'Home':
                 # When on home screen we want to be able to quit the app after 2 presses.
@@ -158,7 +178,7 @@ class UCMManager(ScreenManager):
                     self.quit()
             elif self.current == 'Settings':
                 # Never gets called, screen already changed to 'Home' through app.close_settings() on esc.
-                App.get_running_app().close_settings()
+                self.app.close_settings()
             # If we are in a task, stop that task.
             elif self.current in ['Circle Task']:
                 self.get_screen(self.current).stop_task(interrupt=True)
@@ -176,6 +196,12 @@ class UCMManager(ScreenManager):
         self.transition.direction = transition
         self.current = 'Home'
         self.sidebar.set_state('close')
+    
+    def start_task(self, task):
+        self.transition.direction = 'up'
+        self.transition.duration = 0.5
+        self.app.settings.current_task = task
+        self.current = self.task_consents[task]
         
     def task_finished(self, was_last_block=False):
         # Outro after last block.
@@ -183,7 +209,7 @@ class UCMManager(ScreenManager):
             self.current = 'Outro'
         else:
             self.transition.direction = 'down'
-            self.current = self.task_instructions[self.settings.task]
+            self.current = self.task_instructions[self.settings.current_task]
     
     def quit(self, *args):
-        App.get_running_app().stop()
+        self.app.stop()

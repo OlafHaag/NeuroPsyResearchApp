@@ -7,12 +7,12 @@ from ..i18n import _
 class ScreenInstructCircleTask(BaseScreen):
     """ Display that tells the user what to in next task. """
     settings = ObjectProperty()
-    instruction_msg = StringProperty(_("Initiating..."))
+    instruction_msg = StringProperty(_("Loading..."))
     
     def __init__(self, **kwargs):
         super(ScreenInstructCircleTask, self).__init__(**kwargs)
-        self.df_unconstraint_msg = _("Initiating...")
-        self.df_constraint_msg = _("Initiating...")
+        self.df_unconstraint_msg = _("Loading...")
+        self.df_constraint_msg = _("Loading...")
     
     def on_pre_enter(self, *args):
         self.settings.next_block()

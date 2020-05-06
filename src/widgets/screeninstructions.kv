@@ -5,19 +5,19 @@
     settings: app.settings
     on_leave: instruct_scroll.scroll_y = 1
 
-    BoxLayout:
-        orientation: 'vertical'
+    MDGridLayout:
+        cols: 1
+        padding: 10, 10
+        spacing: 10
 
         ScrollView:
             id: instruct_scroll
             do_scroll_x: False
             do_scroll_y: True
 
-            GridLayout:
+            MDGridLayout:
                 cols: 1
-                rows: 2
-                size_hint_y: None
-                height: self.minimum_height
+                adaptive_height: True
 
                 MDLabel:
                     text: root.instruction_msg
@@ -38,10 +38,19 @@
                     size: self.texture_size
                     size_hint: (1, None)
 
-        RoundedButton:
-            text: _("Start")
-            size_hint_y: 0.2
-            on_release:
-                root.manager.transition.direction = 'up'
-                root.manager.transition.duration = 0.5
-                root.manager.current = app.settings.task
+        MDSeparator:
+
+        MDBoxLayout
+            size_hint_y: None
+            height: self.minimum_height
+
+            Widget:  # Spacer
+            MDRaisedButton:
+                text: _("Start")
+                font_size: 24
+                halign: 'center'
+                on_release:
+                    root.manager.transition.direction = 'up'
+                    root.manager.transition.duration = 0.5
+                    root.manager.current = app.settings.current_task
+            Widget:  # Spacer

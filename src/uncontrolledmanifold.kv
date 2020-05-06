@@ -1,7 +1,9 @@
 # uncontrolledmanifold.kv
 #:kivy 1.11.1
+#:import CardTransition kivy.uix.screenmanager.CardTransition
 #:include src/widgets/buttons.kv
 #:include src/widgets/popups.kv
+#:include src/widgets/screensgeneral.kv
 #:include src/widgets/screenconsents.kv
 #:include src/widgets/screeninstructions.kv
 #:include src/widgets/screencircletask.kv
@@ -22,6 +24,7 @@
                 id: content_drawer
 
 <UCMManager>:
+    transition: CardTransition()
     settings: app.settings
     # The first screen added, will be initially displayed.
     ScreenHome:
@@ -115,90 +118,3 @@
         on_release: root.on_release
         #theme_text_color: "Custom"
         #text_color: root.text_color
-
-<ScreenHome>:
-    name: 'Home'
-    on_leave: home_scroll.scroll_y = 1
-    navbar_enabled: True
-
-    BoxLayout:
-        orientation: 'vertical'
-
-        MDToolbar:
-            title: "Navigation Drawer"
-            elevation: 10
-            left_action_items: [['menu', lambda x: root.manager.sidebar.set_state()]]
-
-        ScrollView:
-            id: home_scroll
-            do_scroll_x: False
-            do_scroll_y: True
-
-            MDLabel:
-                text: root.home_msg
-                markup: True
-                text_size: root.width, None
-                font_size: sp(24)
-                size: self.texture_size
-                size_hint_y: None
-                padding: 10, 10
-                halign: 'center'
-                valign: 'middle'
-
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint_y: 0.2
-            RoundedButton:
-                text: _("Proceed")
-                on_release:
-                    root.manager.transition.direction = 'up'
-                    root.manager.transition.duration = 0.5
-                    root.manager.current = root.manager.task_consents[app.settings.task]
-
-<ScreenOutro>:
-    name: 'Outro'
-    settings: app.settings
-    navbar_enabled: True
-
-    BoxLayout:
-        orientation: 'vertical'
-
-        MDLabel:
-            text: root.outro_msg
-            markup: True
-            text_size: root.width, None
-            size: self.texture_size
-            halign: 'center'
-            valign: 'middle'
-        MDLabel:
-            text: "[b]" + _("Personal Identifier:") + "[/b]\n" + app.settings.user
-            markup: True
-            text_size: root.width, None
-            size: self.texture_size
-            halign: 'center'
-            valign: 'middle'
-
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint_y: 0.4
-            RoundedButton:
-                text: _("Send via E-Mail")
-                disabled: not app.settings.is_email_enabled
-                on_release:
-                    app.send_email()
-            RoundedButton:
-                id: upload_btn
-                text: _("Upload")
-                disabled: not app.upload_btn_enabled
-                on_release: root.on_upload()
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint_y: 0.4
-            RoundedButton:
-                text: _("Home")
-                on_release:
-                    app.settings.reset_current()
-                    root.manager.go_home()
-            RoundedButton:
-                text: _("Quit")
-                on_release: root.manager.quit()

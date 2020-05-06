@@ -8,10 +8,10 @@ import base64
 
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import Screen
-from kivy.properties import ObjectProperty, BooleanProperty
+from kivy.properties import ObjectProperty
 from kivy.utils import platform
-from kivy.core.window import Window
 from kivy.lang import global_idmap
+from kivy.clock import Clock
 
 from plyer import storagepath
 from plyer import email
@@ -52,7 +52,6 @@ class Root(Screen):
 
 class UncontrolledManifoldApp(MDApp):
     manager = ObjectProperty(None, allownone=True)
-    upload_btn_enabled = BooleanProperty(True)
     
     def build(self):
         """ Initializes the application; it will be called only once.
@@ -89,25 +88,37 @@ class UncontrolledManifoldApp(MDApp):
         """ This method is called before the application is initialized to construct the ConfigParser object.
         The configuration will be automatically saved in the file returned by get_application_config().
         """
-    
+        # setdefault doesn't work here for single keys. Can't find section if no config yet. NoSectionError
         config.setdefaults(LANGUAGE_SECTION, {LANGUAGE_CODE: current_language()})
-        config.setdefaults('General', {'is_first_run': 1, 'task': 'Circle Task'})
-        config.setdefaults('DataCollection', {
-            'is_local_storage_enabled': 0,
-            'is_upload_enabled': 1,
-            'webserver': WEBSERVER,
-            'is_email_enabled': 0,
-            'email_recipient': '',
-        })
-        config.setdefaults('UserData', {'unique_id': create_user_identifier()})
-        config.setdefaults('CircleTask', {
-            'n_trials': 20,
-            'n_blocks': 3,
-            'constrained_block': 2,
-            'warm_up_time': 1.0,
-            'trial_duration': 3.0,
-            'cool_down_time': 0.5})
+        config.setdefaults('General', {'is_first_run': 1,
+                                       'current_user': create_user_identifier(),
+                                       'task': 'Circle Task'})
+        config.setdefaults('DataCollection',
+                           {
+                               'is_local_storage_enabled': 0,
+                               'is_upload_enabled': 1,
+                               'webserver': WEBSERVER,
+                               'is_email_enabled': 0,
+                               'email_recipient': '',
+                           })
+        config.setdefaults('CircleTask',
+                           {
+                               'n_trials': 20,
+                               'n_blocks': 3,
+                               'constrained_block': 2,
+                               'warm_up_time': 1.0,
+                               'trial_duration': 3.0,
+                               'cool_down_time': 0.5,
+                           })
+        # To set aliases for user ids we need to schedule it next frame, we can't retrieve current_user yet.
+        Clock.schedule_once(lambda dt: self.set_configdefaults_user(config), 1)
     
+    def set_configdefaults_user(self, config):
+        """ Set default alias for first user. """
+        # We allow multiple users on the same device.
+        user_id = config.get('General', 'current_user')
+        config.setdefaults('UserData', {user_id: 'Standard'})
+
     def build_settings(self, settings):
         """ Populate settings panel. """
         settings.add_json_panel('General',
@@ -137,14 +148,6 @@ class UncontrolledManifoldApp(MDApp):
         """ Fired when the section's key-value pair of a ConfigParser changes. """
         if section == 'Localization' and key == 'language':
             switch_language(value)
-        if section == 'UserData' and key == 'configchangebuttons':
-            if value == 'btn_new_uuid':
-                self.settings.user = create_user_identifier()
-                # Update User Label.
-                user_label = self.settings.get_settings_widget('General', 'unique_id')
-                # We need the parent SettingString object of the label.
-                setting_string = user_label.parent.parent.parent
-                setting_string.value = self.settings.user
 
     def update_language_from_config(self):
         """Set the current language of the application from the configuration.
@@ -187,7 +190,7 @@ class UncontrolledManifoldApp(MDApp):
         d['table'] = 'user'
         d['time'] = time.time()
         header = 'id,device_id'
-        data = np.array([self.settings.user, create_device_identifier()])
+        data = np.array([self.settings.user_id, create_device_identifier()])
         d['data'] = data2bytes(data.reshape((1, len(data))), header=header, fmt='%s')
         return d
 
@@ -320,7 +323,7 @@ class UncontrolledManifoldApp(MDApp):
             self.internet_permit = ask_permission(Permission.INTERNET, timeout=2)
         
         # Upload address depends on current task. One dash application per task.
-        if self.settings.task == 'Circle Task':
+        if self.settings.current_task == 'Circle Task':
             upload_route = '/circletask/_dash-update-component'
         # Map other tasks to their respective dash-app here.
         else:
@@ -376,37 +379,13 @@ class UncontrolledManifoldApp(MDApp):
             pass
         return True
     
-    def get_upload_feedback(self, upload_status, error_msg=None):
-        """ Generate arguments for a popup depending on the success of the upload.
-        
-        :param upload_status: Was the upload successful?
-        :type upload_status: bool
-        :param error_msg: Message in case upload failed.
-        :type error_msg: str
-        :return: Title and message for the popup feedback.
-        :rtype: tuple
-        """
-        if not error_msg:
-            error_msg = _("Upload failed.\nSomething went wrong.")
-        if upload_status is True:
-            feedback_title = _("Success!")
-            feedback_txt = _("Upload successful!")
-        else:
-            feedback_title = _("Error!")
-            feedback_txt = _(error_msg)
-        return feedback_title, feedback_txt
-    
     def upload_data(self):
         """ Upload collected data to server. """
         res = self.get_response(self.get_upload_route(), self.get_dash_post(self.data))
         res_msg = self.parse_response(res)
         status = self.get_uploaded_status(res_msg)
-        if status is True:
-            self.upload_btn_enabled = False
-        
-        # Feedback after uploading.
-        title, text = self.get_upload_feedback(status, res_msg)
-        self.manager.dispatch('on_info', title=title, text=text)
+        # Let the manager decide what to do on screen when data was uploaded.
+        self.manager.dispatch('on_upload_response', status, res_msg)
     
     def send_email(self):
         """ Send the data via e-mail. """
@@ -420,7 +399,7 @@ class UncontrolledManifoldApp(MDApp):
                        "and storage, please send an e-mail to the address specified in the address line and provide "
                        "your identification code [b]{}[/b] so that I can assign and delete your record.\n"
                        "If you deleted this email from your [i]Sent[/i] folder, you can look up your unique ID in "
-                       "the App Settings window.").format(self.settings.user) + "\n\n"
+                       "the App Settings window.").format(self.settings.user_id) + "\n\n"
         
         text = "### Data ###\n\n"
         for d in self.data_email:

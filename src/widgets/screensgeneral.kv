@@ -1,0 +1,111 @@
+# screensgeneral.kv
+#:kivy 1.11.1
+
+<BaseScreen>
+    color: app.theme_cls.bg_normal
+    # Without canvas the transitions overlay the last screen.
+    canvas:
+        Color:
+            rgba: root.color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<ScreenHome>:
+    name: 'Home'
+    on_leave: home_scroll.scroll_y = 1
+    navbar_enabled: True
+
+    MDBoxLayout:
+        orientation: 'vertical'
+
+        MDToolbar:
+            title: "Navigation Drawer"
+            elevation: 10
+            left_action_items: [['menu', lambda x: root.manager.sidebar.set_state()]]
+
+        ScrollView:
+            id: home_scroll
+            do_scroll_x: False
+            do_scroll_y: True
+
+            MDLabel:
+                text: root.home_msg
+                markup: True
+                text_size: root.width, None
+                font_size: sp(24)
+                size: self.texture_size
+                size_hint_y: None
+                padding: 10, 10
+                halign: 'center'
+                valign: 'middle'
+
+        BoxLayout:
+            orientation: 'vertical'
+            TaskButton:
+                text: _("Circle Task")
+                task: 'Circle Task'
+                font_size: 24
+                pos_hint: {"center_x": .5, "center_y": .5}
+                on_release: root.manager.start_task(self.task)
+            Widget:  # Spacer.
+
+<ScreenOutro>:
+    name: 'Outro'
+    navbar_enabled: True
+
+    MDGridLayout:
+        cols:1
+
+        MDLabel:
+            text: root.msg
+            markup: True
+            text_size: root.width, None
+            size: self.texture_size
+            halign: 'center'
+            valign: 'middle'
+        MDLabel:
+            text: "[b]" + _("Personal Identifier:") + "[/b]\n" + app.settings.user_id
+            markup: True
+            text_size: root.width, None
+            size: self.texture_size
+            halign: 'center'
+            valign: 'middle'
+
+        BoxLayout:
+            Widget:
+            MDBoxLayout:
+                orientation: 'vertical'
+                spacing: 20
+                padding: 10, 10
+
+                AnchorLayout:
+                    anchors: 'center', 'center'
+                    MDRectangleFlatIconButton:
+                        icon: 'upload'
+                        text: _("Upload")
+                        disabled: not root.upload_btn_enabled
+                        on_release: root.on_upload()
+                AnchorLayout:
+                    anchors: 'center', 'center'
+                    MDRectangleFlatIconButton:
+                        icon: 'email-send'
+                        text: _("Send via E-Mail")
+                        disabled: not app.settings.is_email_enabled
+                        on_release:
+                            app.send_email()
+                AnchorLayout:
+                    anchors: 'center', 'center'
+                    MDRectangleFlatIconButton:
+                        icon: 'home'
+                        text: _("Home")
+                        on_release:
+                            app.settings.reset_current()
+                            root.manager.go_home()
+                AnchorLayout:
+                    anchors: 'center', 'center'
+                    MDRectangleFlatIconButton:
+                        icon: 'close-box'
+                        text: _("Exit")
+                        on_release: root.manager.quit()
+            Widget:

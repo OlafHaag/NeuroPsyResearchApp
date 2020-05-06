@@ -1,21 +1,6 @@
 # buttons.kv
 #:kivy 1.11.1
 
-<RoundedButton@Button>:
-    background_color: 0,0,0,0  # Make invisible.
-    canvas.before:
-        Color:
-            rgba: (.4,.4,.4,1) if self.state=='normal' else (0,.7,.7,1)  # Visual feedback of press.
-        RoundedRectangle:
-            size: [self.size[0]*0.98, self.size[1]*0.9]
-            pos: [self.pos[0]+self.size[0]*0.01, self.pos[1]+self.size[1]*0.05]
-            radius: [30,]
-
-<BtnLabel@ButtonBehavior+Label>:
-    text_size: self.size
-    size: self.texture_size
-    valign: 'center'
-
 <ItemConfirm>
     on_release: root.set_icon(check)
 

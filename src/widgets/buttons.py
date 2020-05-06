@@ -1,4 +1,7 @@
+from kivy.properties import StringProperty
+
 from kivymd.uix.list import OneLineAvatarIconListItem
+from kivymd.uix.button import MDRoundFlatButton
 
 
 class ItemConfirm(OneLineAvatarIconListItem):
@@ -26,3 +29,7 @@ class ItemConfirm(OneLineAvatarIconListItem):
         for check in check_list:
             if check != instance_check:
                 check.active = False
+
+
+class TaskButton(MDRoundFlatButton):
+    task = StringProperty(allownone=False)

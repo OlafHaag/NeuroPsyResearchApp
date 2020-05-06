@@ -33,3 +33,8 @@ John P. Scholz; Gregor Schöner (1999).
 Experimental Brain Research. 126 (3): 289–306.
 
 Todorov, Emmanuel (2004). "Optimality principles in sensorimotor control". Nature Neuroscience. 7 (9): 907–915.
+
+
+## Installation
+- compile using buildozer
+- Install apk to Android device

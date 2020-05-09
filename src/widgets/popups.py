@@ -7,6 +7,7 @@ from kivy.core.window import Window
 from kivymd.uix.button import MDRectangleFlatButton, MDRaisedButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.list import BaseListItem
 
 from . import CheckItem, UserItem, UserAddItem
 from ..i18n import (_,
@@ -96,6 +97,7 @@ class UsersPopup(MDDialog):
             title=_("Choose Active User"),
             type="confirmation",
             auto_dismiss=False,  # Otherwise the callback doesn't fire?!
+            size_hint_x=0.8,
             items=items,
             buttons=[MDRaisedButton(
                 text=_("OK"),
@@ -170,6 +172,7 @@ class UsersPopup(MDDialog):
             self.edit_padding_for_item(item)
             self.items.insert(-1, item)
             self.ids.box_items.add_widget(item, index=1)
+        self.set_height()
     
     def update_aliases(self, aliases):
         """ Update all the texts of the widgets. """
@@ -196,7 +199,21 @@ class UsersPopup(MDDialog):
         # If removed item was current user, select first entry.
         if instance.value == selected_user_id:
             self.items[0].set_icon(self.items[0].ids.check)
+        self.set_height()
     
+    def set_height(self):
+        height = 0
+    
+        for item in self.items:
+            if issubclass(item.__class__, BaseListItem):
+                height += item.height  # calculate height contents
+    
+        if (height + self.get_normal_height()) > Window.height:
+            self.set_normal_height()
+            self.ids.scroll.height = self.get_normal_height()
+        else:
+            self.ids.scroll.height = height
+            
     def on_current_user(self, *args):
         pass
     
@@ -237,7 +254,7 @@ class UserEditPopup(MDDialog):
             type="custom",
             content_cls=UserInput(),
             auto_dismiss=False,  # Otherwise the callbacks don't fire?!
-            size_hint_x=0.5,
+            size_hint_x=0.6,
             buttons=[
                 MDRectangleFlatButton(
                     text=_("CANCEL"),

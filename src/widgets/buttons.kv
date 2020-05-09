@@ -1,10 +1,31 @@
 # buttons.kv
 #:kivy 1.11.1
 
-<ItemConfirm>
+<CheckItem>
     on_release: root.set_icon(check)
 
     CheckboxRightWidget:
         id: check
         group: "check"
         on_active: root.active=self.active
+
+<UserItem>
+    # Inherits from CheckItem
+    on_size:
+        self.ids._right_container.width = icon_container.width
+        self.ids._right_container.x = icon_container.width
+
+    ListItemContainer:
+        id: icon_container
+        MDIconButton:
+            icon: "account-edit"
+            on_release: root.dispatch('on_edit')
+        MDIconButton:
+            icon: "account-remove"
+            disabled: root.remove_disabled
+            on_release: root.dispatch('on_remove')
+
+<UserAddItem>:
+    IconLeftWidget:
+        icon: 'account-plus'
+        on_release: root.dispatch('on_release')

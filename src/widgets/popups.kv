@@ -16,3 +16,36 @@
             halign: "justify"
             size_hint_y: None
             size: self.texture_size
+
+<NumericInput>
+    orientation: "vertical"
+    spacing: "12dp"
+    size_hint_y: None
+    height: "120dp"
+
+    MDTextField:
+        id: num_input
+        hint_text: _("New Value")
+        required: True
+        helper_text: _("Error: invalid value")
+        helper_text_mode: "on_focus"
+        helper_text_mode: "on_error"
+        pos_hint: {"center_y": .5}
+
+<UserInput>
+    orientation: "vertical"
+    padding: "10dp"
+
+    MDLabel:
+        text: _("This name is just for you. It won't be uploaded to the server.")
+        font_style: 'Caption'
+
+    MDTextField:
+        id: alias_input
+        text: root.user_alias
+        required: True
+        icon_right: 'pencil'
+        hint_text: _("Enter Pseudonym")
+        helper_text: _("Error: invalid value")
+        helper_text_mode: "on_error"
+        pos_hint: {"center_y": .5}

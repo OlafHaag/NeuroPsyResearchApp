@@ -261,7 +261,7 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         
         self.meta_data['table'] = 'trials'
         self.meta_data['device'] = create_device_identifier()
-        self.meta_data['user'] = self.settings.user_id
+        self.meta_data['user'] = self.settings.current_user
         self.meta_data['task'] = self.settings.current_task
         # Practice blocks don't count. Make them zero.
         if self.is_practice:
@@ -323,7 +323,7 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         meta_data['time'] = time.time()
         meta_data['time_iso'] = self.get_current_time_iso(time_fmt)
         meta_data['task'] = self.settings.current_task
-        meta_data['user'] = self.settings.user_id
+        meta_data['user'] = self.settings.current_user
         app = App.get_running_app()
         if self.settings.is_local_storage_enabled or self.settings.is_upload_enabled:
             meta_data['data'] = data2bytes(data, header=header, fmt='%s')

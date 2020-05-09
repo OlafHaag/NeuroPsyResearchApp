@@ -2,9 +2,14 @@
 from kivy.app import App
 from kivy.uix.settings import SettingItem, SettingsWithSidebar
 from kivy.uix.widget import Widget
-from kivy.properties import ConfigParserProperty
-from kivy.properties import NumericProperty, StringProperty
+from kivy.properties import (NumericProperty,
+                             StringProperty,
+                             ListProperty,
+                             ConfigParserProperty,
+                             )
 from kivy.utils import platform
+from kivy.clock import Clock
+
 from kivymd.uix.button import MDRaisedButton
 
 from .utility import ask_permission
@@ -40,7 +45,7 @@ class SettingButtons(SettingItem):
         self.panel.settings.dispatch('on_config_change', self.panel.config, self.section, self.key, instance.ID)
 
 
-class Settings(SettingsWithSidebar):
+class Settings(SettingsWithSidebar):  # Todo: Set own interface class to match theme.
     """The settings for the editor.
 
     .. see also:: mod:`kivy.uix.settings`"""
@@ -57,12 +62,9 @@ class Settings(SettingsWithSidebar):
 
 
 class SettingsContainer(Widget):
-    """ For now put all the settings for each task in here for simplicity.
-        When (or if) more tasks get implemented and the need arises to separate them, come up with a better,
-        modular solution.
-    """
+    """ Config settings that can be changes by user and properties for current state. """
     # General properties.
-    user_id = ConfigParserProperty('Default', 'General', 'current_user', 'app', val_type=str)
+    current_user = ConfigParserProperty('Default', 'General', 'current_user', 'app', val_type=str)
     # Data Collection.
     is_local_storage_enabled = ConfigParserProperty('0', 'DataCollection', 'is_local_storage_enabled', 'app',
                                                     val_type=int)  # Converts string to int.
@@ -75,6 +77,18 @@ class SettingsContainer(Widget):
     current_task = StringProperty()
     current_trial = NumericProperty(0)
     current_block = NumericProperty(0)
+    # These only contain the values and are not bound to the config.
+    # Can't use apply_property() to dynamically add ConfigParserProperty, because we can't set the key dynamically.
+    # Can't save in one list with ids as mapping, because callbacks are only triggered at toplevel changes.
+    user_ids = ListProperty([])
+    user_aliases = ListProperty([])  # ToDo: When there's only 1 left, disable remove button.
+    
+    def __init__(self, **kwargs):
+        super(SettingsContainer, self).__init__(**kwargs)
+        self.circle_task = CircleTask()
+        self.reset_current()
+        # Schedule user settings for nct frame. Section is not yet ready.
+        Clock.schedule_once(lambda dt: self.populate_users(), 1)
     
     def get_settings_widget(self, panel_name, key):
         """ Helper function to get a widget from a SettingsPanel that contains a config value. """
@@ -89,6 +103,40 @@ class SettingsContainer(Widget):
             except AttributeError:
                 pass
         return None
+        
+    def populate_users(self):
+        app = App.get_running_app()
+        config = app.config
+        for user_id in config['UserData']:
+            self.user_ids.append(user_id)
+            self.user_aliases.append(config.get('UserData', user_id))
+    
+    def on_current_user(self, instance, new_id):
+        pass
+    
+    def edit_user(self, instance, user_id=None, user_alias=''):
+        """ Edit user information. This can be a new user. """
+        app = App.get_running_app()
+        config = app.config
+        try:
+            idx = self.user_ids.index(user_id)
+            self.user_aliases[idx] = user_alias
+        except ValueError:
+            self.user_aliases.append(user_alias)
+            self.user_ids.append(user_id)
+            # Add to config.
+        config.set('UserData', user_id, user_alias)
+        config.write()
+        
+    def remove_user(self, user_id):
+        """ Remove a user from settings and config by its ID. """
+        app = App.get_running_app()
+        config = app.config
+        config.remove_option(section='UserData', option=user_id)
+        config.write()
+        idx = self.user_ids.index(user_id)
+        self.user_aliases.pop(idx)
+        self.user_ids.remove(user_id)
     
     def on_is_local_storage_enabled(self, instance, value):
         """ We need to ask for write permission before trying to write, otherwise we lose data.
@@ -103,51 +151,6 @@ class SettingsContainer(Widget):
                 switch = self.get_settings_widget('General', 'is_local_storage_enabled')
                 if switch:
                     switch.active = self.is_local_storage_enabled
-    
-    # Circle Task properties.
-    class CircleTask(Widget):
-        n_trials = ConfigParserProperty('20', 'CircleTask', 'n_trials', 'app', val_type=int,
-                                        verify=lambda x: x > 0, errorvalue=20)
-        n_blocks = ConfigParserProperty('3', 'CircleTask', 'n_blocks', 'app', val_type=int,
-                                        verify=lambda x: x > 0, errorvalue=3)
-        n_practice_trials = ConfigParserProperty('5', 'CircleTask', 'n_practice_trials', 'app', val_type=int,
-                                                 verify=lambda x: x >= 0, errorvalue=5)
-        constrained_block = ConfigParserProperty('2', 'CircleTask', 'constrained_block', 'app', val_type=int)
-        warm_up = ConfigParserProperty('1.0', 'CircleTask', 'warm_up_time', 'app', val_type=float,
-                                       verify=lambda x: x > 0.0, errorvalue=1.0)
-        trial_duration = ConfigParserProperty('1.0', 'CircleTask', 'trial_duration', 'app', val_type=float,
-                                              verify=lambda x: x > 0.0, errorvalue=1.0)
-        cool_down = ConfigParserProperty('0.5', 'CircleTask', 'cool_down_time', 'app', val_type=float,
-                                         verify=lambda x: x > 0.0, errorvalue=0.5)
-        
-        def __init__(self, **kwargs):
-            super(SettingsContainer.CircleTask, self).__init__(**kwargs)
-            self.constraint = False
-            self.practice_block = 0
-        
-        def set_practice_block(self, block):
-            if self.n_practice_trials:
-                # Don't advance practice_block when the current block gets reset to 0.
-                if 0 < block <= 3:
-                    self.practice_block += 1
-                # If we've done our 2 practice blocks, we're ready for the big leagues.
-                if self.practice_block > 2 or block == 0:
-                    self.practice_block = 0
-
-        def set_constraint_setting(self, block):
-            # Second practice block and adjusted constrained block.
-            self.constraint = (self.practice_block == 2)\
-                              or (block == (self.constrained_block + bool(self.n_practice_trials) * 2))
-            
-        def on_new_block(self, new_block):
-            # We don't count practice blocks.
-            self.set_practice_block(new_block)
-            self.set_constraint_setting(new_block)
-    
-    def __init__(self, **kwargs):
-        super(SettingsContainer, self).__init__(**kwargs)
-        self.circle_task = self.CircleTask()
-        self.reset_current()
     
     def reset_current(self):
         self.current_block = 0
@@ -165,3 +168,44 @@ class SettingsContainer(Widget):
         """ Bound to change in current block property. """
         if self.current_task == 'Circle Task':
             self.circle_task.on_new_block(value)
+
+
+class CircleTask(Widget):
+    """ Circle Task settings and properties. """
+    n_trials = ConfigParserProperty('20', 'CircleTask', 'n_trials', 'app', val_type=int,
+                                    verify=lambda x: x > 0, errorvalue=20)
+    n_blocks = ConfigParserProperty('3', 'CircleTask', 'n_blocks', 'app', val_type=int,
+                                    verify=lambda x: x > 0, errorvalue=3)
+    n_practice_trials = ConfigParserProperty('5', 'CircleTask', 'n_practice_trials', 'app', val_type=int,
+                                             verify=lambda x: x >= 0, errorvalue=5)
+    constrained_block = ConfigParserProperty('2', 'CircleTask', 'constrained_block', 'app', val_type=int)
+    warm_up = ConfigParserProperty('1.0', 'CircleTask', 'warm_up_time', 'app', val_type=float,
+                                   verify=lambda x: x > 0.0, errorvalue=1.0)
+    trial_duration = ConfigParserProperty('1.0', 'CircleTask', 'trial_duration', 'app', val_type=float,
+                                          verify=lambda x: x > 0.0, errorvalue=1.0)
+    cool_down = ConfigParserProperty('0.5', 'CircleTask', 'cool_down_time', 'app', val_type=float,
+                                     verify=lambda x: x > 0.0, errorvalue=0.5)
+
+    def __init__(self, **kwargs):
+        super(CircleTask, self).__init__(**kwargs)
+        self.constraint = False
+        self.practice_block = 0
+
+    def set_practice_block(self, block):
+        if self.n_practice_trials:
+            # Don't advance practice_block when the current block gets reset to 0.
+            if 0 < block <= 3:
+                self.practice_block += 1
+            # If we've done our 2 practice blocks, we're ready for the big leagues.
+            if self.practice_block > 2 or block == 0:
+                self.practice_block = 0
+
+    def set_constraint_setting(self, block):
+        # Second practice block and adjusted constrained block.
+        self.constraint = (self.practice_block == 2) \
+                          or (block == (self.constrained_block + bool(self.n_practice_trials) * 2))
+
+    def on_new_block(self, new_block):
+        # We don't count practice blocks.
+        self.set_practice_block(new_block)
+        self.set_constraint_setting(new_block)

@@ -27,7 +27,7 @@ from .utility import (create_device_identifier,
                       data2bytes,
                       switch_language
                       )
-from .i18n import _, current_language
+from .i18n import _, DEFAULT_LANGUAGE
 from .config import WEBSERVER
 from .settings import Settings, SettingsContainer
 from .settingsjson import LANGUAGE_CODE, LANGUAGE_SECTION, settings_general_json, settings_circle_task_json
@@ -58,6 +58,7 @@ class UncontrolledManifoldApp(MDApp):
         If this method returns a widget (tree), it will be used as the root widget and added to the window.
         """
         # Theme.
+        self.icon = 'res/icons/mipmap-mdpi/ucmicon.png'
         self.theme_cls.theme_style = "Light"
         self.theme_cls.primary_palette = "Teal"
         # Settings.
@@ -89,7 +90,7 @@ class UncontrolledManifoldApp(MDApp):
         The configuration will be automatically saved in the file returned by get_application_config().
         """
         # setdefault doesn't work here for single keys. Can't find section if no config yet. NoSectionError
-        config.setdefaults(LANGUAGE_SECTION, {LANGUAGE_CODE: current_language()})
+        config.setdefaults(LANGUAGE_SECTION, {LANGUAGE_CODE: DEFAULT_LANGUAGE})
         config.setdefaults('General', {'is_first_run': 1,
                                        'current_user': create_user_identifier(),
                                        'task': 'Circle Task'})
@@ -190,7 +191,7 @@ class UncontrolledManifoldApp(MDApp):
         d['table'] = 'user'
         d['time'] = time.time()
         header = 'id,device_id'
-        data = np.array([self.settings.user_id, create_device_identifier()])
+        data = np.array([self.settings.current_user, create_device_identifier()])
         d['data'] = data2bytes(data.reshape((1, len(data))), header=header, fmt='%s')
         return d
 
@@ -399,7 +400,7 @@ class UncontrolledManifoldApp(MDApp):
                        "and storage, please send an e-mail to the address specified in the address line and provide "
                        "your identification code [b]{}[/b] so that I can assign and delete your record.\n"
                        "If you deleted this email from your [i]Sent[/i] folder, you can look up your unique ID in "
-                       "the App Settings window.").format(self.settings.user_id) + "\n\n"
+                       "the App Settings window.").format(self.settings.current_user) + "\n\n"
         
         text = "### Data ###\n\n"
         for d in self.data_email:

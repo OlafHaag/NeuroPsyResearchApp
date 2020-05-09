@@ -10,7 +10,7 @@ from kivymd.uix.button import MDRaisedButton, MDFlatButton
 from kivymd.uix.dialog import MDDialog
 
 from . import _
-from ..widgets import ItemConfirm
+from ..widgets import CheckItem
 
 
 class SettingOptionMapping(SettingItem):
@@ -52,7 +52,7 @@ class SettingOptionMapping(SettingItem):
             # Gather options.
             items = list()
             for option, text in sorted(self.options.items(), key=lambda t: t[1]):
-                opt = ItemConfirm(text=text, value=option)
+                opt = CheckItem(text=text, value=option)
                 items.append(opt)
 
             self.popup = MDDialog(

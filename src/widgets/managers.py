@@ -9,7 +9,7 @@ from kivy.clock import Clock
 
 from plyer import notification
 
-from . import SimplePopup, TermsPopup
+from . import SimplePopup, BlockingPopup, TermsPopup, UsersPopup, UserEditPopup
 from ..i18n import _
 
 
@@ -23,6 +23,8 @@ class UCMManager(ScreenManager):
     popup_info = ObjectProperty(None, allownone=True)
     popup_warning = ObjectProperty(None, allownone=True)
     popup_error = ObjectProperty(None, allownone=True)
+    popup_user_select = ObjectProperty(None, allownone=True)
+    popup_user_edit = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
         super(UCMManager, self).__init__(**kwargs)
@@ -53,7 +55,7 @@ class UCMManager(ScreenManager):
         root = self.parent.parent
         nav = root.ids.content_drawer
         nav.bind(on_home=lambda x: self.go_home(),
-                 on_users=lambda x: print("Users clicked!"),
+                 on_users=lambda x: self.show_user_select(),
                  on_settings=lambda x: self.open_settings(),
                  on_website=lambda x: self.open_website(self.settings.server_uri),
                  on_about=lambda x: print("About clicked!"),
@@ -88,6 +90,28 @@ class UCMManager(ScreenManager):
         if not self.popup_terms:
             self.popup_terms = TermsPopup()
         self.popup_terms.open()
+    
+    def show_user_select(self):
+        if not self.popup_user_select:
+            self.popup_user_select = UsersPopup()
+            self.popup_user_select.bind(on_add_user=lambda inst: self.show_user_edit(add=True,
+                                                                                     user_alias=_("New User")),
+                                        on_edit_user=lambda inst, user_id, alias: self.show_user_edit(user_id=user_id,
+                                                                                                      user_alias=alias),
+                                        on_remove_user=lambda inst, user_id, alias: self.show_user_remove(user_id,
+                                                                                                          alias),
+                                        )
+        self.popup_user_select.open()
+    
+    def show_user_edit(self, add=False, user_id=None, user_alias=''):
+        if not self.popup_user_edit:
+            self.popup_user_edit = UserEditPopup()
+            self.popup_user_edit.bind(on_user_edited=self.settings.edit_user)
+        self.popup_user_edit.open(add=add, user_id=user_id, user_alias=user_alias)
+        
+    def show_user_remove(self, user_id, user_alias):
+        print(f"Remove {user_alias} with ID: {user_id}?")  # ToDo: confirm removal of user.
+        self.settings.remove_user(user_id)
         
     def on_info(self, title=None, text=None):
         self.show_info(title=title, text=text)
@@ -165,9 +189,15 @@ class UCMManager(ScreenManager):
                     self.quit()
                 else:
                     self.popup_terms.dismiss()
+            elif self.app.root_window.children[0] == self.popup_user_select:
+                self.popup_user_select.dismiss()
+            elif self.app.root_window.children[0] == self.popup_user_edit:
+                self.popup_user_edit.dismiss()
+            elif isinstance(self.app.root_window.children[0], SimplePopup):
+                self.app.root_window.children[0].dismiss()
+            elif isinstance(self.app.root_window.children[0], BlockingPopup):
+                return True  # Do nothing. # FixMe: prevent closing follow-up popup.
             # ToDo: handle other popups on back key.
-            #elif isinstance(self.app.root_window.children[0], SimplePopup):
-                #self.app.root_window.children[0].dismiss()
             # Handle back button on screens.
             elif self.current == 'Home':
                 # When on home screen we want to be able to quit the app after 2 presses.
@@ -198,6 +228,8 @@ class UCMManager(ScreenManager):
         self.sidebar.set_state('close')
     
     def start_task(self, task):
+        # Make sure the correct user is selected.
+        self.show_user_select()
         self.transition.direction = 'up'
         self.transition.duration = 0.5
         self.app.settings.current_task = task

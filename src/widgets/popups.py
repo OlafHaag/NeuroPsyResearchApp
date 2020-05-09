@@ -1,7 +1,6 @@
 from configparser import ConfigParser
 
 from kivy.app import App
-from kivy.uix.popup import Popup
 from kivy.properties import StringProperty, ConfigParserProperty
 from kivy.core.window import Window
 
@@ -9,12 +8,12 @@ from kivymd.uix.button import MDRectangleFlatButton, MDRaisedButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.boxlayout import MDBoxLayout
 
-from . import ItemConfirm
+from . import CheckItem, UserItem, UserAddItem
 from ..i18n import (_,
                     list_translated_languages,
                     translation_to_language_code,
                     DEFAULT_LANGUAGE)
-from ..utility import switch_language
+from ..utility import create_user_identifier
 
 
 # ToDo: Distinguish Info, Warning and Error by icon or color.
@@ -41,7 +40,7 @@ class LanguagePopup(MDDialog):
         # Gather options.
         languages = list_translated_languages()
         languages.sort()
-        items = [ItemConfirm(text=lang, value=translation_to_language_code(lang)) for lang in languages]
+        items = [CheckItem(text=lang, value=translation_to_language_code(lang)) for lang in languages]
         default_kwargs = dict(
             title=_("Choose Language"),
             text=_("You can also change the language in the settings later."),
@@ -57,6 +56,9 @@ class LanguagePopup(MDDialog):
         default_kwargs.update(kwargs)
         super(LanguagePopup, self).__init__(**default_kwargs)
     
+    def on_current_language(self, *args):
+        pass
+        
     def select_current_language(self):
         """ Activate item for currently chosen language. """
         for item in self.items:
@@ -69,10 +71,7 @@ class LanguagePopup(MDDialog):
             if item.active:
                 lang_code = item.value  # There's at least the default language.
                 break
-        # Use the app's function to change language instead of i18n's just in case we do something special there.
-        app = App.get_running_app()
-        switch_language(lang=lang_code)
-        # Now also update the config.
+        # Update the config value. The on_current_language callback will take care of switching to the language.
         self.current_language = lang_code
 
     def on_open(self):
@@ -82,6 +81,225 @@ class LanguagePopup(MDDialog):
         self.change_language()
 
 
+class UsersPopup(MDDialog):
+    """ Dialog for User management. """
+    current_user = ConfigParserProperty('Default', 'General', 'current_user', 'app', val_type=str)
+    
+    def __init__(self, **kwargs):
+        self.register_event_type('on_add_user')
+        self.register_event_type('on_edit_user')
+        self.register_event_type('on_remove_user')
+        
+        # Gather options.
+        items = self.get_items()
+        default_kwargs = dict(
+            title=_("Choose Active User"),
+            type="confirmation",
+            auto_dismiss=False,  # Otherwise the callback doesn't fire?!
+            items=items,
+            buttons=[MDRaisedButton(
+                text=_("OK"),
+                on_release=self.dismiss
+            ),
+            ]
+        )
+        default_kwargs.update(kwargs)
+        super(UsersPopup, self).__init__(**default_kwargs)
+        app = App.get_running_app()
+        app.settings.bind(user_ids=lambda instance, ids: self.update_items(ids),
+                          user_aliases=lambda instance, aliases: self.update_aliases(aliases))
+    
+    def get_items(self):
+        """ Return list items for user management. """
+        app = App.get_running_app()
+        user_ids = app.settings.user_ids
+        user_aliases = app.settings.user_aliases
+        items = list()
+        for user_id in user_ids:
+            item = UserItem(text=user_aliases[user_ids.index(user_id)], value=user_id)
+            item.bind(on_remove=self.remove_item,
+                      on_edit=lambda instance: self.dispatch('on_edit_user', instance.value, instance.text),
+                      on_active=lambda instance, state: self.set_item_active(instance.value, state),
+                      )
+            items.append(item)
+        # The last item should be to add a new user.
+        items.append(UserAddItem(text=_("Add User"),
+                                 value='add',
+                                 on_release=lambda instance: self.dispatch('on_add_user'),
+                                 )
+                     )
+        return items
+
+    def set_item_active(self, user_id, state):  # ToDo: other name
+        if state:
+            self.current_user = user_id
+        
+    def select_item(self, user_id):
+        """ Activate item with value equal to user_id. """
+        for item in self.items:
+            if item.value == user_id:
+                item.set_icon(item.ids.check)
+                break
+        self.current_user = user_id
+    
+    def change_active_user(self):
+        """ Set the currently active user to selected item. """
+        user_id = self.current_user  # Fallback.
+        for item in self.items[:-1]:
+            if item.active:
+                user_id = item.value  # There's at least 1 user.
+                break
+        # Update the config value.
+        self.current_user = user_id
+    
+    def update_items(self, ids):
+        """ Add widgets that are missing from ids. """
+        app = App.get_running_app()
+        user_aliases = app.settings.user_aliases
+        # Gather values of present items.
+        item_ids = [i.value for i in self.items[:-1]]  # Leave out the add user item at the end.
+        # Get (asymmetric) difference between the two. Only those, that aren't present yet.
+        diff = set(ids).difference(item_ids)
+        for user_id in diff:
+            item = UserItem(text=user_aliases[ids.index(user_id)], value=user_id)
+            item.bind(on_remove=self.remove_item,
+                      on_edit=lambda instance: self.dispatch('on_edit_user', instance.value, instance.text),
+                      on_active=lambda instance, state: self.set_item_active(instance.value, state),
+                      )
+            self.edit_padding_for_item(item)
+            self.items.insert(-1, item)
+            self.ids.box_items.add_widget(item, index=1)
+            # FixMe: new item can't be set to current_user.
+    
+    def update_aliases(self, aliases):
+        """ Update all the texts of the widgets. """
+        # Gather values of present items.
+        item_texts = [i.text for i in self.items[:-1]]  # Leave out the add user item at the end.
+        # In case a new user was just added or removed, we may already be up-to-date.
+        if len(item_texts) != len(aliases):
+            return
+        # Now we assume the order of items is the same as in settings.user_aliases.
+        for i, item in enumerate(self.items[:-1]):
+            # Just set all aliases.
+            item.text = aliases[i]
+    
+    def remove_item(self, instance):
+        """ Remove widget from list. """
+        # Get currently selected item.
+        #selected_user_id = self.current_user  # Fallback
+        for item in self.items[:-1]:
+            if item.active:
+                selected_user_id = item.value
+                break
+        self.dispatch('on_remove_user', instance.value, instance.text)
+        self.ids.box_items.remove_widget(instance)  # Maybe do garbage collection with gc.collect()?
+        self.items.remove(instance)
+        # If removed item was current user, select first entry.
+        if instance.value == selected_user_id:
+            self.items[0].set_icon(self.items[0].ids.check)
+            #self.select_item(self.items[0].value)
+    
+    def on_current_user(self, *args):
+        pass
+    
+    def on_items(self, instance, items):
+        """ Disable remove button, when only 1 item left. """
+        # When there's only 1 id, prevent the last one to be deleted.
+        if len(items) <= 2:  # Account for add user item.
+            self.items[0].remove_disabled = True
+        else:
+            self.items[0].remove_disabled = False
+            
+    def on_add_user(self):
+        # It's the manager's task to decide what should happen now.
+        pass
+    
+    def on_edit_user(self, *args, **kwargs):
+        # It's the manager's task to decide what should happen now.
+        pass
+    
+    def on_remove_user(self, user_id, user_alias):
+        pass
+    
+    def on_open(self):
+        self.select_item(self.current_user)
+    
+    def on_dismiss(self):
+        pass
+        
+        
+class UserEditPopup(MDDialog):
+    """ Dialog for editing user information. """
+    user_alias = StringProperty()
+
+    def __init__(self, **kwargs):
+        self.user_id = None
+        default_kwargs = dict(
+            title=_("Edit User"),
+            type="custom",
+            content_cls=UserInput(),
+            auto_dismiss=False,  # Otherwise the callbacks don't fire?!
+            size_hint_x=0.5,
+            buttons=[
+                MDRectangleFlatButton(
+                    text=_("CANCEL"),
+                    on_release=self.dismiss
+                ),
+                MDRaisedButton(
+                    text=_("OK"),
+                    on_release=lambda _: self.confirm()
+                ),
+            ],
+        )
+        default_kwargs.update(kwargs)
+        super(UserEditPopup, self).__init__(**default_kwargs)
+        self.register_event_type('on_user_edited')
+        # Link this class' user_alias to content_cls' user_alias.
+        # Property events are not dispatched when the values are equal, so this doesn't result in endless recursion.
+        self.bind(user_alias=self.content_cls.setter('user_alias'))
+        self.content_cls.bind(user_alias=self.setter('user_alias'))
+    
+    def open(self, *largs, **kwargs):
+        is_new = kwargs.pop('add', False)
+        self.user_id = kwargs.pop('user_id', None)
+        if not self.user_id:
+            self.user_id = create_user_identifier()
+            
+        self.title = _("Add New User") if is_new else _("Edit User")
+        self.user_alias = kwargs.pop('user_alias', '')
+        super(UserEditPopup, self).open()
+        
+    def confirm(self):
+        if not self.content_cls.ids.alias_input.error:
+            self.dispatch('on_user_edited', user_id=self.user_id, user_alias=self.user_alias)
+            self.dismiss()
+    
+    def on_dismiss(self):
+        # FixMe: Reset error status of textfield.
+        #self.property('user_alias').dispatch(self)
+        self.content_cls.ids.alias_input.error = False
+    
+    def on_user_edited(self, *args, **kwargs):
+        """ Default implementation of event. """
+        pass
+
+
+class UserInput(MDBoxLayout):
+    user_alias = StringProperty()
+
+    def __init__(self, **kwargs):
+        super(UserInput, self).__init__(**kwargs)
+        self.ids.alias_input.bind(text=self.on_text,
+                                  on_text_validate=self.check_errors)
+
+    def check_errors(self, *args):
+        self.ids.alias_input.error = len(self.ids.alias_input.text.strip(' ')) == 0
+
+    def on_text(self, instance, value):
+        self.check_errors()
+        self.user_alias = value  # Somehow StringProperty isn't updated by input. Do it manually.
+
+    
 class ScrollText(MDBoxLayout):
     text = StringProperty(_('Loading...'))
 
@@ -89,6 +307,32 @@ class ScrollText(MDBoxLayout):
         self.text = kwargs.pop('text', _("not found"))
         self.height = (Window.height * 0.8) - 100
         super(ScrollText, self).__init__(**kwargs)
+
+
+class NumericInputPopup(MDDialog):
+    
+    def __init__(self, **kwargs):
+        default_kwargs = dict(
+                title=_("Set New Value"),
+                type="custom",
+                content_cls=NumericInput(),
+                buttons=[
+                    MDRectangleFlatButton(
+                        text=_("CANCEL"),
+                        on_release=self.dismiss
+                    ),
+                    MDRaisedButton(
+                        text=_("OK"),
+                        on_release=self.dismiss  # ToDo: handle numeric input
+                    ),
+                ],
+            )
+        default_kwargs.update(kwargs)
+        super(NumericInputPopup, self).__init__(**default_kwargs)
+        
+
+class NumericInput(MDBoxLayout):
+    pass
 
 
 class TermsPopup(MDDialog):

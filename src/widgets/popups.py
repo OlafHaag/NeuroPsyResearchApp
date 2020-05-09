@@ -119,7 +119,7 @@ class UsersPopup(MDDialog):
             item = UserItem(text=user_aliases[user_ids.index(user_id)], value=user_id)
             item.bind(on_remove=self.remove_item,
                       on_edit=lambda instance: self.dispatch('on_edit_user', instance.value, instance.text),
-                      on_active=lambda instance, state: self.set_item_active(instance.value, state),
+                      on_active=lambda instance, state: self.set_current_user(instance.value, state),
                       )
             items.append(item)
         # The last item should be to add a new user.
@@ -130,7 +130,8 @@ class UsersPopup(MDDialog):
                      )
         return items
 
-    def set_item_active(self, user_id, state):  # ToDo: other name
+    def set_current_user(self, user_id, state):
+        """ Sets the user_id to be current user if state is True. """
         if state:
             self.current_user = user_id
         
@@ -164,12 +165,11 @@ class UsersPopup(MDDialog):
             item = UserItem(text=user_aliases[ids.index(user_id)], value=user_id)
             item.bind(on_remove=self.remove_item,
                       on_edit=lambda instance: self.dispatch('on_edit_user', instance.value, instance.text),
-                      on_active=lambda instance, state: self.set_item_active(instance.value, state),
+                      on_active=lambda instance, state: self.set_current_user(instance.value, state),
                       )
             self.edit_padding_for_item(item)
             self.items.insert(-1, item)
             self.ids.box_items.add_widget(item, index=1)
-            # FixMe: new item can't be set to current_user.
     
     def update_aliases(self, aliases):
         """ Update all the texts of the widgets. """
@@ -186,7 +186,6 @@ class UsersPopup(MDDialog):
     def remove_item(self, instance):
         """ Remove widget from list. """
         # Get currently selected item.
-        #selected_user_id = self.current_user  # Fallback
         for item in self.items[:-1]:
             if item.active:
                 selected_user_id = item.value
@@ -197,7 +196,6 @@ class UsersPopup(MDDialog):
         # If removed item was current user, select first entry.
         if instance.value == selected_user_id:
             self.items[0].set_icon(self.items[0].ids.check)
-            #self.select_item(self.items[0].value)
     
     def on_current_user(self, *args):
         pass
@@ -259,7 +257,7 @@ class UserEditPopup(MDDialog):
         self.bind(user_alias=self.content_cls.setter('user_alias'))
         self.content_cls.bind(user_alias=self.setter('user_alias'))
     
-    def open(self, *largs, **kwargs):
+    def open(self, *args, **kwargs):
         is_new = kwargs.pop('add', False)
         self.user_id = kwargs.pop('user_id', None)
         if not self.user_id:

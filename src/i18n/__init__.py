@@ -15,9 +15,9 @@ from .observable_translation import ObservableTranslation
 _locale_dir = Path(__file__).resolve().parent.parent.parent / "locales"
 _current_language = None
 _locales = None
-DOMAIN = "UCMResearchApp"  #: the name of the .po files
+DOMAIN = 'translations'  #: the name of the .po files
 
-_languages_dir = "languages"
+_languages_dir = 'languages'
 _languages_locales = gettext.translation(_languages_dir,
                                          localedir=_locale_dir,
                                          languages=[_languages_dir])

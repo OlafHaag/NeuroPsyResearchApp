@@ -145,16 +145,6 @@ class UsersPopup(MDDialog):
                 break
         self.current_user = user_id
     
-    def change_active_user(self):
-        """ Set the currently active user to selected item. """
-        user_id = self.current_user  # Fallback.
-        for item in self.items[:-1]:
-            if item.active:
-                user_id = item.value  # There's at least 1 user.
-                break
-        # Update the config value.
-        self.current_user = user_id
-    
     def update_items(self, ids):
         """ Add widgets that are missing from ids. """
         app = App.get_running_app()
@@ -213,9 +203,6 @@ class UsersPopup(MDDialog):
             self.ids.scroll.height = self.get_normal_height()
         else:
             self.ids.scroll.height = height
-            
-    def on_current_user(self, *args):
-        pass
     
     def on_items(self, instance, items):
         """ Disable remove button, when only 1 item left. """

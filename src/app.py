@@ -29,10 +29,10 @@ from .utility import (create_device_identifier,
                       )
 from .i18n import _, DEFAULT_LANGUAGE
 from .config import WEBSERVER
-from .settings import Settings, SettingsContainer
+from .settings import SettingsContainer
+from .widgets import BaseScreen, Settings
 from .settingsjson import LANGUAGE_CODE, LANGUAGE_SECTION, settings_general_json, settings_circle_task_json
 
-from .widgets import BaseScreen
 
 if platform == 'android':
     from android.permissions import Permission
@@ -125,7 +125,7 @@ class UncontrolledManifoldApp(MDApp):
         settings.add_json_panel('General',
                                 self.config,
                                 data=settings_general_json)
-        settings.add_json_panel('Circle Task Settings',
+        settings.add_json_panel('Circle Task',
                                 self.config,
                                 data=settings_circle_task_json)
     

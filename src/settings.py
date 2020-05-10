@@ -1,6 +1,5 @@
 """ Defines kivy Settings classes. """
 from kivy.app import App
-from kivy.uix.settings import SettingItem, SettingsWithSidebar
 from kivy.uix.widget import Widget
 from kivy.properties import (NumericProperty,
                              StringProperty,
@@ -10,10 +9,7 @@ from kivy.properties import (NumericProperty,
 from kivy.utils import platform
 from kivy.clock import Clock
 
-from kivymd.uix.button import MDRaisedButton
-
 from .utility import ask_permission
-from .i18n.settings import SettingOptionMapping
 from .config import WEBSERVER
 
 if platform == 'android':
@@ -21,44 +17,6 @@ if platform == 'android':
     WRITE_PERMISSION = Permission.WRITE_EXTERNAL_STORAGE
 else:
     WRITE_PERMISSION = None
-
-
-class SettingButtons(SettingItem):
-
-    def __init__(self, **kwargs):
-        self.register_event_type('on_release')
-        kw = kwargs.copy()
-        kw.pop('buttons', None)
-        super(SettingItem, self).__init__(**kw)
-        for button in kwargs['buttons']:
-            btn_widget = MDRaisedButton(text=button['title'])
-            btn_widget.ID = button['id']
-            self.add_widget(btn_widget)
-            btn_widget.bind(on_release=self.on_button_pressed)
-            
-    def set_value(self, section, key, value):
-        # set_value normally reads the configparser values and runs on an error
-        # to do nothing here
-        return
-    
-    def on_button_pressed(self, instance):
-        self.panel.settings.dispatch('on_config_change', self.panel.config, self.section, self.key, instance.ID)
-
-
-class Settings(SettingsWithSidebar):  # Todo: Set own interface class to match theme.
-    """The settings for the editor.
-
-    .. see also:: mod:`kivy.uix.settings`"""
-
-    def __init__(self, *args, **kwargs):
-        """Create a new settings instance.
-
-        The :class:`SettingOptionMapping` is added and can be used with the ``"optionmapping"`` type.
-        The :class:`SettingButtons` is added and can be used with the ``"buttons"`` type.
-        """
-        super().__init__(*args, **kwargs)
-        self.register_type("optionmapping", SettingOptionMapping)
-        self.register_type('buttons', SettingButtons)
 
 
 class SettingsContainer(Widget):
@@ -85,7 +43,7 @@ class SettingsContainer(Widget):
     
     def __init__(self, **kwargs):
         super(SettingsContainer, self).__init__(**kwargs)
-        self.circle_task = CircleTask()
+        self.circle_task = SettingsCircleTask()
         self.reset_current()
         # Schedule user settings for nct frame. Section is not yet ready.
         Clock.schedule_once(lambda dt: self.populate_users(), 1)
@@ -170,7 +128,7 @@ class SettingsContainer(Widget):
             self.circle_task.on_new_block(value)
 
 
-class CircleTask(Widget):
+class SettingsCircleTask(Widget):
     """ Circle Task settings and properties. """
     n_trials = ConfigParserProperty('20', 'CircleTask', 'n_trials', 'app', val_type=int,
                                     verify=lambda x: x > 0, errorvalue=20)
@@ -187,7 +145,7 @@ class CircleTask(Widget):
                                      verify=lambda x: x > 0.0, errorvalue=0.5)
 
     def __init__(self, **kwargs):
-        super(CircleTask, self).__init__(**kwargs)
+        super(SettingsCircleTask, self).__init__(**kwargs)
         self.constraint = False
         self.practice_block = 0
 

@@ -1,16 +1,79 @@
-"""These options allow to show a different value than the value.
-
-Most of this file is copied from :class:`kivy.uix.settings.SettingOptions`.
-"""
-from kivy.properties import DictProperty, ObjectProperty
-from kivy.uix.settings import SettingItem, SettingsWithSidebar
 from kivy.core.window import Window
 from kivy.metrics import dp
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.settings import Settings, SettingItem, SettingsWithSidebar
+from kivy.properties import ObjectProperty, DictProperty
+
 from kivymd.uix.button import MDRaisedButton, MDFlatButton
 from kivymd.uix.dialog import MDDialog
+from kivymd.uix.tab import MDTabsBase
 
-from . import _
-from ..widgets import CheckItem
+from . import CheckItem
+from ..i18n import _
+
+
+class SettingsWithTabbedPanel(Settings):
+    '''A settings widget that displays settings panels as pages in a
+    :class:`~kivy.uix.tabbedpanel.TabbedPanel`.
+    '''
+
+    __events__ = ('on_close', )
+
+    def __init__(self, *args, **kwargs):
+        self.interface_cls = InterfaceWithTabbedPanel
+        super(SettingsWithTabbedPanel, self).__init__(*args, **kwargs)
+
+    def on_close(self, *args):
+        pass
+    
+    
+class InterfaceWithTabbedPanel(FloatLayout):
+    """The content widget used by Settings. It stores and displays
+    Settings panels in tabs of a TabbedPanel.
+    """
+    tabbedpanel = ObjectProperty()
+    close_button = ObjectProperty()
+
+    __events__ = ('on_close', )
+
+    def __init__(self, *args, **kwargs):
+        super(InterfaceWithTabbedPanel, self).__init__(*args, **kwargs)
+        self.close_button.bind(on_release=lambda j: self.dispatch('on_close'))
+
+    def add_panel(self, panel, name, uid):
+        scrollview = ScrollView()
+        scrollview.add_widget(panel)
+        if not self.tabbedpanel.default_tab_content:
+            self.tabbedpanel.default_tab_text = name
+            self.tabbedpanel.default_tab_content = scrollview
+        else:
+            panelitem = TabbedPanelHeader(text=name, content=scrollview)
+            self.tabbedpanel.add_widget(panelitem)
+
+    def on_close(self, *args):
+        pass
+
+
+class SettingButtons(SettingItem):
+
+    def __init__(self, **kwargs):
+        self.register_event_type('on_release')
+        kw = kwargs.copy()
+        kw.pop('buttons', None)
+        super(SettingItem, self).__init__(**kw)
+        for button in kwargs['buttons']:
+            btn_widget = MDRaisedButton(text=button['title'])
+            btn_widget.ID = button['id']
+            self.add_widget(btn_widget)
+            btn_widget.bind(on_release=self.on_button_pressed)
+            
+    def set_value(self, section, key, value):
+        # set_value normally reads the configparser values and runs on an error
+        # to do nothing here
+        return
+    
+    def on_button_pressed(self, instance):
+        self.panel.settings.dispatch('on_config_change', self.panel.config, self.section, self.key, instance.ID)
 
 
 class SettingOptionMapping(SettingItem):
@@ -92,19 +155,17 @@ class SettingOptionMapping(SettingItem):
         self.popup.dismiss()
 
 
-class Settings(SettingsWithSidebar):
+class Settings(SettingsWithSidebar):  # Todo: Set own interface class to match theme.
     """The settings for the editor.
 
-    .. seealso:: mod:`kivy.uix.settings`"""
+    .. see also:: mod:`kivy.uix.settings`"""
 
     def __init__(self, *args, **kwargs):
         """Create a new settings instance.
 
-        The :class:`SettingOptionMapping` is added an can be used with the
-        ``"optionmapping"`` type.
+        The :class:`SettingOptionMapping` is added and can be used with the ``"optionmapping"`` type.
+        The :class:`SettingButtons` is added and can be used with the ``"buttons"`` type.
         """
         super().__init__(*args, **kwargs)
         self.register_type("optionmapping", SettingOptionMapping)
-
-
-__all__ = ["SettingOptionMapping", "Settings"]
+        self.register_type('buttons', SettingButtons)

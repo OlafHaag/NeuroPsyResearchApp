@@ -14,7 +14,7 @@ settings_general_json = json.dumps([
      'options': {code: language_code_to_translation(code)
                  for code in list_languages()}},
     {'type': 'title',
-     'title': 'Data Collection'},
+     'title': _('Data Collection')},
     {'type': 'bool',
      'title': _('Local Storage'),
      'desc': _('Save data locally on device.'),

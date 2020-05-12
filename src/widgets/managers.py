@@ -9,7 +9,7 @@ from kivy.clock import Clock
 
 from plyer import notification
 
-from . import SimplePopup, BlockingPopup, TermsPopup, UsersPopup, UserEditPopup
+from . import SimplePopup, BlockingPopup, TermsPopup, UsersPopup, UserEditPopup, TextInputPopup, NumericInputPopup
 from ..i18n import _
 
 
@@ -41,7 +41,7 @@ class UCMManager(ScreenManager):
         self.register_event_type('on_upload_successful')
     
     def on_kv_post(self, base_widget):
-        Window.bind(on_keyboard=self.key_input)
+        Window.bind(on_key_up=self.key_input, on_key_down=lambda *j: True)
         # Binds need to be executed 1 frame after on_kv_post, otherwise it tries to bind to not yet registered events.
         Clock.schedule_once(lambda dt: self.bind_callbacks(), 1)
     
@@ -176,7 +176,7 @@ class UCMManager(ScreenManager):
         # ToDo: disable upload button.
         pass
     
-    def key_input(self, window, key, scancode, codepoint, modifier):
+    def key_input(self, window, key, scancode):
         """ Handle escape key / back button presses. """
         if platform == "android":
             back_keys = [27]
@@ -195,9 +195,15 @@ class UCMManager(ScreenManager):
                 self.popup_user_edit.dismiss()
             elif isinstance(self.app.root_window.children[0], SimplePopup):
                 self.app.root_window.children[0].dismiss()
+            elif isinstance(self.app.root_window.children[0], TextInputPopup):
+                self.app.root_window.children[0].dismiss()
+            elif isinstance(self.app.root_window.children[0], NumericInputPopup):
+                self.app.root_window.children[0].dismiss()
             elif isinstance(self.app.root_window.children[0], BlockingPopup):
                 return True  # Do nothing. # FixMe: prevent closing follow-up popup.
             # ToDo: handle other popups on back key.
+            elif self.sidebar.state == 'open':
+                self.sidebar.set_state('close')
             # Handle back button on screens.
             elif self.current == 'Home':
                 # When on home screen we want to be able to quit the app after 2 presses.

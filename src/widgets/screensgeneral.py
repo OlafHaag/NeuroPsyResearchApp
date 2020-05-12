@@ -59,7 +59,7 @@ class ScreenOutro(BaseScreen):
         
         self.msg = _('[color=ff00ff][b]Thank you[/b][/color] for participating!') + "\n\n"  # Workaround for i18n.
         if app.settings.is_local_storage_enabled:
-            app.write_data_to_files()
+            app.write_data_to_files()  # FixMe: Data written 2 times when returning from settings.
             dest = App.get_running_app().get_storage_path()
             self.msg += _("Files were{}saved to [i]{}[/i].").format(' ' if dest.exists() else _(' [b]not[/b] '), dest)
         else:

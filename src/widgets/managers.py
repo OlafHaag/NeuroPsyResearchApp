@@ -29,6 +29,8 @@ class UCMManager(ScreenManager):
     def __init__(self, **kwargs):
         super(UCMManager, self).__init__(**kwargs)
         self.app = App.get_running_app()
+        # Keep track of where we cae from.
+        self.last_visited = 'Home'
         self.n_home_esc = 0  # Counter on how many times the back button was pressed on home screen.
         # Keep track of what study we're currently performing.
         self.task_consents = {'Circle Task': 'Consent CT'}
@@ -41,7 +43,7 @@ class UCMManager(ScreenManager):
         self.register_event_type('on_upload_successful')
     
     def on_kv_post(self, base_widget):
-        Window.bind(on_key_up=self.key_input, on_key_down=lambda *j: True)
+        Window.bind(on_keyboard=self.key_input)
         # Binds need to be executed 1 frame after on_kv_post, otherwise it tries to bind to not yet registered events.
         Clock.schedule_once(lambda dt: self.bind_callbacks(), 1)
     
@@ -176,7 +178,7 @@ class UCMManager(ScreenManager):
         # ToDo: disable upload button.
         pass
     
-    def key_input(self, window, key, scancode):
+    def key_input(self, window, key, scancode, codepoint, modifier):  # FixMe: keyboard
         """ Handle escape key / back button presses. """
         if platform == "android":
             back_keys = [27]
@@ -212,9 +214,10 @@ class UCMManager(ScreenManager):
                     notification.notify(message=_("Press again to quit."), toast=True)
                 if self.n_home_esc > 1:
                     self.quit()
-            elif self.current == 'Settings':
-                # Never gets called, screen already changed to 'Home' through app.close_settings() on esc.
-                self.app.close_settings()
+            elif self.current == 'Outro' and self.last_visited == 'Settings':
+                # self.current == 'Settings' would never get called,
+                # as screen already changed by app.close_settings() on esc.
+                return True
             # If we are in a task, stop that task.
             elif self.current in ['Circle Task']:
                 self.get_screen(self.current).stop_task(interrupt=True)

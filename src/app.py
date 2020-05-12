@@ -141,7 +141,7 @@ class UncontrolledManifoldApp(MDApp):
     def close_settings(self, *args):
         """ Always gets called on escape regardless of current screen. """
         if self.manager.current == 'Settings':
-            self.manager.go_home()  # FixMe: When entered from outro screen, return to outro screen.
+            self.manager.current = self.manager.last_visited
             # Hack, since after this manager.key_input is executed and screen is 'home' by then.
             self.manager.n_home_esc -= 1
     

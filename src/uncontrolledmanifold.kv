@@ -4,6 +4,7 @@
 #:include src/widgets/buttons.kv
 #:include src/widgets/popups.kv
 #:include src/widgets/screensgeneral.kv
+#:include src/widgets/screensettings.kv
 #:include src/widgets/screenconsents.kv
 #:include src/widgets/screeninstructions.kv
 #:include src/widgets/screencircletask.kv
@@ -89,7 +90,7 @@
                 on_release: root.dispatch('on_settings')
 
             ItemDrawer:
-                text: _("Visit Analyses")
+                text: _("Visit Online Analyses")
                 icon: 'chart-bar'
                 on_release: root.dispatch('on_website')
 

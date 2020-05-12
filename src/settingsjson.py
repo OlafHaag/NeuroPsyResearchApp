@@ -22,7 +22,7 @@ settings_general_json = json.dumps([
      'key': 'is_local_storage_enabled'},
     {'type': 'bool',
      'title': _('Upload Data'),
-     'desc': _('Send collected data to server.'),
+     'desc': _('Offer to send collected data to server.'),
      'section': 'DataCollection',
      'key': 'is_upload_enabled'},
     {'type': 'string',
@@ -32,7 +32,7 @@ settings_general_json = json.dumps([
      'key': 'webserver'},
     {'type': 'bool',
      'title': _('Send E-Mail'),
-     'desc': _('Offer to send data via e-mail.'),
+     'desc': _('Offer to send collected data via e-mail.'),
      'section': 'DataCollection',
      'key': 'is_email_enabled'},
     {'type': 'string',
@@ -43,6 +43,8 @@ settings_general_json = json.dumps([
 ])
 
 settings_circle_task_json = json.dumps([
+    {'type': 'title',
+     'title': _('PLEASE ONLY CHANGE THESE VALUES IF YOU ARE THE RESEARCHER')},
     {'type': 'numeric',
      'title': 'Number of practice trials',
      'desc': 'Practice trials per condition.',

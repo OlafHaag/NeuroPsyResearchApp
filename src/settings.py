@@ -39,7 +39,7 @@ class SettingsContainer(Widget):
     # Can't use apply_property() to dynamically add ConfigParserProperty, because we can't set the key dynamically.
     # Can't save in one list with ids as mapping, because callbacks are only triggered at toplevel changes.
     user_ids = ListProperty([])
-    user_aliases = ListProperty([])  # ToDo: When there's only 1 left, disable remove button.
+    user_aliases = ListProperty([])
     
     def __init__(self, **kwargs):
         super(SettingsContainer, self).__init__(**kwargs)

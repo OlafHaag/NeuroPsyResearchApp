@@ -230,78 +230,6 @@ class UsersPopup(MDDialog):
         pass
         
         
-class UserEditPopup(MDDialog):
-    """ Dialog for editing user information. """
-    user_alias = StringProperty()
-
-    def __init__(self, **kwargs):
-        self.user_id = None
-        default_kwargs = dict(
-            title=_("Edit User"),
-            type="custom",
-            content_cls=UserInput(),
-            auto_dismiss=False,  # Otherwise the callbacks don't fire?!
-            size_hint_x=0.6,
-            buttons=[
-                MDRectangleFlatButton(
-                    text=_("CANCEL"),
-                    on_release=self.dismiss
-                ),
-                MDRaisedButton(
-                    text=_("OK"),
-                    on_release=lambda _: self.confirm()
-                ),
-            ],
-        )
-        default_kwargs.update(kwargs)
-        super(UserEditPopup, self).__init__(**default_kwargs)
-        self.register_event_type('on_user_edited')
-        # Link this class' user_alias to content_cls' user_alias.
-        # Property events are not dispatched when the values are equal, so this doesn't result in endless recursion.
-        self.bind(user_alias=self.content_cls.setter('user_alias'))
-        self.content_cls.bind(user_alias=self.setter('user_alias'))
-    
-    def open(self, *args, **kwargs):
-        is_new = kwargs.pop('add', False)
-        self.user_id = kwargs.pop('user_id', None)
-        if not self.user_id:
-            self.user_id = create_user_identifier()
-            
-        self.title = _("Add New User") if is_new else _("Edit User")
-        self.user_alias = kwargs.pop('user_alias', '')
-        super(UserEditPopup, self).open()
-        
-    def confirm(self):
-        if not self.content_cls.ids.alias_input.error:
-            self.dispatch('on_user_edited', user_id=self.user_id, user_alias=self.user_alias)
-            self.dismiss()
-    
-    def on_dismiss(self):
-        # FixMe: Reset error status of textfield.
-        #self.property('user_alias').dispatch(self)
-        self.content_cls.ids.alias_input.error = False
-    
-    def on_user_edited(self, *args, **kwargs):
-        """ Default implementation of event. """
-        pass
-
-
-class UserInput(MDBoxLayout):
-    user_alias = StringProperty()
-
-    def __init__(self, **kwargs):
-        super(UserInput, self).__init__(**kwargs)
-        self.ids.alias_input.bind(text=self.on_text,
-                                  on_text_validate=self.check_errors)
-
-    def check_errors(self, *args):
-        self.ids.alias_input.error = len(self.ids.alias_input.text.strip(' ')) == 0
-
-    def on_text(self, instance, value):
-        self.check_errors()
-        self.user_alias = value  # Somehow StringProperty isn't updated by input. Do it manually.
-
-    
 class ScrollText(MDBoxLayout):
     text = StringProperty(_('Loading...'))
 
@@ -311,30 +239,153 @@ class ScrollText(MDBoxLayout):
         super(ScrollText, self).__init__(**kwargs)
 
 
-class NumericInputPopup(MDDialog):
-    
+class TextInputPopup(MDDialog):
+    """ Prompt user to input text.
+    Content class needs to have property 'input'.
+    """
+    input = StringProperty()
+
     def __init__(self, **kwargs):
         default_kwargs = dict(
-                title=_("Set New Value"),
-                type="custom",
-                content_cls=NumericInput(),
-                buttons=[
-                    MDRectangleFlatButton(
-                        text=_("CANCEL"),
-                        on_release=self.dismiss
-                    ),
-                    MDRaisedButton(
-                        text=_("OK"),
-                        on_release=self.dismiss  # ToDo: handle numeric input
-                    ),
-                ],
-            )
+            title=_("Set New Value"),
+            type="custom",
+            content_cls=TextInputContent(),
+            auto_dismiss=False,  # Otherwise the callbacks don't fire?!
+            buttons=[
+                MDRectangleFlatButton(
+                    text=_("CANCEL"),
+                    on_release=self.dismiss
+                ),
+                MDRaisedButton(
+                    text=_("OK"),
+                    on_release=lambda _: self.confirm(),
+                ),
+            ],
+        )
+        default_kwargs.update(kwargs)
+        super(TextInputPopup, self).__init__(**default_kwargs)
+        self.register_event_type('on_confirm')
+        # Link this class' input to content_cls' input.
+        # Property events are not dispatched when the values are equal, so this doesn't result in endless recursion.
+        self.bind(input=self.content_cls.setter('input'))
+        self.content_cls.bind(input=self.setter('input'))
+
+    def confirm(self):
+        if not self.content_cls.ids.textfield.error:
+            self.dispatch('on_confirm', self.input)
+            self.dismiss()
+    
+    def on_confirm(self, value):
+        pass
+
+
+class TextInputContent(MDBoxLayout):
+    """ Content class for TextInputPopup. """
+    description = StringProperty()
+    input = StringProperty()
+    
+    def __init__(self, **kwargs):
+        super(TextInputContent, self).__init__(**kwargs)
+        self.ids.textfield.bind(text=self.on_text, on_text_validate=self.check_errors, on_touch_up=self.check_errors)
+    
+    def check_errors(self, *args):
+        # e.g. when required:
+        #self.ids.textfield.error = len(self.ids.textfield.strip(' ')) == 0
+        pass
+    
+    def on_text(self, instance, value):
+        self.input = value  # Somehow StringProperty isn't updated by input. Do it manually.
+
+
+class NumericInputPopup(TextInputPopup):
+    
+    def __init__(self, **kwargs):
+        _type = kwargs.pop('type', str)
+        default_kwargs = dict(
+            content_cls=NumericInputContent(type=_type),
+        )
         default_kwargs.update(kwargs)
         super(NumericInputPopup, self).__init__(**default_kwargs)
-        
 
-class NumericInput(MDBoxLayout):
-    pass
+
+class NumericInputContent(TextInputContent):
+    """ Content class for NumericInputPopup. Checks for float and integer input. """
+
+    def __init__(self, **kwargs):
+        self.type = kwargs.pop('type', str)
+        super(NumericInputContent, self).__init__(**kwargs)
+        
+    def check_errors(self, *args):
+        # In case comma is used instead of dot.
+        text = self.ids.textfield.text.replace(",", ".")
+        try:
+            self.type(text)
+            self.ids.textfield.error = False
+        except ValueError:
+            self.ids.textfield.error = True
+            
+    def on_text(self, instance, value):
+        num_string = value.replace(",", ".")
+        try:
+            if self.type is int:
+                num = int(float(num_string))
+            elif self.type is float:
+                num = float(num_string)
+            else:
+                # If we don't know the type.
+                is_float = '.' in num_string
+                if is_float:
+                    num = float(num_string)
+                else:
+                    num = int(num_string)
+            self.input = str(num)
+        except ValueError:
+            return
+     
+        
+class UserEditPopup(TextInputPopup):
+    """ Dialog for editing user information. """
+
+    def __init__(self, **kwargs):
+        self.user_id = None
+        default_kwargs = dict(
+            title=_("Edit User"),
+            content_cls=UserInput(),
+            size_hint_x=0.6,
+        )
+        default_kwargs.update(kwargs)
+        super(UserEditPopup, self).__init__(**default_kwargs)
+        self.register_event_type('on_user_edited')
+    
+    def open(self, *args, **kwargs):
+        is_new = kwargs.pop('add', False)
+        self.user_id = kwargs.pop('user_id', None)
+        if not self.user_id:
+            self.user_id = create_user_identifier()
+            
+        self.title = _("Add New User") if is_new else _("Edit User")
+        self.input = kwargs.pop('user_alias', '')
+        super(UserEditPopup, self).open()
+        
+    def confirm(self):
+        if not self.content_cls.ids.textfield.error:
+            self.dispatch('on_user_edited', user_id=self.user_id, user_alias=self.input)
+            self.dismiss()
+    
+    def on_dismiss(self):
+        # FixMe: Reset error status of textfield.
+        #self.property('user_alias').dispatch(self)
+        self.content_cls.ids.textfield.error = False
+    
+    def on_user_edited(self, *args, **kwargs):
+        """ Default implementation of event. """
+        pass
+
+
+class UserInput(TextInputContent):
+    """ Content class for UserInputPopup. """
+    def check_errors(self, *args):
+        self.ids.textfield.error = len(self.ids.textfield.text.strip(' ')) == 0
 
 
 class TermsPopup(MDDialog):

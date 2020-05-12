@@ -9,6 +9,7 @@
         id: scroll
         do_scroll_x: False
         do_scroll_y: True
+        scroll_type: ['bars', 'content']
 
         MDLabel:
             text: root.text
@@ -17,22 +18,30 @@
             size_hint_y: None
             size: self.texture_size
 
-<NumericInput>
+<TextInputContent>
     orientation: "vertical"
     spacing: "12dp"
-    size_hint_y: None
-    height: "120dp"
+    padding: "10dp"
+    description: _("Enter a new value.")
+    input: ""
+    #size_hint_y: None
+    #height: "120dp"
+
+    MDLabel:
+        text: root.description
+        font_style: 'Caption'
 
     MDTextField:
-        id: num_input
+        id: textfield
+        text: root.input
+        icon_right: 'pencil'
         hint_text: _("New Value")
-        required: True
-        helper_text: _("Error: invalid value")
-        helper_text_mode: "on_focus"
+        helper_text: _("Error: invalid input")
         helper_text_mode: "on_error"
         pos_hint: {"center_y": .5}
 
-<UserInput>
+# Dash (-) ist used to override TextInputContent's style rules.
+<-UserInput>
     orientation: "vertical"
     padding: "10dp"
 
@@ -41,8 +50,8 @@
         font_style: 'Caption'
 
     MDTextField:
-        id: alias_input
-        text: root.user_alias
+        id: textfield
+        text: root.input
         required: True
         icon_right: 'pencil'
         hint_text: _("Enter Pseudonym")

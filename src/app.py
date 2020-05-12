@@ -30,7 +30,7 @@ from .utility import (create_device_identifier,
 from .i18n import _, DEFAULT_LANGUAGE
 from .config import WEBSERVER
 from .settings import SettingsContainer
-from .widgets import BaseScreen, Settings
+from .widgets import BaseScreen, SettingsWithTabbedPanels
 from .settingsjson import LANGUAGE_CODE, LANGUAGE_SECTION, settings_general_json, settings_circle_task_json
 
 
@@ -62,7 +62,7 @@ class UncontrolledManifoldApp(MDApp):
         self.theme_cls.theme_style = "Light"
         self.theme_cls.primary_palette = "Teal"
         # Settings.
-        self.settings_cls = Settings
+        self.settings_cls = SettingsWithTabbedPanels
         self.use_kivy_settings = False
         self.settings = SettingsContainer()
         self.update_language_from_config()
@@ -141,7 +141,7 @@ class UncontrolledManifoldApp(MDApp):
     def close_settings(self, *args):
         """ Always gets called on escape regardless of current screen. """
         if self.manager.current == 'Settings':
-            self.manager.go_home()
+            self.manager.go_home()  # FixMe: When entered from outro screen, return to outro screen.
             # Hack, since after this manager.key_input is executed and screen is 'home' by then.
             self.manager.n_home_esc -= 1
     

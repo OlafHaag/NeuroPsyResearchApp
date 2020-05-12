@@ -1,0 +1,96 @@
+# screensettings.kv
+#:kivy 1.11.1
+
+# Override internal styles.
+<-Settings>:
+    orientation: 'horizontal'
+
+<-SettingsPanel>:
+    spacing: 15
+    padding: 5
+    size_hint_y: None
+    height: self.minimum_height
+
+    MDLabel:
+        size_hint_y: None
+        text: root.title
+        height: max(50, self.texture_size[1] + 20)
+        font_style: 'H5'
+
+    MDSeparator:
+
+
+<-SettingItem>:
+    size_hint: .25, None
+    height: dp(40)
+    content: content
+
+    MDBoxLayout:
+        pos: root.pos
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            size_hint_x: .66
+
+            MDLabel:
+                text: root.title or ''
+            MDLabel:
+                text: root.desc or ''
+                font_style: 'Caption'
+                theme_text_color: 'Hint'
+
+        MDBoxLayout:
+            id: content
+            size_hint_x: .33
+
+<SettingBoolean>:
+    MDSwitch:
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        #pos: root.pos
+        active: bool(root.values.index(root.value)) if root.value in root.values else False
+        on_active: root.value = root.values[int(args[1])]
+
+<SettingString>:
+    MDLabel:
+        text: root.value or ''
+        pos: root.pos
+
+# Custom Interface
+<SettingOptionMapping>:
+    MDLabel:
+        text: root.options[root.value] if root.value else ''
+        pos: root.pos
+
+<SettingThemedTitle>:
+    size_hint_y: None
+    height: max(dp(20), self.texture_size[1] + dp(20))
+    font_style: 'H6'
+
+    canvas.before:
+        Color:
+            rgba: app.theme_cls.bg_dark
+        Rectangle:
+            pos: self.x, self.y + 2
+            size: self.width, self.height - 2
+
+<TabbedSettingsInterface>
+    close_button: button
+    BoxLayout:
+        orientation: "vertical"
+        padding: 10, 10
+
+        MDTabs:
+            id: tabs
+
+        MDSeparator:
+
+        BoxLayout:
+            size_hint_y: None
+            height: self.minimum_height
+            padding: 10, 10
+
+            Widget:  # Spacer.
+            MDRaisedButton:
+                id: button
+                text: _("Close")
+            Widget:  # Spacer.

@@ -215,6 +215,9 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
                 # Feedback and reset/abort.
                 msg = _("Please read instructions again carefully and perform task accordingly.\nAborting Session...")
                 self.manager.dispatch('on_warning', text=msg)
+                # These are not the data you're looking for...
+                app = App.get_running_app()
+                app.data_mgr.data_sent = True  # Hack to disable upload button.
                 # Abort session.
                 self.dispatch('on_task_stopped', True)
                 return

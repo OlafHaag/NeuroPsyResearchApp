@@ -14,7 +14,7 @@ from ..i18n import (_,
                     list_translated_languages,
                     translation_to_language_code,
                     DEFAULT_LANGUAGE)
-from ..utility import create_user_identifier
+from ..utility import create_user_identifier, switch_language
 
 
 # ToDo: Distinguish Info, Warning and Error by icon or color.
@@ -57,8 +57,8 @@ class LanguagePopup(MDDialog):
         default_kwargs.update(kwargs)
         super(LanguagePopup, self).__init__(**default_kwargs)
     
-    def on_current_language(self, *args):
-        pass
+    def on_current_language(self, instance, lang):
+        switch_language(lang)
         
     def select_current_language(self):
         """ Activate item for currently chosen language. """

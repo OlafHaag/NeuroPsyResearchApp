@@ -85,7 +85,6 @@ class UCMManager(ScreenManager):
         webbrowser.open_new(url)
 
     def on_language_changed_callback(self, *args):
-        # ToDo: Redraw home screen somehow. _trigger_layout()?
         self.show_terms()
         
     def show_terms(self):

@@ -30,26 +30,42 @@
             do_scroll_y: True
             scroll_type: ['bars', 'content']
 
-            MDLabel:
-                text: root.home_msg
-                markup: True
-                text_size: root.width, None
-                font_size: sp(24)
-                size: self.texture_size
-                size_hint_y: None
+            GridLayout:
+                cols: 1
                 padding: 10, 10
-                halign: 'center'
-                valign: 'middle'
 
-        BoxLayout:
-            orientation: 'vertical'
-            TaskButton:
-                text: _("Circle Task")
-                task: 'Circle Task'
-                font_size: 24
-                pos_hint: {"center_x": .5, "center_y": .5}
-                on_release: root.manager.start_task(self.task)
-            Widget:  # Spacer.
+                MDLabel:
+                    text: _('Welcome!')
+                    markup: True
+                    size_hint_y: None
+                    font_style: 'H5'
+                    padding: 10, 10
+                    halign: 'center'
+
+                MDLabel:
+                    text: _('General Information')  # ToDo: General Information
+                    markup: True
+                    halign: 'justify'
+                    size_hint_y: None
+                    valign: 'top'
+
+                MDSeparator:
+
+                BoxLayout:
+                    orientation: 'vertical'
+
+                    MDLabel:
+                        text: _("Available Studies")
+                        font_style: 'H6'
+                        halign: 'center'
+
+                    TaskButton:
+                        text: _("Circle Task")
+                        task: 'Circle Task'
+                        font_size: 24
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        on_release: root.manager.start_task(self.task)
+                    Widget:  # Spacer.
 
 <ScreenOutro>:
     name: 'Outro'

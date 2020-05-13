@@ -29,7 +29,6 @@ class ScreenHome(BaseScreen):
     def on_pre_enter(self, *args):
         """ Reset data collection each time before a new task is started. """
         App.get_running_app().settings.reset_current()
-        self.home_msg = _('Welcome!')  # ToDo: General Information
     
         app = App.get_running_app()
         app.data_mgr.clear_data_collection()
@@ -62,7 +61,7 @@ class ScreenOutro(BaseScreen):
             if not app.data_mgr.data_saved:
                 app.data_mgr.write_data_to_files()
             dest = app.data_mgr.get_storage_path()
-            self.msg += _("Files were{}saved to [i]{}[/i].").format(' ' if dest.exists() else _(' [b]not[/b] '), dest)
+            self.msg += _("Files were{} saved to [i]{}[/i].").format('' if dest.exists() else _(' [b]not[/b]'), dest)
         else:
             self.msg += _("Results were [b]not[/b] locally stored as files.\n"
                           "You can enable this in the settings.")

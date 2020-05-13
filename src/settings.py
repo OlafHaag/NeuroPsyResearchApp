@@ -32,7 +32,6 @@ class SettingsContainer(Widget):
     email_recipient = ConfigParserProperty('', 'DataCollection', 'email_recipient', 'app', val_type=str)
     
     # Properties that change over the course of all tasks and are not set by config.
-    current_task = StringProperty()
     current_trial = NumericProperty(0)
     current_block = NumericProperty(0)
     # These only contain the values and are not bound to the config.
@@ -44,6 +43,7 @@ class SettingsContainer(Widget):
     def __init__(self, **kwargs):
         super(SettingsContainer, self).__init__(**kwargs)
         self.circle_task = SettingsCircleTask()
+        self.current_task = None
         self.reset_current()
         # Schedule user settings for nct frame. Section is not yet ready.
         Clock.schedule_once(lambda dt: self.populate_users(), 1)

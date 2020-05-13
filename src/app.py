@@ -75,7 +75,7 @@ class UncontrolledManifoldApp(MDApp):
         config.setdefaults(LANGUAGE_SECTION, {LANGUAGE_CODE: DEFAULT_LANGUAGE})
         config.setdefaults('General', {'is_first_run': 1,
                                        'current_user': create_user_identifier(),
-                                       'task': 'Circle Task'})
+                                       })
         config.setdefaults('DataCollection',
                            {
                                'is_local_storage_enabled': 0,

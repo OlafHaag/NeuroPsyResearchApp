@@ -32,6 +32,7 @@ class ScreenHome(BaseScreen):
     
         app = App.get_running_app()
         app.data_mgr.clear_data_collection()
+        app.settings.current_task = None
 
         if self.is_first_run:
             # Wait 1 frame

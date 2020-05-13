@@ -3,6 +3,7 @@ from .navigation import ContentNavigationDrawer
 from .buttons import CheckItem, UserItem, UserAddItem
 from .popups import (SimplePopup,
                      BlockingPopup,
+                     ConfirmPopup,
                      LanguagePopup,
                      TermsPopup,
                      UsersPopup,

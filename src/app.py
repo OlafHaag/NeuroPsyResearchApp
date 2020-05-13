@@ -49,10 +49,10 @@ class UncontrolledManifoldApp(MDApp):
         self.settings = SettingsContainer()
         self.update_language_from_config()
         self.data_mgr = DataManager()
-        self.data_mgr.bind(on_data_processing_failed=lambda inst, msg: self.manager.dispatch('on_error', msg),
-                           on_data_upload=lambda inst, status, msg: self.manager.dispatch('on_upload_response',
-                                                                                          status,
-                                                                                          msg),
+        self.data_mgr.bind(on_data_processing_failed=lambda instance, msg: self.manager.dispatch('on_error', msg),
+                           on_data_upload=lambda instance, status, msg: self.manager.dispatch('on_upload_response',
+                                                                                              status,
+                                                                                              msg),
                            )
         
         # GUI.

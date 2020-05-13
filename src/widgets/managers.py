@@ -9,7 +9,15 @@ from kivy.clock import Clock
 
 from plyer import notification
 
-from . import SimplePopup, BlockingPopup, TermsPopup, UsersPopup, UserEditPopup, TextInputPopup, NumericInputPopup
+from . import (SimplePopup,
+               BlockingPopup,
+               ConfirmPopup,
+               TermsPopup,
+               UsersPopup,
+               UserEditPopup,
+               TextInputPopup,
+               NumericInputPopup,
+               )
 from ..i18n import _
 
 
@@ -25,6 +33,7 @@ class UCMManager(ScreenManager):
     popup_error = ObjectProperty(None, allownone=True)
     popup_user_select = ObjectProperty(None, allownone=True)
     popup_user_edit = ObjectProperty(None, allownone=True)
+    popup_user_remove = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
         super(UCMManager, self).__init__(**kwargs)
@@ -71,11 +80,11 @@ class UCMManager(ScreenManager):
         self.get_screen('Home').bind(on_language_changed=self.on_language_changed_callback)
         # Circle Task
         self.get_screen('Circle Task').bind(
-            on_task_stopped=lambda obj, last: self.task_finished(last),
-            on_warning=lambda obj, text: self.show_warning(text),
+            on_task_stopped=lambda instance, last: self.task_finished(last),
+            on_warning=lambda instance, text: self.show_warning(text),
         )
         # Webview
-        # self.get_screen('Webview').bind(on_quit_screen=lambda obj: self.go_home())
+        # self.get_screen('Webview').bind(on_quit_screen=lambda instance: self.go_home())
     
     def open_settings(self):
         self.app.open_settings()
@@ -95,12 +104,13 @@ class UCMManager(ScreenManager):
     def show_user_select(self):
         if not self.popup_user_select:
             self.popup_user_select = UsersPopup()
-            self.popup_user_select.bind(on_add_user=lambda inst: self.show_user_edit(add=True,
-                                                                                     user_alias=_("New User")),
-                                        on_edit_user=lambda inst, user_id, alias: self.show_user_edit(user_id=user_id,
-                                                                                                      user_alias=alias),
-                                        on_remove_user=lambda inst, user_id, alias: self.show_user_remove(user_id,
-                                                                                                          alias),
+            self.popup_user_select.bind(on_add_user=lambda instance: self.show_user_edit(add=True,
+                                                                                         user_alias=_("New User")),
+                                        on_edit_user=lambda instance, user_id, alias: self.show_user_edit(
+                                                                                                    user_id=user_id,
+                                                                                                    user_alias=alias),
+                                        on_remove_user=lambda instance, user_id, alias: self.show_user_remove(user_id,
+                                                                                                              alias),
                                         )
         self.popup_user_select.open()
     
@@ -111,8 +121,16 @@ class UCMManager(ScreenManager):
         self.popup_user_edit.open(add=add, user_id=user_id, user_alias=user_alias)
         
     def show_user_remove(self, user_id, user_alias):
-        print(f"Remove {user_alias} with ID: {user_id}?")  # ToDo: confirm removal of user.
-        self.settings.remove_user(user_id)
+        if not self.popup_user_remove:  # FixMe: need to set user_id on open.
+            self.popup_user_remove = ConfirmPopup()
+            # Now do some hacky stuff. ;)
+            setattr(self.popup_user_remove, 'user_id', user_id)
+            self.popup_user_remove.bind(on_confirm=lambda instance: self.settings.remove_user(
+                                                                                        self.popup_user_remove.user_id))
+            self.settings.bind(on_user_removed=lambda instance, user: self.popup_user_select.remove_item(user))
+        self.popup_user_remove.title = _("Do you want to remove {}?").format(user_alias)
+        setattr(self.popup_user_remove, 'user_id', user_id)
+        self.popup_user_remove.open()
         
     def on_info(self, title=None, text=None):
         self.show_info(title=title, text=text)
@@ -193,15 +211,13 @@ class UCMManager(ScreenManager):
                 self.popup_user_select.dismiss()
             elif self.app.root_window.children[0] == self.popup_user_edit:
                 self.popup_user_edit.dismiss()
-            elif isinstance(self.app.root_window.children[0], SimplePopup):
-                self.app.root_window.children[0].dismiss()
-            elif isinstance(self.app.root_window.children[0], TextInputPopup):
-                self.app.root_window.children[0].dismiss()
-            elif isinstance(self.app.root_window.children[0], NumericInputPopup):
+            elif isinstance(self.app.root_window.children[0], (SimplePopup,
+                                                               ConfirmPopup,
+                                                               TextInputPopup,
+                                                               NumericInputPopup)):
                 self.app.root_window.children[0].dismiss()
             elif isinstance(self.app.root_window.children[0], BlockingPopup):
                 return True  # Do nothing. # FixMe: prevent closing follow-up popup.
-            # ToDo: handle other popups on back key.
             elif self.sidebar.state == 'open':
                 self.sidebar.set_state('close')
             # Handle back button on screens.

@@ -41,7 +41,7 @@ class ScreenHome(BaseScreen):
     def first_run_language_choice(self):
         if not self.popup_lang:
             self.popup_lang = LanguagePopup()
-            self.popup_lang.bind(on_dismiss=lambda obj: self.dispatch('on_language_changed'))
+            self.popup_lang.bind(on_dismiss=lambda instance: self.dispatch('on_language_changed'))
         self.popup_lang.open()
 
     def on_language_changed(self):

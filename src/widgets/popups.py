@@ -19,7 +19,7 @@ from ..utility import create_user_identifier, switch_language
 
 # ToDo: Distinguish Info, Warning and Error by icon or color.
 class SimplePopup(MDDialog):
-    
+    """ Simple popup with only an OK button. """
     def __init__(self, **kwargs):
         kwargs.update(buttons=[MDRaisedButton(text=_("OK"), on_release=self.dismiss)], auto_dismiss=False)
         super(SimplePopup, self).__init__(**kwargs)
@@ -31,6 +31,35 @@ class BlockingPopup(MDDialog):
         kwargs.update(auto_dismiss=False)
         # ToDo: Display progress indicator. e.g. 'progress-upload' icon
         super(BlockingPopup, self).__init__(**kwargs)
+
+
+class ConfirmPopup(MDDialog):
+    """ Simple popup asking for confirmation or cancellation.
+    Has on_confirm event that can be bound to.
+    """
+    def __init__(self, **kwargs):
+        self.register_event_type('on_dismiss')
+        self.register_event_type('on_confirm')
+        default_kwargs = dict(
+            title=_("Do you want to continue?"),
+            type='simple',
+            auto_dismiss=False,  # Otherwise the callback doesn't fire?!
+            buttons=[
+                MDRectangleFlatButton(
+                    text=_("CANCEL"),
+                    on_release=self.dismiss
+                ),
+                MDRaisedButton(
+                    text=_("OK"),
+                    on_release=lambda instance: self.dispatch('on_confirm'),
+                ),
+            ],
+        )
+        default_kwargs.update(kwargs)
+        super(ConfirmPopup, self).__init__(**default_kwargs)
+    
+    def on_confirm(self, *args):
+        self.dismiss()
 
 
 class LanguagePopup(MDDialog):
@@ -119,7 +148,7 @@ class UsersPopup(MDDialog):
         items = list()
         for user_id in user_ids:
             item = UserItem(text=user_aliases[user_ids.index(user_id)], value=user_id)
-            item.bind(on_remove=self.remove_item,
+            item.bind(on_remove=lambda instance: self.dispatch('on_remove_user', instance.value, instance.text),
                       on_edit=lambda instance: self.dispatch('on_edit_user', instance.value, instance.text),
                       on_active=lambda instance, state: self.set_current_user(instance.value, state),
                       )
@@ -155,7 +184,7 @@ class UsersPopup(MDDialog):
         diff = set(ids).difference(item_ids)
         for user_id in diff:
             item = UserItem(text=user_aliases[ids.index(user_id)], value=user_id)
-            item.bind(on_remove=self.remove_item,
+            item.bind(on_remove=lambda instance: self.dispatch('on_remove_user', instance.value, instance.text),
                       on_edit=lambda instance: self.dispatch('on_edit_user', instance.value, instance.text),
                       on_active=lambda instance, state: self.set_current_user(instance.value, state),
                       )
@@ -176,19 +205,25 @@ class UsersPopup(MDDialog):
             # Just set all aliases.
             item.text = aliases[i]
     
-    def remove_item(self, instance):
+    def remove_item(self, user_id):
         """ Remove widget from list. """
+        instance = None
+        selected_user_id = None
         # Get currently selected item.
         for item in self.items[:-1]:
             if item.active:
                 selected_user_id = item.value
-                break
-        self.dispatch('on_remove_user', instance.value, instance.text)
-        self.ids.box_items.remove_widget(instance)  # Maybe do garbage collection with gc.collect()?
-        self.items.remove(instance)
-        # If removed item was current user, select first entry.
-        if instance.value == selected_user_id:
-            self.items[0].set_icon(self.items[0].ids.check)
+            if item.value == user_id:
+                instance = item
+        try:
+            self.dispatch('on_remove_user', instance.value, instance.text)
+            self.ids.box_items.remove_widget(instance)  # Maybe do garbage collection with gc.collect()?
+            # If removed item was current user, select first entry.
+            if instance.value == selected_user_id:
+                self.items[0].set_icon(self.items[0].ids.check)
+            self.items.remove(instance)
+        except AttributeError:
+            print(f"ERROR: Can't remove user {user_id} from list. Not found.")
         self.set_height()
     
     def set_height(self):
@@ -258,7 +293,7 @@ class TextInputPopup(MDDialog):
                 ),
                 MDRaisedButton(
                     text=_("OK"),
-                    on_release=lambda _: self.confirm(),
+                    on_release=lambda instance: self.confirm(),
                 ),
             ],
         )

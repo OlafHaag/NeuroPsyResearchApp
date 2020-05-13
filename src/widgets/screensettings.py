@@ -38,7 +38,7 @@ class SettingThemedString(SettingString):
         self.popup = popup = TextInputPopup(title=self.title)
         popup.content_cls.description = self.desc
         popup.input = self.value
-        popup.bind(on_confirm=lambda j, text: self._set_value(text), on_dismiss=self._dismiss)
+        popup.bind(on_confirm=lambda x, text: self._set_value(text), on_dismiss=self._dismiss)
         popup.open()
     
     def _dismiss(self, *largs):
@@ -74,7 +74,7 @@ class SettingThemedNumeric(SettingThemedString):
         self.popup = popup = NumericInputPopup(title=self.title, type=self._get_numeric_type())
         popup.content_cls.description = self.desc
         popup.input = self.value
-        popup.bind(on_confirm=lambda j, text: self._set_value(text), on_dismiss=self._dismiss)
+        popup.bind(on_confirm=lambda x, text: self._set_value(text), on_dismiss=self._dismiss)
         popup.open()
         
         
@@ -211,7 +211,7 @@ class TabbedSettingsInterface(FloatLayout):
     
     def __init__(self, *args, **kwargs):
         super(TabbedSettingsInterface, self).__init__(*args, **kwargs)
-        self.close_button.bind(on_release=lambda j: self.dispatch('on_close'))
+        self.close_button.bind(on_release=lambda instance: self.dispatch('on_close'))
 
     def add_panel(self, panel, name, uid):
         scrollview = ScrollView(scroll_type=['bars', 'content'])

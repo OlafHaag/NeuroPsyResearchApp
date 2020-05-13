@@ -45,6 +45,7 @@ class SettingsContainer(Widget):
         self.circle_task = SettingsCircleTask()
         self.current_task = None
         self.reset_current()
+        self.register_event_type('on_user_removed')
         # Schedule user settings for nct frame. Section is not yet ready.
         Clock.schedule_once(lambda dt: self.populate_users(), 1)
     
@@ -95,6 +96,10 @@ class SettingsContainer(Widget):
         idx = self.user_ids.index(user_id)
         self.user_aliases.pop(idx)
         self.user_ids.remove(user_id)
+        self.dispatch('on_user_removed', user_id)
+    
+    def on_user_removed(self, *args):
+        pass
     
     def on_is_local_storage_enabled(self, instance, value):
         """ We need to ask for write permission before trying to write, otherwise we lose data.

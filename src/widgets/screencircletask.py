@@ -50,7 +50,7 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
     
     def on_kv_post(self, base_widget):
         """ Bind events. """
-        self.count_down.bind(on_count_down_finished=lambda obj: self.trial_finished())
+        self.count_down.bind(on_count_down_finished=lambda instance: self.trial_finished())
         self.ids.df1.bind(on_grab=self.slider_grab)
         self.ids.df2.bind(on_grab=self.slider_grab)
         # Save starting positions of sliders.

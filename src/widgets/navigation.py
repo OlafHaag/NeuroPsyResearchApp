@@ -55,4 +55,4 @@ class ItemDrawer(OneLineIconListItem):
 
     def on_kv_post(self, base_widget):
         # When the icon is clicked, trigger on_release of parent.
-        self.ids.icon.bind(on_release=lambda x: self.dispatch('on_release'))
+        self.ids.icon.bind(on_release=lambda instance: self.dispatch('on_release'))

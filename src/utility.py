@@ -27,6 +27,8 @@ else:
 def switch_language(lang='en'):
     """ Change displayed translation. """
     try:
+        # Popups and settings could be simplified by using change_language_to_translated() instead,
+        # but since language name is written in its own language there could be UTF-8 issues when saving to config file.
         change_language_to(lang)
     except ReferenceError:
         # I spent hours trying to fix it. Now I just don't care anymore.

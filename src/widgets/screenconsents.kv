@@ -71,7 +71,4 @@
             MDRaisedButton:
                 text: _("Agree")
                 font_size: 24
-                on_release:
-                    root.manager.transition.direction = 'up'
-                    root.manager.transition.duration = 0.5
-                    root.manager.current = root.manager.task_instructions[app.settings.current_task]
+                on_release: root.on_consent()

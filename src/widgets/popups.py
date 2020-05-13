@@ -29,7 +29,7 @@ class BlockingPopup(MDDialog):
     
     def __init__(self, **kwargs):
         kwargs.update(auto_dismiss=False)
-        # ToDo: Display progress indicator.
+        # ToDo: Display progress indicator. e.g. 'progress-upload' icon
         super(BlockingPopup, self).__init__(**kwargs)
 
 

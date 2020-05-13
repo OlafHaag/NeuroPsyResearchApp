@@ -32,7 +32,7 @@ class ScreenHome(BaseScreen):
         self.home_msg = _('Welcome!')  # ToDo: General Information
     
         app = App.get_running_app()
-        app.reset_data_collection()
+        app.data_mgr.clear_data_collection()
 
         if self.is_first_run:
             # Wait 1 frame
@@ -59,8 +59,9 @@ class ScreenOutro(BaseScreen):
         
         self.msg = _('[color=ff00ff][b]Thank you[/b][/color] for participating!') + "\n\n"  # Workaround for i18n.
         if app.settings.is_local_storage_enabled:
-            app.write_data_to_files()  # FixMe: Data written 2 times when returning from settings.
-            dest = App.get_running_app().get_storage_path()
+            if not app.data_mgr.data_saved:
+                app.data_mgr.write_data_to_files()
+            dest = app.data_mgr.get_storage_path()
             self.msg += _("Files were{}saved to [i]{}[/i].").format(' ' if dest.exists() else _(' [b]not[/b] '), dest)
         else:
             self.msg += _("Results were [b]not[/b] locally stored as files.\n"
@@ -75,5 +76,5 @@ class ScreenOutro(BaseScreen):
         self.popup_block.open()
         app = App.get_running_app()
         # Workaround to make info popup show up.
-        Clock.schedule_once(lambda dt: app.upload_data(), 0)
+        Clock.schedule_once(lambda dt: app.data_mgr.upload_data(app.get_upload_route()), 0)
         self.popup_block.dismiss()

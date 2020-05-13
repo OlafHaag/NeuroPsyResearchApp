@@ -85,7 +85,7 @@
                     MDRectangleFlatIconButton:
                         icon: 'upload'
                         text: _("Upload")
-                        disabled: not root.upload_btn_enabled
+                        disabled: (not root.upload_btn_enabled) or (app.data_mgr.data_sent)
                         on_release: root.on_upload()
                 AnchorLayout:
                     anchors: 'center', 'center'
@@ -94,7 +94,7 @@
                         text: _("Send via E-Mail")
                         disabled: not app.settings.is_email_enabled
                         on_release:
-                            app.send_email()
+                            app.data_mgr.send_email()
                 AnchorLayout:
                     anchors: 'center', 'center'
                     MDRectangleFlatIconButton:

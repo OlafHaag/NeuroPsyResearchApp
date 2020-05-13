@@ -1,3 +1,4 @@
+from kivy.app import App
 from kivy.properties import StringProperty
 
 from . import BaseScreen
@@ -11,6 +12,15 @@ class ScreenConsentCircleTask(BaseScreen):
     def __init__(self, **kwargs):
         super(ScreenConsentCircleTask, self).__init__(**kwargs)
     
+    def on_consent(self):
+        # Start collecting data for user_id.
+        app = App.get_running_app()
+        app.data_mgr.new_data_collection(app.settings.current_user)
+        # Advance to the instructions.
+        self.manager.transition.direction = 'up'
+        self.manager.transition.duration = 0.5
+        self.manager.current = self.manager.task_instructions[app.settings.current_task]
+        
     def on_pre_enter(self, *args):
         # ToDo:  Translate to English. Update Information
         self.consent_msg = _("[size=32]Consent[/size]\n\n"

@@ -175,10 +175,9 @@ class UCMManager(ScreenManager):
             self.show_error(text=error_msg)
     
     def on_upload_successful(self):
-        # ToDo: disable upload button.
         pass
     
-    def key_input(self, window, key, scancode, codepoint, modifier):  # FixMe: keyboard
+    def key_input(self, window, key, scancode, codepoint, modifier):
         """ Handle escape key / back button presses. """
         if platform == "android":
             back_keys = [27]

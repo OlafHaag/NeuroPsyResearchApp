@@ -15,7 +15,7 @@ import numpy as np
 from . import BaseScreen
 from ..config import time_fmt
 from ..i18n import _
-from ..utility import create_device_identifier, data2bytes
+from ..utility import create_device_identifier
 
 
 class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
@@ -46,7 +46,7 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         # Data collection related.
         self.data = None  # For numerical data.
         self.meta_data = dict()  # For context of numerical data acquisition, e.g. treatment/condition.
-        self.session_data = list()  # For description of a block if  numerical data.
+        self.session_data = list()  # For description of a block if numerical data.
     
     def on_kv_post(self, base_widget):
         """ Bind events. """
@@ -288,19 +288,12 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
     def collect_data(self):
         """ Add data to be written or uploaded to app data member. """
         app = App.get_running_app()
-        header = ','.join(self.meta_data['columns'])
-        data_b = data2bytes(self.data, header=header)
-        d = self.meta_data.copy()
-        d['data'] = data_b
-        app.data.append(d)
+        app.data_mgr.add_data(self.meta_data['columns'], self.data, self.meta_data.copy())
     
     def collect_data_email(self):
         """ Add data to be sent via e-mail. """
-        d = self.meta_data.copy()
-        d['data'] = pickle.dumps(self.data)
-        
         app = App.get_running_app()
-        app.data_email.append(d)
+        app.data_mgr.add_data_email(self.data, self.meta_data.copy())
     
     def add_block_to_session(self):
         """ Collects meta data about the current block. """
@@ -324,14 +317,12 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         meta_data['time_iso'] = self.get_current_time_iso(time_fmt)
         meta_data['task'] = self.settings.current_task
         meta_data['user'] = self.settings.current_user
+        columns = ['task', 'time', 'time_iso', 'block', 'treatment', 'hash', 'warm_up', 'trial_duration', 'cool_down']
         app = App.get_running_app()
         if self.settings.is_local_storage_enabled or self.settings.is_upload_enabled:
-            meta_data['data'] = data2bytes(data, header=header, fmt='%s')
-            app.data.append(meta_data)
+            app.data_mgr.add_data(columns, data, meta_data)
         if self.settings.is_email_enabled:
-            email_data = meta_data.copy()
-            email_data['data'] = pickle.dumps([header.split(',')] + self.session_data)
-            app.data_email.append(email_data)
+            app.data_mgr.add_data_email([columns] + self.session_data, meta_data.copy())
     
     def clear_data(self):
         """ Clear data for the next session. """

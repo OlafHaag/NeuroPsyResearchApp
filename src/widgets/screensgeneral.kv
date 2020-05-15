@@ -109,8 +109,7 @@
                         icon: 'email-send'
                         text: _("Send via E-Mail")
                         disabled: not app.settings.is_email_enabled
-                        on_release:
-                            app.data_mgr.send_email()
+                        on_release: app.data_mgr.send_email(app.settings.email_recipient)
                 AnchorLayout:
                     anchors: 'center', 'center'
                     MDRectangleFlatIconButton:

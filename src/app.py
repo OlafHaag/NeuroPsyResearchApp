@@ -1,11 +1,11 @@
 """"Research application aimed at studying uncontrolled manifold and optimal feedback control paradigms."""
 
 from kivymd.app import MDApp
-from kivy.uix.screenmanager import Screen
-from kivy.properties import ObjectProperty
-from kivy.utils import platform
-from kivy.lang import global_idmap
 from kivy.clock import Clock
+from kivy.lang import global_idmap, Builder
+from kivy.properties import ObjectProperty
+from kivy.uix.screenmanager import Screen
+from kivy.utils import platform
 
 from .utility import create_user_identifier, switch_language
 from .datamanager import DataManager
@@ -27,12 +27,7 @@ global_idmap['_'] = _
 #Window.fullscreen = 'auto'
 
 
-class Root(Screen):
-    """ Root widget, child of Window. """
-    pass
-
-
-class UncontrolledManifoldApp(MDApp):
+class NeuroPsyResearchApp(MDApp):
     manager = ObjectProperty(None, allownone=True)
     
     def build(self):
@@ -56,16 +51,16 @@ class UncontrolledManifoldApp(MDApp):
                            )
         
         # GUI.
-        root = Root()
+        root = Builder.load_file('src/widgets/navigation.kv')
         self.manager = root.ids.mgr
         return root
     
     def get_application_config(self, defaultpath='%(appdir)s/%(appname)s.ini'):
         """ Override path to application configuration. """
         if platform == 'win':
-            return super(UncontrolledManifoldApp, self).get_application_config('~/.%(appname)s.ini')  # User directory.
+            return super(NeuroPsyResearchApp, self).get_application_config('~/.%(appname)s.ini')  # User directory.
         else:
-            return super(UncontrolledManifoldApp, self).get_application_config()  # Use default.
+            return super(NeuroPsyResearchApp, self).get_application_config()  # Use default.
     
     def build_config(self, config):
         """ This method is called before the application is initialized to construct the ConfigParser object.

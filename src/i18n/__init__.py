@@ -1,7 +1,7 @@
 """This module provides translation functionality.
 
 The function to use for translation is :class:`_(string)
-<UCMResearchApp.i18n.observable_translation.ObservableTranslation>`
+<NeuroPsyResearchApp.i18n.observable_translation.ObservableTranslation>`
 to translate strings. When you use this in the .kv file, the translations
 are automatically updated when the language is changed.
 

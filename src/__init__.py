@@ -1,1 +1,1 @@
-from .app import UncontrolledManifoldApp as App
+from .app import NeuroPsyResearchApp as App

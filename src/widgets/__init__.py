@@ -13,7 +13,7 @@ from .popups import (SimplePopup,
                      )
 from .countdowns import CountDownCircle
 from .sliders import ScaleSlider
-from .managers import UCMManager
+from .managers import UiManager
 from .screensgeneral import ScreenHome, ScreenOutro
 from .screensettings import SettingsWithTabbedPanels
 from .screenconsents import ScreenConsentCircleTask

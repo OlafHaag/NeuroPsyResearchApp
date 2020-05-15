@@ -1,4 +1,8 @@
-# Uncontrolled Manifold Research App
+# NeuroPsy Research App
+This app should serve as a starting point for neuropsychological research on mobile devices.  
+The necessity for conducting research outside of a laboratory became more paramount during the COVID-19 pandemic when 
+face-to-face contact was restricted as a safety measure.
+ 
 ## Background
 This app demonstrates a toy example for the uncontrolled manifold (UCM) hypothesis (Scholz & Schöner, 1999).
 In its basic form there is one performance criterion for a task, but two degrees of freedom (df) to fulfill that goal.
@@ -38,3 +42,8 @@ Todorov, Emmanuel (2004). "Optimality principles in sensorimotor control". Natur
 ## Installation
 - compile using buildozer
 - Install apk to Android device
+
+
+## Translation
+- Use PoEdit to extract strings wrapped in _("...") function calls.
+- In PoEdit add a new extractor for the kivy language files.

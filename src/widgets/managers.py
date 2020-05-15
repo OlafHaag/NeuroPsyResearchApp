@@ -21,7 +21,7 @@ from . import (SimplePopup,
 from ..i18n import _
 
 
-class UCMManager(ScreenManager):
+class UiManager(ScreenManager):
     """ This class handles all major screen changes, popups and callbacks related to that. """
     settings = ObjectProperty()
     sidebar = ObjectProperty(None, allownone=True)
@@ -36,7 +36,7 @@ class UCMManager(ScreenManager):
     popup_user_remove = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
-        super(UCMManager, self).__init__(**kwargs)
+        super(UiManager, self).__init__(**kwargs)
         self.app = App.get_running_app()
         # Keep track of where we cae from.
         self.last_visited = 'Home'
@@ -179,7 +179,7 @@ class UCMManager(ScreenManager):
         # Handle reset of back button presses on home screen.
         if screen != self.current_screen:
             self.n_home_esc = 0
-        super(UCMManager, self).on_current(instance, value)
+        super(UiManager, self).on_current(instance, value)
     
     def on_upload_response(self, status, error_msg=None):
         if status is True:

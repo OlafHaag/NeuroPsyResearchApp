@@ -345,7 +345,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
     def send_email(self, recipient):
         """ Send the data via e-mail. """
         
-        subject = 'New UCM Data Set'
+        subject = f"New {self.app.get_application_name()} Data Set"
         disclaimer = _("Disclaimer:\n"
                        "By submitting this e-mail you agree to the data processing and evaluation for the purpose of "
                        "this scientific investigation and any other purpose that an interested party might have.\n"

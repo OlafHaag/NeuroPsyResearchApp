@@ -1,5 +1,6 @@
-# uncontrolledmanifold.kv
+# navigation.kv
 #:kivy 1.11.1
+#:import re re
 #:import CardTransition kivy.uix.screenmanager.CardTransition
 #:include src/widgets/buttons.kv
 #:include src/widgets/popups.kv
@@ -9,12 +10,14 @@
 #:include src/widgets/screeninstructions.kv
 #:include src/widgets/screencircletask.kv
 
-<Root>:
+Root:
+
+<Root@Screen>:
     name: 'Root'
 
     NavigationLayout:
 
-        UCMManager:
+        UiManager:
             id: mgr
             sidebar: nav_drawer
 
@@ -24,7 +27,7 @@
             ContentNavigationDrawer:
                 id: content_drawer
 
-<UCMManager>:
+<UiManager>:
     transition: CardTransition()
     settings: app.settings
     # The first screen added, will be initially displayed.
@@ -59,13 +62,14 @@
                 spacing: 5
                 Widget:  # Spacer.
                 MDLabel:
-                    text: "App Title"
+                    # Get the app's name and separate words by upper case letters.
+                    text: re.sub(r'((?<=[a-z])[A-Z]|(?<!\A)[A-Z](?=[a-z]))', r' \1', app.get_application_name())
                     font_style: "Button"
                     size_hint_y: None
                     height: self.texture_size[1]
 
                 MDLabel:
-                    text: "Subtitle"
+                    text: _("Scientific Participation Software")
                     font_style: "Caption"
                     size_hint_y: None
                     height: self.texture_size[1]
@@ -110,12 +114,7 @@
                 on_release: root.dispatch('on_exit')
 
 <ItemDrawer>:
-    #theme_text_color: "Custom"
-    #on_release: self.parent.set_color_item(self)
-
     IconLeftWidget:
         id: icon
         icon: root.icon
         on_release: root.on_release
-        #theme_text_color: "Custom"
-        #text_color: root.text_color

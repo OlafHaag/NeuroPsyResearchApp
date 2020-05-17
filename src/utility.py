@@ -86,6 +86,7 @@ def get_app_details():
     details = {'appname': config_parser.get('dummy_section', 'title', fallback=_("UNKNOWN.")),
                'author': config_parser.get('dummy_section', 'author', fallback=_("UNKNOWN.")),
                'contact': config_parser.get('dummy_section', 'contact', fallback=_("UNKNOWN.")),
+               'source': config_parser.get('dummy_section', 'source', fallback=_("UNKNOWN.")),
                'version': version['__version__'],
                }
     return details

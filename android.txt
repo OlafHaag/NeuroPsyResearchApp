@@ -1,4 +1,5 @@
 title=UCMResearch
 author=Your Name
 contact=you@yourdomain.com
+source=https://your-repo.com/yoursourcecode
 orientation=landscape

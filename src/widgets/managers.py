@@ -135,7 +135,7 @@ class UiManager(ScreenManager):
         self.popup_user_remove.open()
         
     def show_about(self):
-        # ToDo: Info about app, author, version
+        # ToDo: Link to Source Code
         details = get_app_details()
         self.show_info(title=_("About"),
                        text=_("{}\n\n"

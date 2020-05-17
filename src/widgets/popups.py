@@ -1,5 +1,3 @@
-from configparser import ConfigParser
-
 from kivy.app import App
 from kivy.properties import StringProperty, ConfigParserProperty
 from kivy.core.window import Window
@@ -15,7 +13,7 @@ from ..i18n import (_,
                     list_translated_languages,
                     translation_to_language_code,
                     DEFAULT_LANGUAGE)
-from ..utility import create_user_identifier, switch_language
+from ..utility import create_user_identifier, switch_language, get_app_details
 
 
 # ToDo: Distinguish Info, Warning and Error by icon or color.
@@ -459,24 +457,8 @@ class TermsPopup(MDDialog):
         default_kwargs.update(kwargs)
         super(TermsPopup, self).__init__(**default_kwargs)
 
-    def _get_app_details(self):
-        """ Get app's name, author and contact information. """
-        try:
-            with open('android.txt') as f:
-                file_content = '[dummy_section]\n' + f.read()
-        except IOError:
-            print("WARNING: android.txt wasn't found! Setting app details to " + _("UNKNOWN."))
-            return {'appname': _("UNKNOWN."), 'author': _("UNKNOWN."), 'contact': _("UNKNOWN.")}
-
-        config_parser = ConfigParser()
-        config_parser.read_string(file_content)
-        details = {'appname': config_parser.get('dummy_section', 'title', fallback=_("UNKNOWN.")),
-                   'author': config_parser.get('dummy_section', 'author', fallback=_("UNKNOWN.")),
-                   'contact': config_parser.get('dummy_section', 'contact', fallback=_("UNKNOWN."))}
-        return details
-    
     def _get_terms_text(self):
-        app_details = self._get_app_details()
+        app_details = get_app_details()
 
         text = _("By downloading or using the app, these terms will automatically apply to you – "
                  "you should make sure therefore that you read them carefully before using the app. "

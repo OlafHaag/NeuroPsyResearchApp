@@ -19,6 +19,7 @@ from . import (SimplePopup,
                NumericInputPopup,
                )
 from ..i18n import _
+from ..utility import get_app_details
 
 
 class UiManager(ScreenManager):
@@ -34,6 +35,7 @@ class UiManager(ScreenManager):
     popup_user_select = ObjectProperty(None, allownone=True)
     popup_user_edit = ObjectProperty(None, allownone=True)
     popup_user_remove = ObjectProperty(None, allownone=True)
+    popup_about = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
         super(UiManager, self).__init__(**kwargs)
@@ -69,7 +71,7 @@ class UiManager(ScreenManager):
                  on_users=lambda x: self.show_user_select(),
                  on_settings=lambda x: self.open_settings(),
                  on_website=lambda x: self.open_website(self.settings.server_uri),
-                 on_about=lambda x: print("About clicked!"),
+                 on_about=lambda x: self.show_about(),
                  on_terms=lambda x: self.show_terms(),
                  on_exit=lambda x: self.quit(),
                  )
@@ -132,6 +134,18 @@ class UiManager(ScreenManager):
         setattr(self.popup_user_remove, 'user_id', user_id)
         self.popup_user_remove.open()
         
+    def show_about(self):
+        # ToDo: Info about app, author, version
+        details = get_app_details()
+        self.show_info(title=_("About"),
+                       text=_("{}\n\n"
+                              "Author: {}\n"
+                              "Contact: {}\n"
+                              "Version: {}").format(details['appname'],  # Alternatively self.app.get_application_name()
+                                                    details['author'],
+                                                    details['contact'],
+                                                    details['version']))
+            
     def on_info(self, title=None, text=None):
         self.show_info(title=title, text=text)
     

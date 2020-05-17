@@ -121,7 +121,7 @@ class UiManager(ScreenManager):
         self.popup_user_edit.open(add=add, user_id=user_id, user_alias=user_alias)
         
     def show_user_remove(self, user_id, user_alias):
-        if not self.popup_user_remove:  # FixMe: need to set user_id on open.
+        if not self.popup_user_remove:
             self.popup_user_remove = ConfirmPopup()
             # Now do some hacky stuff. ;)
             setattr(self.popup_user_remove, 'user_id', user_id)

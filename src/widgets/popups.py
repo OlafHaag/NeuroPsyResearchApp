@@ -4,9 +4,10 @@ from kivy.app import App
 from kivy.properties import StringProperty, ConfigParserProperty
 from kivy.core.window import Window
 
+from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRectangleFlatButton, MDRaisedButton
 from kivymd.uix.dialog import MDDialog
-from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.label import MDIcon
 from kivymd.uix.list import BaseListItem
 
 from . import CheckItem, UserItem, UserAddItem
@@ -29,8 +30,9 @@ class BlockingPopup(MDDialog):
     
     def __init__(self, **kwargs):
         kwargs.update(auto_dismiss=False)
-        # ToDo: Display progress indicator. e.g. 'progress-upload' icon
+        # ToDo: Properly position progress indicator.
         super(BlockingPopup, self).__init__(**kwargs)
+        self.ids.spacer_top_box.add_widget(MDIcon(icon='progress-upload', halign='center'))
 
 
 class ConfirmPopup(MDDialog):

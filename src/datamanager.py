@@ -5,6 +5,7 @@ import io
 import json
 from pathlib import Path
 import pickle
+import shutil
 import time
 
 # Third party imports
@@ -47,6 +48,8 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         self._data_email = list()
         # For which user to collect data. Set after given consent.
         self._user_id = ''
+        # Events to listen to.
+        self.app.settings.bind(on_user_removed=lambda instance, user_id: self._remove_user_folders(user_id))
         # Events to fire.
         self.register_event_type('on_data_processing_failed')
         self.register_event_type('on_data_upload')
@@ -162,6 +165,14 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         if not destination.exists() and self.write_permit:
             destination.mkdir(parents=True, exist_ok=True)  # Assume this works and we have permissions.
 
+    def _remove_user_folders(self, user_id):
+        """ Removes all of user's locally stored data. """
+        storage_path = self.get_storage_path()
+        # Look for all sub-folders of user in all studies.
+        user_folders = storage_path.rglob(user_id)
+        for folder in user_folders:
+            shutil.rmtree(folder, ignore_errors=True)
+
     def compile_filename(self, meta_data):
         """ Returns file name based on provided meta data.
         Uses current time if meta data is incomplete.
@@ -206,7 +217,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
                 self.dispatch('on_data_processing_failed',
                               _("Unable to write to file:\n{}\nUnknown data format.").format(path.name))
         return False
-    
+
     def write_data_to_files(self):
         """ Writes content of data to disk. """
         success = True

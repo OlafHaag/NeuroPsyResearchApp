@@ -13,7 +13,7 @@ from . import (SimplePopup,
                BlockingPopup,
                ConfirmPopup,
                TermsPopup,
-               PrivacyPopup,
+               PolicyPopup,
                UsersPopup,
                UserEditPopup,
                TextInputPopup,
@@ -108,7 +108,7 @@ class UiManager(ScreenManager):
         
     def show_privacy_policy(self):
         if not self.popup_privacy:
-            self.popup_privacy = PrivacyPopup()
+            self.popup_privacy = PolicyPopup()
         self.popup_privacy.open()
     
     def show_user_select(self):

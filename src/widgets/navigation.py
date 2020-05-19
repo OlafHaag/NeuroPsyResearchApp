@@ -26,6 +26,7 @@ class ContentNavigationDrawer(BoxLayout):
         self.register_event_type('on_website')
         self.register_event_type('on_about')
         self.register_event_type('on_terms')
+        self.register_event_type('on_privacy_policy')
         self.register_event_type('on_exit')
 
     def on_home(self, *_):
@@ -44,6 +45,9 @@ class ContentNavigationDrawer(BoxLayout):
         pass
         
     def on_terms(self, *_):
+        pass
+    
+    def on_privacy_policy(self, *_):
         pass
     
     def on_exit(self, *_):

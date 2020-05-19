@@ -1,3 +1,5 @@
+import webbrowser
+
 from kivy.app import App
 from kivy.properties import StringProperty, ConfigParserProperty
 from kivy.core.window import Window
@@ -13,7 +15,8 @@ from ..i18n import (_,
                     list_translated_languages,
                     translation_to_language_code,
                     DEFAULT_LANGUAGE)
-from ..utility import create_user_identifier, switch_language, get_app_details
+from ..utility import create_user_identifier, switch_language, get_app_details, markdown_to_bbcode
+from privacypolicy import policy_md
 
 
 # ToDo: Distinguish Info, Warning and Error by icon or color.
@@ -533,3 +536,30 @@ class TermsPopup(MDDialog):
             self.ids.button_box.remove_widget(self.__reject_btn)
             self.__accept_btn.text = _("CLOSE")
         self.content_cls.ids.scroll.scroll_y = 1
+
+
+class PrivacyPopup(SimplePopup):
+    """ Display privacy policy for using the app. """
+    
+    def __init__(self, **kwargs):
+        content = ScrollText(text=self._get_policy_text())
+        content.ids.label.bind(on_ref_press=lambda isntance, value: self.open_link(value))
+        
+        default_kwargs = dict(
+            type='custom',
+            content_cls=content,
+            size_hint_x=0.9,
+        )
+        default_kwargs.update(kwargs)
+        super(PrivacyPopup, self).__init__(**default_kwargs)
+    
+    def _get_policy_text(self):
+        details = get_app_details()
+        text = markdown_to_bbcode(policy_md).format(appname=details['appname'],
+                                                    author=details['author'],
+                                                    contact=details['contact'])
+        return text
+
+    def open_link(self, url):
+        if url.strip('"').startswith('https://'):
+            webbrowser.open_new(url)

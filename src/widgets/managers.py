@@ -13,6 +13,7 @@ from . import (SimplePopup,
                BlockingPopup,
                ConfirmPopup,
                TermsPopup,
+               PrivacyPopup,
                UsersPopup,
                UserEditPopup,
                TextInputPopup,
@@ -36,6 +37,7 @@ class UiManager(ScreenManager):
     popup_user_edit = ObjectProperty(None, allownone=True)
     popup_user_remove = ObjectProperty(None, allownone=True)
     popup_about = ObjectProperty(None, allownone=True)
+    popup_privacy = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
         super(UiManager, self).__init__(**kwargs)
@@ -73,6 +75,7 @@ class UiManager(ScreenManager):
                  on_website=lambda x: self.open_website(self.settings.server_uri),
                  on_about=lambda x: self.show_about(),
                  on_terms=lambda x: self.show_terms(),
+                 on_privacy_policy=lambda x: self.show_privacy_policy(),
                  on_exit=lambda x: self.quit(),
                  )
         
@@ -102,6 +105,11 @@ class UiManager(ScreenManager):
         if not self.popup_terms:
             self.popup_terms = TermsPopup()
         self.popup_terms.open()
+        
+    def show_privacy_policy(self):
+        if not self.popup_privacy:
+            self.popup_privacy = PrivacyPopup()
+        self.popup_privacy.open()
     
     def show_user_select(self):
         if not self.popup_user_select:

@@ -109,6 +109,11 @@ Root:
                 on_release: root.dispatch('on_terms')
 
             ItemDrawer:
+                text: _("Privacy Policy")
+                icon: 'shield-account'
+                on_release: root.dispatch('on_privacy_policy')
+
+            ItemDrawer:
                 text: _("Exit")
                 icon: 'close-box'
                 on_release: root.dispatch('on_exit')

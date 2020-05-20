@@ -10,6 +10,7 @@ from kivymd.uix.button import MDRectangleFlatButton, MDRaisedButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.label import MDIcon
 from kivymd.uix.list import BaseListItem
+from plyer import email
 
 from . import CheckItem, UserItem, UserAddItem
 from ..i18n import (_,
@@ -467,8 +468,13 @@ class PolicyPopup(SimplePopup):
         return text
 
     def open_link(self, url):
-        if url.strip('"').startswith('https://'):
+        url = url.strip('"')
+        if url.startswith('https://'):
             webbrowser.open_new(url)
+        elif url.startswith('mailto:'):
+            recipient = url[7:]
+            details = get_app_details()
+            email.send(recipient=recipient, subject=f"{details['appname']}", create_chooser=True)
             
     def on_open(self):
         # In case the language changed, reload the policy text.

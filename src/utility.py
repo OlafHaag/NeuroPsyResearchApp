@@ -151,7 +151,9 @@ def markdown_to_bbcode(s):
             next_search_position = start_index + replacement_size
             
             # Exclude from URLs.
-            if tags_in_excepted_portion(text, start_index, end_index, r"(<(https?:\S+)>)|(\[(.*?)\]\((.*?)\))"):
+            if tags_in_excepted_portion(text, start_index, end_index,
+                                        # Also exclude gender asterisk in German.
+                                        r"(<(https?:\S+)>)|(\[(.*?)\]\((.*?)\))|\w+\*([^.\s\n]*\w+)"):
                 continue
         
             if end_index + replacement_size > len(text):
@@ -193,7 +195,7 @@ def markdown_to_bbcode(s):
     # It re-uses several expressions, needs to be parsed before everything else,
     # because it needs several hacks (?<=\s), as `_` symbol is often used in URLs.
     s = single_tag_context_parser(s, r"\*\*[^ \n]([^\*]+?)[^ \n](?=\*\*)", "b", 2)  # **Bold**
-    s = single_tag_context_parser(s, r"{0}[^ \n]([^{0}]+?)[^ \n](?={0})".format("\*"), "i")  # *Italic*
+    s = single_tag_context_parser(s, r"{0}[^ \n]([^{0}]+?)[^ \n](?={0})".format("\*"), "i")  # *Italic*  # FixMe: exclude gender star
     s = single_tag_context_parser(s, r"__[^ \n]([^_]+?)[^ \n](?=__)", "b", 2)  # __Bold__
     s = single_tag_context_parser(s, r"{0}[^ \n]([^{0}]+?)[^ \n](?={0})".format("_"), "i")  # _Italic_
     s = single_tag_context_parser(s, r"~~[^ \n]([\s\S]+?)[^ \n](?=~~)", "s", 2)  # ~Strikethrough~

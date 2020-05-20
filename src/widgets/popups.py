@@ -16,10 +16,11 @@ from ..i18n import (_,
                     translation_to_language_code,
                     DEFAULT_LANGUAGE)
 from ..utility import create_user_identifier, switch_language, get_app_details, markdown_to_bbcode
-from privacypolicy import policy_md
-from terms import terms_md
+from privacypolicy import get_policy
+from terms import get_terms
 
 
+# FixMe: popup translations not loaded!
 # ToDo: Distinguish Info, Warning and Error by icon or color.
 class SimplePopup(MDDialog):
     """ Simple popup with only an OK button. """
@@ -441,7 +442,7 @@ class PolicyPopup(SimplePopup):
             size_hint_x=0.9,
         )
         if 'content_cls' not in kwargs:
-            content = ScrollText(text=self._get_text(policy_md))
+            content = ScrollText(text=self._get_text(get_policy()))
             content.ids.label.bind(on_ref_press=lambda instance, value: self.open_link(value))
             default_kwargs.update(content_cls=content)
             
@@ -458,6 +459,10 @@ class PolicyPopup(SimplePopup):
     def open_link(self, url):
         if url.strip('"').startswith('https://'):
             webbrowser.open_new(url)
+            
+    def on_open(self):
+        # In case the language changed, reload the policy text.
+        self.content_cls.text = self._get_text(get_policy())
             
 
 class TermsPopup(PolicyPopup):
@@ -479,9 +484,9 @@ class TermsPopup(PolicyPopup):
         )
         # Show Terms and Privacy Policy together on first run.
         if self.is_first_run:
-            text = self._get_text(terms_md) + "\n\n" + self._get_text(policy_md)
+            text = self._get_text(get_terms()) + "\n\n" + self._get_text(get_policy())
         else:
-            text = self._get_text(terms_md)
+            text = self._get_text(get_terms())
             
         content = ScrollText(text=text)
         content.ids.label.bind(on_ref_press=lambda instance, value: self.open_link(value))
@@ -503,7 +508,7 @@ class TermsPopup(PolicyPopup):
     def on_open(self):
         # When the terms are dismissed the first time, it means they were accepted.
         if not self.is_first_run:
-            self.content_cls.text = self._get_text(terms_md)
+            self.content_cls.text = self._get_text(get_terms())
             self.ids.button_box.remove_widget(self.__reject_btn)
             self.__accept_btn.text = _("CLOSE")
         self.content_cls.ids.scroll.scroll_y = 1

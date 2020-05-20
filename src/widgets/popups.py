@@ -1,8 +1,9 @@
 import webbrowser
 
 from kivy.app import App
-from kivy.properties import StringProperty, ConfigParserProperty
+from kivy.clock import Clock
 from kivy.core.window import Window
+from kivy.properties import StringProperty, ConfigParserProperty
 
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRectangleFlatButton, MDRaisedButton
@@ -20,7 +21,6 @@ from privacypolicy import get_policy
 from terms import get_terms
 
 
-# FixMe: popup translations not loaded!
 # ToDo: Distinguish Info, Warning and Error by icon or color.
 class SimplePopup(MDDialog):
     """ Simple popup with only an OK button. """
@@ -83,9 +83,9 @@ class LanguagePopup(MDDialog):
         items = [CheckItem(text=lang, value=translation_to_language_code(lang)) for lang in languages]
         default_kwargs = dict(
             title=_("Choose Language"),
-            text=_("You can also change the language in the settings later."),
+            text=_("You can also change the language in the settings later."),  # Is disabled in type "confirmation". :(
             type="confirmation",
-            auto_dismiss=False,  # Otherwise the callback doesn't fire?!
+            auto_dismiss=False,
             items=items,
             buttons=[MDRaisedButton(
                 text=_("OK"),
@@ -124,6 +124,7 @@ class LanguagePopup(MDDialog):
 class UsersPopup(MDDialog):
     """ Dialog for User management. """
     current_user = ConfigParserProperty('Default', 'General', 'current_user', 'app', val_type=str)
+    current_language = ConfigParserProperty('en', 'Localization', 'language', 'app', val_type=str)
     
     def __init__(self, **kwargs):
         self.register_event_type('on_add_user')
@@ -267,6 +268,15 @@ class UsersPopup(MDDialog):
     
     def on_remove_user(self, user_id, user_alias):
         pass
+    
+    def on_current_language(self, *args):
+        # Language is switched AFTER this event fires, so we have to reschedule to next frame.
+        Clock.schedule_once(lambda dt: self._update_language(), 1)
+    
+    def _update_language(self):
+        self.title = _("Choose Active User")
+        # Instead of clearing all widgets and rebuilding, just assert that the last item is always add user.
+        self.items[-1].text = _("Add User")
     
     def on_open(self):
         self.select_item(self.current_user)

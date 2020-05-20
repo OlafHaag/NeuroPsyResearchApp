@@ -102,7 +102,6 @@ class NeuroPsyResearchApp(MDApp):
         settings.add_json_panel('General',
                                 self.config,
                                 data=get_settings_general_json())
-        # FixMe: change circle task settings to chosen language.
         settings.add_json_panel('Circle Task',
                                 self.config,
                                 data=get_settings_circle_task_json())

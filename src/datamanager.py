@@ -338,7 +338,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         :rtype: bool
         """
         try:
-            if response.startswith('ERROR:') or 'Error' in response:
+            if response.lower().startswith(_('ERROR').lower()) or _('ERROR').lower() in response.lower():
                 return False
         except AttributeError:
             pass

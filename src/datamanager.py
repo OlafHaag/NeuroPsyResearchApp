@@ -359,11 +359,14 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         subject = f"New {self.app.get_application_name()} Data Set"
         disclaimer = _("Disclaimer:\n"
                        "By submitting this e-mail you agree to the data processing and evaluation for the purpose of "
-                       "this scientific investigation and any other purpose that an interested party might have.\n"
-                       "The data below will be copied and saved from the received e-mail and will be made publicly "
-                       "available on the internet under a CC-BY-SA license as stated in the consent you gave before "
-                       "participating in the study. The email itself will be deleted within 3 days to separate "
-                       "the sender address from the data for the purpose of anonymisation.\n")
+                       "this scientific investigation and any other purpose that an interested third party might have."
+                       "\n"
+                       "The research data below will be copied from the received e-mail and will be made publicly "
+                       "available on the Internet under a CC-BY-SA license, as stated in the privacy policy you gave "
+                       "your consent to before participating in the study. The e-mail itself will be deleted within "
+                       "10 days from our e-mail service to separate the sender's address from the research data "
+                       "for the purpose of anonymization. The research data itself doesn't contain personal or "
+                       "sensitive information about you.\n")
     
         text = "### Data ###\n\n"
         for d in self._data_email:

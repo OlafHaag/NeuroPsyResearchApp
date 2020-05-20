@@ -99,10 +99,10 @@ class NeuroPsyResearchApp(MDApp):
 
     def build_settings(self, settings):
         """ Populate settings panel. """
-        settings.add_json_panel('General',
+        settings.add_json_panel(_('General'),
                                 self.config,
                                 data=get_settings_general_json())
-        settings.add_json_panel('Circle Task',
+        settings.add_json_panel(_('Circle Task'),
                                 self.config,
                                 data=get_settings_circle_task_json())
     

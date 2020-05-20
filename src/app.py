@@ -13,7 +13,7 @@ from .i18n import _, DEFAULT_LANGUAGE
 from .config import WEBSERVER
 from .settings import SettingsContainer
 from .widgets import BaseScreen, SettingsWithTabbedPanels
-from .settingsjson import LANGUAGE_CODE, LANGUAGE_SECTION, settings_general_json, settings_circle_task_json
+from .settingsjson import LANGUAGE_CODE, LANGUAGE_SECTION, get_settings_general_json, get_settings_circle_task_json
 
 
 if platform == 'android':
@@ -101,10 +101,11 @@ class NeuroPsyResearchApp(MDApp):
         """ Populate settings panel. """
         settings.add_json_panel('General',
                                 self.config,
-                                data=settings_general_json)
+                                data=get_settings_general_json())
+        # FixMe: change circle task settings to chosen language.
         settings.add_json_panel('Circle Task',
                                 self.config,
-                                data=settings_circle_task_json)
+                                data=get_settings_circle_task_json())
     
     def display_settings(self, settings):
         """ Display the settings panel. """
@@ -126,6 +127,11 @@ class NeuroPsyResearchApp(MDApp):
         """ Fired when the section's key-value pair of a ConfigParser changes. """
         if section == 'Localization' and key == 'language':
             switch_language(value)
+            s = self.manager.get_screen('Settings')
+            if s:
+                self.manager.remove_widget(s)
+                self.destroy_settings()
+                self.open_settings()
 
     def update_language_from_config(self):
         """Set the current language of the application from the configuration.

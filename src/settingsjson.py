@@ -10,7 +10,7 @@ def get_settings_general_json():
     settings_json = json.dumps([
         {'type': 'optionmapping',
          'title': _("Language"),
-         'desc': _("Display language for user instructions."),
+         'desc': _("Display language for user interface."),
          'section': LANGUAGE_SECTION,
          'key': LANGUAGE_CODE,
          'options': {code: language_code_to_translation(code)

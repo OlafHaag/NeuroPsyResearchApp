@@ -2,7 +2,7 @@
 #:kivy 1.11.1
 
 <ScreenConsentCircleTask>:  # When adding new consent forms, to share style add class like so: <ConsentOne, ConsentTwo>:
-    on_leave: consent_scroll.scroll_y = 1
+    on_leave: scroll.scroll_y = 1
 
     MDGridLayout:
         cols: 1
@@ -10,7 +10,7 @@
         spacing: 10
 
         ScrollView:
-            id: consent_scroll
+            id: scroll
             do_scroll_x: False
             do_scroll_y: True
             scroll_type: ['bars', 'content']
@@ -22,6 +22,7 @@
                 spacing: [0, 20]
 
                 MDLabel:
+                    id: consent_label
                     text: root.consent_msg
                     markup: True
                     text_size: root.width, None
@@ -31,25 +32,6 @@
                     padding: 10, 10
                     halign: 'justify'
                     valign: 'top'
-                MDLabel:
-                    text: "[b]" + _("Personal Identifier:") + "[/b]"
-                    markup: True
-                    padding: 10, 10
-                    text_size: root.width, None
-                    font_size: sp(24)
-                    size: self.texture_size
-                    halign: 'center'
-                    valign: 'middle'
-                MDLabel:
-                    text: app.settings.current_user
-                    markup: False
-                    text_size: root.width, None
-                    font_size: sp(24)
-                    size: self.texture_size
-                    size_hint_y: None
-                    padding: 10, 10
-                    halign: 'center'
-                    valign: 'bottom'
 
         MDSeparator:
 

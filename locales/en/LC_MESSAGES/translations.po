@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UCMResearchApp\n"
-"POT-Creation-Date: 2020-05-13 18:18+0200\n"
-"PO-Revision-Date: 2020-05-13 18:18+0200\n"
+"Project-Id-Version: NeuroPsyResearch\n"
+"POT-Creation-Date: 2020-05-21 14:20+0200\n"
+"PO-Revision-Date: 2020-05-21 14:22+0200\n"
 "Last-Translator: Olaf Haag <contanct@olafhaag.com>\n"
 "Language-Team: \n"
 "Language: en\n"
@@ -22,55 +22,63 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-4: locales\n"
 "X-Poedit-SearchPathExcluded-5: res\n"
 
-#: src/uncontrolledmanifold.kv:78 src/widgets/screensgeneral.kv:118
-msgid "Home"
-msgstr "Home"
+#: src/widgets/navigation.kv:72
+msgid "Scientific Participation Software"
+msgstr ""
 
-#: src/uncontrolledmanifold.kv:83
+#: src/widgets/navigation.kv:82 src/widgets/screensgeneral.kv:117
+msgid "Home"
+msgstr ""
+
+#: src/widgets/navigation.kv:87
 msgid "Users"
 msgstr ""
 
-#: src/uncontrolledmanifold.kv:88
+#: src/widgets/navigation.kv:92
 msgid "Settings"
-msgstr "Settings"
+msgstr ""
 
-#: src/uncontrolledmanifold.kv:93
+#: src/widgets/navigation.kv:97
 msgid "Visit Online Analyses"
 msgstr ""
 
-#: src/uncontrolledmanifold.kv:98
+#: src/widgets/navigation.kv:102 src/widgets/managers.py:148
 msgid "About"
 msgstr ""
 
-#: src/uncontrolledmanifold.kv:103 src/widgets/popups.py:412
+#: src/widgets/navigation.kv:107
 msgid "Terms & Conditions"
 msgstr ""
 
-#: src/uncontrolledmanifold.kv:108 src/widgets/screensgeneral.kv:126
+#: src/widgets/navigation.kv:112
+msgid "Privacy Policy"
+msgstr ""
+
+#: src/widgets/navigation.kv:117 src/widgets/screensgeneral.kv:125
 msgid "Exit"
 msgstr ""
 
-#: src/widgets/popups.kv:25
+#: src/widgets/popups.kv:26
 msgid "Enter a new value."
 msgstr ""
 
-#: src/widgets/popups.kv:38
+#: src/widgets/popups.kv:39
 msgid "New Value"
 msgstr ""
 
-#: src/widgets/popups.kv:39
+#: src/widgets/popups.kv:40
 msgid "Error: invalid input"
 msgstr ""
 
-#: src/widgets/popups.kv:49
+#: src/widgets/popups.kv:50
 msgid "This name is just for you. It won't be uploaded to the server."
 msgstr ""
 
-#: src/widgets/popups.kv:57
+#: src/widgets/popups.kv:58
 msgid "Enter Pseudonym"
 msgstr ""
 
-#: src/widgets/popups.kv:58
+#: src/widgets/popups.kv:59
 msgid "Error: invalid value"
 msgstr ""
 
@@ -78,21 +86,21 @@ msgstr ""
 msgid "Please use this slider."
 msgstr ""
 
-#: src/widgets/screenconsents.kv:35 src/widgets/screensgeneral.kv:85
-msgid "Personal Identifier:"
-msgstr ""
-
-#: src/widgets/screenconsents.kv:65
+#: src/widgets/screenconsents.kv:47
 msgid "Decline"
 msgstr ""
 
-#: src/widgets/screenconsents.kv:72
+#: src/widgets/screenconsents.kv:54
 msgid "Agree"
 msgstr ""
 
-#: src/widgets/screeninstructions.kv:50
+#: src/widgets/screeninstructions.kv:48
+msgid "When you are ready to begin press [b]{}[/b]."
+msgstr ""
+
+#: src/widgets/screeninstructions.kv:48 src/widgets/screeninstructions.kv:62
 msgid "Start"
-msgstr "Start"
+msgstr ""
 
 #: src/widgets/screensettings.kv:95
 msgid "Close"
@@ -104,7 +112,7 @@ msgstr ""
 
 #: src/widgets/screensgeneral.kv:38
 msgid "Welcome!"
-msgstr "[color=ff00ff][b]Hello, hello![/b][/color]"
+msgstr ""
 
 #: src/widgets/screensgeneral.kv:46
 msgid "General Information"
@@ -114,8 +122,12 @@ msgstr ""
 msgid "Available Studies"
 msgstr ""
 
-#: src/widgets/screensgeneral.kv:63
+#: src/widgets/screensgeneral.kv:63 src/app.py:105
 msgid "Circle Task"
+msgstr ""
+
+#: src/widgets/screensgeneral.kv:85
+msgid "Personal Identifier:"
 msgstr ""
 
 #: src/widgets/screensgeneral.kv:103
@@ -126,303 +138,408 @@ msgstr ""
 msgid "Send via E-Mail"
 msgstr ""
 
-#: src/datamanager.py:207
+#: privacypolicy.py:15
+#, python-brace-format
+msgid ""
+"# Privacy Policy\n"
+"The purpose of the {appname} app is to collect anonymous research data that "
+"its users, like yourself, provide to us **voluntarily** by participating in "
+"the studies the {appname} app offers. Participation in these studies is "
+"completely voluntary and users have a choice to share the collected research "
+"data with us after each completed study.\n"
+"\n"
+"## Types of Collected Data\n"
+"- Research Data\n"
+"- De-identified Device Information\n"
+"- Personal Data\n"
+"\n"
+"\n"
+"### Research Data\n"
+"For each study, that a user participates in, the {appname} app collects "
+"research data that is relevant to the study's research question. These data "
+"may include, but is not limited to, for example, the time of day the study "
+"was conducted, and psychometric measures such as reaction times and scores.\n"
+"\n"
+"For each user account created in the app, a randomly generated character "
+"string is created as part of the research data so that the data can be "
+"attributed to an anonymously participating person. The name chosen for the "
+"user account is not part of the research data and will not be transmitted "
+"when uploading the data.  \n"
+"The collected research data will not reveal the identity of the "
+"participating user.\n"
+"\n"
+"It is the responsibility of the participants to protect their user account "
+"and the device against unauthorized access.\n"
+"\n"
+"### De-identified Device Information\n"
+"To associate research data that was recorded on the same device, a character "
+"string is transmitted, which does not allow personal identification of the "
+"device or its users. We also collect device information such as the screen "
+"resolution and which type of operating system the {appname} app is running "
+"on. These data are considered part of the research data.\n"
+"\n"
+"### Personal Data\n"
+"The {appname} app does **not** collect sensitive or personally identifiable "
+"information such as a user's name, address, telephone number, IP-address, "
+"passwords, payment details, or social security number.  \n"
+"However, if a user decides to contact us via e-mail, which is completely "
+"optional, we and the third-parties providing the e-mail services will "
+"process the e-mail address and its content to provide the service. After "
+"receiving an e-mail by a user, any research data that was sent with it will "
+"be extracted and therefore separated from any personally identifiable "
+"information the user may have provided to us within the e-mail. This way the "
+"research data can not be used to reveal the identity of the user. The e-mail "
+"will be deleted alongside any personal information that was provided to us "
+"within 10 days of receiving the e-mail. We will not share any e-mail address "
+"or any personal information of users with other third parties.\n"
+"\n"
+"## Local Storage of Research Data\n"
+"Users can opt-in to store the collected information locally on the device by "
+"enabling the option in the settings of the {appname} app. Any locally stored "
+"research data from a user account will be removed when the user account is "
+"removed from the {appname} app.  \n"
+"All locally stored research data by the {appname} app is removed when the "
+"app is removed from the device.\n"
+"\n"
+"## Sharing of Research Data\n"
+"When a user decides to share the collected research data with us, the data "
+"will be transferred to a database on servers within the European Union which "
+"are provided by a third party. You can find out more about the data "
+"protection measures of the third-party provider at the following Internet "
+"address:\n"
+"\n"
+"<https://www.heroku.com/policy/security#data-security>\n"
+"\n"
+"After transfer of the research data to the database, complete deletion of "
+"the research data collected can no longer be guaranteed, since we can not "
+"attribute the anonymous data to a specific person. Furthermore, backup "
+"copies of the data are created within the infrastructure of the third-party "
+"provider. Moreover, immediate public access to the research data and its "
+"results from automated processing is possible, see **Usage of Anonymized "
+"Data**.\n"
+"\n"
+"## Usage of Anonymized Data\n"
+"The results and collected research data from any study in the {appname} app "
+"will be published as a scientific publication. This is done in anonymized "
+"form, i.e. without the research data on its own being able to identify a "
+"specific person. The fully anonymized data from these studies are made "
+"available on the Internet as open data under the [CC-BY-SA license](https://"
+"creativecommons.org/licenses/by-sa/3.0/). This means that the research data "
+"can also be used for any purposes other than the studies they were "
+"originally collected for, including commercial purposes.\n"
+"\n"
+"The collected research data will be processed to perform statistical "
+"analysis for scientific inquiries in a semi-automatic fashion. A link to the "
+"web-interface for analyzing the research data is provided within the "
+"{appname} app.\n"
+"\n"
+"After completing a study, the data will possibly be stored and published in "
+"a national or international data archive. These studies will thus follow the "
+"recommendations of the German Research Foundation (DFG) and the German "
+"Society for Psychology (DGPs) for quality assurance in research.\n"
+msgstr ""
+
+#: src/app.py:102
+msgid "General"
+msgstr ""
+
+#: src/datamanager.py:218
 msgid ""
 "Unable to write to file:\n"
 "{}\n"
 "Unknown data format."
 msgstr ""
 
-#: src/datamanager.py:224 src/datamanager.py:269
+#: src/datamanager.py:235 src/datamanager.py:280
 msgid "KeyError in Meta Data."
 msgstr ""
 
-#: src/datamanager.py:233
+#: src/datamanager.py:244
 msgid ""
 "Data missing.\n"
 "Failed to write\n"
 "{}."
 msgstr ""
 
-#: src/datamanager.py:295
+#: src/datamanager.py:306
 msgid "ERROR: Server not reachable:"
 msgstr ""
 
-#: src/datamanager.py:297
+#: src/datamanager.py:308
 msgid "ERROR: There was an error processing the upload."
 msgstr ""
 
-#: src/datamanager.py:313
+#: src/datamanager.py:324
 msgid "ERROR: There was an unexpected error during upload."
 msgstr ""
 
-#: src/datamanager.py:318
+#: src/datamanager.py:329
 msgid "Not the usual error response."
 msgstr ""
 
-#: src/datamanager.py:349
+#: src/datamanager.py:341
+msgid "ERROR"
+msgstr ""
+
+#: src/datamanager.py:360
 msgid ""
 "Disclaimer:\n"
 "By submitting this e-mail you agree to the data processing and evaluation "
 "for the purpose of this scientific investigation and any other purpose that "
-"an interested party might have.\n"
-"The data below will be copied and saved from the received e-mail and will be "
-"made publicly available on the internet under a CC-BY-SA license as stated "
-"in the consent you gave before participating in the study. The email itself "
-"will be deleted within 3 days to separate the sender address from the data "
-"for the purpose of anonymisation.\n"
+"an interested third party might have.\n"
+"The research data below will be copied from the received e-mail and will be "
+"made publicly available on the Internet under a CC-BY-SA license, as stated "
+"in the privacy policy you gave your consent to before participating in the "
+"study. The e-mail itself will be deleted within 10 days from our e-mail "
+"service to separate the sender's address from the research data for the "
+"purpose of anonymization. The research data itself doesn't contain personal "
+"or sensitive information about you.\n"
 msgstr ""
 
-#: src/settingsjson.py:10
+#: src/settingsjson.py:12
 msgid "Language"
-msgstr "Language"
+msgstr ""
 
-#: src/settingsjson.py:11
-msgid "Display language for user instructions."
-msgstr "Display language for user instructions."
-
-#: src/settingsjson.py:17
-msgid "Data Collection"
+#: src/settingsjson.py:13
+#| msgid "Display language for user instructions."
+msgid "Display language for user interface."
 msgstr ""
 
 #: src/settingsjson.py:19
+msgid "Data Collection"
+msgstr ""
+
+#: src/settingsjson.py:21
 msgid "Local Storage"
 msgstr ""
 
-#: src/settingsjson.py:20
+#: src/settingsjson.py:22
 msgid "Save data locally on device."
 msgstr ""
 
-#: src/settingsjson.py:24
+#: src/settingsjson.py:26
 msgid "Upload Data"
 msgstr ""
 
-#: src/settingsjson.py:25
+#: src/settingsjson.py:27
 msgid "Offer to send collected data to server."
 msgstr ""
 
-#: src/settingsjson.py:29
+#: src/settingsjson.py:31
 msgid "Upload Server"
 msgstr ""
 
-#: src/settingsjson.py:30
+#: src/settingsjson.py:32
 msgid "Target server address to upload data to."
 msgstr ""
 
-#: src/settingsjson.py:34
+#: src/settingsjson.py:36
 msgid "Send E-Mail"
 msgstr ""
 
-#: src/settingsjson.py:35
+#: src/settingsjson.py:37
 msgid "Offer to send collected data via e-mail."
 msgstr ""
 
-#: src/settingsjson.py:39
+#: src/settingsjson.py:41
 msgid "E-Mail Recipient"
 msgstr ""
 
-#: src/settingsjson.py:40
+#: src/settingsjson.py:42
 msgid "E-mail address to send data to."
 msgstr ""
 
-#: src/settingsjson.py:47
+#: src/settingsjson.py:52
 msgid "PLEASE ONLY CHANGE THESE VALUES IF YOU ARE THE RESEARCHER"
 msgstr ""
 
-#: src/widgets/managers.py:103
+#: src/settingsjson.py:54
+msgid "Number of practice trials"
+msgstr ""
+
+#: src/settingsjson.py:55
+msgid "Practice trials per condition."
+msgstr ""
+
+#: src/settingsjson.py:59
+msgid "Number of trials"
+msgstr ""
+
+#: src/settingsjson.py:60
+msgid "Trials per block."
+msgstr ""
+
+#: src/settingsjson.py:64
+msgid "Number of Blocks"
+msgstr ""
+
+#: src/settingsjson.py:65
+msgid "Number of subsequent blocks per run."
+msgstr ""
+
+#: src/settingsjson.py:69
+msgid "Constrained-Task Block"
+msgstr ""
+
+#: src/settingsjson.py:70
+msgid "Which of the blocks has the constrained task."
+msgstr ""
+
+#: src/settingsjson.py:74
+msgid "Warm Up"
+msgstr ""
+
+#: src/settingsjson.py:75
+msgid "Pause before each trial to get ready. In seconds."
+msgstr ""
+
+#: src/settingsjson.py:79
+msgid "Trial Duration"
+msgstr ""
+
+#: src/settingsjson.py:80
+msgid "Countdown timer, in seconds."
+msgstr ""
+
+#: src/settingsjson.py:84
+msgid "Cool Down"
+msgstr ""
+
+#: src/settingsjson.py:85
+msgid "Pause after each trial, in seconds."
+msgstr ""
+
+#: src/utility.py:79 src/utility.py:80 src/utility.py:88 src/utility.py:89
+#: src/utility.py:90 src/utility.py:91
+msgid "UNKNOWN."
+msgstr ""
+
+#: src/widgets/managers.py:118
 msgid "New User"
 msgstr ""
 
-#: src/widgets/managers.py:138
+#: src/widgets/managers.py:141
+msgid "Do you want to remove {}?"
+msgstr ""
+
+#: src/widgets/managers.py:149
+#, python-brace-format
+msgid ""
+"{appname}\n"
+"Version: {version}\n"
+"\n"
+"Author: {author}\n"
+"Contact: [ref=mailto:{contact}][color=0000ff]{contact}[/color][/ref]\n"
+"Source Code: [ref={source}][color=0000ff]{source}[/color][/ref]"
+msgstr ""
+
+#: src/widgets/managers.py:180
 msgid "Warning"
 msgstr ""
 
-#: src/widgets/managers.py:148
+#: src/widgets/managers.py:190
 msgid "Error"
 msgstr ""
 
-#: src/widgets/managers.py:172
+#: src/widgets/managers.py:214
 msgid "Success!"
 msgstr ""
 
-#: src/widgets/managers.py:172
+#: src/widgets/managers.py:214
 msgid "Upload successful!"
 msgstr ""
 
-#: src/widgets/managers.py:177
+#: src/widgets/managers.py:219
 msgid ""
 "Upload failed.\n"
 "Something went wrong."
 msgstr ""
 
-#: src/widgets/managers.py:216
+#: src/widgets/managers.py:256
 msgid "Press again to quit."
-msgstr "Press again to quit."
+msgstr ""
 
-#: src/widgets/popups.py:24 src/widgets/popups.py:52 src/widgets/popups.py:103
-#: src/widgets/popups.py:260 src/widgets/screensettings.py:156
+#: src/widgets/popups.py:31 src/widgets/popups.py:76 src/widgets/popups.py:104
+#: src/widgets/popups.py:156 src/widgets/popups.py:328
+#: src/widgets/screensettings.py:156
 msgid "OK"
 msgstr ""
 
-#: src/widgets/popups.py:46
-#, fuzzy
-#| msgid "Language"
-msgid "Choose Language"
-msgstr "Language"
-
-#: src/widgets/popups.py:47
-msgid "You can also change the language in the settings later."
+#: src/widgets/popups.py:67
+msgid "Do you want to continue?"
 msgstr ""
 
-#: src/widgets/popups.py:97
-msgid "Choose Active User"
-msgstr ""
-
-#: src/widgets/popups.py:128
-msgid "Add User"
-msgstr ""
-
-#: src/widgets/popups.py:234 src/widgets/screenconsents.py:10
-#: src/widgets/screeninstructions.py:10 src/widgets/screeninstructions.py:14
-#: src/widgets/screeninstructions.py:15 src/widgets/screensgeneral.py:20
-#: src/widgets/screensgeneral.py:53
-#, fuzzy
-#| msgid "Initiating..."
-msgid "Loading..."
-msgstr "Initiating..."
-
-#: src/widgets/popups.py:237
-msgid "not found"
-msgstr ""
-
-#: src/widgets/popups.py:250
-msgid "Set New Value"
-msgstr ""
-
-#: src/widgets/popups.py:256 src/widgets/screensettings.py:152
+#: src/widgets/popups.py:72 src/widgets/popups.py:324
+#: src/widgets/screensettings.py:152
 msgid "CANCEL"
 msgstr ""
 
-#: src/widgets/popups.py:352 src/widgets/popups.py:366
+#: src/widgets/popups.py:98
+#| msgid "Language"
+msgid "Choose Language"
+msgstr ""
+
+#: src/widgets/popups.py:99
+msgid "You can also change the language in the settings later."
+msgstr ""
+
+#: src/widgets/popups.py:150 src/widgets/popups.py:290
+msgid "Choose Active User"
+msgstr ""
+
+#: src/widgets/popups.py:181 src/widgets/popups.py:292
+msgid "Add User"
+msgstr ""
+
+#: src/widgets/popups.py:302 src/widgets/screenconsents.py:10
+#: src/widgets/screensgeneral.py:20 src/widgets/screensgeneral.py:53
+#| msgid "Initiating..."
+msgid "Loading..."
+msgstr ""
+
+#: src/widgets/popups.py:305
+msgid "not found"
+msgstr ""
+
+#: src/widgets/popups.py:318
+msgid "Set New Value"
+msgstr ""
+
+#: src/widgets/popups.py:420 src/widgets/popups.py:434
 msgid "Edit User"
 msgstr ""
 
-#: src/widgets/popups.py:366
+#: src/widgets/popups.py:434
 msgid "Add New User"
 msgstr ""
 
-#: src/widgets/popups.py:400
+#: src/widgets/popups.py:496
 msgid "DECLINE"
 msgstr ""
 
-#: src/widgets/popups.py:405
+#: src/widgets/popups.py:501
 msgid "ACCEPT"
 msgstr ""
 
-#: src/widgets/popups.py:431 src/widgets/popups.py:432
-#: src/widgets/popups.py:436 src/widgets/popups.py:437
-#: src/widgets/popups.py:438
-msgid "UNKNOWN."
-msgstr ""
-
-#: src/widgets/popups.py:444
-#, python-brace-format
-msgid ""
-"By downloading or using the app, these terms will automatically apply to you "
-"– you should make sure therefore that you read them carefully before using "
-"the app. You’re not allowed to attempt to extract the source code of the app "
-"from its distributed form. The source code is provided separately under the "
-"open MIT license. The app itself, and all the trade marks, copyright, "
-"database rights and other intellectual property rights related to it, still "
-"belong to {author}.\n"
-"\n"
-"{author} is committed to ensuring that the app is as useful and efficient as "
-"possible. For that reason, we reserve the right to make changes to the app.\n"
-"\n"
-"The {appname} app stores and processes de-identified data that you have "
-"provided to us, in order to provide the Service. As it is with internet "
-"based services, a 100% anonymity cannot be guaranteed. It’s your "
-"responsibility to keep your phone and access to the app secure. We therefore "
-"recommend that you do not jailbreak or root your phone, which is the process "
-"of removing software restrictions and limitations imposed by the official "
-"operating system of your device. It could make your phone vulnerable to "
-"malware/viruses/malicious programs, compromise your phone’s security "
-"features and it could mean that the {appname} app won’t work properly or at "
-"all.\n"
-"\n"
-"You should be aware that there are certain things that {author} will not "
-"take responsibility for. Certain functions of the app will require the app "
-"to have an active internet connection. The connection can be Wi-Fi, or "
-"provided by your mobile network provider, but {author} cannot take "
-"responsibility for the app not working at full functionality if you don’t "
-"have access to Wi-Fi, and you don’t have any of your data allowance left.\n"
-"\n"
-"If you’re using the app outside of an area with Wi-Fi, you should remember "
-"that your terms of the agreement with your mobile network provider will "
-"still apply. As a result, you may be charged by your mobile provider for the "
-"cost of data for the duration of the connection while accessing the app, or "
-"other third party charges. In using the app, you’re accepting responsibility "
-"for any such charges, including roaming data charges if you use the app "
-"outside of your home territory (i.e. region or country) without turning off "
-"data roaming. If you are not the bill payer for the device on which you’re "
-"using the app, please be aware that we assume that you have received "
-"permission from the bill payer for using the app.\n"
-"\n"
-"Along the same lines, {author} cannot always take responsibility for the way "
-"you use the app i.e. You need to make sure that your device stays charged – "
-"if it runs out of battery and you can’t turn it on to avail the Service, "
-"{author} cannot accept responsibility.\n"
-"\n"
-"With respect to {author}’s responsibility for your use of the app, when "
-"you’re using the app, it’s important to bear in mind that although we "
-"endeavour to ensure that it is updated and correct at all times, we do rely "
-"on third parties to provide information to us so that we can make it "
-"available to you. {author} accepts no liability for any loss, direct or "
-"indirect, you experience as a result of relying wholly on this functionality "
-"of the app.\n"
-"\n"
-"At some point, we may wish to update the app. The app is currently available "
-"on Android – the requirements for system (and for any additional systems we "
-"decide to extend the availability of the app to) may change, and you’ll need "
-"to download the updates if you want to keep using the app. {author} does not "
-"promise that te app will always be updated so that it is relevant to you and/"
-"or works with the Android version that you have installed on your device. "
-"However, you promise to always accept updates to the application when "
-"offered to you, We may also wish to stop providing the app, and may "
-"terminate use of it at any time without giving notice of termination to you. "
-"Unless we tell you otherwise, upon any termination, (a) the rights and "
-"licenses granted to you in these terms will end; (b) you must stop using the "
-"app, and (if needed) delete it from your device.\n"
-"\n"
-"[b]Changes to This Terms and Conditions[/b]\n"
-"We may update the Terms and Conditions from time to time.\n"
-"\n"
-" [b]Contact Us[/b]\n"
-"If you have any questions or suggestions about my Terms and Conditions, do "
-"not hesitate to contact us at {contact}.\n"
-"\n"
-"This Terms and Conditions page was generated by {terms_src}"
-msgstr ""
-
-#: src/widgets/popups.py:515
+#: src/widgets/popups.py:532
 msgid "CLOSE"
 msgstr ""
 
 #: src/widgets/screencircletask.py:24 src/widgets/screencircletask.py:139
 msgid "Trial: "
-msgstr "Trial: "
+msgstr ""
 
 #: src/widgets/screencircletask.py:104
 msgid "PREPARE"
-msgstr "PREPARE"
+msgstr ""
 
 #: src/widgets/screencircletask.py:159
 msgid "GET READY"
-msgstr "GET READY"
+msgstr ""
 
 #: src/widgets/screencircletask.py:184
 msgid "FINISHED"
-msgstr "FINISHED"
+msgstr ""
 
 #: src/widgets/screencircletask.py:216
 msgid ""
@@ -430,132 +547,128 @@ msgid ""
 "Aborting Session..."
 msgstr ""
 
-#: src/widgets/screenconsents.py:26
+#: src/widgets/screenconsents.py:42
 msgid ""
 "[size=32]Consent[/size]\n"
 "\n"
-"Lesen Sie bitte die folgenden Informationen aufmerksam durch, bevor Sie "
-"fortfahren. Scrollen Sie dazu bis zum Ende des Textes.\n"
+"Please read the following information carefully before proceeding.Use "
+"scrolling to go through the text to the end.\n"
 "\n"
-"[b]Erklärung zum Experiment:[/b]\n"
-"Es freut uns sehr, dass Sie sich bereit erklärt haben, an unserem Experiment "
-"teilzunehmen. Dieses Experiment hat zum Ziel zu erforschen, wie sich die "
-"Genauigkeit bei der Ausführung einer Bewegungsaufgabe ändert, wenn "
-"gleichzeitig eine weitere Aufgabe mit der Bewegung bewältigt wird. Die "
-"jeweilige Aufgabe wird Ihnen zuvor genau beschrieben und erklärt. Bei der "
-"Ausführung der Aufgaben sind keinerlei besondere Belastungen oder gar "
-"Schäden zu erwarten.\n"
+"[b]Explanation of the experiment:[/b]\n"
+"We are very pleased that you are interested in participating in our "
+"experiment. The goal of this experiment is to investigate how the accuracy "
+"of performing a motion task changes when the range of motion for solving the "
+"task gets limited by an additional, concurrent task. The respective tasks "
+"are described and explained to you in detail beforehand. No particular "
+"stress or even risks are to be expected when performing the tasks.\n"
 "\n"
-"[b]Freiwilligkeit:[/b]\n"
-"Die Teilnahme an der Studie ist freiwillig. Sie können jederzeit und ohne "
-"Angabe von Gründen Ihre Einwilligung zur Teilnahme an dieser Studie "
-"widerrufen, ohne dass Ihnen daraus Nachteile entstehen. Eine "
-"ÜbertragungIhrer Daten können Sie erst nach Ende der vollständig "
-"absolvierten Aufgaben ausführen. Somit können Sie Ihre Einwilligung zur "
-"Speicherung der Daten bis zum Ende der Datenerhebung widerrufen. Brechen Sie "
-"Ihre Teilnahme vor Beendigung ab, oder entscheiden Sie sich gegen eine "
-"Übermittlung der Daten nach Vollendung der Aufgaben, werden keine Daten "
-"übertragen.\n"
+"The study will take approximately {} minutes to complete.\n"
 "\n"
-"[b]Datenschutz:[/b]\n"
-"Es werden keine personenbezogenen Daten erhoben. Um Daten zu ermitteln, die "
-"vom selben Gerät stammen, wird eine Zeichenkette übermittelt, die keine "
-"Identifikation des Gerätes selbst ermöglicht. Eine zweite, zufällige "
-"Zeichenkette wird als Ihr persönlicher Code erstellt, um die Daten einer "
-"anonymen Person zuordnen zu können. Diese Zeichenkette wird Ihnen am Ende "
-"dieser Information, sowie vor der Datenübertragung angezeigt. Die Daten "
-"werden zunächst an einen Drittanbieter auf dessen Server innerhalb der "
-"Europäischen Union übertragen. Über die Datenschutzmaßnahmen des "
-"Drittanbieters können Sie sich unter folgender Internet-Adresse "
-"informieren:\n"
-"https://www.heroku.com/policy/security#data-security\n"
-"Nach Übertragung der Daten kann keine vollständige Löschung Ihres "
-"persönlichen Datensatzes mehr gewährleistet werden, da u.a. "
-"Sicherheitskopien in der Infrastruktur desDrittanbieters angelegt werden. "
-"Desweiteren ist ein sofortiger Zugang der Öffentlichkeitzu den Daten "
-"möglich, siehe [i]Verwendung der anonymisierten Daten[/i].\n"
+"[b]Voluntary Participation:[/b]\n"
+"Participation in the study is voluntary.You can revoke your consent to "
+"participate in this study at any time while performing the tasks and without "
+"giving reasons, without incurring any disadvantages. To do so just press the "
+"back button during the study or close the app.After completing all the tasks "
+"you are offered to upload the collected research data to the Internet. You "
+"can therefore withdraw your consent to the online storage and processing of "
+"the data until the end of task completion. If you cancel your participation "
+"before completion, or if you decide not to transmit the data after "
+"completing the tasks, no data will be transmitted.\n"
 "\n"
-"[b]Verwendung der anonymisierten Daten:[/b]\n"
-"Die Ergebnisse und Daten dieser Studie werden als wissenschaftliche "
-"Publikation veröffentlicht. Dies geschieht in anonymisierter Form, d. h. "
-"ohne dass die Daten einer spezifischen Person zugeordnet werden können. Die "
-"vollständig anonymisierten Daten dieser Studie werden als offene Daten unter "
-"der CC-BY-SA Lizenz im Internet zugänglich gemacht. Nach Abschluss der "
-"Studie können die Daten in einem nationalen oder internationalen Datenarchiv "
-"gespeichert und veröffentlicht werden. Damit folgt diese Studie den "
-"Empfehlungen der Deutschen Forschungsgemeinschaft (DFG) und der Deutschen "
-"Gesellschaft für Psychologie (DGPs) zur Qualitätssicherung in der "
-"Forschung.\n"
+"Please review the [ref=privacy][color=0000ff]Privacy Policy (press here)[/"
+"color][/ref] carefully for information on what kind of data we collect and "
+"how we intend to use them.\n"
 "\n"
-"Hiermit versichere ich, dass ich die oben beschriebenen Teilnahme-"
-"Informationen verstanden habe und mit den genannten Teilnahmebedingungen "
-"einverstanden bin.\n"
+"I hereby confirm that I have read and understood the participation "
+"information described above as well as the [ref=privacy]"
+"[color=0000ff]Privacy Policy[/color][/ref]. I agree to the conditions of "
+"participation and Privacy Policy.\n"
 "\n"
 msgstr ""
 
-#: src/widgets/screeninstructions.py:26
-msgid "{}. practice block"
+#: src/widgets/screeninstructions.py:25
+msgid "{}. Practice Block"
 msgstr ""
 
-#: src/widgets/screeninstructions.py:30
-msgid "{}. test block"
+#: src/widgets/screeninstructions.py:28
+msgid "{}. Testing Block"
 msgstr ""
-
-#: src/widgets/screeninstructions.py:32
-msgid "Please read the instructions carefully."
-msgstr ""
-
-#: src/widgets/screeninstructions.py:33
-msgid "There are a total of {} trials in this block."
-msgstr "There are a total of {} trials in this block."
-
-#: src/widgets/screeninstructions.py:36
-msgid "s"
-msgstr "s"
 
 #: src/widgets/screeninstructions.py:37
-msgid "You have {} task{} in this block."
-msgstr "You have {} task{} in this block."
-
-#: src/widgets/screeninstructions.py:38
 msgid ""
-"A trial ends when the outer [color=ff00ff]purple ring[/color] reaches 100% "
-"(circle closes) and the countdown reaches 0.\n"
-"Shortly thereafter you will be prompted to get ready for the next trial."
+"Please read the following information carefully before proceeding. Use "
+"scrolling to go through the whole text. At the end of this text you'll find "
+"an exemplary image of the task in progress."
 msgstr ""
-"A trial ends when the outer [color=ff00ff]purple ring[/color] reaches 100% "
-"(circle closes) and the countdown reaches 0.\n"
-"Shortly thereafter you will be prompted to get ready for the next trial."
 
 #: src/widgets/screeninstructions.py:41
-msgid ""
-"Use the [b]2 sliders[/b] to match the size of the [b]white disk[/b] to the "
-"[color=008000]green ring[/color]."
+msgid "There are a total of {} trials in this block."
 msgstr ""
-"Use the [b]2 sliders[/b] to match the size of the [b]white disk[/b] to the "
-"[color=008000]green ring[/color]."
 
-#: src/widgets/screeninstructions.py:43
-msgid ""
-"Concurrently bring the [color=3f84f2]blue arch[/color] to the "
-"[color=3f84f2]blue disc[/color] by using one of the sliders. It will be the "
-"same slider during the block."
+#: src/widgets/screeninstructions.py:44
+msgid "s"
 msgstr ""
-"Concurrently bring the [color=3f84f2]blue arch[/color] to the "
-"[color=3f84f2]blue disc[/color] by using one of the sliders. It will be the "
-"same slider during the block."
+
+#: src/widgets/screeninstructions.py:45
+#, python-brace-format
+msgid ""
+"You have {0} task{1} in this block. Be as quick and as accurate as possible "
+"while solving the task{1}"
+msgstr ""
+
+#: src/widgets/screeninstructions.py:47
+#, python-brace-format
+msgid ""
+"A trial starts by giving you {0} seconds time to prepare for the trial. "
+"During this time the sliders are inactive and can't be moved. After this "
+"preparation phase the sliders become active and you'll have {1} seconds time "
+"to complete the task{3}. The time limitation is visualized by counting down "
+"the seconds in the middle of the screen, as well as by an outer "
+"[color=ff00ff]purple ring[/color] that will close as the time runs out. A "
+"trial ends when the outer [color=ff00ff]purple ring[/color] closes and the "
+"countdown reaches 0.\n"
+"Shortly thereafter ({2} seconds) you will be prompted to get ready for the "
+"next trial."
+msgstr ""
+
+#: src/widgets/screeninstructions.py:56
+msgid ""
+"Hold your device with both hands so your thumbs can reach their respective "
+"side of the screen comfortably.\n"
+"In the middle of the screen you'll see a [b]white disk[/b] enclosed by a "
+"larger [color=008000]green ring[/color]. Your task in each trial is to match "
+"the size of this [b]white disk[/b] to the size of the [color=008000]green "
+"ring[/color], so the [b]white disk[/b] accurately touches the "
+"[color=008000]green ring[/color]. You control the size of the disc by using "
+"the [b]2 sliders[/b] located to the left and right side of the display with "
+"your thumbs. Both sliders have an influence on the size of the disc and "
+"you'll need both at the same time to get the [b]white disk[/b] to touch the "
+"[color=008000]green ring[/color]."
+msgstr ""
+
+#: src/widgets/screeninstructions.py:66
+msgid ""
+"In addition you'll have to fulfill another task concurrently to the first "
+"task. On top of the [color=008000]green ring[/color] there's a "
+"[color=3f84f2]blue arch[/color] which length is controlled only by the "
+"slider with the blue handle and bar. You have to make the [color=3f84f2]blue "
+"arch[/color] touch the small [color=3f84f2]blue dot[/color] that is sitting "
+"on the [color=008000]green ring[/color]. Note that the blue slider still "
+"influences the size of the [b]white disk[/b] as well. Accomplish both tasks "
+"at the same time!"
+msgstr ""
 
 #: src/widgets/screensgeneral.py:60
 msgid "[color=ff00ff][b]Thank you[/b][/color] for participating!"
-msgstr "[color=ff00ff][b]Thank you[/b][/color] for participating!"
+msgstr ""
 
 #: src/widgets/screensgeneral.py:65
 msgid "Files were{} saved to [i]{}[/i]."
-msgstr "Files were{} saved to [i]{}[/i]."
+msgstr ""
 
 #: src/widgets/screensgeneral.py:65
 msgid " [b]not[/b]"
-msgstr " [b]not[/b]"
+msgstr ""
 
 #: src/widgets/screensgeneral.py:67
 msgid ""
@@ -584,6 +697,126 @@ msgid ""
 "Please wait\n"
 "Launching browser"
 msgstr ""
+
+#: terms.py:15
+#, python-brace-format
+msgid ""
+"# Terms & Conditions\n"
+"By downloading or using the app, these terms will automatically apply to you "
+"- you should make sure therefore that you read them carefully before using "
+"the app.  \n"
+"By using or accessing the {appname} you agree (i) that you are 13 years of "
+"age and the minimum age of digital consent in your country, (ii) if you are "
+"the age of majority in your jurisdiction or over, that you have read, "
+"understood, and accept to be bound by the Terms, and (iii) if you are "
+"between 13 (or the minimum age of digital consent, as applicable) and the "
+"age of majority in your jurisdiction, that your legal guardian has reviewed "
+"and agrees to these Terms.\n"
+"\n"
+"You are granted a nonexclusive, worldwide, and perpetual license to perform, "
+"display, and use the Product on the Device.  \n"
+"You're not allowed to attempt to extract the source code of the app from its "
+"binary distribution and installation. The source code is provided separately "
+"under the open MIT license. The app itself, and all the trade marks, "
+"copyright, database rights and other intellectual property rights related to "
+"it, still belong to {author}.\n"
+"\n"
+"{author} is committed to ensuring that the app is as useful and efficient as "
+"possible. For that reason, we reserve the right to make changes to the app.\n"
+"\n"
+"The {appname} app stores and processes de-identified data that you have "
+"provided to us, in order to provide the Service. As it is with internet "
+"based services, a 100% anonymity cannot be guaranteed. It's your "
+"responsibility to keep your phone and access to the app secure. We therefore "
+"recommend that you do not jailbreak or root your phone, which is the process "
+"of removing software restrictions and limitations imposed by the official "
+"operating system of your device. It could make your phone vulnerable to "
+"malware/viruses/malicious programs, compromise your phone's security "
+"features and it could mean that the {appname} app won't work properly or at "
+"all.\n"
+"\n"
+"You should be aware that there are certain things that {author} will not "
+"take responsibility for. Certain functions of the app will require the app "
+"to have an active internet connection. The connection can be Wi-Fi, or "
+"provided by your mobile network provider, but {author} cannot take "
+"responsibility for the app not working at full functionality if you don't "
+"have access to Wi-Fi, and you don't have any of your data allowance left.\n"
+"\n"
+"If you're using the app outside of an area with Wi-Fi, you should remember "
+"that your terms of the agreement with your mobile network provider will "
+"still apply. As a result, you may be charged by your mobile provider for the "
+"cost of data for the duration of the connection while accessing the app, or "
+"other third party charges. In using the app, you're accepting responsibility "
+"for any such charges, including roaming data charges if you use the app "
+"outside of your home territory (i.e. region or country) without turning off "
+"data roaming. If you are not the bill payer for the device on which you're "
+"using the app, please be aware that we assume that you have received "
+"permission from the bill payer for using the app.\n"
+"\n"
+"Along the same lines, {author} cannot always take responsibility for the way "
+"you use the app i.e. You need to make sure that your device stays charged - "
+"if it runs out of battery and you can't turn it on to avail the Service, "
+"{author} cannot accept responsibility.\n"
+"\n"
+"With respect to {author}'s responsibility for your use of the app, when "
+"you're using the app, it's important to bear in mind that although we "
+"endeavour to ensure that it is updated and correct at all times, we do rely "
+"on third parties to provide information to us so that we can make it "
+"available to you. {author} accepts no liability for any loss, direct or "
+"indirect, you experience as a result of relying wholly on this functionality "
+"of the app.\n"
+"\n"
+"At some point, we may wish to update the app. The app is currently available "
+"on Android - the requirements for system (and for any additional systems we "
+"decide to extend the availability of the app to) may change, and you'll need "
+"to download the updates if you want to keep using the app. {author} does not "
+"promise that the app will always be updated so that it is relevant to you "
+"and/or works with the Android version that you have installed on your "
+"device. However, you promise to always accept updates to the application "
+"when offered to you, We may also wish to stop providing the app, and may "
+"terminate use of it at any time without giving notice of termination to you. "
+"Unless we tell you otherwise, upon any termination, (a) the rights and "
+"licenses granted to you in these terms will end; (b) you must stop using the "
+"app, and (if needed) delete it from your device.\n"
+"\n"
+"## Changes to This Terms and Conditions\n"
+"We may update the Terms and Conditions from time to time. \n"
+"\n"
+"## Contact Us\n"
+"If you have any questions or suggestions about these Terms and Conditions, "
+"do not hesitate to contact us at [{contact}](mailto:{contact}).\n"
+"\n"
+"This Terms and Conditions page was partly generated by [App Privacy Policy "
+"Generator](https://app-privacy-policy-generator.firebaseapp.com/)."
+msgstr ""
+
+#~ msgid "You have {} task{} in this block."
+#~ msgstr "You have {} task{} in this block."
+
+#~ msgid ""
+#~ "A trial ends when the outer [color=ff00ff]purple ring[/color] reaches "
+#~ "100% (circle closes) and the countdown reaches 0.\n"
+#~ "Shortly thereafter you will be prompted to get ready for the next trial."
+#~ msgstr ""
+#~ "A trial ends when the outer [color=ff00ff]purple ring[/color] reaches "
+#~ "100% (circle closes) and the countdown reaches 0.\n"
+#~ "Shortly thereafter you will be prompted to get ready for the next trial."
+
+#~ msgid ""
+#~ "Use the [b]2 sliders[/b] to match the size of the [b]white disk[/b] to "
+#~ "the [color=008000]green ring[/color]."
+#~ msgstr ""
+#~ "Use the [b]2 sliders[/b] to match the size of the [b]white disk[/b] to "
+#~ "the [color=008000]green ring[/color]."
+
+#~ msgid ""
+#~ "Concurrently bring the [color=3f84f2]blue arch[/color] to the "
+#~ "[color=3f84f2]blue disc[/color] by using one of the sliders. It will be "
+#~ "the same slider during the block."
+#~ msgstr ""
+#~ "Concurrently bring the [color=3f84f2]blue arch[/color] to the "
+#~ "[color=3f84f2]blue disc[/color] by using one of the sliders. It will be "
+#~ "the same slider during the block."
 
 #~ msgid ""
 #~ "Disclaimer:\n"

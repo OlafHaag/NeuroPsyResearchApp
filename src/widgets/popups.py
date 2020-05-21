@@ -33,7 +33,19 @@ class SimplePopup(MDDialog):
         )
         default_kwargs.update(kwargs)
         super(SimplePopup, self).__init__(**default_kwargs)
+    
+    def on_kv_post(self, base_widget):
+        self.ids.text.bind(on_ref_press=lambda instance, value: self.open_link(value))
 
+    def open_link(self, url):
+        url = url.strip('"')
+        if url.startswith('https://'):
+            webbrowser.open_new(url)
+        elif url.startswith('mailto:'):
+            recipient = url[7:]
+            details = get_app_details()
+            email.send(recipient=recipient, subject=f"{details['appname']}", create_chooser=True)
+            
 
 class BlockingPopup(MDDialog):
     
@@ -467,15 +479,6 @@ class PolicyPopup(SimplePopup):
                                                      contact=details['contact'])
         return text
 
-    def open_link(self, url):
-        url = url.strip('"')
-        if url.startswith('https://'):
-            webbrowser.open_new(url)
-        elif url.startswith('mailto:'):
-            recipient = url[7:]
-            details = get_app_details()
-            email.send(recipient=recipient, subject=f"{details['appname']}", create_chooser=True)
-            
     def on_open(self):
         # In case the language changed, reload the policy text.
         self.content_cls.text = self._get_text(get_policy())

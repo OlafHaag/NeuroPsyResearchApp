@@ -146,13 +146,19 @@ class UiManager(ScreenManager):
         # ToDo: Link to Source Code
         details = get_app_details()
         self.show_info(title=_("About"),
-                       text=_("{}\n\n"
-                              "Author: {}\n"
-                              "Contact: {}\n"
-                              "Version: {}").format(details['appname'],  # Alternatively self.app.get_application_name()
-                                                    details['author'],
-                                                    details['contact'],
-                                                    details['version']))
+                       text=_("{appname}\n"
+                              "Version: {version}\n"
+                              "\n"  # Alternatively self.app.get_application_name()
+                              "Author: {author}\n"
+                              "Contact: [ref=mailto:{contact}][color=0000ff]{contact}[/color][/ref]\n"
+                              "Source Code: [ref={source}][color=0000ff]{source}[/color][/ref]"
+                              ).format(appname=details['appname'],
+                                       author=details['author'],
+                                       contact=details['contact'],
+                                       version=details['version'],
+                                       source=details['source'],
+                                       )
+                       )
             
     def on_info(self, title=None, text=None):
         self.show_info(title=title, text=text)

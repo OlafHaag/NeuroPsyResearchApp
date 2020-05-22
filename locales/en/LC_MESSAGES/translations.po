@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-05-21 14:20+0200\n"
-"PO-Revision-Date: 2020-05-21 14:22+0200\n"
+"POT-Creation-Date: 2020-05-22 18:39+0200\n"
+"PO-Revision-Date: 2020-05-22 18:39+0200\n"
 "Last-Translator: Olaf Haag <contanct@olafhaag.com>\n"
 "Language-Team: \n"
 "Language: en\n"
@@ -301,7 +301,6 @@ msgid "Language"
 msgstr ""
 
 #: src/settingsjson.py:13
-#| msgid "Display language for user instructions."
 msgid "Display language for user interface."
 msgstr ""
 
@@ -475,7 +474,6 @@ msgid "CANCEL"
 msgstr ""
 
 #: src/widgets/popups.py:98
-#| msgid "Language"
 msgid "Choose Language"
 msgstr ""
 
@@ -493,7 +491,6 @@ msgstr ""
 
 #: src/widgets/popups.py:302 src/widgets/screenconsents.py:10
 #: src/widgets/screensgeneral.py:20 src/widgets/screensgeneral.py:53
-#| msgid "Initiating..."
 msgid "Loading..."
 msgstr ""
 
@@ -715,6 +712,8 @@ msgid ""
 "\n"
 "You are granted a nonexclusive, worldwide, and perpetual license to perform, "
 "display, and use the Product on the Device.  \n"
+"{author} built the {appname} app as an Open Source app. This SERVICE is "
+"provided by {author} at no cost and is intended for use as is.\n"
 "You're not allowed to attempt to extract the source code of the app from its "
 "binary distribution and installation. The source code is provided separately "
 "under the open MIT license. The app itself, and all the trade marks, "
@@ -778,6 +777,13 @@ msgid ""
 "Unless we tell you otherwise, upon any termination, (a) the rights and "
 "licenses granted to you in these terms will end; (b) you must stop using the "
 "app, and (if needed) delete it from your device.\n"
+"\n"
+"## Links to Other SitesThis Service may contain links to other sites. If you "
+"click on a third-party link, you will be directed to that site. Note that "
+"these external sites may not be operated by me. Therefore, I strongly advise "
+"you to review the Privacy Policy of these websites. I have no control over "
+"and assume no responsibility for the content, privacy policies, or practices "
+"of any third-party sites or services.\n"
 "\n"
 "## Changes to This Terms and Conditions\n"
 "We may update the Terms and Conditions from time to time. \n"

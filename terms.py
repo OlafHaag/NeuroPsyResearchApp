@@ -81,7 +81,7 @@ def get_terms():
     "upon any termination, (a) the rights and licenses granted to you in these terms will end; "
     "(b) you must stop using the app, and (if needed) delete it from your device."
     "\n\n"
-    "## Links to Other Sites"
+    "## Links to Other Sites\n"
     "This Service may contain links to other sites. If you click on a third-party link, you will "
     "be directed to that site. Note that these external sites may not be operated by me. Therefore, "
     "I strongly advise you to review the Privacy Policy of these websites. I have no control over "

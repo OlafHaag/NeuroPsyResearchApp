@@ -37,11 +37,6 @@ def get_settings_general_json():
          'desc': _('Offer to send collected data via e-mail.'),
          'section': 'DataCollection',
          'key': 'is_email_enabled'},
-        {'type': 'string',
-         'title': _('E-Mail Recipient'),
-         'desc': _('E-mail address to send data to.'),
-         'section': 'DataCollection',
-         'key': 'email_recipient'},
     ])
     return settings_json
 
@@ -84,6 +79,11 @@ def get_settings_circle_task_json():
          'title': _('Cool Down'),
          'desc': _('Pause after each trial, in seconds.'),
          'section': 'CircleTask',
-         'key': 'cool_down_time'}
+         'key': 'cool_down_time'},
+        {'type': 'string',
+         'title': _('E-Mail Recipient'),
+         'desc': _('E-mail address to send data to.'),
+         'section': 'CircleTask',
+         'key': 'email_recipient'},
     ])
     return settings_json

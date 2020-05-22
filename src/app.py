@@ -7,7 +7,7 @@ from kivy.properties import ObjectProperty
 from kivy.uix.screenmanager import Screen
 from kivy.utils import platform
 
-from .utility import create_user_identifier, switch_language
+from .utility import create_user_identifier, switch_language, get_app_details
 from .datamanager import DataManager
 from .i18n import _, DEFAULT_LANGUAGE
 from .config import WEBSERVER
@@ -77,7 +77,6 @@ class NeuroPsyResearchApp(MDApp):
                                'is_upload_enabled': 1,
                                'webserver': WEBSERVER,
                                'is_email_enabled': 0,
-                               'email_recipient': '',
                            })
         config.setdefaults('CircleTask',
                            {
@@ -87,6 +86,7 @@ class NeuroPsyResearchApp(MDApp):
                                'warm_up_time': 1.0,
                                'trial_duration': 3.0,
                                'cool_down_time': 0.5,
+                               'email_recipient': get_app_details()['contact'],
                            })
         # To set aliases for user ids we need to schedule it next frame, we can't retrieve current_user yet.
         Clock.schedule_once(lambda dt: self.set_configdefaults_user(config), 1)

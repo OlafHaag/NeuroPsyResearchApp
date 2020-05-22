@@ -29,7 +29,6 @@ class SettingsContainer(Widget):
     is_upload_enabled = ConfigParserProperty('1', 'DataCollection', 'is_upload_enabled', 'app', val_type=int)
     server_uri = ConfigParserProperty(WEBSERVER, 'DataCollection', 'webserver', 'app', val_type=str)
     is_email_enabled = ConfigParserProperty('0', 'DataCollection', 'is_email_enabled', 'app', val_type=int)
-    email_recipient = ConfigParserProperty('', 'DataCollection', 'email_recipient', 'app', val_type=str)
     
     # Properties that change over the course of all tasks and are not set by config.
     current_trial = NumericProperty(0)
@@ -42,6 +41,7 @@ class SettingsContainer(Widget):
     
     def __init__(self, **kwargs):
         super(SettingsContainer, self).__init__(**kwargs)
+        # Study settings have to follow the rule of being named the lowercase study name with underscores.
         self.circle_task = SettingsCircleTask()
         self.current_task = None
         self.reset_current()
@@ -148,6 +148,7 @@ class SettingsCircleTask(Widget):
                                           verify=lambda x: x > 0.0, errorvalue=1.0)
     cool_down = ConfigParserProperty('0.5', 'CircleTask', 'cool_down_time', 'app', val_type=float,
                                      verify=lambda x: x > 0.0, errorvalue=0.5)
+    email_recipient = ConfigParserProperty('', 'CircleTask', 'email_recipient', 'app', val_type=str)
 
     def __init__(self, **kwargs):
         super(SettingsCircleTask, self).__init__(**kwargs)

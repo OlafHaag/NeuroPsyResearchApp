@@ -4,7 +4,7 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.utils import platform
 from kivy.uix.screenmanager import ScreenManager
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, ConfigParserProperty
 from kivy.clock import Clock
 
 from plyer import notification
@@ -12,6 +12,7 @@ from plyer import notification
 from . import (SimplePopup,
                BlockingPopup,
                ConfirmPopup,
+               LanguagePopup,
                TermsPopup,
                PolicyPopup,
                UsersPopup,
@@ -29,6 +30,7 @@ class UiManager(ScreenManager):
     sidebar = ObjectProperty(None, allownone=True)
     # Different kinds of popups, objects stay in memory and only show with replaced content.
     # To avoid garbage collection of Popups and resulting ReferenceError because of translations, keep a reference.
+    popup_language = ObjectProperty(None, allownone=True)
     popup_terms = ObjectProperty(None, allownone=True)
     popup_info = ObjectProperty(None, allownone=True)
     popup_warning = ObjectProperty(None, allownone=True)
@@ -38,7 +40,9 @@ class UiManager(ScreenManager):
     popup_user_remove = ObjectProperty(None, allownone=True)
     popup_about = ObjectProperty(None, allownone=True)
     popup_privacy = ObjectProperty(None, allownone=True)
-
+    #
+    is_first_run = ConfigParserProperty('1', 'General', 'is_first_run', 'app', val_type=int)
+    
     def __init__(self, **kwargs):
         super(UiManager, self).__init__(**kwargs)
         self.app = App.get_running_app()
@@ -59,6 +63,8 @@ class UiManager(ScreenManager):
         Window.bind(on_keyboard=self.key_input)
         # Binds need to be executed 1 frame after on_kv_post, otherwise it tries to bind to not yet registered events.
         Clock.schedule_once(lambda dt: self.bind_callbacks(), 1)
+        if self.is_first_run:
+            Clock.schedule_once(lambda dt: self.show_popup_language(), 1)  # Doesn't open otherwise.
     
     def bind_callbacks(self):
         self.bind_sidebar_callbacks()
@@ -81,8 +87,6 @@ class UiManager(ScreenManager):
         
     def bind_screen_callbacks(self):
         """ Handle screen callbacks here. """
-        # Home
-        self.get_screen('Home').bind(on_language_changed=self.on_language_changed_callback)
         # Circle Task
         self.get_screen('Circle Task').bind(
             on_task_stopped=lambda instance, last: self.task_finished(last),
@@ -98,8 +102,24 @@ class UiManager(ScreenManager):
     def open_website(self, url):
         webbrowser.open_new(url)
 
-    def on_language_changed_callback(self, *args):
+    def show_popup_language(self):
+        """ Popup for language choice on first run of the app. """
+        if not self.popup_language:
+            self.popup_language = LanguagePopup()
+            self.popup_language.bind(on_language_changed=self.on_language_set)
+        self.popup_language.open()
+    
+    def on_language_set(self, *args):
+        """ After language was set for first run. """
         self.show_terms()
+        # Once we accepted the terms, we don't want the language popup's on_current_language event to trigger the terms.
+        self.remove_popup_language()
+        self.get_screen('Home').set_text()
+        
+    def remove_popup_language(self):
+        if self.popup_language:
+            self.popup_language.unbind(on_language_changed=self.on_language_set)
+            self.popup_language = None
         
     def show_terms(self):
         if not self.popup_terms:
@@ -143,12 +163,11 @@ class UiManager(ScreenManager):
         self.popup_user_remove.open()
         
     def show_about(self):
-        # ToDo: Link to Source Code
         details = get_app_details()
         self.show_info(title=_("About"),
-                       text=_("{appname}\n"
+                       text=_("{appname}\n"  # Alternatively self.app.get_application_name()
                               "Version: {version}\n"
-                              "\n"  # Alternatively self.app.get_application_name()
+                              "\n"
                               "Author: {author}\n"
                               "Contact: [ref=mailto:{contact}][color=0000ff]{contact}[/color][/ref]\n"
                               "Source Code: [ref={source}][color=0000ff]{source}[/color][/ref]"
@@ -231,7 +250,7 @@ class UiManager(ScreenManager):
         if key in back_keys:  # backspace, escape, home keys.
             # Handle back button on popup dialogs:
             if self.app.root_window.children[0] == self.popup_terms:
-                if self.popup_terms.is_first_run:
+                if self.is_first_run:
                     self.quit()
                 else:
                     self.popup_terms.dismiss()

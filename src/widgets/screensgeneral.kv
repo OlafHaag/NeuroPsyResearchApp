@@ -13,7 +13,7 @@
 
 <ScreenHome>:
     name: 'Home'
-    on_leave: home_scroll.scroll_y = 1
+    on_leave: scroll.scroll_y = 1
     navbar_enabled: True
 
     MDBoxLayout:
@@ -25,7 +25,7 @@
             left_action_items: [['menu', lambda instance: root.manager.sidebar.set_state()]]
 
         ScrollView:
-            id: home_scroll
+            id: scroll
             do_scroll_x: False
             do_scroll_y: True
             scroll_type: ['bars', 'content']
@@ -35,15 +35,17 @@
                 padding: 10, 10
 
                 MDLabel:
-                    text: _('Welcome!')
+                    text: root.title
                     markup: True
                     size_hint_y: None
+                    height: 20
                     font_style: 'H5'
-                    padding: 10, 10
+                    padding: 10, 20
                     halign: 'center'
+                    valign: 'middle'
 
                 MDLabel:
-                    text: _('General Information')  # ToDo: General Information
+                    text: root.msg
                     markup: True
                     halign: 'justify'
                     size_hint_y: None

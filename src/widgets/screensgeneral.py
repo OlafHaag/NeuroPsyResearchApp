@@ -4,49 +4,46 @@ from kivy.app import App
 from kivy.properties import (ObjectProperty,
                              StringProperty,
                              BooleanProperty,
-                             ConfigParserProperty,
                              )
 from kivy.clock import Clock
 
 from . import BaseScreen
-from . import LanguagePopup, BlockingPopup
+from . import BlockingPopup
 
 from ..i18n import _
 
 
 class ScreenHome(BaseScreen):
     """ Display that gives general information. """
-    # As a workaround for internationalization to work set actual message in on_pre_enter().
-    home_msg = StringProperty(_('Loading...'))
-    is_first_run = ConfigParserProperty('1', 'General', 'is_first_run', 'app', val_type=int)
-    popup_lang = ObjectProperty(None, allownone=True)
+    msg = StringProperty()
+    title = StringProperty()
     
     def __init__(self, **kwargs):
         super(ScreenHome, self).__init__(**kwargs)
         # Procedure related.
-        self.register_event_type('on_language_changed')
     
     def on_pre_enter(self, *args):
         """ Reset data collection each time before a new task is started. """
-        App.get_running_app().settings.reset_current()
-    
         app = App.get_running_app()
+        app.settings.reset_current()
         app.data_mgr.clear_data_collection()
         app.settings.current_task = None
-
-        if self.is_first_run:
-            # Wait 1 frame
-            Clock.schedule_once(lambda dt: self.first_run_language_choice(), 1)
-
-    def first_run_language_choice(self):
-        if not self.popup_lang:
-            self.popup_lang = LanguagePopup()
-            self.popup_lang.bind(on_dismiss=lambda instance: self.dispatch('on_language_changed'))
-        self.popup_lang.open()
-
-    def on_language_changed(self):
-        pass
-
+        
+        self.set_text()
+        
+    def set_text(self):
+        app = App.get_running_app()
+        # To get translation after language change, we have to trigger setting the texts.
+        self.title = _("Welcome!")
+        if app.settings.is_local_storage_enabled:
+            storage_hint = _("Storing research data on the device is enabled. You can disable it in the settings.\n")
+        else:
+            storage_hint = _("Storing research data on the device is disabled. You can enable it in the settings.\n")
+    
+        self.msg = _(""
+                     "You can participate in a study by choosing from available studies below."
+                     "\n\n") + storage_hint  # ToDo: General Information, translation
+        
 
 class ScreenOutro(BaseScreen):
     """ Display at the end of a session. """
@@ -65,7 +62,7 @@ class ScreenOutro(BaseScreen):
             self.msg += _("Files were{} saved to [i]{}[/i].").format('' if dest.exists() else _(' [b]not[/b]'), dest)
         else:
             self.msg += _("Results were [b]not[/b] locally stored as files.\n"
-                          "You can enable this in the settings.")
+                          "You can enable this in the settings [i]before[/i] starting a study.")
     
         self.upload_btn_enabled = app.settings.is_upload_enabled
         

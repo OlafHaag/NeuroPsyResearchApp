@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-05-22 18:42+0200\n"
-"PO-Revision-Date: 2020-05-22 18:42+0200\n"
+"POT-Creation-Date: 2020-05-22 21:53+0200\n"
+"PO-Revision-Date: 2020-05-22 22:09+0200\n"
 "Last-Translator: Olaf Haag <contanct@olafhaag.com>\n"
-"Language-Team: \n"
+"Language-Team: contact@olafhaag.com\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +26,7 @@ msgstr ""
 msgid "Scientific Participation Software"
 msgstr ""
 
-#: src/widgets/navigation.kv:82 src/widgets/screensgeneral.kv:117
+#: src/widgets/navigation.kv:82 src/widgets/screensgeneral.kv:119
 msgid "Home"
 msgstr ""
 
@@ -42,7 +42,7 @@ msgstr ""
 msgid "Visit Online Analyses"
 msgstr ""
 
-#: src/widgets/navigation.kv:102 src/widgets/managers.py:148
+#: src/widgets/navigation.kv:102 src/widgets/managers.py:147
 msgid "About"
 msgstr ""
 
@@ -54,7 +54,7 @@ msgstr ""
 msgid "Privacy Policy"
 msgstr ""
 
-#: src/widgets/navigation.kv:117 src/widgets/screensgeneral.kv:125
+#: src/widgets/navigation.kv:117 src/widgets/screensgeneral.kv:127
 msgid "Exit"
 msgstr ""
 
@@ -110,31 +110,23 @@ msgstr ""
 msgid "MENU"
 msgstr ""
 
-#: src/widgets/screensgeneral.kv:38
-msgid "Welcome!"
-msgstr ""
-
-#: src/widgets/screensgeneral.kv:46
-msgid "General Information"
-msgstr ""
-
-#: src/widgets/screensgeneral.kv:58
+#: src/widgets/screensgeneral.kv:60
 msgid "Available Studies"
 msgstr ""
 
-#: src/widgets/screensgeneral.kv:63 src/app.py:105
+#: src/widgets/screensgeneral.kv:65 src/app.py:105
 msgid "Circle Task"
 msgstr ""
 
-#: src/widgets/screensgeneral.kv:85
+#: src/widgets/screensgeneral.kv:87
 msgid "Personal Identifier:"
 msgstr ""
 
-#: src/widgets/screensgeneral.kv:103
+#: src/widgets/screensgeneral.kv:105
 msgid "Upload"
 msgstr ""
 
-#: src/widgets/screensgeneral.kv:110
+#: src/widgets/screensgeneral.kv:112
 msgid "Send via E-Mail"
 msgstr ""
 
@@ -340,72 +332,72 @@ msgstr ""
 msgid "Offer to send collected data via e-mail."
 msgstr ""
 
-#: src/settingsjson.py:41
-msgid "E-Mail Recipient"
-msgstr ""
-
-#: src/settingsjson.py:42
-msgid "E-mail address to send data to."
-msgstr ""
-
-#: src/settingsjson.py:52
+#: src/settingsjson.py:47
 msgid "PLEASE ONLY CHANGE THESE VALUES IF YOU ARE THE RESEARCHER"
 msgstr ""
 
-#: src/settingsjson.py:54
+#: src/settingsjson.py:49
 msgid "Number of practice trials"
 msgstr ""
 
-#: src/settingsjson.py:55
+#: src/settingsjson.py:50
 msgid "Practice trials per condition."
 msgstr ""
 
-#: src/settingsjson.py:59
+#: src/settingsjson.py:54
 msgid "Number of trials"
 msgstr ""
 
-#: src/settingsjson.py:60
+#: src/settingsjson.py:55
 msgid "Trials per block."
 msgstr ""
 
-#: src/settingsjson.py:64
+#: src/settingsjson.py:59
 msgid "Number of Blocks"
 msgstr ""
 
-#: src/settingsjson.py:65
+#: src/settingsjson.py:60
 msgid "Number of subsequent blocks per run."
 msgstr ""
 
-#: src/settingsjson.py:69
+#: src/settingsjson.py:64
 msgid "Constrained-Task Block"
 msgstr ""
 
-#: src/settingsjson.py:70
+#: src/settingsjson.py:65
 msgid "Which of the blocks has the constrained task."
 msgstr ""
 
-#: src/settingsjson.py:74
+#: src/settingsjson.py:69
 msgid "Warm Up"
 msgstr ""
 
-#: src/settingsjson.py:75
+#: src/settingsjson.py:70
 msgid "Pause before each trial to get ready. In seconds."
 msgstr ""
 
-#: src/settingsjson.py:79
+#: src/settingsjson.py:74
 msgid "Trial Duration"
 msgstr ""
 
-#: src/settingsjson.py:80
+#: src/settingsjson.py:75
 msgid "Countdown timer, in seconds."
 msgstr ""
 
-#: src/settingsjson.py:84
+#: src/settingsjson.py:79
 msgid "Cool Down"
 msgstr ""
 
-#: src/settingsjson.py:85
+#: src/settingsjson.py:80
 msgid "Pause after each trial, in seconds."
+msgstr ""
+
+#: src/settingsjson.py:84
+msgid "E-Mail Recipient"
+msgstr ""
+
+#: src/settingsjson.py:85
+msgid "E-mail address to send data to."
 msgstr ""
 
 #: src/utility.py:79 src/utility.py:80 src/utility.py:88 src/utility.py:89
@@ -421,7 +413,7 @@ msgstr ""
 msgid "Do you want to remove {}?"
 msgstr ""
 
-#: src/widgets/managers.py:149
+#: src/widgets/managers.py:148
 #, python-brace-format
 msgid ""
 "{appname}\n"
@@ -432,29 +424,29 @@ msgid ""
 "Source Code: [ref={source}][color=0000ff]{source}[/color][/ref]"
 msgstr ""
 
-#: src/widgets/managers.py:180
+#: src/widgets/managers.py:179
 msgid "Warning"
 msgstr ""
 
-#: src/widgets/managers.py:190
+#: src/widgets/managers.py:189
 msgid "Error"
 msgstr ""
 
-#: src/widgets/managers.py:214
+#: src/widgets/managers.py:213
 msgid "Success!"
 msgstr ""
 
-#: src/widgets/managers.py:214
+#: src/widgets/managers.py:213
 msgid "Upload successful!"
 msgstr ""
 
-#: src/widgets/managers.py:219
+#: src/widgets/managers.py:218
 msgid ""
 "Upload failed.\n"
 "Something went wrong."
 msgstr ""
 
-#: src/widgets/managers.py:256
+#: src/widgets/managers.py:255
 msgid "Press again to quit."
 msgstr ""
 
@@ -490,7 +482,8 @@ msgid "Add User"
 msgstr ""
 
 #: src/widgets/popups.py:302 src/widgets/screenconsents.py:10
-#: src/widgets/screensgeneral.py:20 src/widgets/screensgeneral.py:53
+#: src/widgets/screensgeneral.py:20 src/widgets/screensgeneral.py:21
+#: src/widgets/screensgeneral.py:69
 msgid "Loading..."
 msgstr ""
 
@@ -655,29 +648,51 @@ msgid ""
 "at the same time!"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:60
+#: src/widgets/screensgeneral.py:47
+msgid "Welcome!"
+msgstr ""
+
+#: src/widgets/screensgeneral.py:49
+msgid ""
+"Storing research data on the device is enabled. You can disable it in the "
+"settings.\n"
+msgstr ""
+
+#: src/widgets/screensgeneral.py:51
+msgid ""
+"Storing research data on the device is disabled. You can enable it in the "
+"settings.\n"
+msgstr ""
+
+#: src/widgets/screensgeneral.py:53
+msgid ""
+"You can participate in a study by choosing from available studies below.\n"
+"\n"
+msgstr ""
+
+#: src/widgets/screensgeneral.py:76
 msgid "[color=ff00ff][b]Thank you[/b][/color] for participating!"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:65
+#: src/widgets/screensgeneral.py:81
 msgid "Files were{} saved to [i]{}[/i]."
 msgstr ""
 
-#: src/widgets/screensgeneral.py:65
+#: src/widgets/screensgeneral.py:81
 msgid " [b]not[/b]"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:67
+#: src/widgets/screensgeneral.py:83
 msgid ""
 "Results were [b]not[/b] locally stored as files.\n"
-"You can enable this in the settings."
+"You can enable this in the settings [i]before[/i] starting a study."
 msgstr ""
 
-#: src/widgets/screensgeneral.py:75
+#: src/widgets/screensgeneral.py:91
 msgid "Uploading..."
 msgstr ""
 
-#: src/widgets/screensgeneral.py:75
+#: src/widgets/screensgeneral.py:91
 msgid ""
 "Waking up server.\n"
 "Please be patient."

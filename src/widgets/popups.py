@@ -108,10 +108,8 @@ class LanguagePopup(MDDialog):
         )
         default_kwargs.update(kwargs)
         super(LanguagePopup, self).__init__(**default_kwargs)
+        self.register_event_type('on_language_changed')
     
-    def on_current_language(self, instance, lang):
-        switch_language(lang)
-        
     def select_current_language(self):
         """ Activate item for currently chosen language. """
         for item in self.items:
@@ -126,7 +124,14 @@ class LanguagePopup(MDDialog):
                 break
         # Update the config value. The on_current_language callback will take care of switching to the language.
         self.current_language = lang_code
+        
+    def on_current_language(self, instance, lang):
+        switch_language(lang)
+        self.dispatch('on_language_changed')
 
+    def on_language_changed(self):
+        pass
+    
     def on_open(self):
         self.select_current_language()
 

@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-05-22 21:53+0200\n"
-"PO-Revision-Date: 2020-05-22 22:09+0200\n"
-"Last-Translator: Olaf Haag <contanct@olafhaag.com>\n"
+"POT-Creation-Date: 2020-05-23 14:54+0200\n"
+"PO-Revision-Date: 2020-05-23 14:56+0200\n"
+"Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
@@ -42,7 +42,7 @@ msgstr ""
 msgid "Visit Online Analyses"
 msgstr ""
 
-#: src/widgets/navigation.kv:102 src/widgets/managers.py:147
+#: src/widgets/navigation.kv:102 src/widgets/managers.py:167
 msgid "About"
 msgstr ""
 
@@ -405,15 +405,15 @@ msgstr ""
 msgid "UNKNOWN."
 msgstr ""
 
-#: src/widgets/managers.py:118
+#: src/widgets/managers.py:138
 msgid "New User"
 msgstr ""
 
-#: src/widgets/managers.py:141
+#: src/widgets/managers.py:161
 msgid "Do you want to remove {}?"
 msgstr ""
 
-#: src/widgets/managers.py:148
+#: src/widgets/managers.py:168
 #, python-brace-format
 msgid ""
 "{appname}\n"
@@ -424,34 +424,34 @@ msgid ""
 "Source Code: [ref={source}][color=0000ff]{source}[/color][/ref]"
 msgstr ""
 
-#: src/widgets/managers.py:179
+#: src/widgets/managers.py:199
 msgid "Warning"
 msgstr ""
 
-#: src/widgets/managers.py:189
+#: src/widgets/managers.py:209
 msgid "Error"
 msgstr ""
 
-#: src/widgets/managers.py:213
+#: src/widgets/managers.py:233
 msgid "Success!"
 msgstr ""
 
-#: src/widgets/managers.py:213
+#: src/widgets/managers.py:233
 msgid "Upload successful!"
 msgstr ""
 
-#: src/widgets/managers.py:218
+#: src/widgets/managers.py:238
 msgid ""
 "Upload failed.\n"
 "Something went wrong."
 msgstr ""
 
-#: src/widgets/managers.py:255
+#: src/widgets/managers.py:275
 msgid "Press again to quit."
 msgstr ""
 
 #: src/widgets/popups.py:31 src/widgets/popups.py:76 src/widgets/popups.py:104
-#: src/widgets/popups.py:156 src/widgets/popups.py:328
+#: src/widgets/popups.py:161 src/widgets/popups.py:333
 #: src/widgets/screensettings.py:156
 msgid "OK"
 msgstr ""
@@ -460,7 +460,7 @@ msgstr ""
 msgid "Do you want to continue?"
 msgstr ""
 
-#: src/widgets/popups.py:72 src/widgets/popups.py:324
+#: src/widgets/popups.py:72 src/widgets/popups.py:329
 #: src/widgets/screensettings.py:152
 msgid "CANCEL"
 msgstr ""
@@ -473,45 +473,44 @@ msgstr ""
 msgid "You can also change the language in the settings later."
 msgstr ""
 
-#: src/widgets/popups.py:150 src/widgets/popups.py:290
+#: src/widgets/popups.py:155 src/widgets/popups.py:295
 msgid "Choose Active User"
 msgstr ""
 
-#: src/widgets/popups.py:181 src/widgets/popups.py:292
+#: src/widgets/popups.py:186 src/widgets/popups.py:297
 msgid "Add User"
 msgstr ""
 
-#: src/widgets/popups.py:302 src/widgets/screenconsents.py:10
-#: src/widgets/screensgeneral.py:20 src/widgets/screensgeneral.py:21
-#: src/widgets/screensgeneral.py:69
+#: src/widgets/popups.py:307 src/widgets/screenconsents.py:10
+#: src/widgets/screensgeneral.py:43
 msgid "Loading..."
 msgstr ""
 
-#: src/widgets/popups.py:305
+#: src/widgets/popups.py:310
 msgid "not found"
 msgstr ""
 
-#: src/widgets/popups.py:318
+#: src/widgets/popups.py:323
 msgid "Set New Value"
 msgstr ""
 
-#: src/widgets/popups.py:420 src/widgets/popups.py:434
+#: src/widgets/popups.py:425 src/widgets/popups.py:439
 msgid "Edit User"
 msgstr ""
 
-#: src/widgets/popups.py:434
+#: src/widgets/popups.py:439
 msgid "Add New User"
 msgstr ""
 
-#: src/widgets/popups.py:496
+#: src/widgets/popups.py:501
 msgid "DECLINE"
 msgstr ""
 
-#: src/widgets/popups.py:501
+#: src/widgets/popups.py:506
 msgid "ACCEPT"
 msgstr ""
 
-#: src/widgets/popups.py:532
+#: src/widgets/popups.py:537
 msgid "CLOSE"
 msgstr ""
 
@@ -648,51 +647,59 @@ msgid ""
 "at the same time!"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:47
+#: src/widgets/screensgeneral.py:31
 msgid "Welcome!"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:49
+#: src/widgets/screensgeneral.py:33
 msgid ""
 "Storing research data on the device is enabled. You can disable it in the "
 "settings.\n"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:51
+#: src/widgets/screensgeneral.py:35
 msgid ""
 "Storing research data on the device is disabled. You can enable it in the "
 "settings.\n"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:53
+#: src/widgets/screensgeneral.py:37
 msgid ""
 "You can participate in a study by choosing from available studies below.\n"
 "\n"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:76
+#: src/widgets/screensgeneral.py:50
 msgid "[color=ff00ff][b]Thank you[/b][/color] for participating!"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:81
-msgid "Files were{} saved to [i]{}[/i]."
+#: src/widgets/screensgeneral.py:55
+msgid "Files were{} saved to [i]{}[/i].\n"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:81
+#: src/widgets/screensgeneral.py:55
 msgid " [b]not[/b]"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:83
+#: src/widgets/screensgeneral.py:57
 msgid ""
-"Results were [b]not[/b] locally stored as files.\n"
-"You can enable this in the settings [i]before[/i] starting a study."
+"Results were [b]not[/b] locally stored as files. You can enable this in the "
+"settings [i]before[/i] starting a study.\n"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:91
+#: src/widgets/screensgeneral.py:61
+msgid ""
+"You can now [b]upload[/b] the research data by pressing the button below. "
+"Unless stated otherwise in the study's description we'd appreciate if you "
+"only upload your data the first time you participated in this study. Thank "
+"you.\n"
+msgstr ""
+
+#: src/widgets/screensgeneral.py:68
 msgid "Uploading..."
 msgstr ""
 
-#: src/widgets/screensgeneral.py:91
+#: src/widgets/screensgeneral.py:68
 msgid ""
 "Waking up server.\n"
 "Please be patient."

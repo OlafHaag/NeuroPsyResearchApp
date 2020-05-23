@@ -1,5 +1,3 @@
-from configparser import ConfigParser
-
 from kivy.app import App
 from kivy.properties import (ObjectProperty,
                              StringProperty,
@@ -17,10 +15,6 @@ class ScreenHome(BaseScreen):
     """ Display that gives general information. """
     msg = StringProperty()
     title = StringProperty()
-    
-    def __init__(self, **kwargs):
-        super(ScreenHome, self).__init__(**kwargs)
-        # Procedure related.
     
     def on_pre_enter(self, *args):
         """ Reset data collection each time before a new task is started. """
@@ -40,9 +34,8 @@ class ScreenHome(BaseScreen):
         else:
             storage_hint = _("Storing research data on the device is disabled. You can enable it in the settings.\n")
     
-        self.msg = _(""
-                     "You can participate in a study by choosing from available studies below."
-                     "\n\n") + storage_hint  # ToDo: General Information, translation
+        self.msg = _("You can participate in a study by choosing from available studies below."
+                     "\n\n") + storage_hint
         
 
 class ScreenOutro(BaseScreen):
@@ -59,12 +52,15 @@ class ScreenOutro(BaseScreen):
             if not app.data_mgr.data_saved:
                 app.data_mgr.write_data_to_files()
             dest = app.data_mgr.get_storage_path()
-            self.msg += _("Files were{} saved to [i]{}[/i].").format('' if dest.exists() else _(' [b]not[/b]'), dest)
+            self.msg += _("Files were{} saved to [i]{}[/i].\n").format('' if dest.exists() else _(' [b]not[/b]'), dest)
         else:
-            self.msg += _("Results were [b]not[/b] locally stored as files.\n"
-                          "You can enable this in the settings [i]before[/i] starting a study.")
-    
+            self.msg += _("Results were [b]not[/b] locally stored as files. "
+                          "You can enable this in the settings [i]before[/i] starting a study.\n")
         self.upload_btn_enabled = app.settings.is_upload_enabled
+        if self.upload_btn_enabled:
+            self.msg += _("You can now [b]upload[/b] the research data by pressing the button below. "
+                          "Unless stated otherwise in the study's description we'd appreciate if you only upload "
+                          "your data the first time you participated in this study. Thank you.\n")
         
     def on_upload(self):
         # Show we're busy. Heroku dyno sleeps so it can take some time for the response.

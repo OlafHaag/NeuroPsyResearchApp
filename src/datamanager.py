@@ -298,7 +298,6 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
     
     def _get_response(self, server, data):
         """ Upload collected data to server. """
-        # ToDo: upload error handling.
         try:
             response = requests.post(server, json=data)
             returned_txt = response.text

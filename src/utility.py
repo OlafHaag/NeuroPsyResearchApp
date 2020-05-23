@@ -195,7 +195,7 @@ def markdown_to_bbcode(s):
     # It re-uses several expressions, needs to be parsed before everything else,
     # because it needs several hacks (?<=\s), as `_` symbol is often used in URLs.
     s = single_tag_context_parser(s, r"\*\*[^ \n]([^\*]+?)[^ \n](?=\*\*)", "b", 2)  # **Bold**
-    s = single_tag_context_parser(s, r"{0}[^ \n]([^{0}]+?)[^ \n](?={0})".format("\*"), "i")  # *Italic*  # FixMe: exclude gender star
+    s = single_tag_context_parser(s, r"{0}[^ \n]([^{0}]+?)[^ \n](?={0})".format("\*"), "i")  # *Italic*
     s = single_tag_context_parser(s, r"__[^ \n]([^_]+?)[^ \n](?=__)", "b", 2)  # __Bold__
     s = single_tag_context_parser(s, r"{0}[^ \n]([^{0}]+?)[^ \n](?={0})".format("_"), "i")  # _Italic_
     s = single_tag_context_parser(s, r"~~[^ \n]([\s\S]+?)[^ \n](?=~~)", "s", 2)  # ~Strikethrough~

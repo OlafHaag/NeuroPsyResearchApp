@@ -367,7 +367,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
                        "for the purpose of anonymization. The research data itself doesn't contain personal or "
                        "sensitive information about you.\n")
     
-        text = "### Data ###\n\n"
+        text = "\n\n### Data ###\n\n"
         for d in self._data_email:
             text += "\n".join(k + ": " + str(v) for k, v in d.items())
             text += "\n\n"

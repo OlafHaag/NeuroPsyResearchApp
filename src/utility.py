@@ -11,6 +11,7 @@ from kivy.core.window import Window
 from plyer import uniqueid
 
 from .i18n import _, change_language_to
+from . import __version__ as app_version
 
 if platform == 'android':
     from android.permissions import request_permissions, check_permission
@@ -79,17 +80,13 @@ def get_app_details():
         print("WARNING: android.txt wasn't found! Setting app details to " + _("UNKNOWN."))
         return {'appname': _("UNKNOWN."), 'author': _("UNKNOWN."), 'contact': _("UNKNOWN.")}
     
-    version = {}
-    with open("version.py") as fp:
-        exec(fp.read(), version)
-    
     config_parser = ConfigParser()
     config_parser.read_string(file_content)
     details = {'appname': config_parser.get('dummy_section', 'title', fallback=_("UNKNOWN.")),
                'author': config_parser.get('dummy_section', 'author', fallback=_("UNKNOWN.")),
                'contact': config_parser.get('dummy_section', 'contact', fallback=_("UNKNOWN.")),
                'source': config_parser.get('dummy_section', 'source', fallback=_("UNKNOWN.")),
-               'version': version['__version__'],
+               'version': app_version,
                }
     return details
 

@@ -2,7 +2,6 @@ from configparser import ConfigParser
 from hashlib import md5
 import re
 import time
-from pathlib import Path
 from uuid import uuid4
 
 from kivy import platform
@@ -54,6 +53,7 @@ def create_user_identifier(**kwargs):
     return uuid
 
 
+# FixMe: Closes app on android
 def ask_permission(permission, timeout=5):
     """ Necessary on Android to request permission for certain actions. """
     if platform == 'android':

@@ -25,7 +25,7 @@ from terms import get_terms
 # ToDo: Distinguish Info, Warning and Error by icon or color.
 class SimplePopup(MDDialog):
     """ Simple popup with only an OK button. """
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs):  # ToDo: Make popup almost fit screen width, is too small on Android.
         default_kwargs = dict(
             auto_dismiss=False,
             buttons=[MDRaisedButton(text=_("OK"),
@@ -108,7 +108,7 @@ class LanguagePopup(MDDialog):
         )
         default_kwargs.update(kwargs)
         super(LanguagePopup, self).__init__(**default_kwargs)
-        self.register_event_type('on_language_changed')
+        self.register_event_type('on_language_set')
     
     def select_current_language(self):
         """ Activate item for currently chosen language. """
@@ -122,14 +122,20 @@ class LanguagePopup(MDDialog):
             if item.active:
                 lang_code = item.value  # There's at least the default language.
                 break
+        # If language did not change trigger event now.
+        if lang_code == self.current_language:
+            self.dispatch('on_language_set')
         # Update the config value. The on_current_language callback will take care of switching to the language.
         self.current_language = lang_code
         
     def on_current_language(self, instance, lang):
+        """ Switches the language when config value changed.
+        Only called when language value in config actually changed.
+        """
         switch_language(lang)
-        self.dispatch('on_language_changed')
+        self.dispatch('on_language_set')
 
-    def on_language_changed(self):
+    def on_language_set(self):
         pass
     
     def on_open(self):
@@ -461,6 +467,8 @@ class UserInput(TextInputContent):
         self.ids.textfield.error = len(self.ids.textfield.text.strip(' ')) == 0
 
 
+# FixMe: Popup Policy ScrollView is black on Android in portrait mode.
+# FixMe: Popup Policy unused spaced on top. Visible text gets really narrow on Android.
 class PolicyPopup(SimplePopup):
     """ Display privacy policy for using the app. """
     

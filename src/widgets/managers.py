@@ -106,7 +106,7 @@ class UiManager(ScreenManager):
         """ Popup for language choice on first run of the app. """
         if not self.popup_language:
             self.popup_language = LanguagePopup()
-            self.popup_language.bind(on_language_changed=self.on_language_set)
+            self.popup_language.bind(on_language_set=self.on_language_set)
         self.popup_language.open()
     
     def on_language_set(self, *args):
@@ -118,8 +118,8 @@ class UiManager(ScreenManager):
         
     def remove_popup_language(self):
         if self.popup_language:
-            self.popup_language.unbind(on_language_changed=self.on_language_set)
-            self.popup_language = None
+            self.popup_language.unbind(on_language_set=self.on_language_set)
+            #self.popup_language = None
         
     def show_terms(self):
         if not self.popup_terms:

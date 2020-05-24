@@ -2,12 +2,12 @@
 
 from kivymd.app import MDApp
 from kivy.clock import Clock
+from kivy.core.window import Window
 from kivy.lang import global_idmap, Builder
 from kivy.properties import ObjectProperty
-from kivy.uix.screenmanager import Screen
 from kivy.utils import platform
 
-from .utility import create_user_identifier, switch_language, get_app_details
+from .utility import create_user_identifier, switch_language, get_app_details, ask_permission
 from .datamanager import DataManager
 from .i18n import _, DEFAULT_LANGUAGE
 from .config import WEBSERVER
@@ -23,8 +23,8 @@ if platform == 'android':
 global_idmap['_'] = _
 
 # Go fullscreen. # FixMe: On android status bar still re-appears.
-#Window.borderless = True
-#Window.fullscreen = 'auto'
+Window.borderless = True
+Window.fullscreen = 'auto'
 
 
 class NeuroPsyResearchApp(MDApp):

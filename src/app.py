@@ -67,6 +67,8 @@ class NeuroPsyResearchApp(MDApp):
         config.setdefaults(LANGUAGE_SECTION, {LANGUAGE_CODE: DEFAULT_LANGUAGE})
         config.setdefaults('General', {'is_first_run': 1,
                                        'current_user': create_user_identifier(),
+                                       'sound_enabled': 1,
+                                       'vibration_enabled': 1,
                                        })
         config.setdefaults('DataCollection',
                            {

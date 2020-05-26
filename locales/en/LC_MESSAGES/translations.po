@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-05-23 14:54+0200\n"
-"PO-Revision-Date: 2020-05-23 14:56+0200\n"
+"POT-Creation-Date: 2020-05-26 16:58+0200\n"
+"PO-Revision-Date: 2020-05-26 16:58+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: en\n"
@@ -26,7 +26,7 @@ msgstr ""
 msgid "Scientific Participation Software"
 msgstr ""
 
-#: src/widgets/navigation.kv:82 src/widgets/screensgeneral.kv:119
+#: src/widgets/navigation.kv:82 src/widgets/screensgeneral.kv:123
 msgid "Home"
 msgstr ""
 
@@ -42,7 +42,7 @@ msgstr ""
 msgid "Visit Online Analyses"
 msgstr ""
 
-#: src/widgets/navigation.kv:102 src/widgets/managers.py:167
+#: src/widgets/navigation.kv:102 src/widgets/managers.py:168
 msgid "About"
 msgstr ""
 
@@ -54,7 +54,7 @@ msgstr ""
 msgid "Privacy Policy"
 msgstr ""
 
-#: src/widgets/navigation.kv:117 src/widgets/screensgeneral.kv:127
+#: src/widgets/navigation.kv:117 src/widgets/screensgeneral.kv:131
 msgid "Exit"
 msgstr ""
 
@@ -114,19 +114,15 @@ msgstr ""
 msgid "Available Studies"
 msgstr ""
 
-#: src/widgets/screensgeneral.kv:65 src/app.py:105
+#: src/widgets/screensgeneral.kv:67 src/app.py:105
 msgid "Circle Task"
 msgstr ""
 
-#: src/widgets/screensgeneral.kv:87
-msgid "Personal Identifier:"
-msgstr ""
-
-#: src/widgets/screensgeneral.kv:105
+#: src/widgets/screensgeneral.kv:109
 msgid "Upload"
 msgstr ""
 
-#: src/widgets/screensgeneral.kv:112
+#: src/widgets/screensgeneral.kv:116
 msgid "Send via E-Mail"
 msgstr ""
 
@@ -235,45 +231,49 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: src/datamanager.py:218
+#: src/datamanager.py:215
 msgid ""
 "Unable to write to file:\n"
 "{}\n"
 "Unknown data format."
 msgstr ""
 
-#: src/datamanager.py:235 src/datamanager.py:280
+#: src/datamanager.py:232 src/datamanager.py:279
 msgid "KeyError in Meta Data."
 msgstr ""
 
-#: src/datamanager.py:244
+#: src/datamanager.py:243
 msgid ""
 "Data missing.\n"
 "Failed to write\n"
 "{}."
 msgstr ""
 
-#: src/datamanager.py:306
+#: src/datamanager.py:304
 msgid "ERROR: Server not reachable:"
 msgstr ""
 
-#: src/datamanager.py:308
+#: src/datamanager.py:306
 msgid "ERROR: There was an error processing the upload."
 msgstr ""
 
-#: src/datamanager.py:324
+#: src/datamanager.py:322
 msgid "ERROR: There was an unexpected error during upload."
 msgstr ""
 
-#: src/datamanager.py:329
+#: src/datamanager.py:327
 msgid "Not the usual error response."
 msgstr ""
 
-#: src/datamanager.py:341
+#: src/datamanager.py:339
 msgid "ERROR"
 msgstr ""
 
-#: src/datamanager.py:360
+#: src/datamanager.py:375
+msgid "Permission to access Internet denied."
+msgstr ""
+
+#: src/datamanager.py:381
 msgid ""
 "Disclaimer:\n"
 "By submitting this e-mail you agree to the data processing and evaluation "
@@ -296,112 +296,128 @@ msgstr ""
 msgid "Display language for user interface."
 msgstr ""
 
-#: src/settingsjson.py:19
-msgid "Data Collection"
-msgstr ""
-
-#: src/settingsjson.py:21
-msgid "Local Storage"
+#: src/settingsjson.py:19 src/settingsjson.py:21
+msgid "Sounds"
 msgstr ""
 
 #: src/settingsjson.py:22
-msgid "Save data locally on device."
+msgid "Enable or disable playback of sounds."
 msgstr ""
 
 #: src/settingsjson.py:26
-msgid "Upload Data"
+msgid "Vibration"
 msgstr ""
 
 #: src/settingsjson.py:27
-msgid "Offer to send collected data to server."
+msgid "Enable or disable vibration."
 msgstr ""
 
 #: src/settingsjson.py:31
+msgid "Data Collection"
+msgstr ""
+
+#: src/settingsjson.py:33
+msgid "Local Storage"
+msgstr ""
+
+#: src/settingsjson.py:34
+msgid "Save data locally on device."
+msgstr ""
+
+#: src/settingsjson.py:38
+msgid "Upload Data"
+msgstr ""
+
+#: src/settingsjson.py:39
+msgid "Offer to send collected data to server."
+msgstr ""
+
+#: src/settingsjson.py:43
 msgid "Upload Server"
 msgstr ""
 
-#: src/settingsjson.py:32
+#: src/settingsjson.py:44
 msgid "Target server address to upload data to."
 msgstr ""
 
-#: src/settingsjson.py:36
+#: src/settingsjson.py:48
 msgid "Send E-Mail"
 msgstr ""
 
-#: src/settingsjson.py:37
+#: src/settingsjson.py:49
 msgid "Offer to send collected data via e-mail."
 msgstr ""
 
-#: src/settingsjson.py:47
+#: src/settingsjson.py:59
 msgid "PLEASE ONLY CHANGE THESE VALUES IF YOU ARE THE RESEARCHER"
 msgstr ""
 
-#: src/settingsjson.py:49
+#: src/settingsjson.py:61
 msgid "Number of practice trials"
 msgstr ""
 
-#: src/settingsjson.py:50
+#: src/settingsjson.py:62
 msgid "Practice trials per condition."
 msgstr ""
 
-#: src/settingsjson.py:54
+#: src/settingsjson.py:66
 msgid "Number of trials"
 msgstr ""
 
-#: src/settingsjson.py:55
+#: src/settingsjson.py:67
 msgid "Trials per block."
 msgstr ""
 
-#: src/settingsjson.py:59
+#: src/settingsjson.py:71
 msgid "Number of Blocks"
 msgstr ""
 
-#: src/settingsjson.py:60
+#: src/settingsjson.py:72
 msgid "Number of subsequent blocks per run."
 msgstr ""
 
-#: src/settingsjson.py:64
+#: src/settingsjson.py:76
 msgid "Constrained-Task Block"
 msgstr ""
 
-#: src/settingsjson.py:65
+#: src/settingsjson.py:77
 msgid "Which of the blocks has the constrained task."
 msgstr ""
 
-#: src/settingsjson.py:69
+#: src/settingsjson.py:81
 msgid "Warm Up"
 msgstr ""
 
-#: src/settingsjson.py:70
+#: src/settingsjson.py:82
 msgid "Pause before each trial to get ready. In seconds."
 msgstr ""
 
-#: src/settingsjson.py:74
+#: src/settingsjson.py:86
 msgid "Trial Duration"
 msgstr ""
 
-#: src/settingsjson.py:75
+#: src/settingsjson.py:87
 msgid "Countdown timer, in seconds."
 msgstr ""
 
-#: src/settingsjson.py:79
+#: src/settingsjson.py:91
 msgid "Cool Down"
 msgstr ""
 
-#: src/settingsjson.py:80
+#: src/settingsjson.py:92
 msgid "Pause after each trial, in seconds."
 msgstr ""
 
-#: src/settingsjson.py:84
+#: src/settingsjson.py:96
 msgid "E-Mail Recipient"
 msgstr ""
 
-#: src/settingsjson.py:85
+#: src/settingsjson.py:97
 msgid "E-mail address to send data to."
 msgstr ""
 
-#: src/utility.py:79 src/utility.py:80 src/utility.py:88 src/utility.py:89
-#: src/utility.py:90 src/utility.py:91
+#: src/utility.py:103 src/utility.py:104 src/utility.py:108 src/utility.py:109
+#: src/utility.py:110 src/utility.py:111 src/utility.py:112
 msgid "UNKNOWN."
 msgstr ""
 
@@ -413,7 +429,7 @@ msgstr ""
 msgid "Do you want to remove {}?"
 msgstr ""
 
-#: src/widgets/managers.py:168
+#: src/widgets/managers.py:169
 #, python-brace-format
 msgid ""
 "{appname}\n"
@@ -421,37 +437,42 @@ msgid ""
 "\n"
 "Author: {author}\n"
 "Contact: [ref=mailto:{contact}][color=0000ff]{contact}[/color][/ref]\n"
-"Source Code: [ref={source}][color=0000ff]{source}[/color][/ref]"
+"Source Code: [ref={source}][color=0000ff]{source}[/color][/ref]\n"
+"\n"
+"This app uses third-party solutions that may not be governed by the same "
+"license.\n"
+"Third-Party Licenses: [ref={thirdparty}][color=0000ff]{thirdparty}[/color][/"
+"ref]"
 msgstr ""
 
-#: src/widgets/managers.py:199
+#: src/widgets/managers.py:204
 msgid "Warning"
 msgstr ""
 
-#: src/widgets/managers.py:209
+#: src/widgets/managers.py:214
 msgid "Error"
 msgstr ""
 
-#: src/widgets/managers.py:233
+#: src/widgets/managers.py:238
 msgid "Success!"
 msgstr ""
 
-#: src/widgets/managers.py:233
+#: src/widgets/managers.py:238
 msgid "Upload successful!"
 msgstr ""
 
-#: src/widgets/managers.py:238
+#: src/widgets/managers.py:243
 msgid ""
 "Upload failed.\n"
 "Something went wrong."
 msgstr ""
 
-#: src/widgets/managers.py:275
+#: src/widgets/managers.py:280
 msgid "Press again to quit."
 msgstr ""
 
 #: src/widgets/popups.py:31 src/widgets/popups.py:76 src/widgets/popups.py:104
-#: src/widgets/popups.py:161 src/widgets/popups.py:333
+#: src/widgets/popups.py:167 src/widgets/popups.py:339
 #: src/widgets/screensettings.py:156
 msgid "OK"
 msgstr ""
@@ -460,7 +481,7 @@ msgstr ""
 msgid "Do you want to continue?"
 msgstr ""
 
-#: src/widgets/popups.py:72 src/widgets/popups.py:329
+#: src/widgets/popups.py:72 src/widgets/popups.py:335
 #: src/widgets/screensettings.py:152
 msgid "CANCEL"
 msgstr ""
@@ -473,64 +494,64 @@ msgstr ""
 msgid "You can also change the language in the settings later."
 msgstr ""
 
-#: src/widgets/popups.py:155 src/widgets/popups.py:295
+#: src/widgets/popups.py:161 src/widgets/popups.py:301
 msgid "Choose Active User"
 msgstr ""
 
-#: src/widgets/popups.py:186 src/widgets/popups.py:297
+#: src/widgets/popups.py:192 src/widgets/popups.py:303
 msgid "Add User"
 msgstr ""
 
-#: src/widgets/popups.py:307 src/widgets/screenconsents.py:10
+#: src/widgets/popups.py:313 src/widgets/screenconsents.py:10
 #: src/widgets/screensgeneral.py:43
 msgid "Loading..."
 msgstr ""
 
-#: src/widgets/popups.py:310
+#: src/widgets/popups.py:316
 msgid "not found"
 msgstr ""
 
-#: src/widgets/popups.py:323
+#: src/widgets/popups.py:329
 msgid "Set New Value"
 msgstr ""
 
-#: src/widgets/popups.py:425 src/widgets/popups.py:439
+#: src/widgets/popups.py:431 src/widgets/popups.py:445
 msgid "Edit User"
 msgstr ""
 
-#: src/widgets/popups.py:439
+#: src/widgets/popups.py:445
 msgid "Add New User"
 msgstr ""
 
-#: src/widgets/popups.py:501
+#: src/widgets/popups.py:509
 msgid "DECLINE"
 msgstr ""
 
-#: src/widgets/popups.py:506
+#: src/widgets/popups.py:514
 msgid "ACCEPT"
 msgstr ""
 
-#: src/widgets/popups.py:537
+#: src/widgets/popups.py:545
 msgid "CLOSE"
 msgstr ""
 
-#: src/widgets/screencircletask.py:24 src/widgets/screencircletask.py:139
+#: src/widgets/screencircletask.py:29 src/widgets/screencircletask.py:156
 msgid "Trial: "
 msgstr ""
 
-#: src/widgets/screencircletask.py:104
+#: src/widgets/screencircletask.py:112
 msgid "PREPARE"
 msgstr ""
 
-#: src/widgets/screencircletask.py:159
+#: src/widgets/screencircletask.py:176
 msgid "GET READY"
 msgstr ""
 
-#: src/widgets/screencircletask.py:184
+#: src/widgets/screencircletask.py:200
 msgid "FINISHED"
 msgstr ""
 
-#: src/widgets/screencircletask.py:216
+#: src/widgets/screencircletask.py:231
 msgid ""
 "Please read instructions again carefully and perform task accordingly.\n"
 "Aborting Session..."
@@ -602,25 +623,36 @@ msgstr ""
 #, python-brace-format
 msgid ""
 "You have {0} task{1} in this block. Be as quick and as accurate as possible "
-"while solving the task{1}"
+"while performing the task{1}"
 msgstr ""
 
 #: src/widgets/screeninstructions.py:47
+msgid "This will also be signaled to you by a short vibration. "
+msgstr ""
+
+#: src/widgets/screeninstructions.py:49
 #, python-brace-format
 msgid ""
 "A trial starts by giving you {0} seconds time to prepare for the trial. "
-"During this time the sliders are inactive and can't be moved. After this "
-"preparation phase the sliders become active and you'll have {1} seconds time "
-"to complete the task{3}. The time limitation is visualized by counting down "
-"the seconds in the middle of the screen, as well as by an outer "
+"During this time the sliders are inactive and can't be moved. This is "
+"indicated by their dimmed color. After this preparation phase the sliders "
+"become active. You can then touch and move them. {4}You'll have {1} seconds "
+"time to complete the task{3}. The time limitation is visualized by counting "
+"down the seconds in the middle of the screen, as well as by an outer "
 "[color=ff00ff]purple ring[/color] that will close as the time runs out. A "
 "trial ends when the outer [color=ff00ff]purple ring[/color] closes and the "
 "countdown reaches 0.\n"
 "Shortly thereafter ({2} seconds) you will be prompted to get ready for the "
-"next trial."
+"next trial. "
 msgstr ""
 
-#: src/widgets/screeninstructions.py:56
+#: src/widgets/screeninstructions.py:59
+msgid ""
+"The events for the start and end of the countdown for each trial will play "
+"distinctive sounds. "
+msgstr ""
+
+#: src/widgets/screeninstructions.py:61
 msgid ""
 "Hold your device with both hands so your thumbs can reach their respective "
 "side of the screen comfortably.\n"
@@ -632,10 +664,12 @@ msgid ""
 "the [b]2 sliders[/b] located to the left and right side of the display with "
 "your thumbs. Both sliders have an influence on the size of the disc and "
 "you'll need both at the same time to get the [b]white disk[/b] to touch the "
-"[color=008000]green ring[/color]."
+"[color=008000]green ring[/color]. Please perform the task in a continuous "
+"motion and let go of the sliders when you think you reached the goal. The "
+"sliders are deactivated once you let go of them."
 msgstr ""
 
-#: src/widgets/screeninstructions.py:66
+#: src/widgets/screeninstructions.py:73
 msgid ""
 "In addition you'll have to fulfill another task concurrently to the first "
 "task. On top of the [color=008000]green ring[/color] there's a "

@@ -14,6 +14,8 @@ class SettingsContainer(Widget):
     """ Config settings that can be changes by user and properties for current state. """
     # General properties.
     current_user = ConfigParserProperty('Default', 'General', 'current_user', 'app', val_type=str)
+    is_sound_enabled = ConfigParserProperty('1', 'General', 'sound_enabled', 'app', val_type=int)
+    is_vibrate_enabled = ConfigParserProperty('1', 'General', 'vibration_enabled', 'app', val_type=int)
     # Data Collection.
     is_local_storage_enabled = ConfigParserProperty('0', 'DataCollection', 'is_local_storage_enabled', 'app',
                                                     val_type=int)  # Converts string to int.

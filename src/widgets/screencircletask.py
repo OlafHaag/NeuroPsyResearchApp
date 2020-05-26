@@ -15,7 +15,12 @@ import numpy as np
 from . import BaseScreen
 from ..config import time_fmt
 from ..i18n import _
-from ..utility import create_device_identifier
+from ..utility import create_device_identifier, platform
+
+if platform != 'win':
+    from plyer import vibrator
+else:
+    vibrator = None
 
 
 class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
@@ -100,8 +105,9 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         # Initiate data container for this block.
         self.data = np.zeros((self.settings.circle_task.n_trials, 2))
         # FixMe: Not loading sound files on Windows. (Unable to find a loader)
-        self.sound_start = SoundLoader.load('res/start.ogg')
-        self.sound_stop = SoundLoader.load('res/stop.ogg')
+        if self.settings.is_sound_enabled:
+            self.sound_start = SoundLoader.load('res/start.ogg')
+            self.sound_stop = SoundLoader.load('res/stop.ogg')
         self.count_down.start_count = self.settings.circle_task.trial_duration
         self.count_down.set_label(_("PREPARE"))
         self.start_task()
@@ -174,13 +180,12 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
             Clock.schedule_once(lambda dt: self.start_trial(), self.settings.circle_task.warm_up)
     
     def vibrate(self, t=0.1):
-        # FixMe: bug in plyer vibrate - argument mismatch
-        # try:
-        #     if vibrator.exists():
-        #         vibrator.vibrate(time=t)
-        # except (NotImplementedError, ModuleNotFoundError):
-        #     pass
-        pass
+        if self.settings.is_vibrate_enabled and vibrator:
+            try:
+                if vibrator.exists():
+                    vibrator.vibrate(time=t)
+            except (NotImplementedError, ModuleNotFoundError):
+                pass
     
     def start_trial(self):
         """ Start the trial. """
@@ -196,7 +201,6 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
             self.sound_stop.play()
         self.disable_sliders()
         self.count_down.set_label(_("FINISHED"))
-        self.vibrate()
         self.check_slider_use()
         # Record data for current trial.
         self.data[self.settings.current_trial - 1, :] = (self.ids.df1.value_normalized, self.ids.df2.value_normalized)

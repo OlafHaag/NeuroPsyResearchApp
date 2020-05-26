@@ -51,8 +51,10 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
     def on_kv_post(self, base_widget):
         """ Bind events. """
         self.count_down.bind(on_count_down_finished=lambda instance: self.trial_finished())
-        self.ids.df1.bind(on_grab=self.slider_grab)
-        self.ids.df2.bind(on_grab=self.slider_grab)
+        self.ids.df1.bind(on_grab=self.slider_grab,
+                          on_ungrab=self.slider_ungrab)
+        self.ids.df2.bind(on_grab=self.slider_grab,
+                          on_ungrab=self.slider_ungrab)
         # Save starting positions of sliders.
         self.df1_default = self.ids.df1.value_normalized
         self.df2_default = self.ids.df2.value_normalized
@@ -107,14 +109,26 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
     # ToDo: only last touch ungrabbed, ungrab all lingering touches. Doesn't appear to cause problems so far.
     def slider_grab(self, instance, touch):
         """ Set reference to touch event for sliders. """
-        if instance == self.ids.df1:
+        if instance == self.ids.df1 and not self.ids.df1.disabled:
             self.df1_touch = touch
             self.ids.df1_warning.opacity = 0.0
-        elif instance == self.ids.df2:
+        elif instance == self.ids.df2 and not self.ids.df2.disabled:
             self.df2_touch = touch
             self.ids.df2_warning.opacity = 0.0
     
+    def slider_ungrab(self, instance, touch):
+        """ Disable sliders when they're let go. """
+        if (instance == self.ids.df1) and self.df1_touch:
+            self.ids.df1.disabled = True
+            self.df1_touch.ungrab(self.ids.df1)
+            self.df1_touch = None
+        elif (instance == self.ids.df2) and self.df2_touch:
+            self.ids.df2.disabled = True
+            self.df2_touch.ungrab(self.ids.df2)
+            self.df2_touch = None
+        
     def disable_sliders(self):
+        """ Disable sliders regardless of whether they have touch or not. """
         self.ids.df2.disabled = True
         self.ids.df1.disabled = True
         # Release slider grabs, if any.

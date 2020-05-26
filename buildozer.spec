@@ -1,10 +1,10 @@
 [app]
 
 # (str) Title of your application
-title = Uncontrolled Manifold
+title = NeuroPsy Research
 
 # (str) Package name
-package.name = UncontrolledManifold
+package.name = NeuroPsyResearch
 
 # (str) Package domain (needed for android/ios packaging)
 package.domain = com.olafhaag
@@ -13,7 +13,7 @@ package.domain = com.olafhaag
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv,atlas,ogg,mo
+source.include_exts = py,png,jpg,kv,atlas,ogg,mo,txt
 
 # (list) List of inclusions using pattern matching
 #source.include_patterns = assets/*,images/*.png
@@ -22,21 +22,21 @@ source.include_exts = py,png,jpg,kv,atlas,ogg,mo
 #source.exclude_exts = spec
 
 # (list) List of directory to exclude (let empty to not exclude anything)
-#source.exclude_dirs = tests, bin, .idea
+source.exclude_dirs = tests, bin, .idea, .git
 
 # (list) List of exclusions using pattern matching
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 0.1
+# version = 0.1
 
 # (str) Application versioning (method 2)
-# version.regex = __version__ = ['"](.*)['"]
-# version.filename = %(source.dir)s/main.py
+version.regex = __version__ = ['"](.*)['"]
+version.filename = %(source.dir)s/src/version.py
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3, kivy==1.11.1, kivymd, plyer, numpy, requests
+requirements = hostpython3==3.7.7, python3==3.7.7, kivy==1.11.1, git+https://github.com/HeaTTheatR/KivyMD, plyer, numpy, requests
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -82,16 +82,16 @@ fullscreen = 1
 # red, blue, green, black, white, gray, cyan, magenta, yellow, lightgray,
 # darkgray, grey, lightgrey, darkgrey, aqua, fuchsia, lime, maroon, navy,
 # olive, purple, silver, teal.
-#android.presplash_color = #FFFFFF
+android.presplash_color = teal
 
 # (list) Permissions
-android.permissions = WRITE_EXTERNAL_STORAGE,INTERNET,VIBRATE
+android.permissions = INTERNET,VIBRATE
 
 # (int) Target Android API, should be as high as possible.
-#android.api = 27
+android.api = 28
 
 # (int) Minimum API your APK will support.
-#android.minapi = 21
+android.minapi = 21
 
 # (int) Android SDK version to use
 #android.sdk = 20
@@ -103,7 +103,7 @@ android.permissions = WRITE_EXTERNAL_STORAGE,INTERNET,VIBRATE
 #android.ndk_api = 21
 
 # (bool) Use --private data storage (True) or --dir public storage (False)
-#android.private_storage = True
+android.private_storage = True
 
 # (str) Android NDK directory (if empty, it will be automatically downloaded.)
 #android.ndk_path =

@@ -164,19 +164,24 @@ class UiManager(ScreenManager):
         
     def show_about(self):
         details = get_app_details()
+        # FixMe: height of the popup greater than screen height, can't reach ok-button.
         self.show_info(title=_("About"),
                        text=_("{appname}\n"  # Alternatively self.app.get_application_name()
                               "Version: {version}\n"
                               "\n"
                               "Author: {author}\n"
                               "Contact: [ref=mailto:{contact}][color=0000ff]{contact}[/color][/ref]\n"
-                              "Source Code: [ref={source}][color=0000ff]{source}[/color][/ref]"
+                              "Source Code: [ref={source}][color=0000ff]{source}[/color][/ref]\n"
+                              "\n"
+                              "This app uses third-party solutions that may not be governed by the same license.\n"
+                              "Third-Party Licenses: [ref={thirdparty}][color=0000ff]{thirdparty}[/color][/ref]"
                               ).format(appname=details['appname'],
                                        author=details['author'],
                                        contact=details['contact'],
                                        version=details['version'],
                                        source=details['source'],
-                                       )
+                                       thirdparty=details['third-party'],
+                                       ),
                        )
             
     def on_info(self, title=None, text=None):

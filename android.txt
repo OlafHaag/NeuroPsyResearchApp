@@ -2,4 +2,5 @@ title=UCMResearch
 author=Your Name
 contact=you@yourdomain.com
 source=https://your-repo.com/yoursourcecode
+3rdPartyLicenses=https://yourlink.to/all3rdpartylicenses
 orientation=landscape

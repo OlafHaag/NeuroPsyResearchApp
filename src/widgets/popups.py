@@ -61,7 +61,6 @@ class ConfirmPopup(MDDialog):
     Has on_confirm event that can be bound to.
     """
     def __init__(self, **kwargs):
-        self.register_event_type('on_dismiss')
         self.register_event_type('on_confirm')
         default_kwargs = dict(
             title=_("Do you want to continue?"),
@@ -138,10 +137,10 @@ class LanguagePopup(MDDialog):
     def on_language_set(self):
         pass
     
-    def on_open(self):
+    def on_pre_open(self):
         self.select_current_language()
 
-    def on_dismiss(self):
+    def on_pre_dismiss(self):
         self.change_language()
 
 
@@ -302,7 +301,7 @@ class UsersPopup(MDDialog):
         # Instead of clearing all widgets and rebuilding, just assert that the last item is always add user.
         self.items[-1].text = _("Add User")
     
-    def on_open(self):
+    def on_pre_open(self):
         self.select_item(self.current_user)
     
     def on_dismiss(self):
@@ -492,7 +491,7 @@ class PolicyPopup(SimplePopup):
                                                      contact=details['contact'])
         return text
 
-    def on_open(self):
+    def on_pre_open(self):
         # In case the language changed, reload the policy text.
         self.content_cls.text = self._get_text(get_policy())
             
@@ -537,7 +536,7 @@ class TermsPopup(PolicyPopup):
         if self.is_first_run:
             self.is_first_run = 0
             
-    def on_open(self):
+    def on_pre_open(self):
         # When the terms are dismissed the first time, it means they were accepted.
         if not self.is_first_run:
             self.content_cls.text = self._get_text(get_terms())

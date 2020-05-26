@@ -1,5 +1,3 @@
-import json
-
 from kivy.core.window import Window
 from kivy.metrics import dp
 from kivy.uix.floatlayout import FloatLayout
@@ -34,12 +32,14 @@ class SettingThemedString(SettingString):
         self._dismiss()
         
     def _create_popup(self, instance):
-        # create popup layout
-        self.popup = popup = TextInputPopup(title=self.title)
-        popup.content_cls.description = self.desc
-        popup.input = self.value
-        popup.bind(on_confirm=lambda x, text: self._set_value(text), on_dismiss=self._dismiss)
-        popup.open()
+        # Prevent opening multiple of these popups.
+        if not self.popup:
+            # create popup layout
+            self.popup = popup = TextInputPopup(title=self.title)
+            popup.content_cls.description = self.desc
+            popup.input = self.value
+            popup.bind(on_confirm=lambda x, text: self._set_value(text), on_dismiss=self._dismiss)
+            popup.open()
     
     def _dismiss(self, *largs):
         self.popup = None
@@ -70,12 +70,13 @@ class SettingThemedNumeric(SettingThemedString):
             return str
         
     def _create_popup(self, instance):
-        # create popup layout
-        self.popup = popup = NumericInputPopup(title=self.title, type=self._get_numeric_type())
-        popup.content_cls.description = self.desc
-        popup.input = self.value
-        popup.bind(on_confirm=lambda x, text: self._set_value(text), on_dismiss=self._dismiss)
-        popup.open()
+        if not self.popup:
+            # create popup layout
+            self.popup = popup = NumericInputPopup(title=self.title, type=self._get_numeric_type())
+            popup.content_cls.description = self.desc
+            popup.input = self.value
+            popup.bind(on_confirm=lambda x, text: self._set_value(text), on_dismiss=self._dismiss)
+            popup.open()
         
         
 class SettingButtons(SettingItem):

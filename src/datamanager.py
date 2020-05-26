@@ -7,6 +7,7 @@ from pathlib import Path
 import pickle
 import shutil
 import time
+from typing import List
 
 # Third party imports
 from kivy.app import App
@@ -15,8 +16,7 @@ from kivy.properties import BooleanProperty
 from kivy.uix.widget import Widget
 from kivy.utils import platform
 import numpy as np
-from plyer import storagepath
-from plyer import email
+import plyer
 import requests
 
 # Own module imports
@@ -25,11 +25,11 @@ from .i18n import _
 from .utility import (create_device_identifier,
                       get_screensize,
                       ask_permission,
+                      Permission,
                       )
-
 # Conditional imports
 if platform == 'android':
-    from android.permissions import Permission
+    from jnius import autoclass
 
 
 class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
@@ -40,11 +40,8 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
     def __init__(self, **kwargs):
         super(DataManager, self).__init__(**kwargs)
         self.app = App.get_running_app()
-        # Android permissions.
-        self.write_permit = True  # Set to true as default for platforms other than android.
-        self.internet_permit = True
         # Containers for data.
-        self._data = list()  # type: list[dict]
+        self._data = list()  # type: List[dict]
         self._data_email = list()
         # For which user to collect data. Set after given consent.
         self._user_id = ''
@@ -137,23 +134,24 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
 
     # ## Data Local Storage ## #
     def get_storage_path(self):
-        """ Return writable path.
-        If it does not exist on android, make directory.
+        """ Return path we want to save data to.
+        This returns an app specific path in external storage that we don't need special permission to use and that gets
+        removed with app uninstall.
         """
         if platform == 'android':
-            # dest = Path(storagepath.get_documents_dir())
-            dest = Path(storagepath.get_external_storage_dir()) / self.app.name
-            # We may need to ask permission to write to the external storage. Permission could have been revoked.
-            self.write_permit = ask_permission(Permission.WRITE_EXTERNAL_STORAGE)
-        
-            if not dest.exists() and self.write_permit:
-                # Make sure the path exists.
-                dest.mkdir(parents=True, exist_ok=True)
+            PythonActivity = autoclass('org.kivy.android.PythonActivity')
+            activity = PythonActivity.mActivity
+            # This should work even if there's no external storage.
+            dest = activity.getExternalFilesDir(None).getAbsolutePath()
+            dest = Path(dest)
+            # Alternative storage paths that would need permission management.
+            # dest = Path(plyer.storagepath.get_external_storage_dir()) / self.app.name
+            # dest = Path(plyer.storagepath.get_documents_dir()) / self.app.name
         else:
             dest = Path(self.app.user_data_dir)
             # dest = dest.resolve()  # Resolve any symlinks.
         return dest
-
+    
     def _create_subfolder(self, subpath):
         """ Create a user folder inside storage_path.
 
@@ -162,7 +160,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         """
         storage_path = self.get_storage_path()
         destination = storage_path / subpath
-        if not destination.exists() and self.write_permit:
+        if not destination.exists():
             destination.mkdir(parents=True, exist_ok=True)  # Assume this works and we have permissions.
 
     def _remove_user_folders(self, user_id):
@@ -172,7 +170,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         user_folders = storage_path.rglob(user_id)
         for folder in user_folders:
             shutil.rmtree(folder, ignore_errors=True)
-
+        
     def compile_filename(self, meta_data):
         """ Returns file name based on provided meta data.
         Uses current time if meta data is incomplete.
@@ -206,16 +204,15 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         :return: Whether writing to file was successful.
         :rtype: bool
         """
-        if self.write_permit:
-            if isinstance(content, bytes):
-                path.write_bytes(content)
-                return True
-            elif isinstance(content, str):
-                path.write_text(content)
-                return True
-            else:
-                self.dispatch('on_data_processing_failed',
-                              _("Unable to write to file:\n{}\nUnknown data format.").format(path.name))
+        if isinstance(content, bytes):
+            path.write_bytes(content)
+            return True
+        elif isinstance(content, str):
+            path.write_text(content)
+            return True
+        else:
+            self.dispatch('on_data_processing_failed',
+                          _("Unable to write to file:\n{}\nUnknown data format.").format(path.name))
         return False
 
     def write_data_to_files(self):
@@ -237,6 +234,8 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         
             file_name = self.compile_filename(d)
             file_path = dir_path / file_name
+            # Because external storage resides on a physical volume that the user might be able to remove,
+            # verify that the volume is accessible before trying to write app-specific data to external storage.
             try:
                 success = self.write_file(file_path, d['data'])
             except KeyError:
@@ -345,13 +344,36 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
     
     def upload_data(self, route):
         """ Upload collected data to server. """
-        res = self._get_response(route, self._get_dash_post(self._data))
-        res_msg = self._parse_response(res)
-        status = self._get_uploaded_status(res_msg)
-        self.data_sent = status
-        # Inform any listeners about the result.
-        self.dispatch('on_data_upload', status, res_msg)
+        # Since ask_permission first checks for permission and, if present, doesn't trigger the callback, this does
+        # not result in an endless loop.
+        permission = ask_permission(Permission.INTERNET, callback=self._on_internet_permission_request)
+        if permission:
+            res = self._get_response(route, self._get_dash_post(self._data))
+            res_msg = self._parse_response(res)
+            status = self._get_uploaded_status(res_msg)
+            self.data_sent = status
+            # Inform any listeners about the result.
+            self.dispatch('on_data_upload', status, res_msg)
 
+    def _on_internet_permission_request(self, permissions, grant_results):
+        """ Callback receiving results of permission request.
+        :type permissions: List[str]
+        :type grant_results: List[bool]
+        """
+        try:
+            idx = permissions.index(Permission.INTERNET)
+            # Check if internet permission was granted.
+            permission_granted = grant_results[idx]
+        except ValueError:
+            # Request was interrupted and we didn't get request result.
+            permission_granted = False
+        # Act on permission request result.
+        if permission_granted:
+            self.upload_data(self.app.get_upload_route())
+        else:
+            # Toast with info on failed permit
+            plyer.notification.notify(message=_("Permission to access Internet denied."), toast=True)
+    
     def send_email(self, recipient):
         """ Send the data via e-mail. """
         
@@ -373,7 +395,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
             text += "\n\n"
     
         create_chooser = True
-        email.send(recipient=recipient, subject=subject, text=disclaimer + text, create_chooser=create_chooser)
+        plyer.email.send(recipient=recipient, subject=subject, text=disclaimer + text, create_chooser=create_chooser)
 
     # ## Events ## #
     def on_data_saved(self, instance, value):

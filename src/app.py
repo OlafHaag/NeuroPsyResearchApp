@@ -7,7 +7,7 @@ from kivy.lang import global_idmap, Builder
 from kivy.properties import ObjectProperty
 from kivy.utils import platform
 
-from .utility import create_user_identifier, switch_language, get_app_details, ask_permission
+from .utility import create_user_identifier, switch_language, get_app_details
 from .datamanager import DataManager
 from .i18n import _, DEFAULT_LANGUAGE
 from .config import WEBSERVER
@@ -15,9 +15,6 @@ from .settings import SettingsContainer
 from .widgets import BaseScreen, SettingsWithTabbedPanels
 from .settingsjson import LANGUAGE_CODE, LANGUAGE_SECTION, get_settings_general_json, get_settings_circle_task_json
 
-
-if platform == 'android':
-    from android.permissions import Permission
 
 # i18n
 global_idmap['_'] = _
@@ -29,7 +26,7 @@ Window.fullscreen = 'auto'
 
 class NeuroPsyResearchApp(MDApp):
     manager = ObjectProperty(None, allownone=True)
-    
+
     def build(self):
         """ Initializes the application; it will be called only once.
         If this method returns a widget (tree), it will be used as the root widget and added to the window.
@@ -144,9 +141,6 @@ class NeuroPsyResearchApp(MDApp):
         :return: Destination URI for data upload.
         :rtype: str
         """
-        if platform == 'android':
-            self.internet_permit = ask_permission(Permission.INTERNET, timeout=2)
-        
         # Upload address depends on current task. One dash application per task.
         if self.settings.current_task == 'Circle Task':
             upload_route = '/circletask/_dash-update-component'

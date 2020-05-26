@@ -2,21 +2,12 @@
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.properties import (NumericProperty,
-                             StringProperty,
                              ListProperty,
                              ConfigParserProperty,
                              )
-from kivy.utils import platform
 from kivy.clock import Clock
 
-from .utility import ask_permission
 from .config import WEBSERVER
-
-if platform == 'android':
-    from android.permissions import Permission
-    WRITE_PERMISSION = Permission.WRITE_EXTERNAL_STORAGE
-else:
-    WRITE_PERMISSION = None
 
 
 class SettingsContainer(Widget):
@@ -38,7 +29,7 @@ class SettingsContainer(Widget):
     # Can't save in one list with ids as mapping, because callbacks are only triggered at toplevel changes.
     user_ids = ListProperty([])
     user_aliases = ListProperty([])
-    
+
     def __init__(self, **kwargs):
         super(SettingsContainer, self).__init__(**kwargs)
         # Study settings have to follow the rule of being named the lowercase study name with underscores.
@@ -49,29 +40,12 @@ class SettingsContainer(Widget):
         # Schedule user settings for nct frame. Section is not yet ready.
         Clock.schedule_once(lambda dt: self.populate_users(), 1)
     
-    def get_settings_widget(self, panel_name, key):
-        """ Helper function to get a widget from a SettingsPanel that contains a config value. """
-        app = App.get_running_app()
-        panels = app._app_settings.interface.content.panels
-        gen_panel = [k for k, v in panels.items() if v.title == panel_name][0]
-        widgets = panels[gen_panel].children
-        for w in widgets:
-            try:
-                if w.key == key:
-                    return w.children[0].children[0].children[0]
-            except AttributeError:
-                pass
-        return None
-        
     def populate_users(self):
         app = App.get_running_app()
         config = app.config
         for user_id in config['UserData']:
             self.user_ids.append(user_id)
             self.user_aliases.append(config.get('UserData', user_id))
-    
-    def on_current_user(self, instance, new_id):
-        pass
     
     def edit_user(self, instance, user_id=None, user_alias=''):
         """ Edit user information. This can be a new user. """
@@ -99,21 +73,8 @@ class SettingsContainer(Widget):
         self.dispatch('on_user_removed', user_id)
     
     def on_user_removed(self, *args):
+        """ Default dummy implementation of event callback. """
         pass
-    
-    def on_is_local_storage_enabled(self, instance, value):
-        """ We need to ask for write permission before trying to write, otherwise we lose data.
-        There's no callback for permissions granted yet.
-        """
-        if value:
-            app = App.get_running_app()
-            app.write_permit = ask_permission(WRITE_PERMISSION, timeout=5)
-            if not app.write_permit:
-                self.is_local_storage_enabled = 0
-                # Hack to change the visual switch after value was set. ConfigParserProperty doesn't work here. (1.11.0)
-                switch = self.get_settings_widget('General', 'is_local_storage_enabled')
-                if switch:
-                    switch.active = self.is_local_storage_enabled
     
     def reset_current(self):
         self.current_block = 0
@@ -149,7 +110,7 @@ class SettingsCircleTask(Widget):
     cool_down = ConfigParserProperty('0.5', 'CircleTask', 'cool_down_time', 'app', val_type=float,
                                      verify=lambda x: x > 0.0, errorvalue=0.5)
     email_recipient = ConfigParserProperty('', 'CircleTask', 'email_recipient', 'app', val_type=str)
-
+    
     def __init__(self, **kwargs):
         super(SettingsCircleTask, self).__init__(**kwargs)
         self.constraint = False

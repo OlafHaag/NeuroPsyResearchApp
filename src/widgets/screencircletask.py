@@ -56,10 +56,14 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
     def on_kv_post(self, base_widget):
         """ Bind events. """
         self.count_down.bind(on_count_down_finished=lambda instance: self.trial_finished())
+        # Release slider when we leave handle position too much.
+        # We don't want extra degrees of freedom that we don't measure.
         self.ids.df1.bind(on_grab=self.slider_grab,
-                          on_ungrab=self.slider_ungrab)
+                          on_ungrab=self.slider_ungrab,
+                          on_leave=self.slider_ungrab)
         self.ids.df2.bind(on_grab=self.slider_grab,
-                          on_ungrab=self.slider_ungrab)
+                          on_ungrab=self.slider_ungrab,
+                          on_leave=self.slider_ungrab)
         # Save starting positions of sliders.
         self.df1_default = self.ids.df1.value_normalized
         self.df2_default = self.ids.df2.value_normalized
@@ -124,15 +128,15 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
     
     def slider_ungrab(self, instance, touch):
         """ Disable sliders when they're let go. """
-        if (instance == self.ids.df1) and self.df1_touch:
+        if (instance == self.ids.df1) and touch is self.df1_touch:
             self.ids.df1.disabled = True
             self.df1_touch.ungrab(self.ids.df1)
             self.df1_touch = None
-        elif (instance == self.ids.df2) and self.df2_touch:
+        elif (instance == self.ids.df2) and touch is self.df2_touch:
             self.ids.df2.disabled = True
             self.df2_touch.ungrab(self.ids.df2)
             self.df2_touch = None
-        
+    
     def disable_sliders(self):
         """ Disable sliders regardless of whether they have touch or not. """
         self.ids.df2.disabled = True

@@ -29,13 +29,8 @@ class ScreenHome(BaseScreen):
         app = App.get_running_app()
         # To get translation after language change, we have to trigger setting the texts.
         self.title = _("Welcome!")
-        if app.settings.is_local_storage_enabled:
-            storage_hint = _("Storing research data on the device is enabled. You can disable it in the settings.\n")
-        else:
-            storage_hint = _("Storing research data on the device is disabled. You can enable it in the settings.\n")
-    
         self.msg = _("You can participate in a study by choosing from available studies below."
-                     "\n\n") + storage_hint
+                     "\n\n")
         
 
 class ScreenOutro(BaseScreen):
@@ -43,20 +38,26 @@ class ScreenOutro(BaseScreen):
     msg = StringProperty(_("Loading..."))
     upload_btn_enabled = BooleanProperty(True)
     popup_block = ObjectProperty(None, allownone=True)
-
+    
     def on_pre_enter(self, *args):
+        # Local storage.
         app = App.get_running_app()
-        
-        self.msg = _('[color=ff00ff][b]Thank you[/b][/color] for participating!') + "\n\n"  # Workaround for i18n.
-        if app.settings.is_local_storage_enabled:
-            if not app.data_mgr.data_saved:
-                app.data_mgr.write_data_to_files()
-            dest = app.data_mgr.get_storage_path()
+        if app.settings.is_local_storage_enabled and not app.data_mgr.is_data_saved:
+            app.data_mgr.write_data_to_files()
+        # Upload.
+        self.upload_btn_enabled = app.settings.is_upload_enabled and (not app.data_mgr.is_invalid)
+        self._set_msg()
+    
+    def _set_msg(self):
+        self.msg = _('[color=ff00ff][b]Thank you[/b][/color] for participating!') + "\n\n"
+        # Local storage.
+        app = App.get_running_app()
+        dest = app.data_mgr.get_storage_path()
+        if app.data_mgr.is_data_saved:
             self.msg += _("Files were{} saved to [i]{}[/i].\n").format('' if dest.exists() else _(' [b]not[/b]'), dest)
         else:
-            self.msg += _("Results were [b]not[/b] locally stored as files. "
-                          "You can enable this in the settings [i]before[/i] starting a study.\n")
-        self.upload_btn_enabled = app.settings.is_upload_enabled
+            self.msg += _("Research data were [b]not[/b] locally stored as files. "
+                          "You can enable storing research data on the device in the settings.\n")
         if self.upload_btn_enabled:
             self.msg += _("You can now [b]upload[/b] the research data by pressing the button below. "
                           "Unless stated otherwise in the study's description we'd appreciate if you only upload "

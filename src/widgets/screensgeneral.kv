@@ -12,17 +12,13 @@
             size: self.size
 
 <ScreenHome>:
-    name: 'Home'
     on_leave: scroll.scroll_y = 1
     navbar_enabled: True
 
     MDBoxLayout:
         orientation: 'vertical'
 
-        MDToolbar:
-            title: _("MENU")
-            elevation: 10
-            left_action_items: [['menu', lambda instance: root.manager.sidebar.set_state()]]
+        TopBar:
 
         ScrollView:
             id: scroll
@@ -33,12 +29,12 @@
             GridLayout:
                 cols: 1
                 padding: 10, 10
+                spacing: 10
                 # FixMe: Title overlapped by text on Android.
                 MDLabel:
                     text: root.title
                     markup: True
                     size_hint_y: None
-                    height: 20
                     font_style: 'H5'
                     padding: 10, 20
                     halign: 'center'
@@ -74,60 +70,49 @@
                     Widget:  # Spacer.
 
 <ScreenOutro>:
-    name: 'Outro'
     navbar_enabled: True
 
-    ScrollView:
-        id: scroll
-        do_scroll_x: False
-        do_scroll_y: True
-        scroll_type: ['bars', 'content']
+    MDBoxLayout:
+        orientation: 'vertical'
 
-        MDGridLayout:
-            cols:1
+        TopBar:
 
-            MDLabel:
-                text: root.msg
-                markup: True
-                text_size: root.width, None
-                size: self.texture_size
-                halign: 'center'
-                valign: 'middle'
+        ScrollView:
+            id: scroll
+            do_scroll_x: False
+            do_scroll_y: True
+            scroll_type: ['bars', 'content']
 
-            # FixMe: buttons overlapping
-            BoxLayout:
-                Widget:
-                MDBoxLayout:
-                    orientation: 'vertical'
-                    spacing: 20
-                    padding: 10, 10
+            MDGridLayout:
+                cols:1
 
-                    AnchorLayout:
-                        anchors: 'center', 'center'
-                        MDRectangleFlatIconButton:
-                            icon: 'upload'
-                            text: _("Upload")
-                            disabled: (not root.upload_btn_enabled) or (app.data_mgr.data_sent)
-                            on_release: root.on_upload()
-                    AnchorLayout:
-                        anchors: 'center', 'center'
-                        MDRectangleFlatIconButton:
-                            icon: 'email-send'
-                            text: _("Send via E-Mail")
-                            disabled: not app.settings.is_email_enabled
-                            on_release: app.data_mgr.send_email(getattr(app.settings, app.settings.current_task.lower().replace(" ", "_")).email_recipient)
-                    AnchorLayout:
-                        anchors: 'center', 'center'
-                        MDRectangleFlatIconButton:
-                            icon: 'home'
-                            text: _("Home")
-                            on_release:
-                                app.settings.reset_current()
-                                root.manager.go_home()
-                    AnchorLayout:
-                        anchors: 'center', 'center'
-                        MDRectangleFlatIconButton:
-                            icon: 'close-box'
-                            text: _("Exit")
-                            on_release: root.manager.quit()
-                Widget:
+                MDLabel:
+                    text: root.msg
+                    markup: True
+                    text_size: root.width, None
+                    size: self.texture_size
+                    halign: 'center'
+                    valign: 'middle'
+
+                BoxLayout:
+                    Widget:
+                    MDBoxLayout:
+                        orientation: 'vertical'
+                        spacing: 20
+                        padding: 10, 10
+
+                        AnchorLayout:
+                            anchors: 'center', 'center'
+                            MDRectangleFlatIconButton:
+                                icon: 'upload'
+                                text: _("Upload")
+                                disabled: (not root.upload_btn_enabled) or app.data_mgr.is_data_sent or app.data_mgr.is_invalid
+                                on_release: root.on_upload()
+                        AnchorLayout:
+                            anchors: 'center', 'center'
+                            MDRectangleFlatIconButton:
+                                icon: 'email-send'
+                                text: _("Send via E-Mail")
+                                disabled: not app.settings.is_email_enabled
+                                on_release: app.data_mgr.send_email(getattr(app.settings, app.settings.current_task.lower().replace(" ", "_")).email_recipient)
+                    Widget:

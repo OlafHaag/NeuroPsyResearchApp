@@ -6,6 +6,7 @@ from kivy.core.window import Window
 from kivy.lang import global_idmap, Builder
 from kivy.properties import ObjectProperty
 from kivy.utils import platform
+import plyer
 
 from .utility import create_user_identifier, switch_language, get_app_details
 from .datamanager import DataManager
@@ -26,6 +27,8 @@ Window.fullscreen = 'auto'
 
 class NeuroPsyResearchApp(MDApp):
     manager = ObjectProperty(None, allownone=True)
+    use_kivy_settings = False
+    settings_cls = SettingsWithTabbedPanels
 
     def build(self):
         """ Initializes the application; it will be called only once.
@@ -36,8 +39,6 @@ class NeuroPsyResearchApp(MDApp):
         self.theme_cls.theme_style = "Light"
         self.theme_cls.primary_palette = "Teal"
         # Settings.
-        self.settings_cls = SettingsWithTabbedPanels
-        self.use_kivy_settings = False
         self.settings = SettingsContainer()
         self.update_language_from_config()
         self.data_mgr = DataManager()
@@ -48,6 +49,11 @@ class NeuroPsyResearchApp(MDApp):
                            )
         
         # GUI.
+        try:
+            plyer.orientation.set_portrait()
+        except (NotImplementedError, ModuleNotFoundError):
+            pass
+        
         root = Builder.load_file('src/widgets/navigation.kv')
         self.manager = root.ids.mgr
         return root

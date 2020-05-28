@@ -34,8 +34,8 @@ if platform == 'android':
 
 class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
     """ Manager for data collection and saving or sending them. """
-    data_saved = BooleanProperty(False)  # Did we save the current data?
-    data_sent = BooleanProperty(False)  # Did we sent the current data?
+    is_data_saved = BooleanProperty(False)  # Did we save the current data?
+    is_data_sent = BooleanProperty(False)  # Did we sent the current data?
     
     def __init__(self, **kwargs):
         super(DataManager, self).__init__(**kwargs)
@@ -43,6 +43,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         # Containers for data.
         self._data = list()  # type: List[dict]
         self._data_email = list()
+        self.is_invalid = False
         # For which user to collect data. Set after given consent.
         self._user_id = ''
         # Events to listen to.
@@ -68,8 +69,9 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         """ Clear data. """
         self._data.clear()
         self._data_email.clear()
-        self.data_sent = False
-        self.data_saved = False
+        self.is_invalid = False
+        self.is_data_sent = False
+        self.is_data_saved = False
     
     def new_data_collection(self, user_id):
         """ Start new collection. """
@@ -241,7 +243,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
             except KeyError:
                 success = False
                 self.dispatch('on_data_processing_failed', _("Data missing.\nFailed to write\n{}.").format(file_name))
-        self.data_saved = success
+        self.is_data_saved = success
 
     # ## Data Upload ## #
     def _get_user_data(self, user_id):
@@ -351,7 +353,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
             res = self._get_response(route, self._get_dash_post(self._data))
             res_msg = self._parse_response(res)
             status = self._get_uploaded_status(res_msg)
-            self.data_sent = status
+            self.is_data_sent = status
             # Inform any listeners about the result.
             self.dispatch('on_data_upload', status, res_msg)
 
@@ -398,10 +400,10 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         plyer.email.send(recipient=recipient, subject=subject, text=disclaimer + text, create_chooser=create_chooser)
 
     # ## Events ## #
-    def on_data_saved(self, instance, value):
+    def on_is_data_saved(self, instance, value):
         pass
     
-    def on_data_sent(self, instance, value):
+    def on_is_data_sent(self, instance, value):
         pass
 
     def on_data_processing_failed(self, *args):

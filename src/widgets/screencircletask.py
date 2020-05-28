@@ -11,16 +11,12 @@ from kivy.clock import Clock
 from kivymd.uix.behaviors import BackgroundColorBehavior
 
 import numpy as np
+import plyer
 
 from . import BaseScreen
 from ..config import time_fmt
 from ..i18n import _
-from ..utility import create_device_identifier, platform
-
-if platform != 'win':
-    from plyer import vibrator
-else:
-    vibrator = None
+from ..utility import create_device_identifier
 
 
 class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
@@ -32,14 +28,13 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
     is_practice = BooleanProperty(True)
     
     def __init__(self, **kwargs):
-        super(ScreenCircleTask, self).__init__(**kwargs)
+        self.target2_switch = False  # Which slider is controlling the second target.
         # Procedure related.
         self.register_event_type('on_task_stopped')
         self.schedule = None
         self.max_trials = 0
         self.max_blocks = 0
         # Control related.
-        self.target2_switch = False  # Which slider is controlling the second target.
         self.df1_touch = None
         self.df2_touch = None
         # Save defaults in order to check if sliders have been used at all. Set in on_kv_post.
@@ -52,6 +47,7 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         self.data = None  # For numerical data.
         self.meta_data = dict()  # For context of numerical data acquisition, e.g. treatment/condition.
         self.session_data = list()  # For description of a block if numerical data.
+        super(ScreenCircleTask, self).__init__(**kwargs)
     
     def on_kv_post(self, base_widget):
         """ Bind events. """
@@ -85,9 +81,15 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         else:
             slider.cursor_image = f'res/sliderhandle_{o}_on.png'
             slider.cursor_disabled_image = f'res/sliderhandle_{o}_off.png'
-            
+    
     def on_pre_enter(self, *args):
         """ Setup this run of the task and initiate start. """
+        # Switch to landscape.
+        try:
+            plyer.orientation.set_landscape()
+        except (NotImplementedError, ModuleNotFoundError):
+            pass
+        
         # Do we do practice trials?
         self.is_practice = bool(self.settings.circle_task.practice_block)
         if self.is_practice:
@@ -107,7 +109,11 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         self.ids.df2_warning.opacity = 1.0
 
         # Initiate data container for this block.
-        self.data = np.zeros((self.settings.circle_task.n_trials, 2))
+        if self.is_practice:
+            n_trials = self.settings.circle_task.n_practice_trials
+        else:
+            n_trials = self.settings.circle_task.n_trials
+        self.data = np.zeros((n_trials, 2))
         # FixMe: Not loading sound files on Windows. (Unable to find a loader)
         if self.settings.is_sound_enabled:
             self.sound_start = SoundLoader.load('res/start.ogg')
@@ -116,6 +122,12 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         self.count_down.set_label(_("PREPARE"))
         self.start_task()
     
+    def on_leave(self, *args):
+        try:
+            plyer.orientation.set_portrait()
+        except (NotImplementedError, ModuleNotFoundError):
+            pass
+        
     # ToDo: only last touch ungrabbed, ungrab all lingering touches. Doesn't appear to cause problems so far.
     def slider_grab(self, instance, touch):
         """ Set reference to touch event for sliders. """
@@ -184,10 +196,10 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
             Clock.schedule_once(lambda dt: self.start_trial(), self.settings.circle_task.warm_up)
     
     def vibrate(self, t=0.1):
-        if self.settings.is_vibrate_enabled and vibrator:
+        if self.settings.is_vibrate_enabled:
             try:
-                if vibrator.exists():
-                    vibrator.vibrate(time=t)
+                if plyer.vibrator.exists():
+                    plyer.vibrator.vibrate(time=t)
             except (NotImplementedError, ModuleNotFoundError):
                 pass
     
@@ -239,8 +251,8 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
                 self.manager.dispatch('on_warning', text=msg)
                 # These are not the data you're looking for...
                 app = App.get_running_app()
-                app.data_mgr.data_sent = True  # Hack to disable upload button.
-                # Abort session.
+                app.data_mgr.is_invalid = True
+                # Abort session. Was last block.
                 self.dispatch('on_task_stopped', True)
                 return
             

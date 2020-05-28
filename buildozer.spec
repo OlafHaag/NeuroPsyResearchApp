@@ -36,7 +36,7 @@ version.filename = %(source.dir)s/src/version.py
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = hostpython3==3.7.7, python3==3.7.7, kivy==1.11.1, git+https://github.com/HeaTTheatR/KivyMD, plyer, numpy, requests
+requirements = hostpython3==3.7.7, python3==3.7.7, kivy==1.11.1, kivymd==0.104.1, plyer, numpy, requests
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -52,7 +52,7 @@ presplash.filename = %(source.dir)s/res/loading.png
 icon.filename = %(source.dir)s/res/icons/mipmap-mdpi/ucmicon.png
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
-orientation = landscape
+orientation = portrait
 
 # (list) List of service to declare
 #services = NAME:ENTRYPOINT_TO_PY,NAME2:ENTRYPOINT2_TO_PY

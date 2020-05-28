@@ -9,7 +9,11 @@ from kivy.clock import Clock
 
 from plyer import notification
 
-from . import (SimplePopup,
+from . import (ScreenConsentCircleTask,
+               ScreenInstructCircleTask,
+               ScreenCircleTask,
+               ScreenOutro,
+               SimplePopup,
                BlockingPopup,
                ConfirmPopup,
                LanguagePopup,
@@ -22,6 +26,12 @@ from . import (SimplePopup,
                )
 from ..i18n import _
 from ..utility import get_app_details
+
+screen_map = {'Consent CT': ScreenConsentCircleTask,
+              'Instructions CT': ScreenInstructCircleTask,
+              'Circle Task': ScreenCircleTask,
+              'Outro': ScreenOutro,
+              }
 
 
 class UiManager(ScreenManager):
@@ -56,19 +66,16 @@ class UiManager(ScreenManager):
         self.register_event_type('on_info')
         self.register_event_type('on_warning')
         self.register_event_type('on_error')
+        self.register_event_type('on_invalid_session')
         self.register_event_type('on_upload_response')
         self.register_event_type('on_upload_successful')
     
     def on_kv_post(self, base_widget):
         Window.bind(on_keyboard=self.key_input)
         # Binds need to be executed 1 frame after on_kv_post, otherwise it tries to bind to not yet registered events.
-        Clock.schedule_once(lambda dt: self.bind_callbacks(), 1)
+        Clock.schedule_once(lambda dt: self.bind_sidebar_callbacks(), 1)
         if self.is_first_run:
             Clock.schedule_once(lambda dt: self.show_popup_language(), 1)  # Doesn't open otherwise.
-    
-    def bind_callbacks(self):
-        self.bind_sidebar_callbacks()
-        self.bind_screen_callbacks()
     
     def bind_sidebar_callbacks(self):
         """ Handle events in navigation drawer. """
@@ -84,16 +91,18 @@ class UiManager(ScreenManager):
                  on_privacy_policy=lambda x: self.show_privacy_policy(),
                  on_exit=lambda x: self.quit(),
                  )
-        
-    def bind_screen_callbacks(self):
+    
+    def bind_screen_callbacks(self, screen_name):
         """ Handle screen callbacks here. """
         # Circle Task
-        self.get_screen('Circle Task').bind(
-            on_task_stopped=lambda instance, last: self.task_finished(last),
-            on_warning=lambda instance, text: self.show_warning(text),
-        )
+        if screen_name == 'Circle Task':
+            self.get_screen(screen_name).bind(
+                on_task_stopped=lambda instance, is_last_block: self.task_finished(is_last_block),
+                on_warning=lambda instance, text: self.show_warning(text),
+            )
         # Webview
-        # self.get_screen('Webview').bind(on_quit_screen=lambda instance: self.go_home())
+        elif screen_name == 'Webview':
+            self.get_screen(screen_name).bind(on_quit_screen=lambda instance: self.go_home())
     
     def open_settings(self):
         self.app.open_settings()
@@ -164,7 +173,7 @@ class UiManager(ScreenManager):
         
     def show_about(self):
         details = get_app_details()
-        # FixMe: height of the popup greater than screen height, can't reach ok-button.
+        # FixMe: landscape height of the popup greater than screen height, can't reach ok-button.
         self.show_info(title=_("About"),
                        text=_("{appname}\n"  # Alternatively self.app.get_application_name()
                               "Version: {version}\n"
@@ -218,6 +227,13 @@ class UiManager(ScreenManager):
         
     def on_current(self, instance, value):
         """ When switching screens reset counter on back button presses on home screen. """
+        if not self.has_screen(value):
+            if value in screen_map:
+                self.add_widget(screen_map[value](name=value))
+                self.bind_screen_callbacks(value)
+            else:
+                return
+            
         screen = self.get_screen(value)
         # Handle navbar access.
         try:
@@ -269,7 +285,7 @@ class UiManager(ScreenManager):
                                                                NumericInputPopup)):
                 self.app.root_window.children[0].dismiss()
             elif isinstance(self.app.root_window.children[0], BlockingPopup):
-                return True  # Do nothing. # FixMe: prevent closing follow-up popup.
+                return True  # Do nothing. # ToDo: prevent closing follow-up popup.
             elif self.sidebar.state == 'open':
                 self.sidebar.set_state('close')
             # Handle back button on screens.
@@ -317,6 +333,10 @@ class UiManager(ScreenManager):
         else:
             self.transition.direction = 'down'
             self.current = self.task_instructions[self.settings.current_task]
+    
+    def on_invalid_session(self, *args):
+        """ Default event implementation. """
+        pass
     
     def quit(self, *args):
         self.app.stop()

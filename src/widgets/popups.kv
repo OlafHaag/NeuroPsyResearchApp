@@ -25,8 +25,6 @@
     padding: "10dp"
     description: _("Enter a new value.")
     input: ""
-    #size_hint_y: None
-    #height: "120dp"
 
     MDLabel:
         text: root.description
@@ -38,24 +36,5 @@
         icon_right: 'pencil'
         hint_text: _("New Value")
         helper_text: _("Error: invalid input")
-        helper_text_mode: "on_error"
-        pos_hint: {"center_y": .5}
-
-# Dash (-) ist used to override TextInputContent's style rules.
-<-UserInput>
-    orientation: "vertical"
-    padding: "10dp"
-    # FixMe: Text overlapped by hint_text of text input on Android.
-    MDLabel:
-        text: _("This name is just for you. It won't be uploaded to the server.")
-        font_style: 'Caption'
-
-    MDTextField:
-        id: textfield
-        text: root.input
-        required: True
-        icon_right: 'pencil'
-        hint_text: _("Enter Pseudonym")
-        helper_text: _("Error: invalid value")
         helper_text_mode: "on_error"
         pos_hint: {"center_y": .5}

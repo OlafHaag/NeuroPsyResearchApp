@@ -14,10 +14,10 @@ from .popups import (SimplePopup,
                      )
 from .countdowns import CountDownCircle
 from .sliders import ScaleSlider
-from .managers import UiManager
 from .screensgeneral import ScreenHome, ScreenOutro
 from .screensettings import SettingsWithTabbedPanels
 from .screenconsents import ScreenConsentCircleTask
 from .screeninstructions import ScreenInstructCircleTask
 from .screencircletask import ScreenCircleTask
 from .screenwebview import ScreenWebView
+from .managers import UiManager

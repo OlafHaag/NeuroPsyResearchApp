@@ -15,6 +15,7 @@ from . import __version__ as app_version
 # Conditional imports
 if platform == 'android':
     from android.permissions import request_permission, check_permission, Permission
+    from jnius import autoclass
 else:
     class Permission:
         INTERNET = (
@@ -36,6 +37,20 @@ else:
         return Window.width, Window.height
 
 
+def is_window_landscape():
+    """ Return whether window is landscape or portrait. """
+    if platform == 'android':
+        activity = autoclass('org.kivy.android.PythonActivity').mActivity
+        config = activity.getResources().getConfiguration()
+        if config.orientation == 1:
+            return False
+        elif config.orientation == 2:
+            return True
+    else:
+        width, height = get_screensize()
+        return width > height
+    
+    
 def switch_language(lang='en'):
     """ Change displayed translation. """
     try:

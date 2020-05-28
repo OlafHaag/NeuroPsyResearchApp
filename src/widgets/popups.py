@@ -27,6 +27,7 @@ class SimplePopup(MDDialog):
     """ Simple popup with only an OK button. """
     def __init__(self, **kwargs):  # ToDo: Make popup almost fit screen width, is too small on Android.
         default_kwargs = dict(
+            size_hint_x=0.8,
             auto_dismiss=False,
             buttons=[MDRaisedButton(text=_("OK"),
                                     on_release=self.dismiss)],
@@ -313,7 +314,7 @@ class ScrollText(MDBoxLayout):
 
     def __init__(self, **kwargs):
         self.text = kwargs.pop('text', _("not found"))
-        self.height = (Window.height * 0.8) - 100
+        self.height = (Window.height * 0.8) - 80  # Adjust: height of ScrollText
         super(ScrollText, self).__init__(**kwargs)
 
 
@@ -429,7 +430,7 @@ class UserEditPopup(TextInputPopup):
         default_kwargs = dict(
             title=_("Edit User"),
             content_cls=UserInput(),
-            size_hint_x=0.6,
+            size_hint_x=0.8,
         )
         default_kwargs.update(kwargs)
         super(UserEditPopup, self).__init__(**default_kwargs)
@@ -443,6 +444,7 @@ class UserEditPopup(TextInputPopup):
             
         self.title = _("Add New User") if is_new else _("Edit User")
         self.input = kwargs.pop('user_alias', '')
+        self.content_cls.set_text()
         super(UserEditPopup, self).open()
         
     def confirm(self):
@@ -451,7 +453,7 @@ class UserEditPopup(TextInputPopup):
             self.dismiss()
     
     def on_dismiss(self):
-        # FixMe: Reset error status of textfield.
+        # ToDo: Reset error status of textfield.
         #self.property('user_alias').dispatch(self)
         self.content_cls.ids.textfield.error = False
     
@@ -462,12 +464,16 @@ class UserEditPopup(TextInputPopup):
 
 class UserInput(TextInputContent):
     """ Content class for UserInputPopup. """
+    
+    def set_text(self):
+        self.description = _("This name is just for you. It won't be uploaded to the server.")
+        self.ids.textfield.hint_text = _("Enter Pseudonym")
+        
     def check_errors(self, *args):
         self.ids.textfield.error = len(self.ids.textfield.text.strip(' ')) == 0
 
 
-# FixMe: Popup Policy ScrollView is black on Android in portrait mode.
-# FixMe: Popup Policy unused spaced on top. Visible text gets really narrow on Android.
+# FixMe: Popup Policy ScrollView is black on Android.
 class PolicyPopup(SimplePopup):
     """ Display privacy policy for using the app. """
     
@@ -483,7 +489,11 @@ class PolicyPopup(SimplePopup):
             
         default_kwargs.update(kwargs)
         super(PolicyPopup, self).__init__(**default_kwargs)
-    
+        # Reduce the emtpy space.
+        self._spacer_top = self.content_cls.height
+        self.ids.container.size_hint_y = 0.9
+        self.ids.container.padding = ("24dp", "8dp", "8dp", "0dp")  # left, top, right, bottom
+        
     def _get_text(self, content_md):
         details = get_app_details()
         text = markdown_to_bbcode(content_md).format(appname=details['appname'],

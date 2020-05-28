@@ -32,12 +32,12 @@ Root:
     settings: app.settings
     # The first screen added, will be initially displayed.
     ScreenHome:
-    ScreenConsentCircleTask:
-        name: 'Consent CT'
-    ScreenInstructCircleTask:
-        name: 'Instructions CT'
-    ScreenCircleTask:
-    ScreenOutro:
+        name: 'Home'
+
+<TopBar@MDToolbar>
+    title: _("MENU")
+    elevation: 10
+    left_action_items: [['menu', lambda instance: app.manager.sidebar.set_state()]]
 
 <ContentNavigationDrawer>:
     orientation: "vertical"

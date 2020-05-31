@@ -7,6 +7,7 @@ from ..i18n import _
 
 class ScreenConsentCircleTask(BaseScreen):
     """ Tell the user about conditions of participation and require consent. """
+    title = StringProperty()
     consent_msg = StringProperty(_("Loading..."))
     
     def __init__(self, **kwargs):
@@ -38,9 +39,8 @@ class ScreenConsentCircleTask(BaseScreen):
                       )
         duration /= 60.0  # To minutes.
         duration = int(duration)  # Round.
-        
-        self.consent_msg = _("[size=32]Consent[/size]\n\n"
-                             "Please read the following information carefully before proceeding."
+        self.title = _("Consent")
+        self.consent_msg = _("Please read the following information carefully before proceeding."
                              "Use scrolling to go through the text to the end.\n\n"
                              "[b]Explanation of the experiment:[/b]\n"
                              "We are very pleased that you are interested in participating in our experiment. The goal "

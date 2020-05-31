@@ -1,6 +1,15 @@
 # screeninstructions.kv
 #:kivy 1.11.1
 
+<InstructLabel>:
+    markup: True
+    size_hint_y: None
+    height: self.texture_size[1]
+    font_size: sp(24)  # Doesn't work.
+    font_style: 'H5'  # Does work.
+    halign: 'justify'
+    valign: 'top'
+
 <ScreenInstructCircleTask>:  # When adding new task instruction, to share style add class like so: <TaskOne, TaskTwo>:
     settings: app.settings
     on_leave: scroll.scroll_y = 1
@@ -19,22 +28,20 @@
             MDGridLayout:
                 cols: 1
                 adaptive_height: True
-                spacing: 10
+                padding: 10, 0
 
                 MDLabel:
                     text: root.title
                     font_style: 'H3'
                     size_hint_y: None
+                    height: self.texture_size[1]
 
-                MDLabel:
-                    text: root.msg
-                    markup: True
-                    font_size: sp(24)
-                    size: self.texture_size
+                MDGridLayout:
+                    id: instruct_text
+                    cols: 1
+                    spacing: 20
                     size_hint_y: None
-                    padding_x: 10
-                    halign: 'justify'
-                    valign: 'top'
+                    height: self.minimum_height
 
                 Image:
                     id: instruct_img

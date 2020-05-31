@@ -36,6 +36,8 @@ from kivymd.uix.boxlayout import MDBoxLayout
 
 from kivy.graphics import Color, Rectangle  # Used in debug marking ref zones.
 
+from ..i18n import _
+
 
 class ScrollText(MDBoxLayout):
     text = StringProperty(_('Loading...'))

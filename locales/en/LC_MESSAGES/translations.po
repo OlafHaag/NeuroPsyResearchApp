@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-05-28 19:55+0200\n"
-"PO-Revision-Date: 2020-05-28 19:55+0200\n"
+"POT-Creation-Date: 2020-05-31 20:59+0200\n"
+"PO-Revision-Date: 2020-05-31 20:59+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: en\n"
@@ -78,19 +78,19 @@ msgstr ""
 msgid "Please use this slider."
 msgstr ""
 
-#: src/widgets/screenconsents.kv:47
+#: src/widgets/screenconsents.kv:51
 msgid "Decline"
 msgstr ""
 
-#: src/widgets/screenconsents.kv:54
+#: src/widgets/screenconsents.kv:58
 msgid "Agree"
 msgstr ""
 
-#: src/widgets/screeninstructions.kv:48
+#: src/widgets/screeninstructions.kv:54
 msgid "When you are ready to begin press [b]{}[/b]."
 msgstr ""
 
-#: src/widgets/screeninstructions.kv:48 src/widgets/screeninstructions.kv:62
+#: src/widgets/screeninstructions.kv:54 src/widgets/screeninstructions.kv:68
 msgid "Start"
 msgstr ""
 
@@ -185,8 +185,7 @@ msgid ""
 "protection measures of the third-party provider at the following Internet "
 "address:\n"
 "\n"
-"[Heroku Data Security Policy](https://www.heroku.com/policy/security#data-"
-"security)\n"
+"<https://www.heroku.com/policy/security#data-security>\n"
 "\n"
 "After transfer of the research data to the database, complete deletion of "
 "the research data collected can no longer be guaranteed, since we can not "
@@ -546,14 +545,17 @@ msgid ""
 "Aborting Session..."
 msgstr ""
 
-#: src/widgets/screenconsents.py:10 src/widgets/screensgeneral.py:38
+#: src/widgets/screenconsents.py:10
+msgid "Consent"
+msgstr ""
+
+#: src/widgets/screenconsents.py:11 src/widgets/screensgeneral.py:38
+#: src/widgets/scrolllabel.py:43
 msgid "Loading..."
 msgstr ""
 
-#: src/widgets/screenconsents.py:42
+#: src/widgets/screenconsents.py:43
 msgid ""
-"[size=32]Consent[/size]\n"
-"\n"
 "Please read the following information carefully before proceeding.Use "
 "scrolling to go through the text to the end.\n"
 "\n"
@@ -589,41 +591,41 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/widgets/screeninstructions.py:25
+#: src/widgets/screeninstructions.py:29
 msgid "{}. Practice Block"
 msgstr ""
 
-#: src/widgets/screeninstructions.py:28
+#: src/widgets/screeninstructions.py:32
 msgid "{}. Testing Block"
 msgstr ""
 
-#: src/widgets/screeninstructions.py:37
+#: src/widgets/screeninstructions.py:41
 msgid ""
 "Please read the following information carefully before proceeding. Use "
 "scrolling to go through the whole text. At the end of this text you'll find "
 "an exemplary image of the task in progress."
 msgstr ""
 
-#: src/widgets/screeninstructions.py:41
+#: src/widgets/screeninstructions.py:45
 msgid "There are a total of {} trials in this block."
 msgstr ""
 
-#: src/widgets/screeninstructions.py:44
+#: src/widgets/screeninstructions.py:48
 msgid "s"
 msgstr ""
 
-#: src/widgets/screeninstructions.py:45
+#: src/widgets/screeninstructions.py:49
 #, python-brace-format
 msgid ""
 "You have {0} task{1} in this block. Be as quick and as accurate as possible "
 "while performing the task{1}"
 msgstr ""
 
-#: src/widgets/screeninstructions.py:47
+#: src/widgets/screeninstructions.py:51
 msgid "This will also be signaled to you by a short vibration. "
 msgstr ""
 
-#: src/widgets/screeninstructions.py:49
+#: src/widgets/screeninstructions.py:53
 #, python-brace-format
 msgid ""
 "A trial starts by giving you {0} seconds time to prepare for the trial. "
@@ -639,13 +641,13 @@ msgid ""
 "next trial. "
 msgstr ""
 
-#: src/widgets/screeninstructions.py:59
+#: src/widgets/screeninstructions.py:63
 msgid ""
 "The events for the start and end of the countdown for each trial will play "
 "distinctive sounds. "
 msgstr ""
 
-#: src/widgets/screeninstructions.py:61
+#: src/widgets/screeninstructions.py:65
 msgid ""
 "Hold your device with both hands so your thumbs can reach their respective "
 "side of the screen comfortably.\n"
@@ -662,7 +664,7 @@ msgid ""
 "sliders are deactivated once you let go of them."
 msgstr ""
 
-#: src/widgets/screeninstructions.py:73
+#: src/widgets/screeninstructions.py:77
 msgid ""
 "In addition you'll have to fulfill another task concurrently to the first "
 "task. On top of the [color=008000]green ring[/color] there's a "
@@ -730,6 +732,10 @@ msgstr ""
 msgid ""
 "Please wait\n"
 "Launching browser"
+msgstr ""
+
+#: src/widgets/scrolllabel.py:46
+msgid "not found"
 msgstr ""
 
 #: terms.py:15

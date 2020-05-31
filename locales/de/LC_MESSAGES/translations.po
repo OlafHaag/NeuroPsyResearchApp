@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-05-31 04:31+0200\n"
-"PO-Revision-Date: 2020-05-31 04:31+0200\n"
+"POT-Creation-Date: 2020-05-31 21:02+0200\n"
+"PO-Revision-Date: 2020-05-31 21:02+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: de_DE\n"
@@ -62,15 +62,15 @@ msgstr "Datenschutzerklärung"
 msgid "Exit"
 msgstr "Beenden"
 
-#: src/widgets/popups.kv:26
+#: src/widgets/popups.kv:8
 msgid "Enter a new value."
 msgstr "Neuen Wert eingeben."
 
-#: src/widgets/popups.kv:37
+#: src/widgets/popups.kv:19
 msgid "New Value"
 msgstr "Neuer Wert"
 
-#: src/widgets/popups.kv:38
+#: src/widgets/popups.kv:20
 msgid "Error: invalid input"
 msgstr "Fehler: ungültige Eingabe"
 
@@ -78,19 +78,19 @@ msgstr "Fehler: ungültige Eingabe"
 msgid "Please use this slider."
 msgstr "Bitte diesen Regler nutzen."
 
-#: src/widgets/screenconsents.kv:47
+#: src/widgets/screenconsents.kv:51
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/widgets/screenconsents.kv:54
+#: src/widgets/screenconsents.kv:58
 msgid "Agree"
 msgstr "Zustimmen"
 
-#: src/widgets/screeninstructions.kv:48
+#: src/widgets/screeninstructions.kv:54
 msgid "When you are ready to begin press [b]{}[/b]."
 msgstr "Wenn Sie bereit sind zu beginnen, drücken Sie [b]{}[/b]."
 
-#: src/widgets/screeninstructions.kv:48 src/widgets/screeninstructions.kv:62
+#: src/widgets/screeninstructions.kv:54 src/widgets/screeninstructions.kv:68
 msgid "Start"
 msgstr "Anfangen"
 
@@ -599,7 +599,7 @@ msgid "Press again to quit."
 msgstr "Nochmals tippen zum Beenden."
 
 #: src/widgets/popups.py:32 src/widgets/popups.py:76 src/widgets/popups.py:104
-#: src/widgets/popups.py:167 src/widgets/popups.py:339
+#: src/widgets/popups.py:167 src/widgets/popups.py:330
 #: src/widgets/screensettings.py:157
 msgid "OK"
 msgstr "OK"
@@ -608,7 +608,7 @@ msgstr "OK"
 msgid "Do you want to continue?"
 msgstr "Möchten Sie fortfahren?"
 
-#: src/widgets/popups.py:72 src/widgets/popups.py:335
+#: src/widgets/popups.py:72 src/widgets/popups.py:326
 #: src/widgets/screensettings.py:153
 msgid "CANCEL"
 msgstr "ABBRECHEN"
@@ -629,44 +629,35 @@ msgstr "Aktives Nutzer*innenkonto wählen"
 msgid "Add User"
 msgstr "Nutzer*in hinzufügen"
 
-#: src/widgets/popups.py:313 src/widgets/screenconsents.py:10
-#: src/widgets/screensgeneral.py:38
-msgid "Loading..."
-msgstr "Lädt..."
-
-#: src/widgets/popups.py:316
-msgid "not found"
-msgstr "nicht gefunden"
-
-#: src/widgets/popups.py:329
+#: src/widgets/popups.py:320
 msgid "Set New Value"
 msgstr "Neuen Wert setzen"
 
-#: src/widgets/popups.py:431 src/widgets/popups.py:445
+#: src/widgets/popups.py:422 src/widgets/popups.py:436
 msgid "Edit User"
 msgstr "Nutzer*in bearbeiten"
 
-#: src/widgets/popups.py:445
+#: src/widgets/popups.py:436
 msgid "Add New User"
 msgstr "Nutzer*in hinzufügen"
 
-#: src/widgets/popups.py:469
+#: src/widgets/popups.py:460
 msgid "This name is just for you. It won't be uploaded to the server."
 msgstr "Dieser Name ist nur für Sie. Er wird nicht auf den Server übertragen."
 
-#: src/widgets/popups.py:470
+#: src/widgets/popups.py:461
 msgid "Enter Pseudonym"
 msgstr "Pseudonym eingeben"
 
-#: src/widgets/popups.py:519
+#: src/widgets/popups.py:510
 msgid "DECLINE"
 msgstr "ABLEHNEN"
 
-#: src/widgets/popups.py:524
+#: src/widgets/popups.py:515
 msgid "ACCEPT"
 msgstr "ZUSTIMMEN"
 
-#: src/widgets/popups.py:555
+#: src/widgets/popups.py:546
 msgid "CLOSE"
 msgstr "SCHLIESSEN"
 
@@ -697,10 +688,17 @@ msgstr ""
 "die Aufgabe entsprechend aus.\n"
 "Sitzung wird abgebrochen ..."
 
+#: src/widgets/screenconsents.py:11 src/widgets/screensgeneral.py:38
+#: src/widgets/scrolllabel.py:43
+msgid "Loading..."
+msgstr "Lädt..."
+
 #: src/widgets/screenconsents.py:42
+msgid "Consent"
+msgstr "Einverständniserklärung"
+
+#: src/widgets/screenconsents.py:43
 msgid ""
-"[size=32]Consent[/size]\n"
-"\n"
 "Please read the following information carefully before proceeding.Use "
 "scrolling to go through the text to the end.\n"
 "\n"
@@ -735,8 +733,6 @@ msgid ""
 "participation and Privacy Policy.\n"
 "\n"
 msgstr ""
-"[size=32]Einverständniserklärung[/size]\n"
-"\n"
 "Bitte lesen Sie die folgenden Informationen sorgfältig durch, bevor Sie "
 "fortfahren. Verwenden Sie den Bildlauf, um den Text bis zum Ende "
 "durchzugehen.\n"
@@ -775,15 +771,15 @@ msgstr ""
 "habe. Ich stimme den Teilnahmebedingungen und den Datenschutzbestimmungen "
 "zu.\n"
 
-#: src/widgets/screeninstructions.py:25
+#: src/widgets/screeninstructions.py:29
 msgid "{}. Practice Block"
 msgstr "{}. Übungsblock"
 
-#: src/widgets/screeninstructions.py:28
+#: src/widgets/screeninstructions.py:32
 msgid "{}. Testing Block"
 msgstr "{}. Testblock"
 
-#: src/widgets/screeninstructions.py:37
+#: src/widgets/screeninstructions.py:41
 msgid ""
 "Please read the following information carefully before proceeding. Use "
 "scrolling to go through the whole text. At the end of this text you'll find "
@@ -794,15 +790,15 @@ msgstr ""
 "Am Ende dieses Textes finden Sie ein Beispielbild der Aufgabe während der "
 "Ausführung."
 
-#: src/widgets/screeninstructions.py:41
+#: src/widgets/screeninstructions.py:45
 msgid "There are a total of {} trials in this block."
 msgstr "In diesem Block absolvieren Sie insgesamt {} Durchgänge."
 
-#: src/widgets/screeninstructions.py:44
+#: src/widgets/screeninstructions.py:48
 msgid "s"
 msgstr "n"
 
-#: src/widgets/screeninstructions.py:45
+#: src/widgets/screeninstructions.py:49
 #, python-brace-format
 msgid ""
 "You have {0} task{1} in this block. Be as quick and as accurate as possible "
@@ -811,11 +807,11 @@ msgstr ""
 "Sie haben {0} Aufgabe{1} in diesem Block. Seien Sie so schnell und so genau "
 "wie möglich, während Sie die Aufgabe{1} ausführen."
 
-#: src/widgets/screeninstructions.py:47
+#: src/widgets/screeninstructions.py:51
 msgid "This will also be signaled to you by a short vibration. "
 msgstr "Dies wird Ihnen auch über eine kurze Vibration signalisiert. "
 
-#: src/widgets/screeninstructions.py:49
+#: src/widgets/screeninstructions.py:53
 #, python-brace-format
 msgid ""
 "A trial starts by giving you {0} seconds time to prepare for the trial. "
@@ -843,7 +839,7 @@ msgstr ""
 "Kurz danach ({2} Sekunden) werden Sie aufgefordert, sich auf den nächsten "
 "Durchgang vorzubereiten. "
 
-#: src/widgets/screeninstructions.py:59
+#: src/widgets/screeninstructions.py:63
 msgid ""
 "The events for the start and end of the countdown for each trial will play "
 "distinctive sounds. "
@@ -851,7 +847,7 @@ msgstr ""
 "Die Ereignisse für den Beginn und das Ende des Countdowns für jeden "
 "Durchgang geben jeweils einen speziellen Ton wieder. "
 
-#: src/widgets/screeninstructions.py:61
+#: src/widgets/screeninstructions.py:65
 msgid ""
 "Hold your device with both hands so your thumbs can reach their respective "
 "side of the screen comfortably.\n"
@@ -882,7 +878,7 @@ msgstr ""
 "and lassen Sie die Schieberegler los, wenn sie denken die Aufgabe erfüllt zu "
 "haben. Die Schieberegler werden deaktiviert, sobald Sie diese loslassen."
 
-#: src/widgets/screeninstructions.py:73
+#: src/widgets/screeninstructions.py:77
 msgid ""
 "In addition you'll have to fulfill another task concurrently to the first "
 "task. On top of the [color=008000]green ring[/color] there's a "
@@ -972,6 +968,10 @@ msgid ""
 msgstr ""
 "Bitte warten\n"
 "Starte Browser"
+
+#: src/widgets/scrolllabel.py:46
+msgid "not found"
+msgstr "nicht gefunden"
 
 #: terms.py:15
 #, python-brace-format

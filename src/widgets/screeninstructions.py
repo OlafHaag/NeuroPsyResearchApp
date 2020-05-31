@@ -1,13 +1,17 @@
 from kivy.properties import ObjectProperty, StringProperty
+from kivymd.uix.label import MDLabel
 
 from . import BaseScreen
 from ..i18n import _
 
 
+class InstructLabel(MDLabel):
+    pass
+
+
 class ScreenInstructCircleTask(BaseScreen):
     """ Display that tells the user what to in next task. """
     settings = ObjectProperty()
-    msg = StringProperty()
     title = StringProperty()
     
     def __init__(self, **kwargs):
@@ -16,19 +20,19 @@ class ScreenInstructCircleTask(BaseScreen):
     def on_pre_enter(self, *args):
         self.settings.next_block()
         self.title = self.get_title()
-        self.msg = self.get_message()
+        self.set_message()
         self.set_img()
 
     def get_title(self):
         ct = self.settings.circle_task
         if ct.practice_block:
-            start_msg = _("{}. Practice Block").format(ct.practice_block)
+            title = _("{}. Practice Block").format(ct.practice_block)
         else:
             block = (self.settings.current_block - bool(ct.n_practice_trials) * 2)
-            start_msg = _("{}. Testing Block").format(block)
-        return start_msg
+            title = _("{}. Testing Block").format(block)
+        return title
         
-    def get_message(self):
+    def set_message(self):
         ct = self.settings.circle_task
         if ct.practice_block:
             n_trials = ct.n_practice_trials
@@ -83,9 +87,12 @@ class ScreenInstructCircleTask(BaseScreen):
                         time_limit_msg,
                         n_trials_msg,
                         ]
-        msg = "\n\n".join(instructions)
-        msg = msg.replace("\n\n\n\n", "\n\n")  # Cleanup if there's no 2nd task.
-        return msg
+        # Clear the old message.
+        self.ids.instruct_text.clear_widgets()
+        # Add new message.
+        for message in instructions:
+            label = InstructLabel(text=message)
+            self.ids.instruct_text.add_widget(label)
     
     def set_img(self):
         if self.settings.circle_task.constraint:

@@ -26,15 +26,16 @@
             do_scroll_y: True
             scroll_type: ['bars', 'content']
 
-            GridLayout:
+            MDGridLayout:
                 cols: 1
-                padding: 10, 10
+                padding: 10, 0
                 spacing: 10
-                # FixMe: Title overlapped by text on Android.
+
                 MDLabel:
                     text: root.title
                     markup: True
                     size_hint_y: None
+                    height: self.texture_size[1]
                     font_style: 'H5'
                     padding: 10, 20
                     halign: 'center'
@@ -45,29 +46,31 @@
                     markup: True
                     halign: 'justify'
                     size_hint_y: None
+                    height: self.texture_size[1]
                     valign: 'top'
 
                 MDSeparator:
 
-                BoxLayout:
-                    orientation: 'vertical'
-
-                    MDLabel:
-                        text: _("Available Studies")
-                        font_style: 'H6'
-                        halign: 'center'
-                    BoxLayout:
-                        spacing: 20
-                        Widget:  # Spacer.
-                        TaskButton:
-                            text: _("Circle Task")
-                            task: 'Circle Task'
-                            font_size: 24
-                            pos_hint: {"center_x": .5, "center_y": .5}
-                            on_release: root.manager.start_task(self.task)
-                        Widget:  # Spacer.
-
+                MDLabel:
+                    text: _("Available Studies")
+                    font_style: 'H6'
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    halign: 'center'
+                    valign: 'top'
+                MDGridLayout:
+                    rows: 1
+                    spacing: 20
                     Widget:  # Spacer.
+                    TaskButton:
+                        text: _("Circle Task")
+                        task: 'Circle Task'
+                        font_size: 24
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        on_release: root.manager.start_task(self.task)
+                    Widget:  # Spacer.
+
+                Widget:  # Spacer.
 
 <ScreenOutro>:
     navbar_enabled: True

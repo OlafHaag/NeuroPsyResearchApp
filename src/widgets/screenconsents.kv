@@ -22,6 +22,12 @@
                 spacing: [0, 20]
 
                 MDLabel:
+                    text: root.title
+                    font_style: 'H3'
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
                     id: consent_label
                     text: root.consent_msg
                     markup: True

@@ -1,24 +1,6 @@
 # popups.kv
 #:kivy 1.11.1
 
-<ScrollText>
-    orientation: 'vertical'
-    size_hint_y: None
-
-    ScrollView:
-        id: scroll
-        do_scroll_x: False
-        do_scroll_y: True
-        scroll_type: ['bars', 'content']
-
-        MDLabel:
-            id: label
-            text: root.text
-            markup: True
-            halign: "justify"
-            size_hint_y: None
-            size: self.texture_size
-
 <TextInputContent>
     orientation: "vertical"
     spacing: "12dp"

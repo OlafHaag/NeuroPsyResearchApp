@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-05-28 03:42+0200\n"
-"PO-Revision-Date: 2020-05-28 03:42+0200\n"
+"POT-Creation-Date: 2020-05-28 19:55+0200\n"
+"PO-Revision-Date: 2020-05-28 19:55+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: en\n"
@@ -22,55 +22,55 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-4: locales\n"
 "X-Poedit-SearchPathExcluded-5: res\n"
 
-#: src/widgets/navigation.kv:38
+#: src/widgets/navigation.kv:39
 msgid "MENU"
 msgstr ""
 
-#: src/widgets/navigation.kv:72
+#: src/widgets/navigation.kv:73
 msgid "Scientific Participation Software"
 msgstr ""
 
-#: src/widgets/navigation.kv:82
+#: src/widgets/navigation.kv:83
 msgid "Home"
 msgstr ""
 
-#: src/widgets/navigation.kv:87
+#: src/widgets/navigation.kv:88
 msgid "Users"
 msgstr ""
 
-#: src/widgets/navigation.kv:92
+#: src/widgets/navigation.kv:93
 msgid "Settings"
 msgstr ""
 
-#: src/widgets/navigation.kv:97
+#: src/widgets/navigation.kv:98
 msgid "Visit Online Analyses"
 msgstr ""
 
-#: src/widgets/navigation.kv:102 src/widgets/managers.py:181
+#: src/widgets/navigation.kv:103 src/widgets/managers.py:177
 msgid "About"
 msgstr ""
 
-#: src/widgets/navigation.kv:107
+#: src/widgets/navigation.kv:108
 msgid "Terms & Conditions"
 msgstr ""
 
-#: src/widgets/navigation.kv:112
+#: src/widgets/navigation.kv:113
 msgid "Privacy Policy"
 msgstr ""
 
-#: src/widgets/navigation.kv:117
+#: src/widgets/navigation.kv:118
 msgid "Exit"
 msgstr ""
 
-#: src/widgets/popups.kv:26
+#: src/widgets/popups.kv:8
 msgid "Enter a new value."
 msgstr ""
 
-#: src/widgets/popups.kv:37
+#: src/widgets/popups.kv:19
 msgid "New Value"
 msgstr ""
 
-#: src/widgets/popups.kv:38
+#: src/widgets/popups.kv:20
 msgid "Error: invalid input"
 msgstr ""
 
@@ -102,7 +102,7 @@ msgstr ""
 msgid "Available Studies"
 msgstr ""
 
-#: src/widgets/screensgeneral.kv:63 src/app.py:111
+#: src/widgets/screensgeneral.kv:63 src/app.py:110
 msgid "Circle Task"
 msgstr ""
 
@@ -117,6 +117,7 @@ msgstr ""
 #: privacypolicy.py:15
 #, python-brace-format
 msgid ""
+"\n"
 "# Privacy Policy\n"
 "The purpose of the {appname} app is to collect anonymous research data that "
 "its users, like yourself, provide to us **voluntarily** by participating in "
@@ -184,7 +185,8 @@ msgid ""
 "protection measures of the third-party provider at the following Internet "
 "address:\n"
 "\n"
-"<https://www.heroku.com/policy/security#data-security>\n"
+"[Heroku Data Security Policy](https://www.heroku.com/policy/security#data-"
+"security)\n"
 "\n"
 "After transfer of the research data to the database, complete deletion of "
 "the research data collected can no longer be guaranteed, since we can not "
@@ -215,7 +217,7 @@ msgid ""
 "Society for Psychology (DGPs) for quality assurance in research.\n"
 msgstr ""
 
-#: src/app.py:108
+#: src/app.py:107
 msgid "General"
 msgstr ""
 
@@ -409,15 +411,15 @@ msgstr ""
 msgid "UNKNOWN."
 msgstr ""
 
-#: src/widgets/managers.py:151
+#: src/widgets/managers.py:147
 msgid "New User"
 msgstr ""
 
-#: src/widgets/managers.py:174
+#: src/widgets/managers.py:170
 msgid "Do you want to remove {}?"
 msgstr ""
 
-#: src/widgets/managers.py:182
+#: src/widgets/managers.py:178
 #, python-brace-format
 msgid ""
 "{appname}\n"
@@ -433,34 +435,34 @@ msgid ""
 "ref]"
 msgstr ""
 
-#: src/widgets/managers.py:217
+#: src/widgets/managers.py:213
 msgid "Warning"
 msgstr ""
 
-#: src/widgets/managers.py:227
+#: src/widgets/managers.py:223
 msgid "Error"
 msgstr ""
 
-#: src/widgets/managers.py:258
+#: src/widgets/managers.py:254
 msgid "Success!"
 msgstr ""
 
-#: src/widgets/managers.py:258
+#: src/widgets/managers.py:254
 msgid "Upload successful!"
 msgstr ""
 
-#: src/widgets/managers.py:263
+#: src/widgets/managers.py:259
 msgid ""
 "Upload failed.\n"
 "Something went wrong."
 msgstr ""
 
-#: src/widgets/managers.py:300
+#: src/widgets/managers.py:296
 msgid "Press again to quit."
 msgstr ""
 
 #: src/widgets/popups.py:32 src/widgets/popups.py:76 src/widgets/popups.py:104
-#: src/widgets/popups.py:167 src/widgets/popups.py:339
+#: src/widgets/popups.py:167 src/widgets/popups.py:330
 #: src/widgets/screensettings.py:157
 msgid "OK"
 msgstr ""
@@ -469,7 +471,7 @@ msgstr ""
 msgid "Do you want to continue?"
 msgstr ""
 
-#: src/widgets/popups.py:72 src/widgets/popups.py:335
+#: src/widgets/popups.py:72 src/widgets/popups.py:326
 #: src/widgets/screensettings.py:153
 msgid "CANCEL"
 msgstr ""
@@ -490,67 +492,62 @@ msgstr ""
 msgid "Add User"
 msgstr ""
 
-#: src/widgets/popups.py:313 src/widgets/screenconsents.py:10
-#: src/widgets/screensgeneral.py:38
-msgid "Loading..."
-msgstr ""
-
-#: src/widgets/popups.py:316
-msgid "not found"
-msgstr ""
-
-#: src/widgets/popups.py:329
+#: src/widgets/popups.py:320
 msgid "Set New Value"
 msgstr ""
 
-#: src/widgets/popups.py:431 src/widgets/popups.py:445
+#: src/widgets/popups.py:422 src/widgets/popups.py:436
 msgid "Edit User"
 msgstr ""
 
-#: src/widgets/popups.py:445
+#: src/widgets/popups.py:436
 msgid "Add New User"
 msgstr ""
 
-#: src/widgets/popups.py:469
+#: src/widgets/popups.py:460
 msgid "This name is just for you. It won't be uploaded to the server."
 msgstr ""
 
-#: src/widgets/popups.py:470
+#: src/widgets/popups.py:461
 msgid "Enter Pseudonym"
 msgstr ""
 
-#: src/widgets/popups.py:518
+#: src/widgets/popups.py:510
 msgid "DECLINE"
 msgstr ""
 
-#: src/widgets/popups.py:523
+#: src/widgets/popups.py:515
 msgid "ACCEPT"
 msgstr ""
 
-#: src/widgets/popups.py:554
+#: src/widgets/popups.py:546
 msgid "CLOSE"
 msgstr ""
 
-#: src/widgets/screencircletask.py:25 src/widgets/screencircletask.py:171
+#: src/widgets/screencircletask.py:25 src/widgets/screencircletask.py:175
 msgid "Trial: "
 msgstr ""
 
-#: src/widgets/screencircletask.py:118
+#: src/widgets/screencircletask.py:122
 msgid "PREPARE"
 msgstr ""
 
-#: src/widgets/screencircletask.py:191
+#: src/widgets/screencircletask.py:195
 msgid "GET READY"
 msgstr ""
 
-#: src/widgets/screencircletask.py:215
+#: src/widgets/screencircletask.py:219
 msgid "FINISHED"
 msgstr ""
 
-#: src/widgets/screencircletask.py:246
+#: src/widgets/screencircletask.py:250
 msgid ""
 "Please read instructions again carefully and perform task accordingly.\n"
 "Aborting Session..."
+msgstr ""
+
+#: src/widgets/screenconsents.py:10 src/widgets/screensgeneral.py:38
+msgid "Loading..."
 msgstr ""
 
 #: src/widgets/screenconsents.py:42
@@ -738,6 +735,7 @@ msgstr ""
 #: terms.py:15
 #, python-brace-format
 msgid ""
+"\n"
 "# Terms & Conditions\n"
 "By downloading or using the app, these terms will automatically apply to you "
 "- you should make sure therefore that you read them carefully before using "

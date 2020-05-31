@@ -12,6 +12,7 @@ from src.utility import create_markdown_file
 # Wrap terms in getter so that translation kicks in when necessary.
 def get_policy():
     policy_md = _(
+    "\n"  # Hack for fitting title into popup.
     "# Privacy Policy\n"
     "The purpose of the {appname} app is to collect anonymous research data that its users, like yourself, "
     "provide to us **voluntarily** by participating in the studies the {appname} app offers. "

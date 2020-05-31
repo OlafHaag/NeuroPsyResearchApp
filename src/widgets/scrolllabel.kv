@@ -1,0 +1,47 @@
+# scrollabel.kv
+#:kivy 1.11.1
+
+<ScrollText>
+    orientation: 'vertical'
+    size_hint_y: None
+
+    ScrollView:
+        id: scroll
+        do_scroll_x: False
+        do_scroll_y: True
+        scroll_type: ['bars', 'content']
+
+        MDLabel:
+            id: label
+            text: root.text
+            markup: True
+            halign: "justify"
+            size_hint_y: None
+            size: self.texture_size
+
+<RecycleLabel>:
+    color: app.theme_cls.text_color
+    markup: True
+
+    RecycleView:
+        id: rv
+        viewclass: "TextLine"
+        pos: root.pos
+        size: root.size
+        scroll_type: ['bars', 'content']
+
+        RecycleBoxLayout:
+            default_size: None, root.height
+            default_size_hint: 1, None
+            size_hint_y: None
+            height: self.minimum_height
+            orientation: 'vertical'
+
+<-TextLine>:
+    canvas:
+        Color:
+            rgba: app.theme_cls.bg_normal
+        Rectangle:
+            pos: self._rect_x, self.y
+            size: self.texture_size
+            texture: root.texture

@@ -12,6 +12,7 @@ from src.utility import create_markdown_file
 # Wrap terms in getter so that translation kicks in when necessary.
 def get_terms():
     terms_md = _(
+    "\n"  # Hack for fitting title into popup.
     "# Terms & Conditions\n"
     "By downloading or using the app, these terms will automatically apply to you - "
     "you should make sure therefore that you read them carefully before using the app.  \n"

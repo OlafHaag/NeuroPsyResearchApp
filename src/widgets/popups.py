@@ -12,7 +12,7 @@ from kivymd.uix.label import MDIcon
 from kivymd.uix.list import BaseListItem
 from plyer import email
 
-from . import CheckItem, UserItem, UserAddItem
+from . import CheckItem, UserItem, UserAddItem, RecycleLabel
 from ..i18n import (_,
                     list_translated_languages,
                     translation_to_language_code,
@@ -307,15 +307,6 @@ class UsersPopup(MDDialog):
     
     def on_dismiss(self):
         pass
-        
-        
-class ScrollText(MDBoxLayout):
-    text = StringProperty(_('Loading...'))
-
-    def __init__(self, **kwargs):
-        self.text = kwargs.pop('text', _("not found"))
-        self.height = (Window.height * 0.8) - 80  # Adjust: height of ScrollText
-        super(ScrollText, self).__init__(**kwargs)
 
 
 class TextInputPopup(MDDialog):
@@ -473,7 +464,6 @@ class UserInput(TextInputContent):
         self.ids.textfield.error = len(self.ids.textfield.text.strip(' ')) == 0
 
 
-# FixMe: Popup Policy ScrollView is black on Android.
 class PolicyPopup(SimplePopup):
     """ Display privacy policy for using the app. """
     
@@ -483,16 +473,17 @@ class PolicyPopup(SimplePopup):
             size_hint_x=0.9,
         )
         if 'content_cls' not in kwargs:
-            content = ScrollText(text=self._get_text(get_policy()))
-            content.ids.label.bind(on_ref_press=lambda instance, value: self.open_link(value))
+            content = RecycleLabel(text=self._get_text(get_policy()), halign='justify')
+            content.bind(on_ref_press=lambda instance, value: self.open_link(value))
             default_kwargs.update(content_cls=content)
             
         default_kwargs.update(kwargs)
         super(PolicyPopup, self).__init__(**default_kwargs)
         # Reduce the emtpy space.
-        self._spacer_top = self.content_cls.height
+        self.ids.spacer_top_box.size_hint_y = 1
+        self.ids.spacer_top_box.padding = (0, 0, 0, 0)
         self.ids.container.size_hint_y = 0.9
-        self.ids.container.padding = ("24dp", "8dp", "8dp", "0dp")  # left, top, right, bottom
+        self.ids.container.padding = ("8dp", "8dp", "8dp", "0dp")  # left, top, right, bottom
         
     def _get_text(self, content_md):
         details = get_app_details()
@@ -504,7 +495,8 @@ class PolicyPopup(SimplePopup):
     def on_pre_open(self):
         # In case the language changed, reload the policy text.
         self.content_cls.text = self._get_text(get_policy())
-            
+        self.content_cls.ids.rv.scroll_y = 1
+        
 
 class TermsPopup(PolicyPopup):
     """ Display terms and conditions for using the app. """
@@ -529,8 +521,8 @@ class TermsPopup(PolicyPopup):
         else:
             text = self._get_text(get_terms())
             
-        content = ScrollText(text=text)
-        content.ids.label.bind(on_ref_press=lambda instance, value: self.open_link(value))
+        content = RecycleLabel(text=text, halign='justify')
+        content.bind(on_ref_press=lambda instance, value: self.open_link(value))
         
         default_kwargs = dict(
             content_cls=content,
@@ -552,4 +544,4 @@ class TermsPopup(PolicyPopup):
             self.content_cls.text = self._get_text(get_terms())
             self.ids.button_box.remove_widget(self.__reject_btn)
             self.__accept_btn.text = _("CLOSE")
-        self.content_cls.ids.scroll.scroll_y = 1
+        self.content_cls.ids.rv.scroll_y = 1

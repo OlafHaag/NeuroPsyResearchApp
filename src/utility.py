@@ -239,8 +239,8 @@ def markdown_to_bbcode(s):
     s = single_tag_context_parser(s, r"~~[^ \n]([\s\S]+?)[^ \n](?=~~)", "s", 2)  # ~Strikethrough~
     
     # URLs. Kivy Label style.
-    s = re.sub(r"<(https?:\S+)>", "[ref=\"\\1\"][color=0000ff]\\1[/color][/ref]", s)
-    s = re.sub(r"\[(.*?)\]\((.*?)\)", "[ref=\"\\2\"][color=0000ff]\\1[/color][/ref]", s)
+    s = re.sub(r"<(https?:\S+)>", "[color=0000ff][ref=\"\\1\"]\\1[/ref][/color]", s)
+    s = re.sub(r"\[(.*?)\]\((.*?)\)", "[color=0000ff][ref=\"\\2\"]\\1[/ref][/color]", s)
     
     s = re.sub(r"(?m)^((?!~).*)$", translate(), s)
     s = re.sub(r"\[/quote]\n\[quote]", "\n", s)

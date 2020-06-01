@@ -1,13 +1,11 @@
-""""Research application aimed at studying uncontrolled manifold and optimal feedback control paradigms."""
+""" Research application aimed at studying uncontrolled manifold and optimal feedback control paradigms. """
 
 from kivymd.app import MDApp
 from kivy.clock import Clock
-from kivy.core.window import Window
 from kivy.lang import global_idmap, Builder
 from kivy.logger import Logger
 from kivy.properties import ObjectProperty
 from kivy.utils import platform
-import plyer
 
 from .utility import create_user_identifier, switch_language, get_app_details
 from .datamanager import DataManager
@@ -65,16 +63,16 @@ class NeuroPsyResearchApp(MDApp):
                                                                                               msg),
                            )
         
-        # GUI.
-        try:
-            plyer.orientation.set_portrait()
-        except (NotImplementedError, ModuleNotFoundError):
-            pass
-        
         root = Builder.load_file('src/widgets/navigation.kv')
         self.manager = root.ids.mgr
+        self.set_orientation_from_config()
         return root
     
+    def set_orientation_from_config(self):
+        """ Set screen orientation from saved config value. """
+        orientation = self.config.get('General', 'orientation')
+        self.manager.orientation = orientation
+
     @run_on_ui_thread
     def android_set_hide_menu(self):
         if android_api_version.SDK_INT >= 19:
@@ -103,6 +101,7 @@ class NeuroPsyResearchApp(MDApp):
         # setdefault doesn't work here for single keys. Can't find section if no config yet. NoSectionError
         config.setdefaults(LANGUAGE_SECTION, {LANGUAGE_CODE: DEFAULT_LANGUAGE})
         config.setdefaults('General', {'is_first_run': 1,
+                                       'orientation': 'portrait',
                                        'current_user': create_user_identifier(),
                                        'sound_enabled': 1,
                                        'vibration_enabled': 1,

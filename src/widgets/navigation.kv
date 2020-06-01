@@ -35,10 +35,12 @@ Root:
     ScreenHome:
         name: 'Home'
 
-<TopBar@MDToolbar>
+<TopBar>:
     title: _("MENU")
     elevation: 10
     left_action_items: [['menu', lambda instance: app.manager.sidebar.set_state()]]
+    # The callback as lambda is a hack to avoid AttributeError when manager is not yet initialized.
+    right_action_items: [['phone-rotate-landscape', lambda instance: app.manager.toggle_orientation(instance)]]
 
 <ContentNavigationDrawer>:
     orientation: "vertical"

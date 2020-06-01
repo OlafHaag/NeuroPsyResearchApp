@@ -7,7 +7,7 @@ from kivy.uix.screenmanager import ScreenManager
 from kivy.properties import ObjectProperty, ConfigParserProperty
 from kivy.clock import Clock
 
-from plyer import notification
+import plyer
 
 from . import (ScreenConsentCircleTask,
                ScreenInstructCircleTask,
@@ -52,6 +52,7 @@ class UiManager(ScreenManager):
     popup_privacy = ObjectProperty(None, allownone=True)
     #
     is_first_run = ConfigParserProperty('1', 'General', 'is_first_run', 'app', val_type=int)
+    orientation = ConfigParserProperty('portrait', 'General', 'orientation', 'app', val_type=str, force_dispatch=True)
     
     def __init__(self, **kwargs):
         super(UiManager, self).__init__(**kwargs)
@@ -104,6 +105,26 @@ class UiManager(ScreenManager):
         elif screen_name == 'Webview':
             self.get_screen(screen_name).bind(on_quit_screen=lambda instance: self.go_home())
     
+    def toggle_orientation(self, instance):
+        """ Toggles between portrait and landscape screen orientation. """
+        # Update the icon.
+        instance.icon = f'phone-rotate-{self.orientation}'
+        # Switch orientation.
+        if self.orientation == 'portrait':
+            self.orientation = 'landscape'
+        elif self.orientation == 'landscape':
+            self.orientation = 'portrait'
+            
+    def on_orientation(self, instance, value):
+        try:
+            if value == 'landscape':
+                plyer.orientation.set_landscape()
+            elif value == 'portrait':
+                plyer.orientation.set_portrait()
+        except (NotImplementedError, ModuleNotFoundError):
+            pass
+        
+        
     def open_settings(self):
         self.app.open_settings()
         self.sidebar.set_state('close')
@@ -293,7 +314,7 @@ class UiManager(ScreenManager):
                 # When on home screen we want to be able to quit the app after 2 presses.
                 self.n_home_esc += 1
                 if self.n_home_esc == 1:
-                    notification.notify(message=_("Press again to quit."), toast=True)
+                    plyer.notification.notify(message=_("Press again to quit."), toast=True)
                 if self.n_home_esc > 1:
                     self.quit()
             elif self.current == 'Outro' and self.last_visited == 'Settings':

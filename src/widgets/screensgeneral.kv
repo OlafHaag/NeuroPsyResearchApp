@@ -14,11 +14,13 @@
 <ScreenHome>:
     on_leave: scroll.scroll_y = 1
     navbar_enabled: True
+    topbar: topbar
 
     MDBoxLayout:
         orientation: 'vertical'
 
         TopBar:
+            id: topbar
 
         ScrollView:
             id: scroll
@@ -74,11 +76,13 @@
 
 <ScreenOutro>:
     navbar_enabled: True
+    topbar: topbar
 
     MDBoxLayout:
         orientation: 'vertical'
 
         TopBar:
+            id: topbar
 
         ScrollView:
             id: scroll

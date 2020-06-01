@@ -22,8 +22,11 @@ class ScreenHome(BaseScreen):
         app.settings.reset_current()
         app.data_mgr.clear_data_collection()
         app.settings.current_task = None
-        
         self.set_text()
+        Clock.schedule_once(lambda dt: self.topbar.update_icons(), 0)
+    
+    def on_kv_post(self, base_widget):
+        Clock.schedule_once(lambda dt: self.topbar.update_icons(), 0)
         
     def set_text(self):
         app = App.get_running_app()
@@ -47,6 +50,7 @@ class ScreenOutro(BaseScreen):
         # Upload.
         self.upload_btn_enabled = app.settings.is_upload_enabled and (not app.data_mgr.is_invalid)
         self._set_msg()
+        Clock.schedule_once(lambda dt: self.topbar.update_icons(), 0)
     
     def _set_msg(self):
         self.msg = _('[color=ff00ff][b]Thank you[/b][/color] for participating!') + "\n\n"

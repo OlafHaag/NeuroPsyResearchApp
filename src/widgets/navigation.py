@@ -1,8 +1,25 @@
+from kivy.app import App
 from kivy.properties import StringProperty
 from kivy.uix.boxlayout import BoxLayout
 
+from kivymd.uix.toolbar import MDToolbar
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.list import OneLineIconListItem
+
+
+class TopBar(MDToolbar):
+    """ Toolbar for menu and screen orientation. """
+    
+    def update_icons(self):
+        """ Update icons in toolbar. """
+        # Right action button for orientation.
+        app = App.get_running_app()
+        orientation = app.config.get('General', 'orientation')
+        ra = self.ids["right_actions"]
+        if orientation == 'portrait':
+            ra.children[0].icon = f'phone-rotate-landscape'
+        elif orientation == 'landscape':
+            ra.children[0].icon = f'phone-rotate-portrait'
 
 
 class NavigationDrawer(MDNavigationDrawer):

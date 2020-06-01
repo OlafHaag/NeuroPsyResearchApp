@@ -84,7 +84,7 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
     
     def on_pre_enter(self, *args):
         """ Setup this run of the task and initiate start. """
-        # Switch to landscape.
+        # Switch to landscape without changing config.
         try:
             plyer.orientation.set_landscape()
         except (NotImplementedError, ModuleNotFoundError):
@@ -123,8 +123,10 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         self.start_task()
     
     def on_leave(self, *args):
+        # Set orientation back to config value.
         try:
-            plyer.orientation.set_portrait()
+            if self.manager.orientation == 'portrait':
+                plyer.orientation.set_portrait()
         except (NotImplementedError, ModuleNotFoundError):
             pass
         

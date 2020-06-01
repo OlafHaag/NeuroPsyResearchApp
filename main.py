@@ -22,8 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 """
-
+from kivy.config import Config
 from src import App
 
 if __name__ in ('__main__', '__android__'):
+    # Go fullscreen. # FixMe: On android status bar still re-appears.
+    Config.set('graphics', 'fullscreen', 'auto')
+    Config.set('graphics', 'borderless', 1)
+    Config.set('graphics', 'window_state', 'maximized')
+    Config.write()
     App().run()

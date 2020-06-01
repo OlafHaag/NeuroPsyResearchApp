@@ -4,6 +4,7 @@ from kivymd.app import MDApp
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.lang import global_idmap, Builder
+from kivy.logger import Logger
 from kivy.properties import ObjectProperty
 from kivy.utils import platform
 import plyer
@@ -16,13 +17,29 @@ from .settings import SettingsContainer
 from .widgets import BaseScreen, SettingsWithTabbedPanels
 from .settingsjson import LANGUAGE_CODE, LANGUAGE_SECTION, get_settings_general_json, get_settings_circle_task_json
 
+try:
+    from jnius import autoclass
+    from android.runnable import run_on_ui_thread
 
+    android_api_version = autoclass('android.os.Build$VERSION')
+    AndroidView = autoclass('android.view.View')
+    AndroidPythonActivity = autoclass('org.kivy.android.PythonActivity')
+
+    Logger.debug(
+        'Application runs on Android, API level {0}'.format(
+            android_api_version.SDK_INT
+        )
+    )
+except (ImportError, ModuleNotFoundError):
+    def run_on_ui_thread(func):
+        def wrapper(*args):
+            Logger.debug('{0} called on non android platform'.format(
+                func.__name__
+            ))
+        return wrapper
+    
 # i18n
 global_idmap['_'] = _
-
-# Go fullscreen. # FixMe: On android status bar still re-appears.
-Window.borderless = True
-Window.fullscreen = 'auto'
 
 
 class NeuroPsyResearchApp(MDApp):
@@ -58,6 +75,20 @@ class NeuroPsyResearchApp(MDApp):
         self.manager = root.ids.mgr
         return root
     
+    @run_on_ui_thread
+    def android_set_hide_menu(self):
+        if android_api_version.SDK_INT >= 19:
+            Logger.debug('API >= 19. Set hide menu')
+            view = AndroidPythonActivity.mActivity.getWindow().getDecorView()
+            view.setSystemUiVisibility(
+                AndroidView.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                AndroidView.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                AndroidView.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                AndroidView.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                AndroidView.SYSTEM_UI_FLAG_FULLSCREEN |
+                AndroidView.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            )
+            
     def get_application_config(self, defaultpath='%(appdir)s/%(appname)s.ini'):
         """ Override path to application configuration. """
         if platform == 'win':
@@ -157,7 +188,10 @@ class NeuroPsyResearchApp(MDApp):
             upload_route = ''
         server_uri = self.settings.server_uri.strip('/') + upload_route
         return server_uri
-    
+
+    def on_start(self):
+        self.android_set_hide_menu()
+        
     # ToDo pause App.on_pause(), App.on_resume()
     def on_pause(self):
         # Here you can save data if needed
@@ -165,4 +199,5 @@ class NeuroPsyResearchApp(MDApp):
     
     def on_resume(self):
         # Here you can check if any data needs replacing (usually nothing)
+        self.android_set_hide_menu()
         pass

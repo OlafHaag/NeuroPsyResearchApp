@@ -7,7 +7,7 @@ from kivy.properties import (NumericProperty,
                              )
 from kivy.clock import Clock
 
-from .config import WEBSERVER
+from .utility import get_app_details
 
 
 class SettingsContainer(Widget):
@@ -20,7 +20,8 @@ class SettingsContainer(Widget):
     is_local_storage_enabled = ConfigParserProperty('0', 'DataCollection', 'is_local_storage_enabled', 'app',
                                                     val_type=int)  # Converts string to int.
     is_upload_enabled = ConfigParserProperty('1', 'DataCollection', 'is_upload_enabled', 'app', val_type=int)
-    server_uri = ConfigParserProperty(WEBSERVER, 'DataCollection', 'webserver', 'app', val_type=str)
+    server_uri = ConfigParserProperty(get_app_details()['webserver'], 'DataCollection', 'webserver', 'app',
+                                      val_type=str)
     is_email_enabled = ConfigParserProperty('0', 'DataCollection', 'is_email_enabled', 'app', val_type=int)
     
     # Properties that change over the course of all tasks and are not set by config.

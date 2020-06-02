@@ -3,4 +3,5 @@ author=Your Name
 contact=you@yourdomain.com
 source=https://your-repo.com/yoursourcecode
 3rdPartyLicenses=https://yourlink.to/all3rdpartylicenses
+webserver=https://your-webapp.apphoster.com
 orientation=portrait

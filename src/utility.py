@@ -125,6 +125,7 @@ def get_app_details():
                'contact': config_parser.get('dummy_section', 'contact', fallback=_("UNKNOWN.")),
                'source': config_parser.get('dummy_section', 'source', fallback=_("UNKNOWN.")),
                'third-party': config_parser.get('dummy_section', '3rdPartyLicenses', fallback=_("UNKNOWN.")),
+               'webserver': config_parser.get('dummy_section', 'webserver', fallback=_("http://127.0.0.1:5000")),
                'version': app_version,
                }
     return details

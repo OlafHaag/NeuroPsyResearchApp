@@ -32,7 +32,7 @@ from kivy.utils import platform
 
 from . import BaseScreen
 from ..i18n import _
-from ..config import WEBSERVER
+from ..utility import get_app_details
 
 if platform == 'android':
     from android.runnable import run_on_ui_thread
@@ -88,7 +88,7 @@ class ScreenWebView(BaseScreen):
     webview = None
     wvc = None
     webview_lock = False  # simple lock to avoid launching two webviews.
-    url = StringProperty(WEBSERVER)
+    url = StringProperty(get_app_details()['webserver'])
     
     def __init__(self, **kwargs):
         super(ScreenWebView, self).__init__(**kwargs)

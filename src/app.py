@@ -9,7 +9,6 @@ from kivy.utils import platform
 from .utility import create_user_identifier, switch_language, get_app_details
 from .datamanager import DataManager
 from .i18n import _, DEFAULT_LANGUAGE
-from .config import WEBSERVER
 from .settings import SettingsContainer
 from .widgets import BaseScreen, SettingsWithTabbedPanels
 from .settingsjson import LANGUAGE_CODE, LANGUAGE_SECTION, get_settings_general_json, get_settings_circle_task_json
@@ -64,6 +63,7 @@ class NeuroPsyResearchApp(MDApp):
         The configuration will be automatically saved in the file returned by get_application_config().
         """
         # setdefault doesn't work here for single keys. Can't find section if no config yet. NoSectionError
+        app_details = get_app_details()
         config.setdefaults(LANGUAGE_SECTION, {LANGUAGE_CODE: DEFAULT_LANGUAGE})
         config.setdefaults('General', {'is_first_run': 1,
                                        'orientation': 'portrait',
@@ -75,7 +75,7 @@ class NeuroPsyResearchApp(MDApp):
                            {
                                'is_local_storage_enabled': 0,
                                'is_upload_enabled': 1,
-                               'webserver': WEBSERVER,
+                               'webserver': app_details['webserver'],
                                'is_email_enabled': 0,
                            })
         config.setdefaults('CircleTask',
@@ -86,7 +86,7 @@ class NeuroPsyResearchApp(MDApp):
                                'warm_up_time': 1.0,
                                'trial_duration': 3.0,
                                'cool_down_time': 0.5,
-                               'email_recipient': get_app_details()['contact'],
+                               'email_recipient': app_details['contact'],
                            })
         # To set aliases for user ids we need to schedule it next frame, we can't retrieve current_user yet.
         Clock.schedule_once(lambda dt: self.set_configdefaults_user(config), 1)

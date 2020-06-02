@@ -1,7 +1,7 @@
-title=UCMResearch
-author=Your Name
-contact=you@yourdomain.com
-source=https://your-repo.com/yoursourcecode
-3rdPartyLicenses=https://yourlink.to/all3rdpartylicenses
-webserver=https://your-webapp.apphoster.com
+title=NeuroPsyResearch
+author=Olaf Haag
+contact=contact@olafhaag.com
+source=https://github.com/OlafHaag/NeuroPsyResearchApp
+3rdPartyLicenses=https://github.com/OlafHaag/NeuroPsyResearchApp/blob/master/Third-Party-Licenses-Android.md
+webserver=https://ucmwebapp.herokuapp.com
 orientation=portrait

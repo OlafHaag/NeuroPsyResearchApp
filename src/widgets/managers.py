@@ -193,8 +193,8 @@ class UiManager(ScreenManager):
         self.popup_user_remove.open()
         
     def show_about(self):
+        # ToDo: own popup class with scrollview.
         details = get_app_details()
-        # FixMe: landscape height of the popup greater than screen height, can't reach ok-button.
         self.show_info(title=_("About"),
                        text=_("{appname}\n"  # Alternatively self.app.get_application_name()
                               "Version: {version}\n"
@@ -220,6 +220,8 @@ class UiManager(ScreenManager):
     def show_info(self, title=None, text=None):
         if not self.popup_info:
             self.popup_info = SimplePopup()
+            # Hack for making about dialog to fit into screen.
+            self.popup_info.bind(on_dismiss=lambda instance: setattr(self, 'popup_info', None))
         if title:
             self.popup_info.title = title
         if text:

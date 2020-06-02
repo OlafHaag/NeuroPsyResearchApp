@@ -25,7 +25,7 @@ from terms import get_terms
 # ToDo: Distinguish Info, Warning and Error by icon or color.
 class SimplePopup(MDDialog):
     """ Simple popup with only an OK button. """
-    def __init__(self, **kwargs):  # ToDo: Make popup almost fit screen width, is too small on Android.
+    def __init__(self, **kwargs):
         default_kwargs = dict(
             size_hint_x=0.8,
             auto_dismiss=False,
@@ -38,6 +38,15 @@ class SimplePopup(MDDialog):
     def on_kv_post(self, base_widget):
         self.ids.text.bind(on_ref_press=lambda instance, value: self.open_link(value))
 
+    def on_open(self):
+        # Check height of popup, if it's too large, make smaller.
+        container = self.ids.container
+        if container.height > Window.height:
+            container.size_hint_y = 0.95
+            container.padding = ("24dp", "0dp", "8dp", "0dp")
+            self.ids.text.font_style = 'Body2'
+            self._spacer_top = 0
+    
     def open_link(self, url):
         url = url.strip('"')
         if url.startswith('https://'):

@@ -20,9 +20,9 @@ import plyer
 import requests
 
 # Own module imports
-from .config import time_fmt
 from .i18n import _
-from .utility import (create_device_identifier,
+from .utility import (time_fmt,
+                      create_device_identifier,
                       get_screensize,
                       ask_permission,
                       Permission,

@@ -14,9 +14,8 @@ import numpy as np
 import plyer
 
 from . import BaseScreen
-from ..config import time_fmt
 from ..i18n import _
-from ..utility import create_device_identifier
+from ..utility import time_fmt, create_device_identifier
 
 
 class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):

@@ -24,7 +24,13 @@ else:
         WRITE_EXTERNAL_STORAGE = (
             "android.permission.WRITE_EXTERNAL_STORAGE"
         )
-        
+
+
+# Variables.
+time_fmt = '%Y_%m_%d_%H_%M_%S'  # For safe usage as file name.
+
+
+# Function declarations.
 if platform == 'win':
     def get_screensize():
         import ctypes

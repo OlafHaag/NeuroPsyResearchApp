@@ -62,8 +62,8 @@ class ScreenInstructCircleTask(BaseScreen):
                            ).format(ct.warm_up, ct.trial_duration, ct.cool_down, task_suffix, vibration_msg)
         time_limit_msg += _("The events for the start and end of the countdown for each trial will play distinctive "
                             "sounds. ") * self.settings.is_sound_enabled
-        task1_msg = _("Hold your device with both hands so your thumbs can reach their respective side of the "
-                      "screen comfortably.\n"
+        task1_msg = _("When the task starts, please hold your device sideways with both hands, so your thumbs can "
+                      "reach their respective side of the screen comfortably.\n"
                       "In the middle of the screen you'll see a [b]white disk[/b] enclosed by a larger "
                       "[color=008000]green ring[/color]. Your task in each trial is to match the size of this "
                       "[b]white disk[/b] to the size of the [color=008000]green ring[/color], so the [b]white disk[/b] "

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-05-31 21:02+0200\n"
-"PO-Revision-Date: 2020-05-31 21:02+0200\n"
+"POT-Creation-Date: 2020-06-03 13:50+0200\n"
+"PO-Revision-Date: 2020-06-03 13:53+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: de_DE\n"
@@ -26,39 +26,39 @@ msgstr ""
 msgid "MENU"
 msgstr "MENÜ"
 
-#: src/widgets/navigation.kv:73
+#: src/widgets/navigation.kv:75
 msgid "Scientific Participation Software"
 msgstr "Teilnahme an Wissenschaft"
 
-#: src/widgets/navigation.kv:83
+#: src/widgets/navigation.kv:85
 msgid "Home"
 msgstr "Start"
 
-#: src/widgets/navigation.kv:88
+#: src/widgets/navigation.kv:90
 msgid "Users"
 msgstr "Nutzende"
 
-#: src/widgets/navigation.kv:93
+#: src/widgets/navigation.kv:95
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: src/widgets/navigation.kv:98
+#: src/widgets/navigation.kv:100
 msgid "Visit Online Analyses"
 msgstr "Besuche Online Analyse"
 
-#: src/widgets/navigation.kv:103 src/widgets/managers.py:177
+#: src/widgets/navigation.kv:105 src/widgets/managers.py:198
 msgid "About"
 msgstr "Über"
 
-#: src/widgets/navigation.kv:108
+#: src/widgets/navigation.kv:110
 msgid "Terms & Conditions"
 msgstr "Nutzungsbedingungen"
 
-#: src/widgets/navigation.kv:113
+#: src/widgets/navigation.kv:115
 msgid "Privacy Policy"
 msgstr "Datenschutzerklärung"
 
-#: src/widgets/navigation.kv:118
+#: src/widgets/navigation.kv:120
 msgid "Exit"
 msgstr "Beenden"
 
@@ -78,19 +78,19 @@ msgstr "Fehler: ungültige Eingabe"
 msgid "Please use this slider."
 msgstr "Bitte diesen Regler nutzen."
 
-#: src/widgets/screenconsents.kv:51
+#: src/widgets/screenconsents.kv:53
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/widgets/screenconsents.kv:58
+#: src/widgets/screenconsents.kv:60
 msgid "Agree"
 msgstr "Zustimmen"
 
-#: src/widgets/screeninstructions.kv:54
+#: src/widgets/screeninstructions.kv:55
 msgid "When you are ready to begin press [b]{}[/b]."
 msgstr "Wenn Sie bereit sind zu beginnen, drücken Sie [b]{}[/b]."
 
-#: src/widgets/screeninstructions.kv:54 src/widgets/screeninstructions.kv:68
+#: src/widgets/screeninstructions.kv:55 src/widgets/screeninstructions.kv:69
 msgid "Start"
 msgstr "Anfangen"
 
@@ -98,19 +98,19 @@ msgstr "Anfangen"
 msgid "Close"
 msgstr "Schließen"
 
-#: src/widgets/screensgeneral.kv:56
+#: src/widgets/screensgeneral.kv:57
 msgid "Available Studies"
 msgstr "Verfügbare Studien"
 
-#: src/widgets/screensgeneral.kv:63 src/app.py:110
+#: src/widgets/screensgeneral.kv:68 src/app.py:105
 msgid "Circle Task"
 msgstr "Ring Aufgabe"
 
-#: src/widgets/screensgeneral.kv:108
+#: src/widgets/screensgeneral.kv:115
 msgid "Upload"
 msgstr "Hochladen"
 
-#: src/widgets/screensgeneral.kv:115
+#: src/widgets/screensgeneral.kv:122
 msgid "Send via E-Mail"
 msgstr "E-Mail senden"
 
@@ -322,7 +322,7 @@ msgstr ""
 "Forschungsgemeinschaft (DFG) und der Deutschen Gesellschaft für Psychologie "
 "(DGPs) zur Qualitätssicherung in der Forschung.\n"
 
-#: src/app.py:107
+#: src/app.py:102
 msgid "General"
 msgstr "Allgemein"
 
@@ -530,20 +530,24 @@ msgstr "E-Mail Empfänger"
 msgid "E-mail address to send data to."
 msgstr "E-Mail-Adresse, an die Daten gesendet werden."
 
-#: src/utility.py:118 src/utility.py:119 src/utility.py:123 src/utility.py:124
-#: src/utility.py:125 src/utility.py:126 src/utility.py:127
+#: src/utility.py:124 src/utility.py:125 src/utility.py:129 src/utility.py:130
+#: src/utility.py:131 src/utility.py:132 src/utility.py:133
 msgid "UNKNOWN."
 msgstr "UNBEKANNT."
 
-#: src/widgets/managers.py:147
+#: src/utility.py:134
+msgid "http://127.0.0.1:5000"
+msgstr ""
+
+#: src/widgets/managers.py:168
 msgid "New User"
 msgstr "Neues Konto"
 
-#: src/widgets/managers.py:170
+#: src/widgets/managers.py:191
 msgid "Do you want to remove {}?"
 msgstr "Möchten Sie {} entfernen?"
 
-#: src/widgets/managers.py:178
+#: src/widgets/managers.py:199
 #, python-brace-format
 msgid ""
 "{appname}\n"
@@ -570,23 +574,23 @@ msgstr ""
 "Drittanbieter Lizenzen: [ref={thirdparty}][color=0000ff]{thirdparty}[/color]"
 "[/ref]"
 
-#: src/widgets/managers.py:213
+#: src/widgets/managers.py:236
 msgid "Warning"
 msgstr "Warnung"
 
-#: src/widgets/managers.py:223
+#: src/widgets/managers.py:246
 msgid "Error"
 msgstr "Fehler"
 
-#: src/widgets/managers.py:254
+#: src/widgets/managers.py:277
 msgid "Success!"
 msgstr "Erfolg!"
 
-#: src/widgets/managers.py:254
+#: src/widgets/managers.py:277
 msgid "Upload successful!"
 msgstr "Hochladen erfolgreich!"
 
-#: src/widgets/managers.py:259
+#: src/widgets/managers.py:282
 msgid ""
 "Upload failed.\n"
 "Something went wrong."
@@ -594,92 +598,92 @@ msgstr ""
 "Hochladen fehlgeschlagen.\n"
 "Etwas ist schief gelaufen."
 
-#: src/widgets/managers.py:296
+#: src/widgets/managers.py:319
 msgid "Press again to quit."
 msgstr "Nochmals tippen zum Beenden."
 
-#: src/widgets/popups.py:32 src/widgets/popups.py:76 src/widgets/popups.py:104
-#: src/widgets/popups.py:167 src/widgets/popups.py:330
+#: src/widgets/popups.py:32 src/widgets/popups.py:85 src/widgets/popups.py:113
+#: src/widgets/popups.py:176 src/widgets/popups.py:339
 #: src/widgets/screensettings.py:157
 msgid "OK"
 msgstr "OK"
 
-#: src/widgets/popups.py:67
+#: src/widgets/popups.py:76
 msgid "Do you want to continue?"
 msgstr "Möchten Sie fortfahren?"
 
-#: src/widgets/popups.py:72 src/widgets/popups.py:326
+#: src/widgets/popups.py:81 src/widgets/popups.py:335
 #: src/widgets/screensettings.py:153
 msgid "CANCEL"
 msgstr "ABBRECHEN"
 
-#: src/widgets/popups.py:98
+#: src/widgets/popups.py:107
 msgid "Choose Language"
 msgstr "Sprache wählen"
 
-#: src/widgets/popups.py:99
+#: src/widgets/popups.py:108
 msgid "You can also change the language in the settings later."
 msgstr "Sie können die Sprache auch später in den Einstellungen ändern."
 
-#: src/widgets/popups.py:161 src/widgets/popups.py:301
+#: src/widgets/popups.py:170 src/widgets/popups.py:310
 msgid "Choose Active User"
 msgstr "Aktives Nutzer*innenkonto wählen"
 
-#: src/widgets/popups.py:192 src/widgets/popups.py:303
+#: src/widgets/popups.py:201 src/widgets/popups.py:312
 msgid "Add User"
 msgstr "Nutzer*in hinzufügen"
 
-#: src/widgets/popups.py:320
+#: src/widgets/popups.py:329
 msgid "Set New Value"
 msgstr "Neuen Wert setzen"
 
-#: src/widgets/popups.py:422 src/widgets/popups.py:436
+#: src/widgets/popups.py:431 src/widgets/popups.py:445
 msgid "Edit User"
 msgstr "Nutzer*in bearbeiten"
 
-#: src/widgets/popups.py:436
+#: src/widgets/popups.py:445
 msgid "Add New User"
 msgstr "Nutzer*in hinzufügen"
 
-#: src/widgets/popups.py:460
+#: src/widgets/popups.py:469
 msgid "This name is just for you. It won't be uploaded to the server."
 msgstr "Dieser Name ist nur für Sie. Er wird nicht auf den Server übertragen."
 
-#: src/widgets/popups.py:461
+#: src/widgets/popups.py:470
 msgid "Enter Pseudonym"
 msgstr "Pseudonym eingeben"
 
-#: src/widgets/popups.py:510
+#: src/widgets/popups.py:519
 msgid "DECLINE"
 msgstr "ABLEHNEN"
 
-#: src/widgets/popups.py:515
+#: src/widgets/popups.py:524
 msgid "ACCEPT"
 msgstr "ZUSTIMMEN"
 
-#: src/widgets/popups.py:546
+#: src/widgets/popups.py:555
 msgid "CLOSE"
 msgstr "SCHLIESSEN"
 
-#: src/widgets/screencircletask.py:25 src/widgets/screencircletask.py:175
+#: src/widgets/screencircletask.py:24 src/widgets/screencircletask.py:176
 msgid "Trial: "
 msgstr "Durchgang: "
 
-#: src/widgets/screencircletask.py:122
+#: src/widgets/screencircletask.py:121
 msgid "PREPARE"
 msgstr "ACHTUNG"
 
-#: src/widgets/screencircletask.py:195
+#: src/widgets/screencircletask.py:196
 msgid "GET READY"
 msgstr ""
 "Bereit\n"
 "machen"
 
-#: src/widgets/screencircletask.py:219
+#: src/widgets/screencircletask.py:220
 msgid "FINISHED"
 msgstr "FERTIG"
 
-#: src/widgets/screencircletask.py:250
+#: src/widgets/screencircletask.py:251
 msgid ""
 "Please read instructions again carefully and perform task accordingly.\n"
 "Aborting Session..."
@@ -688,7 +692,7 @@ msgstr ""
 "die Aufgabe entsprechend aus.\n"
 "Sitzung wird abgebrochen ..."
 
-#: src/widgets/screenconsents.py:11 src/widgets/screensgeneral.py:38
+#: src/widgets/screenconsents.py:11 src/widgets/screensgeneral.py:41
 #: src/widgets/scrolllabel.py:43
 msgid "Loading..."
 msgstr "Lädt..."
@@ -849,8 +853,8 @@ msgstr ""
 
 #: src/widgets/screeninstructions.py:65
 msgid ""
-"Hold your device with both hands so your thumbs can reach their respective "
-"side of the screen comfortably.\n"
+"When the task starts, please hold your device sideways with both hands, so "
+"your thumbs can reach their respective side of the screen comfortably.\n"
 "In the middle of the screen you'll see a [b]white disk[/b] enclosed by a "
 "larger [color=008000]green ring[/color]. Your task in each trial is to match "
 "the size of this [b]white disk[/b] to the size of the [color=008000]green "
@@ -863,15 +867,16 @@ msgid ""
 "motion and let go of the sliders when you think you reached the goal. The "
 "sliders are deactivated once you let go of them."
 msgstr ""
-"Halten Sie Ihr Gerät mit beiden Händen, so, dass Ihre Daumen bequem auf die "
-"jeweilige Seite des Bildschirms gelangen können.\n"
+"Wenn die Aufgabe beginnt, halten Sie Ihr Gerät bitte seitwärts mit beiden "
+"Händen, sodass Ihre Daumen bequem auf die jeweilige Seite des Bildschirms "
+"gelangen können.\n"
 "In der Mitte des Bildschirms sehen Sie eine [b]weiße Scheibe[/b], die von "
 "einem größeren [color=008000]grünen Ring[/color] umschlossen ist. Ihre "
 "Aufgabe in jedem Durchgang ist es, die Größe dieser [b]weißen Scheibe[/b] "
 "auf die Größe des [color=008000]grünen Rings[/color] anzupassen, damit die "
 "[b]weiße Scheibe[/b] den [color=008000]grünen Ring[/color] berührt. Sie "
 "steuern die Größe der Scheibe mithilfe der [b]2-Schieberegler[/b] links und "
-"rechts auf dem Display mithilfe ihrer Daumen. Beide Schieberegler haben "
+"rechts auf dem Display mittels ihrer Daumen. Beide Schieberegler haben "
 "Einfluss auf die Größe der Scheibe, und Sie benötigen beide gleichzeitig, "
 "damit die [b]weiße Scheibe[/b] den [color=008000]grünen Ring[/color] "
 "berührt. Bitte führen Sie die Aufgabe in einer durchgängigen Bewegung aus "
@@ -898,11 +903,11 @@ msgstr ""
 "Beachten Sie, dass der blaue Schieberegler auch weiterhin die Größe der "
 "[b]weißen Scheibe[/b] beeinflusst. Erfüllen Sie beide Aufgaben gleichzeitig!"
 
-#: src/widgets/screensgeneral.py:31
+#: src/widgets/screensgeneral.py:34
 msgid "Welcome!"
 msgstr "Willkommen!"
 
-#: src/widgets/screensgeneral.py:32
+#: src/widgets/screensgeneral.py:35
 msgid ""
 "You can participate in a study by choosing from available studies below.\n"
 "\n"
@@ -911,19 +916,19 @@ msgstr ""
 "aufgeführten Studien auswählen.\n"
 "\n"
 
-#: src/widgets/screensgeneral.py:52
+#: src/widgets/screensgeneral.py:56
 msgid "[color=ff00ff][b]Thank you[/b][/color] for participating!"
 msgstr "[color=ff00ff][b]Vielen Dank[/b][/color] für Ihre Teilnahme!"
 
-#: src/widgets/screensgeneral.py:57
+#: src/widgets/screensgeneral.py:61
 msgid "Files were{} saved to [i]{}[/i].\n"
 msgstr "Daten wurden {}gespeichert in [i]{}[/i].\n"
 
-#: src/widgets/screensgeneral.py:57
+#: src/widgets/screensgeneral.py:61
 msgid " [b]not[/b]"
 msgstr " [b]nicht[/b]"
 
-#: src/widgets/screensgeneral.py:59
+#: src/widgets/screensgeneral.py:63
 msgid ""
 "Research data were [b]not[/b] locally stored as files. You can enable "
 "storing research data on the device in the settings.\n"
@@ -931,7 +936,7 @@ msgstr ""
 "Die Forschungsdaten wurden [b]nicht[/b] lokal gespeichert. Sie können das "
 "Speichern der Daten auf dem Gerät in den Einstellungen aktivieren.\n"
 
-#: src/widgets/screensgeneral.py:62
+#: src/widgets/screensgeneral.py:66
 msgid ""
 "You can now [b]upload[/b] the research data by pressing the button below. "
 "Unless stated otherwise in the study's description we'd appreciate if you "
@@ -943,11 +948,11 @@ msgstr ""
 "anders angegeben, wären wir Ihnen dankbar, wenn Sie Ihre Daten nur nach "
 "Ihrer ersten Teilnahme an dieser Studie hochladen. Vielen Dank.\n"
 
-#: src/widgets/screensgeneral.py:69
+#: src/widgets/screensgeneral.py:73
 msgid "Uploading..."
 msgstr "Hochladen..."
 
-#: src/widgets/screensgeneral.py:69
+#: src/widgets/screensgeneral.py:73
 msgid ""
 "Waking up server.\n"
 "Please be patient."

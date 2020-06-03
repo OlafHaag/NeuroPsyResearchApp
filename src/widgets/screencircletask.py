@@ -43,6 +43,7 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         self.sound_start = None
         self.sound_stop = None
         # Data collection related.
+        self.clear_times()
         self.data = None  # For numerical data.
         self.meta_data = dict()  # For context of numerical data acquisition, e.g. treatment/condition.
         self.session_data = list()  # For description of a block if numerical data.
@@ -112,7 +113,7 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
             n_trials = self.settings.circle_task.n_practice_trials
         else:
             n_trials = self.settings.circle_task.n_trials
-        self.data = np.zeros((n_trials, 2))
+        self.data = np.zeros((n_trials, 6))  # Data for df1, df2, df1_grab, df1_release, df2_grab, df2_release
         # FixMe: Not loading sound files on Windows. (Unable to find a loader)
         if self.settings.is_sound_enabled:
             self.sound_start = SoundLoader.load('res/start.ogg')
@@ -134,32 +135,43 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         """ Set reference to touch event for sliders. """
         if instance == self.ids.df1 and not self.ids.df1.disabled:
             self.df1_touch = touch
+            self.df1_grab_dt = self.df1_touch.time_start - self.onset
             self.ids.df1_warning.opacity = 0.0
         elif instance == self.ids.df2 and not self.ids.df2.disabled:
             self.df2_touch = touch
+            self.df2_grab_dt = self.df2_touch.time_start - self.onset
             self.ids.df2_warning.opacity = 0.0
     
     def slider_ungrab(self, instance, touch):
         """ Disable sliders when they're let go. """
+        if touch.time_end == -1:
+            t = time.time()
+        else:
+            t = touch.time_end
         if (instance == self.ids.df1) and touch is self.df1_touch:
             self.ids.df1.disabled = True
             self.df1_touch.ungrab(self.ids.df1)
+            self.df1_release_dt = t - self.onset
             self.df1_touch = None
         elif (instance == self.ids.df2) and touch is self.df2_touch:
             self.ids.df2.disabled = True
             self.df2_touch.ungrab(self.ids.df2)
+            self.df2_release_dt = t - self.onset
             self.df2_touch = None
     
     def disable_sliders(self):
         """ Disable sliders regardless of whether they have touch or not. """
         self.ids.df2.disabled = True
         self.ids.df1.disabled = True
+        t = time.time()
         # Release slider grabs, if any.
         if self.df1_touch:
             self.df1_touch.ungrab(self.ids.df1)
+            self.df1_release_dt = t - self.onset
             self.df1_touch = None
         if self.df2_touch:
             self.df2_touch.ungrab(self.ids.df2)
+            self.df2_release_dt = t - self.onset
             self.df2_touch = None
     
     def enable_sliders(self):
@@ -170,6 +182,8 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         """ Set sliders to initial position. """
         self.ids.df1.value = self.ids.df1.max * 0.1
         self.ids.df2.value = self.ids.df2.max * 0.1
+        # Reset slider grab times.
+        self.clear_times()
     
     def get_progress(self):
         """ Return a string for the number of trials out of total that are already done. """
@@ -204,6 +218,13 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
             except (NotImplementedError, ModuleNotFoundError):
                 pass
     
+    def clear_times(self):
+        self.onset = np.NaN
+        self.df1_grab_dt = np.NaN
+        self.df1_release_dt = np.NaN
+        self.df2_grab_dt = np.NaN
+        self.df2_release_dt = np.NaN
+        
     def start_trial(self):
         """ Start the trial. """
         if self.sound_start:
@@ -211,6 +232,7 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         self.enable_sliders()
         self.vibrate()
         self.count_down.start()
+        self.onset = time.time()
     
     def trial_finished(self):
         """ Callback for when a trial ends. Collect data. """
@@ -220,7 +242,10 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         self.count_down.set_label(_("FINISHED"))
         self.check_slider_use()
         # Record data for current trial.
-        self.data[self.settings.current_trial - 1, :] = (self.ids.df1.value_normalized, self.ids.df2.value_normalized)
+        self.data[self.settings.current_trial - 1, :] = (self.ids.df1.value_normalized, self.ids.df2.value_normalized,
+                                                         self.df1_grab_dt, self.df1_release_dt,
+                                                         self.df2_grab_dt, self.df2_release_dt)
+        self.clear_times()
         
     def check_slider_use(self):
         """ Checks if the slider values are still at their defaults and displays warning where appropriate."""
@@ -243,29 +268,32 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
             self.schedule = None
         self.reset_sliders()
         self.release_audio()
-        if not interrupt:
-            # Check if task was properly done, i.e. values are not all at default.
-            if (self.data[:, 0] == self.df1_default).all() and (self.data[:, 1] == self.df2_default).all():
-                self.clear_data()
-                # Feedback and reset/abort.
-                msg = _("Please read instructions again carefully and perform task accordingly.\nAborting Session...")
-                self.manager.dispatch('on_warning', text=msg)
-                # These are not the data you're looking for...
-                app = App.get_running_app()
-                app.data_mgr.is_invalid = True
-                # Abort session. Was last block.
-                self.dispatch('on_task_stopped', True)
-                return
+        if interrupt:
+            self.clear_data()
+            return
+        
+        # Check if task was properly done, i.e. sliders were not used at all.
+        if (np.isnan(self.data[:, 2]).all()) or (np.isnan(self.data[:, 4]).all()):
+            self.clear_data()
+            # Feedback and reset/abort.
+            msg = _("Please read instructions again carefully and perform task accordingly.\nAborting Session...")
+            self.manager.dispatch('on_warning', text=msg)
+            # These are not the data you're looking for...
+            app = App.get_running_app()
+            app.data_mgr.is_invalid = True
+            # Abort session. Was last block.
+            self.dispatch('on_task_stopped', True)
+            return
+        
+        was_last_block = self.settings.current_block == (self.settings.circle_task.n_blocks
+                                                         + bool(self.settings.circle_task.n_practice_trials) * 2)
+        # Only add data of session if we're not practicing anymore.
+        if not self.is_practice:
+            self.data_collection()
+            if was_last_block:
+                self.add_session_data()
             
-            was_last_block = self.settings.current_block == (self.settings.circle_task.n_blocks
-                                                             + bool(self.settings.circle_task.n_practice_trials) * 2)
-            # Only add data of session if we're not practicing anymore.
-            if not self.is_practice:
-                self.data_collection()
-                if was_last_block:
-                    self.add_session_data()
-                
-            self.dispatch('on_task_stopped', was_last_block)
+        self.dispatch('on_task_stopped', was_last_block)
     
     def on_task_stopped(self, was_last_block=False):
         if was_last_block:
@@ -311,17 +339,17 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         self.meta_data['time_iso'] = self.get_current_time_iso(time_fmt)
         self.meta_data['time'] = time.time()
         self.meta_data['hash'] = md5(self.data).hexdigest()
-        self.meta_data['columns'] = ['df1', 'df2']
+        self.meta_data['columns'] = ['df1', 'df2', 'df1_grab_dt', 'df1_release_dt', 'df2_grab_dt', 'df2_release_dt']
     
     def data_collection(self):
         # Scale normalized data to 0-100.
-        self.data = np.around(self.data * 100, decimals=5)  # When writing we save as %.5f. For hashing this must match.
+        self.data[:, :2] = self.data[:, :2] * 100
+        # When writing we save as %.5f. For hashing this must match.
+        self.data = np.around(self.data, decimals=5)
         self.collect_meta_data()
         self.add_block_to_session()
-        if self.settings.is_local_storage_enabled or self.settings.is_upload_enabled:
-            self.collect_data()
-        if self.settings.is_email_enabled:
-            self.collect_data_email()
+        self.collect_data()
+        self.collect_data_email()
     
     def collect_data(self):
         """ Add data to be written or uploaded to app data member. """
@@ -357,10 +385,8 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         meta_data['user'] = self.settings.current_user
         columns = ['task', 'time', 'time_iso', 'block', 'treatment', 'hash', 'warm_up', 'trial_duration', 'cool_down']
         app = App.get_running_app()
-        if self.settings.is_local_storage_enabled or self.settings.is_upload_enabled:
-            app.data_mgr.add_data(columns, data, meta_data)
-        if self.settings.is_email_enabled:
-            app.data_mgr.add_data_email([columns] + self.session_data, meta_data.copy())
+        app.data_mgr.add_data(columns, data, meta_data)
+        app.data_mgr.add_data_email([columns] + self.session_data, meta_data.copy())
     
     def clear_data(self):
         """ Clear data for the next session. """

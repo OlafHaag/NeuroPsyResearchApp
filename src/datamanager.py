@@ -323,10 +323,17 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
             if len(response) > 150:
                 return _("ERROR: There was an unexpected error during upload.")
             return response
+        msg = ""
+        try:
+            msg = res_json['response']['output-data-upload']['children'][0]['props']['children']
+        except (KeyError, IndexError):
+            pass
+        
         try:
             msg = res_json['response']['props']['children'][0]['props']['children']
         except (KeyError, IndexError):
-            msg = _("Not the usual error response.")
+            pass
+        msg = msg or _("ERROR: There was an unexpected error during upload.")
         return msg
 
     def _get_uploaded_status(self, response):
@@ -338,7 +345,9 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         :rtype: bool
         """
         try:
-            if response.lower().startswith(_('ERROR').lower()) or _('ERROR').lower() in response.lower():
+            if response.lower().startswith('error')  \
+                or response.lower().startswith(_('ERROR').lower()) \
+                    or _('ERROR').lower() in response.lower():
                 return False
         except AttributeError:
             pass

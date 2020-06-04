@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-06-03 13:50+0200\n"
-"PO-Revision-Date: 2020-06-03 13:53+0200\n"
+"POT-Creation-Date: 2020-06-04 16:35+0200\n"
+"PO-Revision-Date: 2020-06-04 16:37+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: de_DE\n"
@@ -358,23 +358,19 @@ msgstr "FEHLER: Server nicht erreichbar:"
 msgid "ERROR: There was an error processing the upload."
 msgstr "FEHLER: Beim Verarbeiten des Uploads ist ein Fehler aufgetreten."
 
-#: src/datamanager.py:324
+#: src/datamanager.py:324 src/datamanager.py:336
 msgid "ERROR: There was an unexpected error during upload."
 msgstr "FEHLER: Beim Hochladen ist ein unerwarteter Fehler aufgetreten."
 
-#: src/datamanager.py:329
-msgid "Not the usual error response."
-msgstr "Nicht die gewöhnliche Fehlermeldung."
-
-#: src/datamanager.py:341
+#: src/datamanager.py:349 src/datamanager.py:350
 msgid "ERROR"
 msgstr "FEHLER"
 
-#: src/datamanager.py:377
+#: src/datamanager.py:386
 msgid "Permission to access Internet denied."
 msgstr "Berechtigung für Internetzugang abgelehnt."
 
-#: src/datamanager.py:383
+#: src/datamanager.py:392
 msgid ""
 "Disclaimer:\n"
 "By submitting this e-mail you agree to the data processing and evaluation "
@@ -447,7 +443,7 @@ msgstr "Angebot, gesammelte Daten an den Server zu senden."
 
 #: src/settingsjson.py:43
 msgid "Upload Server"
-msgstr ""
+msgstr "Ziel-Server"
 
 #: src/settingsjson.py:44
 msgid "Target server address to upload data to."
@@ -535,10 +531,6 @@ msgstr "E-Mail-Adresse, an die Daten gesendet werden."
 msgid "UNKNOWN."
 msgstr "UNBEKANNT."
 
-#: src/utility.py:134
-msgid "http://127.0.0.1:5000"
-msgstr ""
-
 #: src/widgets/managers.py:168
 msgid "New User"
 msgstr "Neues Konto"
@@ -598,7 +590,12 @@ msgstr ""
 "Hochladen fehlgeschlagen.\n"
 "Etwas ist schief gelaufen."
 
-#: src/widgets/managers.py:319
+#: src/widgets/managers.py:283
+msgid "Please make sure the app is up-to-date."
+msgstr ""
+"Bitte stellen Sie sicher, dass die Software auf dem neuesten Stand ist."
+
+#: src/widgets/managers.py:320
 msgid "Press again to quit."
 msgstr "Nochmals tippen zum Beenden."
 
@@ -665,25 +662,25 @@ msgstr "ZUSTIMMEN"
 msgid "CLOSE"
 msgstr "SCHLIESSEN"
 
-#: src/widgets/screencircletask.py:24 src/widgets/screencircletask.py:176
+#: src/widgets/screencircletask.py:24 src/widgets/screencircletask.py:190
 msgid "Trial: "
 msgstr "Durchgang: "
 
-#: src/widgets/screencircletask.py:121
+#: src/widgets/screencircletask.py:122
 msgid "PREPARE"
 msgstr "ACHTUNG"
 
-#: src/widgets/screencircletask.py:196
+#: src/widgets/screencircletask.py:210
 msgid "GET READY"
 msgstr ""
 "Bereit\n"
 "machen"
 
-#: src/widgets/screencircletask.py:220
+#: src/widgets/screencircletask.py:242
 msgid "FINISHED"
 msgstr "FERTIG"
 
-#: src/widgets/screencircletask.py:251
+#: src/widgets/screencircletask.py:279
 msgid ""
 "Please read instructions again carefully and perform task accordingly.\n"
 "Aborting Session..."
@@ -1198,6 +1195,9 @@ msgstr ""
 "Diese Seite mit den Allgemeinen Nutzungsbedingungen wurde in englischer "
 "Fassung teilweise von [App Privacy Policy Generator](https://app-privacy-"
 "policy-generator.firebaseapp.com/) erstellt."
+
+#~ msgid "Not the usual error response."
+#~ msgstr "Nicht die gewöhnliche Fehlermeldung."
 
 #~ msgid ""
 #~ "Storing research data on the device is enabled. You can disable it in the "

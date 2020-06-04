@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-06-03 13:47+0200\n"
-"PO-Revision-Date: 2020-06-03 13:47+0200\n"
+"POT-Creation-Date: 2020-06-04 16:37+0200\n"
+"PO-Revision-Date: 2020-06-04 16:37+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: en\n"
@@ -246,23 +246,19 @@ msgstr ""
 msgid "ERROR: There was an error processing the upload."
 msgstr ""
 
-#: src/datamanager.py:324
+#: src/datamanager.py:324 src/datamanager.py:336
 msgid "ERROR: There was an unexpected error during upload."
 msgstr ""
 
-#: src/datamanager.py:329
-msgid "Not the usual error response."
-msgstr ""
-
-#: src/datamanager.py:341
+#: src/datamanager.py:349 src/datamanager.py:350
 msgid "ERROR"
 msgstr ""
 
-#: src/datamanager.py:377
+#: src/datamanager.py:386
 msgid "Permission to access Internet denied."
 msgstr ""
 
-#: src/datamanager.py:383
+#: src/datamanager.py:392
 msgid ""
 "Disclaimer:\n"
 "By submitting this e-mail you agree to the data processing and evaluation "
@@ -410,10 +406,6 @@ msgstr ""
 msgid "UNKNOWN."
 msgstr ""
 
-#: src/utility.py:134
-msgid "http://127.0.0.1:5000"
-msgstr ""
-
 #: src/widgets/managers.py:168
 msgid "New User"
 msgstr ""
@@ -460,7 +452,11 @@ msgid ""
 "Something went wrong."
 msgstr ""
 
-#: src/widgets/managers.py:319
+#: src/widgets/managers.py:283
+msgid "Please make sure the app is up-to-date."
+msgstr ""
+
+#: src/widgets/managers.py:320
 msgid "Press again to quit."
 msgstr ""
 
@@ -527,23 +523,23 @@ msgstr ""
 msgid "CLOSE"
 msgstr ""
 
-#: src/widgets/screencircletask.py:24 src/widgets/screencircletask.py:176
+#: src/widgets/screencircletask.py:24 src/widgets/screencircletask.py:190
 msgid "Trial: "
 msgstr ""
 
-#: src/widgets/screencircletask.py:121
+#: src/widgets/screencircletask.py:122
 msgid "PREPARE"
 msgstr ""
 
-#: src/widgets/screencircletask.py:196
+#: src/widgets/screencircletask.py:210
 msgid "GET READY"
 msgstr ""
 
-#: src/widgets/screencircletask.py:220
+#: src/widgets/screencircletask.py:242
 msgid "FINISHED"
 msgstr ""
 
-#: src/widgets/screencircletask.py:251
+#: src/widgets/screencircletask.py:279
 msgid ""
 "Please read instructions again carefully and perform task accordingly.\n"
 "Aborting Session..."
@@ -653,8 +649,8 @@ msgstr ""
 
 #: src/widgets/screeninstructions.py:65
 msgid ""
-"When the task starts hold your device sideways with both hands so your "
-"thumbs can reach their respective side of the screen comfortably.\n"
+"When the task starts, please hold your device sideways with both hands, so "
+"your thumbs can reach their respective side of the screen comfortably.\n"
 "In the middle of the screen you'll see a [b]white disk[/b] enclosed by a "
 "larger [color=008000]green ring[/color]. Your task in each trial is to match "
 "the size of this [b]white disk[/b] to the size of the [color=008000]green "

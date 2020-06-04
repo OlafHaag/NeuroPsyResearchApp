@@ -280,6 +280,7 @@ class UiManager(ScreenManager):
         else:
             if not error_msg:
                 error_msg = _("Upload failed.\nSomething went wrong.")
+            error_msg += "\n" + _("Please make sure the app is up-to-date.")
             self.show_error(text=error_msg)
     
     def on_upload_successful(self):

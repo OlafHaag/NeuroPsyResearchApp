@@ -1,4 +1,6 @@
 # NeuroPsy Research App
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 This app should serve as a starting point for neuropsychological research on mobile devices.  
 The necessity for conducting research outside of a laboratory became more paramount during the COVID-19 pandemic when 
 face-to-face contact was restricted as a safety measure.

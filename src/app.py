@@ -84,7 +84,7 @@ class NeuroPsyResearchApp(MDApp):
                                'n_blocks': 3,
                                'constrained_block': 2,
                                'warm_up_time': 1.0,
-                               'trial_duration': 3.0,
+                               'trial_duration': 2.0,
                                'cool_down_time': 0.5,
                                'email_recipient': app_details['contact'],
                            })

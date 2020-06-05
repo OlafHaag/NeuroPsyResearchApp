@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-06-04 16:37+0200\n"
-"PO-Revision-Date: 2020-06-04 16:37+0200\n"
+"POT-Creation-Date: 2020-06-05 10:37+0200\n"
+"PO-Revision-Date: 2020-06-05 10:37+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: en\n"
@@ -76,6 +76,10 @@ msgstr ""
 
 #: src/widgets/screencircletask.kv:18
 msgid "Please use this slider."
+msgstr ""
+
+#: src/widgets/screencircletask.kv:99
+msgid "Use sliders simultaneously."
 msgstr ""
 
 #: src/widgets/screenconsents.kv:53
@@ -539,7 +543,7 @@ msgstr ""
 msgid "FINISHED"
 msgstr ""
 
-#: src/widgets/screencircletask.py:279
+#: src/widgets/screencircletask.py:285
 msgid ""
 "Please read instructions again carefully and perform task accordingly.\n"
 "Aborting Session..."

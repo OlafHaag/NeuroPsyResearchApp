@@ -240,23 +240,29 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
             self.sound_stop.play()
         self.disable_sliders()
         self.count_down.set_label(_("FINISHED"))
-        self.check_slider_use()
         # Record data for current trial.
         self.data[self.settings.current_trial - 1, :] = (self.ids.df1.value_normalized, self.ids.df2.value_normalized,
                                                          self.df1_grab_dt, self.df1_release_dt,
                                                          self.df2_grab_dt, self.df2_release_dt)
+        self.check_slider_use()
         self.clear_times()
         
     def check_slider_use(self):
         """ Checks if the slider values are still at their defaults and displays warning where appropriate."""
-        if self.ids.df1.value_normalized == self.df1_default:
+        if np.isnan(self.data[self.settings.current_trial - 1, [2, 3]]).all():
             self.ids.df1_warning.opacity = 1.0
         else:
             self.ids.df1_warning.opacity = 0.0
-        if self.ids.df2.value_normalized == self.df2_default:
+        if np.isnan(self.data[self.settings.current_trial - 1, [4, 5]]).all():
             self.ids.df2_warning.opacity = 1.0
         else:
             self.ids.df2_warning.opacity = 0.0
+        if np.isnan(self.data[self.settings.current_trial - 1, 2:]).any() \
+                or np.greater_equal(*self.data[self.settings.current_trial - 1, [2, 5]]) \
+                or np.greater_equal(*self.data[self.settings.current_trial - 1, [4, 3]]):
+            self.ids.concurrency_warning.opacity = 1.0
+        else:
+            self.ids.concurrency_warning.opacity = 0.0
     
     def stop_task(self, interrupt=False):
         """ Stop time interval that starts new trials.
@@ -339,7 +345,7 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         self.meta_data['time_iso'] = self.get_current_time_iso(time_fmt)
         self.meta_data['time'] = time.time()
         self.meta_data['hash'] = md5(self.data).hexdigest()
-        self.meta_data['columns'] = ['df1', 'df2', 'df1_grab_dt', 'df1_release_dt', 'df2_grab_dt', 'df2_release_dt']
+        self.meta_data['columns'] = ['df1', 'df2', 'df1_grab', 'df1_release', 'df2_grab', 'df2_release']
     
     def data_collection(self):
         # Scale normalized data to 0-100.

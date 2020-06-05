@@ -108,7 +108,7 @@ class SettingsCircleTask(Widget):
     constrained_block = ConfigParserProperty('2', 'CircleTask', 'constrained_block', 'app', val_type=int)
     warm_up = ConfigParserProperty('1.0', 'CircleTask', 'warm_up_time', 'app', val_type=float,
                                    verify=lambda x: x > 0.0, errorvalue=1.0)
-    trial_duration = ConfigParserProperty('1.0', 'CircleTask', 'trial_duration', 'app', val_type=float,
+    trial_duration = ConfigParserProperty('2.0', 'CircleTask', 'trial_duration', 'app', val_type=float,
                                           verify=lambda x: x > 0.0, errorvalue=1.0)
     cool_down = ConfigParserProperty('0.5', 'CircleTask', 'cool_down_time', 'app', val_type=float,
                                      verify=lambda x: x > 0.0, errorvalue=0.5)

@@ -12,15 +12,18 @@ class ScreenConsentCircleTask(BaseScreen):
     
     def __init__(self, **kwargs):
         super(ScreenConsentCircleTask, self).__init__(**kwargs)
+        self.register_event_type('on_consent')
     
     def on_kv_post(self, base_widget):
         self.ids.consent_label.bind(on_ref_press=lambda instance, value: self.on_ref(value))
         
     def on_ref(self, value):
+        """ Handle clicks on links. """
         if value == 'privacy':
             self.manager.show_privacy_policy()
     
-    def on_consent(self):
+    def on_consent(self, *args):
+        """ On to the next screen. We have consent, begin new data collection. """
         # Start collecting data for user_id.
         app = App.get_running_app()
         app.data_mgr.new_data_collection(app.settings.current_user)
@@ -30,6 +33,7 @@ class ScreenConsentCircleTask(BaseScreen):
         self.manager.current = self.manager.task_instructions[app.settings.current_task]
         
     def on_pre_enter(self, *args):
+        """ Setup information screen before we see it. """
         # Estimate how long will the study take.
         app = App.get_running_app()
         s = app.settings.circle_task

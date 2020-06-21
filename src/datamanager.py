@@ -54,14 +54,14 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
 
     def _data2bytes(self, data, header=None, fmt="%.5f"):
         """ Takes numpy array and returns it as bytes. """
-        bio = io.BytesIO()
-        if header:
-            # header = header.encode('utf-8')
-            np.savetxt(bio, data, delimiter=',', fmt=fmt, encoding='utf-8', header=header, comments='')
-        else:
-            np.savetxt(bio, data, delimiter=',', fmt=fmt, encoding='utf-8')
-    
-        b = bio.getvalue()
+        with io.BytesIO() as bio:
+            if header:
+                # header = header.encode('utf-8')
+                np.savetxt(bio, data, delimiter=',', fmt=fmt, encoding='utf-8', header=header, comments='')
+            else:
+                np.savetxt(bio, data, delimiter=',', fmt=fmt, encoding='utf-8')
+        
+            b = bio.getvalue()
         return b
 
     # ## Data Collection ## #
@@ -114,6 +114,27 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         device_properties['platform'] = platform
         return device_properties
     
+    def add_user_data(self, age="", gender=""):
+        """ Create a dataset to identify the user when uploading to server.
+        
+        :param age: Age-group of user.
+        :type age: str
+        :param gender: code for user's gender identification.
+        :type gender: str
+        """
+        meta_data = dict()
+        meta_data['table'] = 'user'
+        meta_data['user'] = self._user_id
+        meta_data['task'] = self.app.settings.current_task
+        meta_data['time'] = time.time()
+        columns = ['id', 'device_id', 'age_group', 'gender']
+        data = np.array([self._user_id, create_device_identifier(), age, gender])
+        data = data.reshape((1, len(columns)))
+        
+        self.add_data(columns, data, meta_data, fmt='%s')
+        # Data for e-mail.
+        self.add_data_email([columns] + [data], meta_data.copy())
+        
     def add_data(self, columns, data, meta_data, fmt='%s'):
         """ Adds a data set to current collection.
         
@@ -133,7 +154,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
     def add_data_email(self, data, meta_data):
         meta_data['data'] = pickle.dumps(data)
         self._data_email.append(meta_data)
-
+    
     # ## Data Local Storage ## #
     def get_storage_path(self):
         """ Return path we want to save data to.
@@ -153,7 +174,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
             dest = Path(self.app.user_data_dir)
             # dest = dest.resolve()  # Resolve any symlinks.
         return dest
-    
+
     def _create_subfolder(self, subpath):
         """ Create a user folder inside storage_path.
 
@@ -164,7 +185,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         destination = storage_path / subpath
         if not destination.exists():
             destination.mkdir(parents=True, exist_ok=True)  # Assume this works and we have permissions.
-
+        
     def _remove_user_folders(self, user_id):
         """ Removes all of user's locally stored data. """
         storage_path = self.get_storage_path()
@@ -172,7 +193,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         user_folders = storage_path.rglob(user_id)
         for folder in user_folders:
             shutil.rmtree(folder, ignore_errors=True)
-        
+
     def compile_filename(self, meta_data):
         """ Returns file name based on provided meta data.
         Uses current time if meta data is incomplete.
@@ -223,7 +244,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         storage = self.get_storage_path()
         for d in self._data:
             try:
-                if d['table'] in ['session', 'trials']:
+                if d['table'] in ['session', 'trials', 'user']:
                     sub_folder = Path(d['task'].replace(" ", "_")) / d['user']
                     self._create_subfolder(sub_folder)
                     dir_path = storage / sub_folder
@@ -246,18 +267,8 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         self.is_data_saved = success
 
     # ## Data Upload ## #
-    def _get_user_data(self, user_id):
-        """ Create a dataset to identify the user when uploading to server. """
-        d = dict()
-        d['table'] = 'user'
-        d['time'] = time.time()
-        header = 'id,device_id'
-        data = np.array([user_id, create_device_identifier()])
-        d['data'] = self._data2bytes(data.reshape((1, len(data))), header=header, fmt='%s')
-        return d
-
-    def _get_dash_post(self, data_collection):
-        """ Build a json string to post to a dash update component.
+    def _get_dash_post(self):
+        """ Build a json string from collected data to post to a dash update component.
 
         :return: post request json string.
         """
@@ -265,12 +276,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         last_modified = list()
         data = list()
     
-        # When writing data to files, we create a folder with the user's identifier.
-        # We need to add user identification to the post as well.
-        user_data = self._get_user_data(self._user_id)
-        data_collection.insert(1, user_data)  # After device data, before session.
-    
-        for d in data_collection:
+        for d in self._data:
             # Build fake file name.
             name = self.compile_filename(d)
             file_names.append(name)
@@ -359,7 +365,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         # not result in an endless loop.
         permission = ask_permission(Permission.INTERNET, callback=self._on_internet_permission_request)
         if permission:
-            res = self._get_response(route, self._get_dash_post(self._data))
+            res = self._get_response(route, self._get_dash_post())
             res_msg = self._parse_response(res)
             status = self._get_uploaded_status(res_msg)
             self.is_data_sent = status
@@ -397,8 +403,8 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
                        "available on the Internet under a CC-BY-SA license, as stated in the privacy policy you gave "
                        "your consent to before participating in the study. The e-mail itself will be deleted within "
                        "10 days from our e-mail service to separate the sender's address from the research data "
-                       "for the purpose of anonymization. The research data itself doesn't contain personal or "
-                       "sensitive information about you.\n")
+                       "for the purpose of anonymization. The research data itself does not contain personal "
+                       "or sensitive information that could be used to identify you.\n")
     
         text = "\n\n### Data ###\n\n"
         for d in self._data_email:

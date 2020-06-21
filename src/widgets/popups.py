@@ -10,6 +10,7 @@ from kivymd.uix.button import MDRectangleFlatButton, MDRaisedButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.label import MDIcon
 from kivymd.uix.list import BaseListItem
+from kivymd.uix.menu import MDDropdownMenu
 from plyer import email
 
 from . import CheckItem, UserItem, UserAddItem, RecycleLabel
@@ -473,6 +474,88 @@ class UserInput(TextInputContent):
         self.ids.textfield.error = len(self.ids.textfield.text.strip(' ')) == 0
 
 
+class DemographicsPopup(MDDialog):
+    """ Popup for collecting demographic data on user. """
+    input = StringProperty()
+    
+    def __init__(self, **kwargs):
+        default_kwargs = dict(
+            title=_("Demographic Information"),
+            type="custom",
+            content_cls=DemographicsContent(),
+            auto_dismiss=False,
+            buttons=[
+                MDRaisedButton(
+                    text=_("OK"),
+                    on_release=lambda instance: self.dismiss(),
+                ),
+            ],
+        )
+        default_kwargs.update(kwargs)
+        super(DemographicsPopup, self).__init__(**default_kwargs)
+        self.register_event_type('on_confirm')
+    
+    def on_confirm(self, *args):
+        pass
+    
+    def on_dismiss(self, *args):
+        self.dispatch('on_confirm', self.content_cls.get_age_group(), self.content_cls.get_gender_code())
+        
+
+class DemographicsContent(MDBoxLayout):
+    """ Content class for DemographicsPopup. Has dropdowns for age and gender options. """
+    
+    def __init__(self, **kwargs):
+        super(DemographicsContent, self).__init__(**kwargs)
+        self._no_answer_txt = _("no answer")
+        # Age
+        age_items = [{"text": self._no_answer_txt}, {'text': "<20"}] \
+                  + [{"text": f"{i}-{i+9}"} for i in range(20, 80, 10)] \
+                  + [{'text': "80+"}]
+        self.ids.age_dropdown.text = age_items[0]['text']
+        self.age_menu = MDDropdownMenu(
+            caller=self.ids.age_dropdown,
+            items=age_items,
+            position="center",
+            callback=self.set_age_item,
+            width_mult=4,
+        )
+        # Gender
+        gender_items = [{'text': txt} for txt in (self._no_answer_txt, _("male"), _("female"), _("diverse"))]
+        self.ids.gender_dropdown.text = gender_items[0]['text']
+        self.gender_menu = MDDropdownMenu(
+            caller=self.ids.gender_dropdown,
+            items=gender_items,
+            position="center",
+            callback=self.set_gender_item,
+            width_mult=4,
+        )
+
+    def set_age_item(self, instance):
+        self.ids.age_dropdown.set_item(instance.text)
+        self.age_menu.dismiss()
+        
+    def set_gender_item(self, instance):
+        self.ids.gender_dropdown.set_item(instance.text)
+        self.gender_menu.dismiss()
+    
+    def get_age_group(self):
+        if self.ids.age_dropdown.current_item == self._no_answer_txt:
+            return ""
+        else:
+            return self.ids.age_dropdown.current_item
+        
+    def get_gender_code(self):
+        if self.ids.gender_dropdown.current_item == _("male"):
+            return 'm'
+        elif self.ids.gender_dropdown.current_item == _("female"):
+            return 'f'
+        elif self.ids.gender_dropdown.current_item == _("diverse"):
+            return 'd'
+        else:
+            return ""
+        
+        
 class PolicyPopup(SimplePopup):
     """ Display privacy policy for using the app. """
     

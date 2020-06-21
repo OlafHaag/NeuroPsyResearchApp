@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-06-05 10:37+0200\n"
-"PO-Revision-Date: 2020-06-05 10:38+0200\n"
+"POT-Creation-Date: 2020-06-21 19:21+0200\n"
+"PO-Revision-Date: 2020-06-21 19:22+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: de_DE\n"
@@ -46,7 +46,7 @@ msgstr "Einstellungen"
 msgid "Visit Online Analyses"
 msgstr "Besuche Online Analyse"
 
-#: src/widgets/navigation.kv:105 src/widgets/managers.py:198
+#: src/widgets/navigation.kv:105 src/widgets/managers.py:200
 msgid "About"
 msgstr "Über"
 
@@ -73,6 +73,19 @@ msgstr "Neuer Wert"
 #: src/widgets/popups.kv:20
 msgid "Error: invalid input"
 msgstr "Fehler: ungültige Eingabe"
+
+#: src/widgets/popups.kv:30
+msgid "You can voluntarily give us demographic information about yourself."
+msgstr ""
+"Sie können uns freiwillig demografische Informationen über sich mitteilen."
+
+#: src/widgets/popups.kv:38
+msgid "Age"
+msgstr "Alter"
+
+#: src/widgets/popups.kv:45
+msgid "Gender"
+msgstr "Geschlecht"
 
 #: src/widgets/screencircletask.kv:18
 msgid "Please use this slider."
@@ -330,7 +343,7 @@ msgstr ""
 msgid "General"
 msgstr "Allgemein"
 
-#: src/datamanager.py:217
+#: src/datamanager.py:238
 msgid ""
 "Unable to write to file:\n"
 "{}\n"
@@ -340,11 +353,11 @@ msgstr ""
 "{}\n"
 "Unbekanntes Datenformat."
 
-#: src/datamanager.py:234 src/datamanager.py:281
+#: src/datamanager.py:255 src/datamanager.py:287
 msgid "KeyError in Meta Data."
 msgstr "Schlüsselfehler in Meta Daten."
 
-#: src/datamanager.py:245
+#: src/datamanager.py:266
 msgid ""
 "Data missing.\n"
 "Failed to write\n"
@@ -354,27 +367,27 @@ msgstr ""
 "Fehler beim Schreiben\n"
 "{}."
 
-#: src/datamanager.py:306
+#: src/datamanager.py:312
 msgid "ERROR: Server not reachable:"
 msgstr "FEHLER: Server nicht erreichbar:"
 
-#: src/datamanager.py:308
+#: src/datamanager.py:314
 msgid "ERROR: There was an error processing the upload."
 msgstr "FEHLER: Beim Verarbeiten des Uploads ist ein Fehler aufgetreten."
 
-#: src/datamanager.py:324 src/datamanager.py:336
+#: src/datamanager.py:330 src/datamanager.py:342
 msgid "ERROR: There was an unexpected error during upload."
 msgstr "FEHLER: Beim Hochladen ist ein unerwarteter Fehler aufgetreten."
 
-#: src/datamanager.py:349 src/datamanager.py:350
+#: src/datamanager.py:355 src/datamanager.py:356
 msgid "ERROR"
 msgstr "FEHLER"
 
-#: src/datamanager.py:386
+#: src/datamanager.py:392
 msgid "Permission to access Internet denied."
 msgstr "Berechtigung für Internetzugang abgelehnt."
 
-#: src/datamanager.py:392
+#: src/datamanager.py:398
 msgid ""
 "Disclaimer:\n"
 "By submitting this e-mail you agree to the data processing and evaluation "
@@ -385,8 +398,8 @@ msgid ""
 "in the privacy policy you gave your consent to before participating in the "
 "study. The e-mail itself will be deleted within 10 days from our e-mail "
 "service to separate the sender's address from the research data for the "
-"purpose of anonymization. The research data itself doesn't contain personal "
-"or sensitive information about you.\n"
+"purpose of anonymization. The research data itself does not contain personal "
+"or sensitive information that could be used to identify you.\n"
 msgstr ""
 "Erklärung:\n"
 "Durch das Absenden dieser E-Mail stimmen Sie der Datenverarbeitung und -"
@@ -399,7 +412,7 @@ msgstr ""
 "unserem E-Mail-Service gelöscht, um die Adresse des Absenders von den "
 "Forschungsdaten zum Zwecke der Anonymisierung zu trennen. Die "
 "Forschungsdaten selbst enthalten keine persönlichen oder sensiblen "
-"Informationen über Sie.\n"
+"Informationen, die dazu verwendet werden können Sie zu identifizieren.\n"
 
 #: src/settingsjson.py:12
 msgid "Language"
@@ -535,15 +548,15 @@ msgstr "E-Mail-Adresse, an die Daten gesendet werden."
 msgid "UNKNOWN."
 msgstr "UNBEKANNT."
 
-#: src/widgets/managers.py:168
+#: src/widgets/managers.py:170
 msgid "New User"
 msgstr "Neues Konto"
 
-#: src/widgets/managers.py:191
+#: src/widgets/managers.py:193
 msgid "Do you want to remove {}?"
 msgstr "Möchten Sie {} entfernen?"
 
-#: src/widgets/managers.py:199
+#: src/widgets/managers.py:201
 #, python-brace-format
 msgid ""
 "{appname}\n"
@@ -570,23 +583,23 @@ msgstr ""
 "Drittanbieter Lizenzen: [ref={thirdparty}][color=0000ff]{thirdparty}[/color]"
 "[/ref]"
 
-#: src/widgets/managers.py:236
+#: src/widgets/managers.py:238
 msgid "Warning"
 msgstr "Warnung"
 
-#: src/widgets/managers.py:246
+#: src/widgets/managers.py:248
 msgid "Error"
 msgstr "Fehler"
 
-#: src/widgets/managers.py:277
+#: src/widgets/managers.py:285
 msgid "Success!"
 msgstr "Erfolg!"
 
-#: src/widgets/managers.py:277
+#: src/widgets/managers.py:285
 msgid "Upload successful!"
 msgstr "Hochladen erfolgreich!"
 
-#: src/widgets/managers.py:282
+#: src/widgets/managers.py:290
 msgid ""
 "Upload failed.\n"
 "Something went wrong."
@@ -594,75 +607,95 @@ msgstr ""
 "Hochladen fehlgeschlagen.\n"
 "Etwas ist schief gelaufen."
 
-#: src/widgets/managers.py:283
+#: src/widgets/managers.py:291
 msgid "Please make sure the app is up-to-date."
 msgstr ""
 "Bitte stellen Sie sicher, dass die Software auf dem neuesten Stand ist."
 
-#: src/widgets/managers.py:320
+#: src/widgets/managers.py:328
 msgid "Press again to quit."
 msgstr "Nochmals tippen zum Beenden."
 
-#: src/widgets/popups.py:32 src/widgets/popups.py:85 src/widgets/popups.py:113
-#: src/widgets/popups.py:176 src/widgets/popups.py:339
-#: src/widgets/screensettings.py:157
+#: src/widgets/popups.py:33 src/widgets/popups.py:86 src/widgets/popups.py:114
+#: src/widgets/popups.py:177 src/widgets/popups.py:340
+#: src/widgets/popups.py:489 src/widgets/screensettings.py:157
 msgid "OK"
 msgstr "OK"
 
-#: src/widgets/popups.py:76
+#: src/widgets/popups.py:77
 msgid "Do you want to continue?"
 msgstr "Möchten Sie fortfahren?"
 
-#: src/widgets/popups.py:81 src/widgets/popups.py:335
+#: src/widgets/popups.py:82 src/widgets/popups.py:336
 #: src/widgets/screensettings.py:153
 msgid "CANCEL"
 msgstr "ABBRECHEN"
 
-#: src/widgets/popups.py:107
+#: src/widgets/popups.py:108
 msgid "Choose Language"
 msgstr "Sprache wählen"
 
-#: src/widgets/popups.py:108
+#: src/widgets/popups.py:109
 msgid "You can also change the language in the settings later."
 msgstr "Sie können die Sprache auch später in den Einstellungen ändern."
 
-#: src/widgets/popups.py:170 src/widgets/popups.py:310
+#: src/widgets/popups.py:171 src/widgets/popups.py:311
 msgid "Choose Active User"
 msgstr "Aktives Nutzer*innenkonto wählen"
 
-#: src/widgets/popups.py:201 src/widgets/popups.py:312
+#: src/widgets/popups.py:202 src/widgets/popups.py:313
 msgid "Add User"
 msgstr "Nutzer*in hinzufügen"
 
-#: src/widgets/popups.py:329
+#: src/widgets/popups.py:330
 msgid "Set New Value"
 msgstr "Neuen Wert setzen"
 
-#: src/widgets/popups.py:431 src/widgets/popups.py:445
+#: src/widgets/popups.py:432 src/widgets/popups.py:446
 msgid "Edit User"
 msgstr "Nutzer*in bearbeiten"
 
-#: src/widgets/popups.py:445
+#: src/widgets/popups.py:446
 msgid "Add New User"
 msgstr "Nutzer*in hinzufügen"
 
-#: src/widgets/popups.py:469
+#: src/widgets/popups.py:470
 msgid "This name is just for you. It won't be uploaded to the server."
 msgstr "Dieser Name ist nur für Sie. Er wird nicht auf den Server übertragen."
 
-#: src/widgets/popups.py:470
+#: src/widgets/popups.py:471
 msgid "Enter Pseudonym"
 msgstr "Pseudonym eingeben"
 
-#: src/widgets/popups.py:519
+#: src/widgets/popups.py:483
+msgid "Demographic Information"
+msgstr "Demografische Information"
+
+#: src/widgets/popups.py:510
+msgid "no answer"
+msgstr "keine Angabe"
+
+#: src/widgets/popups.py:524 src/widgets/popups.py:549
+msgid "male"
+msgstr "männlich"
+
+#: src/widgets/popups.py:524 src/widgets/popups.py:551
+msgid "female"
+msgstr "weiblich"
+
+#: src/widgets/popups.py:524 src/widgets/popups.py:553
+msgid "diverse"
+msgstr "divers"
+
+#: src/widgets/popups.py:602
 msgid "DECLINE"
 msgstr "ABLEHNEN"
 
-#: src/widgets/popups.py:524
+#: src/widgets/popups.py:607
 msgid "ACCEPT"
 msgstr "ZUSTIMMEN"
 
-#: src/widgets/popups.py:555
+#: src/widgets/popups.py:638
 msgid "CLOSE"
 msgstr "SCHLIESSEN"
 
@@ -698,11 +731,11 @@ msgstr ""
 msgid "Loading..."
 msgstr "Lädt..."
 
-#: src/widgets/screenconsents.py:42
+#: src/widgets/screenconsents.py:46
 msgid "Consent"
 msgstr "Einverständniserklärung"
 
-#: src/widgets/screenconsents.py:43
+#: src/widgets/screenconsents.py:47
 msgid ""
 "Please read the following information carefully before proceeding.Use "
 "scrolling to go through the text to the end.\n"
@@ -1222,9 +1255,6 @@ msgstr ""
 
 #~ msgid "Personal Identifier:"
 #~ msgstr "Persönlicher Identifizierungscode:"
-
-#~ msgid "General Information"
-#~ msgstr "Allgemeine Information"
 
 #~ msgid "Welcome back!"
 #~ msgstr "Willkommen zurück!"

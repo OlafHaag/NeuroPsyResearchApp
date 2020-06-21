@@ -23,6 +23,7 @@ from . import (ScreenConsentCircleTask,
                UserEditPopup,
                TextInputPopup,
                NumericInputPopup,
+               DemographicsPopup,
                )
 from ..i18n import _
 from ..utility import get_app_details
@@ -95,8 +96,10 @@ class UiManager(ScreenManager):
     
     def bind_screen_callbacks(self, screen_name):
         """ Handle screen callbacks here. """
-        # Circle Task
-        if screen_name == 'Circle Task':
+        # Circle
+        if screen_name == 'Consent CT':
+            self.get_screen(screen_name).bind(on_consent=self.show_popup_demographics)
+        elif screen_name == 'Circle Task':
             self.get_screen(screen_name).bind(
                 on_task_stopped=lambda instance, is_last_block: self.task_finished(is_last_block),
                 on_warning=lambda instance, text: self.show_warning(text),
@@ -123,7 +126,6 @@ class UiManager(ScreenManager):
                 plyer.orientation.set_portrait()
         except (NotImplementedError, ModuleNotFoundError):
             pass
-        
         
     def open_settings(self):
         self.app.open_settings()
@@ -247,6 +249,12 @@ class UiManager(ScreenManager):
         if text:
             self.popup_error.text = text
         self.popup_error.open()
+    
+    def show_popup_demographics(self, *args):
+        popup = DemographicsPopup()
+        # ToDo: This was a quick hack, don't want data_mgr reference here. Should keep separate.
+        popup.bind(on_confirm=lambda instance, *largs: self.app.data_mgr.add_user_data(*largs))
+        popup.open()
         
     def on_current(self, instance, value):
         """ When switching screens reset counter on back button presses on home screen. """

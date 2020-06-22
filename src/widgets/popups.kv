@@ -30,20 +30,26 @@
         text: _("You can voluntarily give us demographic information about yourself.")
         font_style: 'Caption'
 
-    MDGridLayout:
-        cols: 3
-        rows: 2
+    MDBoxLayout:
+        orientation: 'vertical'
+        spacing: "18dp"
 
-        MDLabel:
-            text: _("Age")
+        MDBoxLayout:
+            MDLabel:
+                text: _("Age")
+                shorten: True
 
-        MDDropDownItem:
-            id: age_dropdown
-            on_release: root.age_menu.open()
-        Widget:
-        MDLabel:
-            text: _("Gender")
+            MDDropDownItem:
+                id: age_dropdown
+                on_release: root.age_menu.open()
+                pos_hint: {"center_y": .5}
 
-        MDDropDownItem:
-            id: gender_dropdown
-            on_release: root.gender_menu.open()
+        MDBoxLayout:
+            MDLabel:
+                text: _("Gender")
+                shorten: True
+
+            MDDropDownItem:
+                id: gender_dropdown
+                on_release: root.gender_menu.open()
+                pos_hint: {"center_y": .5}

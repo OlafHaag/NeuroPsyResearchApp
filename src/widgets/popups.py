@@ -484,23 +484,26 @@ class DemographicsPopup(MDDialog):
             type="custom",
             content_cls=DemographicsContent(),
             auto_dismiss=False,
+            size_hint_x=0.8,
             buttons=[
                 MDRaisedButton(
                     text=_("OK"),
-                    on_release=lambda instance: self.dismiss(),
+                    on_release=lambda instance: self.confirm(),
                 ),
             ],
         )
         default_kwargs.update(kwargs)
         super(DemographicsPopup, self).__init__(**default_kwargs)
         self.register_event_type('on_confirm')
+        self.ids.spacer_top_box.padding = (0, 0, 0, 0)
     
+    def confirm(self):
+        self.dispatch('on_confirm', self.content_cls.get_age_group(), self.content_cls.get_gender_code())
+        self.dismiss()
+        
     def on_confirm(self, *args):
         pass
     
-    def on_dismiss(self, *args):
-        self.dispatch('on_confirm', self.content_cls.get_age_group(), self.content_cls.get_gender_code())
-        
 
 class DemographicsContent(MDBoxLayout):
     """ Content class for DemographicsPopup. Has dropdowns for age and gender options. """
@@ -516,7 +519,7 @@ class DemographicsContent(MDBoxLayout):
         self.age_menu = MDDropdownMenu(
             caller=self.ids.age_dropdown,
             items=age_items,
-            position="center",
+            use_icon_item=False,
             callback=self.set_age_item,
             width_mult=4,
         )
@@ -526,7 +529,7 @@ class DemographicsContent(MDBoxLayout):
         self.gender_menu = MDDropdownMenu(
             caller=self.ids.gender_dropdown,
             items=gender_items,
-            position="center",
+            use_icon_item=False,
             callback=self.set_gender_item,
             width_mult=4,
         )

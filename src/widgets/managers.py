@@ -314,8 +314,11 @@ class UiManager(ScreenManager):
             elif isinstance(self.app.root_window.children[0], (SimplePopup,
                                                                ConfirmPopup,
                                                                TextInputPopup,
-                                                               NumericInputPopup)):
+                                                               NumericInputPopup,)):
                 self.app.root_window.children[0].dismiss()
+            elif isinstance(self.app.root_window.children[0], DemographicsPopup):
+                self.app.root_window.children[0].dismiss()
+                self.go_home()
             elif isinstance(self.app.root_window.children[0], BlockingPopup):
                 return True  # Do nothing. # ToDo: prevent closing follow-up popup.
             elif self.sidebar.state == 'open':

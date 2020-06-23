@@ -1,6 +1,16 @@
 # screenconsents.kv
 #:kivy 1.11.1
 
+<ConsentLabel>:
+    markup: True
+    text_size: root.width, None
+    font_size: sp(24)
+    size: self.texture_size
+    size_hint_y: None
+    padding: 10, 10
+    halign: 'justify'
+    valign: 'top'
+
 <ScreenConsentCircleTask>:  # When adding new consent forms, to share style add class like so: <ConsentOne, ConsentTwo>:
     on_leave: scroll.scroll_y = 1
 
@@ -27,17 +37,12 @@
                     size_hint_y: None
                     height: self.texture_size[1]
 
-                MDLabel:
-                    id: consent_label
-                    text: root.consent_msg
-                    markup: True
-                    text_size: root.width, None
-                    font_size: sp(24)
-                    size: self.texture_size
+                MDGridLayout:
+                    id: consent_labels
+                    cols: 1
+                    spacing: 10
                     size_hint_y: None
-                    padding: 10, 10
-                    halign: 'justify'
-                    valign: 'top'
+                    height: self.minimum_height
 
         MDSeparator:
 

@@ -241,10 +241,15 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         self.disable_sliders()
         self.count_down.set_label(_("FINISHED"))
         # Record data for current trial.
-        self.data[self.settings.current_trial - 1, :] = (self.ids.df1.value_normalized, self.ids.df2.value_normalized,
-                                                         self.df1_grab_dt, self.df1_release_dt,
-                                                         self.df2_grab_dt, self.df2_release_dt)
-        self.check_slider_use()
+        try:
+            self.data[self.settings.current_trial - 1, :] = (self.ids.df1.value_normalized,
+                                                             self.ids.df2.value_normalized,
+                                                             self.df1_grab_dt, self.df1_release_dt,
+                                                             self.df2_grab_dt, self.df2_release_dt)
+            self.check_slider_use()
+        except TypeError:
+            # Trial was aborted and data set to None by self.clea_data().
+            pass
         self.clear_times()
         
     def check_slider_use(self):

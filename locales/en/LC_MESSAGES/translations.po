@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-06-21 19:22+0200\n"
-"PO-Revision-Date: 2020-06-21 19:22+0200\n"
+"POT-Creation-Date: 2020-06-23 16:10+0200\n"
+"PO-Revision-Date: 2020-06-23 16:11+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: en\n"
@@ -78,11 +78,11 @@ msgstr ""
 msgid "You can voluntarily give us demographic information about yourself."
 msgstr ""
 
-#: src/widgets/popups.kv:38
+#: src/widgets/popups.kv:39
 msgid "Age"
 msgstr ""
 
-#: src/widgets/popups.kv:45
+#: src/widgets/popups.kv:49
 msgid "Gender"
 msgstr ""
 
@@ -94,11 +94,11 @@ msgstr ""
 msgid "Use sliders simultaneously."
 msgstr ""
 
-#: src/widgets/screenconsents.kv:53
+#: src/widgets/screenconsents.kv:58
 msgid "Decline"
 msgstr ""
 
-#: src/widgets/screenconsents.kv:60
+#: src/widgets/screenconsents.kv:65
 msgid "Agree"
 msgstr ""
 
@@ -458,26 +458,27 @@ msgstr ""
 msgid "Do you want to quit?"
 msgstr ""
 
+#: src/widgets/managers.py:290
 msgid "Success!"
 msgstr ""
 
-#: src/widgets/managers.py:285
+#: src/widgets/managers.py:290
 msgid "Upload successful!"
 msgstr ""
 
-#: src/widgets/managers.py:290
+#: src/widgets/managers.py:295
 msgid ""
 "Upload failed.\n"
 "Something went wrong."
 msgstr ""
 
-#: src/widgets/managers.py:291
+#: src/widgets/managers.py:296
 msgid "Please make sure the app is up-to-date."
 msgstr ""
 
 #: src/widgets/popups.py:33 src/widgets/popups.py:86 src/widgets/popups.py:114
 #: src/widgets/popups.py:177 src/widgets/popups.py:340
-#: src/widgets/popups.py:489 src/widgets/screensettings.py:157
+#: src/widgets/popups.py:490 src/widgets/screensettings.py:157
 msgid "OK"
 msgstr ""
 
@@ -530,31 +531,31 @@ msgstr ""
 msgid "Demographic Information"
 msgstr ""
 
-#: src/widgets/popups.py:510
+#: src/widgets/popups.py:513
 msgid "no answer"
 msgstr ""
 
-#: src/widgets/popups.py:524 src/widgets/popups.py:549
+#: src/widgets/popups.py:527 src/widgets/popups.py:552
 msgid "male"
 msgstr ""
 
-#: src/widgets/popups.py:524 src/widgets/popups.py:551
+#: src/widgets/popups.py:527 src/widgets/popups.py:554
 msgid "female"
 msgstr ""
 
-#: src/widgets/popups.py:524 src/widgets/popups.py:553
+#: src/widgets/popups.py:527 src/widgets/popups.py:556
 msgid "diverse"
 msgstr ""
 
-#: src/widgets/popups.py:602
+#: src/widgets/popups.py:605
 msgid "DECLINE"
 msgstr ""
 
-#: src/widgets/popups.py:607
+#: src/widgets/popups.py:610
 msgid "ACCEPT"
 msgstr ""
 
-#: src/widgets/popups.py:638
+#: src/widgets/popups.py:641
 msgid "CLOSE"
 msgstr ""
 
@@ -580,30 +581,34 @@ msgid ""
 "Aborting Session..."
 msgstr ""
 
-#: src/widgets/screenconsents.py:11 src/widgets/screensgeneral.py:41
-#: src/widgets/scrolllabel.py:43
-msgid "Loading..."
-msgstr ""
-
-#: src/widgets/screenconsents.py:46
+#: src/widgets/screenconsents.py:56
 msgid "Consent"
 msgstr ""
 
-#: src/widgets/screenconsents.py:47
+#: src/widgets/screenconsents.py:57
 msgid ""
 "Please read the following information carefully before proceeding.Use "
-"scrolling to go through the text to the end.\n"
-"\n"
+"scrolling to go through the text to the end."
+msgstr ""
+
+#: src/widgets/screenconsents.py:60
+msgid ""
 "[b]Explanation of the experiment:[/b]\n"
 "We are very pleased that you are interested in participating in our "
 "experiment. The goal of this experiment is to investigate how the accuracy "
 "of performing a motion task changes when the range of motion for solving the "
 "task gets limited by an additional, concurrent task. The respective tasks "
 "are described and explained to you in detail beforehand. No particular "
-"stress or even risks are to be expected when performing the tasks.\n"
-"\n"
-"The study will take approximately {} minutes to complete.\n"
-"\n"
+"stress or even risks are to be expected when performing the tasks."
+msgstr ""
+
+#: src/widgets/screenconsents.py:68
+#, python-brace-format
+msgid "The study will take approximately {0} minutes to complete."
+msgstr ""
+
+#: src/widgets/screenconsents.py:70
+msgid ""
 "[b]Voluntary Participation:[/b]\n"
 "Participation in the study is voluntary.You can revoke your consent to "
 "participate in this study at any time while performing the tasks and without "
@@ -613,17 +618,41 @@ msgid ""
 "can therefore withdraw your consent to the online storage and processing of "
 "the data until the end of task completion. If you cancel your participation "
 "before completion, or if you decide not to transmit the data after "
-"completing the tasks, no data will be transmitted.\n"
-"\n"
+"completing the tasks, no data will be transmitted."
+msgstr ""
+
+#: src/widgets/screenconsents.py:82
+msgid ""
 "Please review the [ref=privacy][color=0000ff]Privacy Policy (press here)[/"
 "color][/ref] carefully for information on what kind of data we collect and "
-"how we intend to use them.\n"
+"how we intend to use them."
+msgstr ""
+
+#: src/widgets/screenconsents.py:85
+#, python-brace-format
+msgid ""
+"[b]Contact regarding this study:[/b]\n"
+"Philipps-Universität Marburg\n"
+"Department of Psychology\n"
+"Work group: General and Biological Psychology\n"
+"Research group Theoretical Neuroscience\n"
+"PI: Prof. Dr. Dominik Endres\n"
+"Researcher: Olaf Haag\n"
 "\n"
+"Gutenbergstraße 18\n"
+"D-35032 Marburg / Lahn\n"
+"Tel .: +496421 - 2823818\n"
+"[ref=mailto:dominik.endres@uni-marburg.de][color=0000ff]dominik.endres@uni-"
+"marburg.de[/color][/ref]\n"
+"[ref=mailto:{0}][color=0000ff]{0}[/color][/ref]"
+msgstr ""
+
+#: src/widgets/screenconsents.py:99
+msgid ""
 "I hereby confirm that I have read and understood the participation "
 "information described above as well as the [ref=privacy]"
 "[color=0000ff]Privacy Policy[/color][/ref]. I agree to the conditions of "
-"participation and Privacy Policy.\n"
-"\n"
+"participation and Privacy Policy."
 msgstr ""
 
 #: src/widgets/screeninstructions.py:29
@@ -719,6 +748,10 @@ msgstr ""
 msgid ""
 "You can participate in a study by choosing from available studies below.\n"
 "\n"
+msgstr ""
+
+#: src/widgets/screensgeneral.py:41 src/widgets/scrolllabel.py:43
+msgid "Loading..."
 msgstr ""
 
 #: src/widgets/screensgeneral.py:56

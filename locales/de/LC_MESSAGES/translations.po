@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-06-21 19:21+0200\n"
-"PO-Revision-Date: 2020-06-21 19:22+0200\n"
+"POT-Creation-Date: 2020-06-23 16:11+0200\n"
+"PO-Revision-Date: 2020-06-23 16:23+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: de_DE\n"
@@ -79,11 +79,11 @@ msgid "You can voluntarily give us demographic information about yourself."
 msgstr ""
 "Sie können uns freiwillig demografische Informationen über sich mitteilen."
 
-#: src/widgets/popups.kv:38
+#: src/widgets/popups.kv:39
 msgid "Age"
 msgstr "Alter"
 
-#: src/widgets/popups.kv:45
+#: src/widgets/popups.kv:49
 msgid "Gender"
 msgstr "Geschlecht"
 
@@ -95,11 +95,11 @@ msgstr "Bitte diesen Regler nutzen."
 msgid "Use sliders simultaneously."
 msgstr "Regler gleichzeitig verwenden."
 
-#: src/widgets/screenconsents.kv:53
+#: src/widgets/screenconsents.kv:58
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/widgets/screenconsents.kv:60
+#: src/widgets/screenconsents.kv:65
 msgid "Agree"
 msgstr "Zustimmen"
 
@@ -595,14 +595,15 @@ msgstr "Fehler"
 msgid "Do you want to quit?"
 msgstr "Möchten Sie die App beenden?"
 
+#: src/widgets/managers.py:290
 msgid "Success!"
 msgstr "Erfolg!"
 
-#: src/widgets/managers.py:285
+#: src/widgets/managers.py:290
 msgid "Upload successful!"
 msgstr "Hochladen erfolgreich!"
 
-#: src/widgets/managers.py:290
+#: src/widgets/managers.py:295
 msgid ""
 "Upload failed.\n"
 "Something went wrong."
@@ -610,14 +611,14 @@ msgstr ""
 "Hochladen fehlgeschlagen.\n"
 "Etwas ist schief gelaufen."
 
-#: src/widgets/managers.py:291
+#: src/widgets/managers.py:296
 msgid "Please make sure the app is up-to-date."
 msgstr ""
 "Bitte stellen Sie sicher, dass die Software auf dem neuesten Stand ist."
 
 #: src/widgets/popups.py:33 src/widgets/popups.py:86 src/widgets/popups.py:114
 #: src/widgets/popups.py:177 src/widgets/popups.py:340
-#: src/widgets/popups.py:489 src/widgets/screensettings.py:157
+#: src/widgets/popups.py:490 src/widgets/screensettings.py:157
 msgid "OK"
 msgstr "OK"
 
@@ -670,31 +671,31 @@ msgstr "Pseudonym eingeben"
 msgid "Demographic Information"
 msgstr "Demografische Information"
 
-#: src/widgets/popups.py:510
+#: src/widgets/popups.py:513
 msgid "no answer"
 msgstr "keine Angabe"
 
-#: src/widgets/popups.py:524 src/widgets/popups.py:549
+#: src/widgets/popups.py:527 src/widgets/popups.py:552
 msgid "male"
 msgstr "männlich"
 
-#: src/widgets/popups.py:524 src/widgets/popups.py:551
+#: src/widgets/popups.py:527 src/widgets/popups.py:554
 msgid "female"
 msgstr "weiblich"
 
-#: src/widgets/popups.py:524 src/widgets/popups.py:553
+#: src/widgets/popups.py:527 src/widgets/popups.py:556
 msgid "diverse"
 msgstr "divers"
 
-#: src/widgets/popups.py:602
+#: src/widgets/popups.py:605
 msgid "DECLINE"
 msgstr "ABLEHNEN"
 
-#: src/widgets/popups.py:607
+#: src/widgets/popups.py:610
 msgid "ACCEPT"
 msgstr "ZUSTIMMEN"
 
-#: src/widgets/popups.py:638
+#: src/widgets/popups.py:641
 msgid "CLOSE"
 msgstr "SCHLIESSEN"
 
@@ -725,30 +726,44 @@ msgstr ""
 "die Aufgabe entsprechend aus.\n"
 "Sitzung wird abgebrochen ..."
 
-#: src/widgets/screenconsents.py:11 src/widgets/screensgeneral.py:41
-#: src/widgets/scrolllabel.py:43
-msgid "Loading..."
-msgstr "Lädt..."
-
-#: src/widgets/screenconsents.py:46
+#: src/widgets/screenconsents.py:56
 msgid "Consent"
 msgstr "Einverständniserklärung"
 
-#: src/widgets/screenconsents.py:47
+#: src/widgets/screenconsents.py:57
 msgid ""
 "Please read the following information carefully before proceeding.Use "
-"scrolling to go through the text to the end.\n"
-"\n"
+"scrolling to go through the text to the end."
+msgstr ""
+"Bitte lesen Sie die folgenden Informationen sorgfältig durch, bevor Sie "
+"fortfahren. Verwenden Sie den Bildlauf, um den gesamten Text durchzugehen."
+
+#: src/widgets/screenconsents.py:60
+msgid ""
 "[b]Explanation of the experiment:[/b]\n"
 "We are very pleased that you are interested in participating in our "
 "experiment. The goal of this experiment is to investigate how the accuracy "
 "of performing a motion task changes when the range of motion for solving the "
 "task gets limited by an additional, concurrent task. The respective tasks "
 "are described and explained to you in detail beforehand. No particular "
-"stress or even risks are to be expected when performing the tasks.\n"
-"\n"
-"The study will take approximately {} minutes to complete.\n"
-"\n"
+"stress or even risks are to be expected when performing the tasks."
+msgstr ""
+"[b]Erklärung des Experiments:[/b]\n"
+"Es freut uns sehr, dass Sie Interesse daran haben, an unserem Experiment "
+"teilzunehmen. Dieses Experiment hat zum Ziel zu erforschen, wie sich die "
+"Genauigkeit bei der Ausführung einer Bewegungsaufgabe ändert, wenn die "
+"Bewegungsfreiheit zur Erfüllung dieser Aufgabe gleichzeitig durch eine "
+"zusätzliche Aufgabe eingeschränkt wird. Die jeweilige Aufgabe wird Ihnen "
+"zuvor genau beschrieben und erklärt. Bei der Ausführung der Aufgaben sind "
+"keinerlei besondere Belastungen oder gar Risiken zu erwarten."
+
+#: src/widgets/screenconsents.py:68
+#, python-brace-format
+msgid "The study will take approximately {0} minutes to complete."
+msgstr "Die Dauer dieser Studie beträgt ungefähr {0} Minuten."
+
+#: src/widgets/screenconsents.py:70
+msgid ""
 "[b]Voluntary Participation:[/b]\n"
 "Participation in the study is voluntary.You can revoke your consent to "
 "participate in this study at any time while performing the tasks and without "
@@ -758,33 +773,8 @@ msgid ""
 "can therefore withdraw your consent to the online storage and processing of "
 "the data until the end of task completion. If you cancel your participation "
 "before completion, or if you decide not to transmit the data after "
-"completing the tasks, no data will be transmitted.\n"
-"\n"
-"Please review the [ref=privacy][color=0000ff]Privacy Policy (press here)[/"
-"color][/ref] carefully for information on what kind of data we collect and "
-"how we intend to use them.\n"
-"\n"
-"I hereby confirm that I have read and understood the participation "
-"information described above as well as the [ref=privacy]"
-"[color=0000ff]Privacy Policy[/color][/ref]. I agree to the conditions of "
-"participation and Privacy Policy.\n"
-"\n"
+"completing the tasks, no data will be transmitted."
 msgstr ""
-"Bitte lesen Sie die folgenden Informationen sorgfältig durch, bevor Sie "
-"fortfahren. Verwenden Sie den Bildlauf, um den Text bis zum Ende "
-"durchzugehen.\n"
-"\n"
-"[b]Erklärung des Experiments:[/b]\n"
-"Es freut uns sehr, dass Sie Interesse daran haben, an unserem Experiment "
-"teilzunehmen. Dieses Experiment hat zum Ziel zu erforschen, wie sich die "
-"Genauigkeit bei der Ausführung einer Bewegungsaufgabe ändert, wenn die "
-"Bewegungsfreiheit zur Erfüllung dieser Aufgabe gleichzeitig durch eine "
-"zusätzliche Aufgabe eingeschränkt wird. Die jeweilige Aufgabe wird Ihnen "
-"zuvor genau beschrieben und erklärt. Bei der Ausführung der Aufgaben sind "
-"keinerlei besondere Belastungen oder gar Risiken zu erwarten.\n"
-"\n"
-"Die Dauer dieser Studie beträgt ungefähr {} Minuten.\n"
-"\n"
 "[b]Freiwillige Teilnahme:[/b]\n"
 "Die Teilnahme an der Studie ist freiwillig. Sie können Ihre Einwilligung zur "
 "Teilnahme an dieser Studie ohne Angabe von Gründen jederzeit widerrufen, "
@@ -796,17 +786,62 @@ msgstr ""
 "Speicherung und -Verarbeitung der Daten bis zum Ende der Aufgabenerfüllung "
 "widerrufen. Brechen Sie Ihre Teilnahme vor Abschluss ab, oder entscheiden "
 "Sie sich dazu, die Forschungsdaten nicht hochzuladen, werden keine Daten "
-"übertragen.\n"
-"\n"
+"übertragen."
+
+#: src/widgets/screenconsents.py:82
+msgid ""
+"Please review the [ref=privacy][color=0000ff]Privacy Policy (press here)[/"
+"color][/ref] carefully for information on what kind of data we collect and "
+"how we intend to use them."
+msgstr ""
 "Bitte lesen Sie die [ref=privacy][color=0000ff]Datenschutzerklärung (hier "
 "drücken)[/color][/ref] sorgfältig durch, um Informationen darüber zu "
-"erhalten, welche Art von Daten wir sammeln und wie wir sie verwenden.\n"
+"erhalten, welche Art von Daten wir sammeln und wie wir sie verwenden."
+
+#: src/widgets/screenconsents.py:85
+#, python-brace-format
+msgid ""
+"[b]Contact regarding this study:[/b]\n"
+"Philipps-Universität Marburg\n"
+"Department of Psychology\n"
+"Work group: General and Biological Psychology\n"
+"Research group Theoretical Neuroscience\n"
+"PI: Prof. Dr. Dominik Endres\n"
+"Researcher: Olaf Haag\n"
 "\n"
+"Gutenbergstraße 18\n"
+"D-35032 Marburg / Lahn\n"
+"Tel .: +496421 - 2823818\n"
+"[ref=mailto:dominik.endres@uni-marburg.de][color=0000ff]dominik.endres@uni-"
+"marburg.de[/color][/ref]\n"
+"[ref=mailto:{0}][color=0000ff]{0}[/color][/ref]"
+msgstr ""
+"[b]Kontakt für diese Studie:[/b]\n"
+"Philipps-Universität Marburg\n"
+"Fachbereich Psychologie\n"
+"AG Allgemeine und Biologische Psychologie\n"
+"AE Theoretische Neurowissenschaft\n"
+"PI: Prof. Dr. Dominik Endres\n"
+"Studienleitung: Olaf Haag\n"
+"\n"
+"Gutenbergstraße 18\n"
+"D-35032 Marburg / Lahn\n"
+"Tel .: +496421 - 2823818\n"
+"[ref=mailto:dominik.endres@uni-marburg.de][color=0000ff]dominik.endres@uni-"
+"marburg.de[/color][/ref]\n"
+"[ref=mailto:{0}][color=0000ff]{0}[/color][/ref]"
+
+#: src/widgets/screenconsents.py:99
+msgid ""
+"I hereby confirm that I have read and understood the participation "
+"information described above as well as the [ref=privacy]"
+"[color=0000ff]Privacy Policy[/color][/ref]. I agree to the conditions of "
+"participation and Privacy Policy."
+msgstr ""
 "Hiermit versichere ich, dass ich die oben beschriebenen "
-"Teilnahmeinformationen sowie die [ref=privacy]"
+"Teilnahmeinformationen sowie die [ref=privacy] "
 "[color=0000ff]Datenschutzerklärung[/color][/ref] gelesen und verstanden "
-"habe. Ich stimme den Teilnahmebedingungen und den Datenschutzbestimmungen "
-"zu.\n"
+"habe. Ich stimme den Teilnahmebedingungen und den Datenschutzbestimmungen zu."
 
 #: src/widgets/screeninstructions.py:29
 msgid "{}. Practice Block"
@@ -948,6 +983,10 @@ msgstr ""
 "Sie können an einer Studie teilnehmen, indem Sie sie von den unten "
 "aufgeführten Studien auswählen.\n"
 "\n"
+
+#: src/widgets/screensgeneral.py:41 src/widgets/scrolllabel.py:43
+msgid "Loading..."
+msgstr "Lädt..."
 
 #: src/widgets/screensgeneral.py:56
 msgid "[color=ff00ff][b]Thank you[/b][/color] for participating!"

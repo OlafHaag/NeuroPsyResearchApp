@@ -81,20 +81,22 @@ class ScreenConsentCircleTask(BaseScreen):
         
         privacy_notice = _("Please review the [ref=privacy][color=0000ff]Privacy Policy (press here)[/color][/ref] "
                            "carefully for information on what kind of data we collect and how we intend to use them.")
-        
+
+        app_details = get_app_details()
         contact = _("[b]Contact regarding this study:[/b]\n"
                     "Philipps-Universität Marburg\n"
                     "Department of Psychology\n"
                     "Work group: General and Biological Psychology\n"
                     "Research group Theoretical Neuroscience\n"
                     "PI: Prof. Dr. Dominik Endres\n"
-                    "Researcher: Olaf Haag\n\n"
+                    "Researcher: {0}\n\n"
                     "Gutenbergstraße 18\n"
                     "D-35032 Marburg / Lahn\n"
                     "Tel .: +496421 - 2823818\n"
                     "[ref=mailto:dominik.endres@uni-marburg.de][color=0000ff]dominik.endres@uni-marburg.de"
                     "[/color][/ref]\n"
-                    "[ref=mailto:{0}][color=0000ff]{0}[/color][/ref]").format(get_app_details()['contact'])
+                    "[ref=mailto:{1}][color=0000ff]{1}[/color][/ref]").format(app_details['author'],
+                                                                              app_details['contact'])
         
         consent = _("I hereby confirm that I have read and understood the participation information described "
                     "above as well as the [ref=privacy][color=0000ff]Privacy Policy[/color][/ref]. "

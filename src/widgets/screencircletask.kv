@@ -2,28 +2,6 @@
 #:kivy 1.11.1
 #:import math math
 
-<ScaleSlider>
-    min: 0
-    max: 100
-    value: self.max * 0.1
-    orientation: 'vertical'
-    value_track_color: [0.25, 0.52, 0.95, 1]
-    cursor_size: [sp(64)]*2
-    padding: sp(48)
-    sensitivity: 'handle'
-    size_hint: None, 1
-
-<SliderHint@MDLabel>
-    opacity: 1.0
-    text: _("Please use this slider.")
-    size_hint_y: 0.1
-    size: self.texture_size
-    padding: 10, 10
-    halign: 'center'
-    valign: 'middle'
-    theme_text_color: "Error"
-    font_style: 'Subtitle2'
-
 <ScreenCircleTask>:
     color: [0, 0, 0, 1]
     count_down: anim_label

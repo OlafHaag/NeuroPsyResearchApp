@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-06-23 16:10+0200\n"
-"PO-Revision-Date: 2020-06-23 16:11+0200\n"
+"POT-Creation-Date: 2020-06-23 16:50+0200\n"
+"PO-Revision-Date: 2020-06-23 16:50+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: en\n"
@@ -628,7 +628,7 @@ msgid ""
 "how we intend to use them."
 msgstr ""
 
-#: src/widgets/screenconsents.py:85
+#: src/widgets/screenconsents.py:86
 #, python-brace-format
 msgid ""
 "[b]Contact regarding this study:[/b]\n"
@@ -637,17 +637,17 @@ msgid ""
 "Work group: General and Biological Psychology\n"
 "Research group Theoretical Neuroscience\n"
 "PI: Prof. Dr. Dominik Endres\n"
-"Researcher: Olaf Haag\n"
+"Researcher: {0}\n"
 "\n"
 "Gutenbergstraße 18\n"
 "D-35032 Marburg / Lahn\n"
 "Tel .: +496421 - 2823818\n"
 "[ref=mailto:dominik.endres@uni-marburg.de][color=0000ff]dominik.endres@uni-"
 "marburg.de[/color][/ref]\n"
-"[ref=mailto:{0}][color=0000ff]{0}[/color][/ref]"
+"[ref=mailto:{1}][color=0000ff]{1}[/color][/ref]"
 msgstr ""
 
-#: src/widgets/screenconsents.py:99
+#: src/widgets/screenconsents.py:101
 msgid ""
 "I hereby confirm that I have read and understood the participation "
 "information described above as well as the [ref=privacy]"

@@ -312,11 +312,14 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
     
     def release_audio(self):
         """ Unload audio sources from memory. """
-        for sound in [self.sound_start, self.sound_stop]:
-            if sound:
-                sound.stop()
-                sound.unload()
-                sound = None
+        if self.sound_start:
+            self.sound_start.stop()
+            self.sound_start.unload()
+            self.sound_start = None
+        if self.sound_stop:
+            self.sound_stop.stop()
+            self.sound_stop.unload()
+            self.sound_stop = None
     
     def get_current_time_iso(self, fmt=None):
         """ Returns the current datetime as string.

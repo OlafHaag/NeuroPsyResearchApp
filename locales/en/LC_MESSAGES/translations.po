@@ -454,7 +454,10 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: src/widgets/managers.py:285
+#: src/widgets/managers.py:260
+msgid "Do you want to quit?"
+msgstr ""
+
 msgid "Success!"
 msgstr ""
 
@@ -470,10 +473,6 @@ msgstr ""
 
 #: src/widgets/managers.py:291
 msgid "Please make sure the app is up-to-date."
-msgstr ""
-
-#: src/widgets/managers.py:328
-msgid "Press again to quit."
 msgstr ""
 
 #: src/widgets/popups.py:33 src/widgets/popups.py:86 src/widgets/popups.py:114

@@ -256,6 +256,11 @@ class UiManager(ScreenManager):
         popup.bind(on_confirm=lambda instance, *largs: self.app.data_mgr.add_user_data(*largs))
         popup.open()
         
+    def show_popup_exit(self):
+        popup = ConfirmPopup(title=_("Do you want to quit?"))
+        popup.bind(on_confirm=self.quit)
+        popup.open()
+        
     def on_current(self, instance, value):
         """ When switching screens reset counter on back button presses on home screen. """
         if not self.has_screen(value):
@@ -325,12 +330,12 @@ class UiManager(ScreenManager):
                 self.sidebar.set_state('close')
             # Handle back button on screens.
             elif self.current == 'Home':
-                # When on home screen we want to be able to quit the app after 2 presses.
+                # Using back button to quit the app after 2 presses lead to a freeze when coming back from another
+                # screen and not touching the screen after first back-press. Odd, right?! So make user touch screen.
                 self.n_home_esc += 1
-                if self.n_home_esc == 1:
-                    plyer.notification.notify(message=_("Press again to quit."), toast=True)
-                if self.n_home_esc > 1:
-                    self.quit()
+                if self.n_home_esc >= 1:
+                    #plyer.notification.notify(message=_("Press again to quit."), toast=True)
+                    self.show_popup_exit()
             elif self.current == 'Outro' and self.last_visited == 'Settings':
                 # self.current == 'Settings' would never get called,
                 # as screen already changed by app.close_settings() on esc.

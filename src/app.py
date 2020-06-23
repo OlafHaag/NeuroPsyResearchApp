@@ -87,6 +87,7 @@ class NeuroPsyResearchApp(MDApp):
                                'trial_duration': 2.0,
                                'cool_down_time': 0.5,
                                'email_recipient': app_details['contact'],
+                               'researcher': app_details['author'],
                            })
         # To set aliases for user ids we need to schedule it next frame, we can't retrieve current_user yet.
         Clock.schedule_once(lambda dt: self.set_configdefaults_user(config), 1)

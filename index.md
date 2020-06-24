@@ -1,4 +1,9 @@
 # NeuroPsy Research App
 
-- [App Terms & Conditions](./terms)
-- [App Privacy Policy](./privacypolicy)
+## English
+- [App Terms & Conditions](./terms_en)
+- [App Privacy Policy](./privacypolicy_en)
+
+## Deutsch
+- [App Allgemeine Nutzungsbedingungen](./terms_de)
+- [App Datenschutzerklärung](./privacypolicy_de)

@@ -5,8 +5,8 @@
     markup: True
     size_hint_y: None
     height: self.texture_size[1]
-    font_size: sp(24)  # Doesn't work.
-    font_style: 'H5'  # Does work.
+    #font_size: sp(12)  # Doesn't work.
+    #font_style: 'H6'  # Does work.
     halign: 'justify'
     valign: 'top'
 
@@ -16,8 +16,7 @@
 
     MDGridLayout:
         cols: 1
-        padding: 10, 10
-        spacing: 10
+        padding: dp(10), dp(10)
 
         ScrollView:
             id: scroll
@@ -28,18 +27,18 @@
             MDGridLayout:
                 cols: 1
                 adaptive_height: True
-                padding: 10, 0
+                padding: dp(10), 0
 
                 MDLabel:
                     text: root.title
-                    font_style: 'H3'
+                    font_style: 'H5'
                     size_hint_y: None
                     height: self.texture_size[1]
 
                 MDGridLayout:
                     id: instruct_text
                     cols: 1
-                    spacing: 20
+                    spacing: dp(20)
                     size_hint_y: None
                     height: self.minimum_height
 
@@ -54,7 +53,7 @@
                 MDLabel:
                     text: _("When you are ready to begin press [b]{}[/b].").format(_("Start"))
                     markup: True
-                    font_size: sp(24)
+                    #font_size: sp(12)
                     size_hint_y: None
                     halign: 'center'
 
@@ -62,12 +61,13 @@
 
         MDBoxLayout
             size_hint_y: None
+            padding: dp(10), dp(5)
             height: self.minimum_height
 
             Widget:  # Spacer
             MDRaisedButton:
                 text: _("Start")
-                font_size: 24
+                font_size: sp(12)
                 halign: 'center'
                 on_release:
                     root.manager.transition.direction = 'up'

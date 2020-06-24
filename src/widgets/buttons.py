@@ -1,4 +1,5 @@
 from kivy.properties import StringProperty, BooleanProperty
+from kivy.metrics import dp
 
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.list import OneLineAvatarIconListItem, OneLineIconListItem, IRightBodyTouch
@@ -43,6 +44,7 @@ class UserItem(CheckItem):
         super(UserItem, self).__init__(**kwargs)
         self.register_event_type('on_edit')
         self.register_event_type('on_remove')
+        self.ids._right_container.width = self.ids.icon_container.width + dp(24)  # Add width to fix clipping.
 
     def on_edit(self, *args):
         pass

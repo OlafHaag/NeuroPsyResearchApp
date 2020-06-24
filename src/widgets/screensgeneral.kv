@@ -30,8 +30,8 @@
 
             MDGridLayout:
                 cols: 1
-                padding: 10, 0
-                spacing: 10
+                padding: dp(10), 0
+                spacing: dp(10)
 
                 MDLabel:
                     text: root.title
@@ -39,7 +39,7 @@
                     size_hint_y: None
                     height: self.texture_size[1]
                     font_style: 'H5'
-                    padding: 10, 20
+                    padding: dp(10), dp(20)
                     halign: 'center'
                     valign: 'middle'
 
@@ -62,12 +62,12 @@
                     valign: 'top'
                 MDGridLayout:
                     rows: 1
-                    spacing: 20
+                    spacing: dp(20)
                     Widget:  # Spacer.
                     TaskButton:
                         text: _("Circle Task")
                         task: 'Circle Task'
-                        font_size: 24
+                        font_size: sp(12)
                         pos_hint: {"center_x": .5, "center_y": .5}
                         on_release: root.manager.start_task(self.task)
                     Widget:  # Spacer.
@@ -105,8 +105,8 @@
                     Widget:
                     MDBoxLayout:
                         orientation: 'vertical'
-                        spacing: 20
-                        padding: 10, 10
+                        spacing: dp(20)
+                        padding: dp(10), dp(10)
 
                         AnchorLayout:
                             anchors: 'center', 'center'

@@ -113,6 +113,7 @@ class SettingsCircleTask(Widget):
     cool_down = ConfigParserProperty('0.5', 'CircleTask', 'cool_down_time', 'app', val_type=float,
                                      verify=lambda x: x > 0.0, errorvalue=0.5)
     email_recipient = ConfigParserProperty('', 'CircleTask', 'email_recipient', 'app', val_type=str)
+    researcher = ConfigParserProperty('', 'CircleTask', 'researcher', 'app', val_type=str)
     
     def __init__(self, **kwargs):
         super(SettingsCircleTask, self).__init__(**kwargs)

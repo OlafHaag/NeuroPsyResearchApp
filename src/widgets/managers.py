@@ -98,7 +98,7 @@ class UiManager(ScreenManager):
         """ Handle screen callbacks here. """
         # Circle
         if screen_name == 'Consent CT':
-            self.get_screen(screen_name).bind(on_consent=self.show_popup_demographics)
+            self.get_screen(screen_name).bind(on_consent=lambda instance: self.show_instructions())
         elif screen_name == 'Circle Task':
             self.get_screen(screen_name).bind(
                 on_task_stopped=lambda instance, is_last_block: self.task_finished(is_last_block),
@@ -108,6 +108,20 @@ class UiManager(ScreenManager):
         elif screen_name == 'Webview':
             self.get_screen(screen_name).bind(on_quit_screen=lambda instance: self.go_home())
     
+    def show_instructions(self):
+        # Switch to landscape without changing config.
+        # Constantly switching orientation between instructions and task is really annoying and can lead to freezes.
+        try:
+            plyer.orientation.set_landscape()
+        except (NotImplementedError, ModuleNotFoundError):
+            pass
+        # Advance to the instructions.
+        self.transition.direction = 'up'
+        self.transition.duration = 0.5
+        self.current = self.task_instructions[self.app.settings.current_task]
+        # Collect demographic data.
+        Clock.schedule_once(lambda dt: self.show_popup_demographics(), 1)
+        
     def toggle_orientation(self, instance):
         """ Toggles between portrait and landscape screen orientation. """
         # Update the icon.
@@ -305,7 +319,7 @@ class UiManager(ScreenManager):
             back_keys = [27]
         else:
             back_keys = [27, 278]  # backspace = 8, but would need to check if we're typing in an input mask.
-        if key in back_keys:  # backspace, escape, home keys.
+        if key in back_keys:  # escape, home keys.
             # Handle back button on popup dialogs:
             if self.app.root_window.children[0] == self.popup_terms:
                 if self.is_first_run:
@@ -357,6 +371,7 @@ class UiManager(ScreenManager):
         self.transition.direction = transition
         self.current = 'Home'
         self.sidebar.set_state('close')
+        self.on_orientation(None, self.orientation)
     
     def start_task(self, task):
         # Make sure the correct user is selected.
@@ -369,6 +384,8 @@ class UiManager(ScreenManager):
     def task_finished(self, was_last_block=False):
         # Outro after last block.
         if was_last_block:
+            # Set orientation back to config value.
+            self.on_orientation(None, self.orientation)
             self.current = 'Outro'
         else:
             self.transition.direction = 'down'

@@ -7,7 +7,7 @@
     font_size: sp(24)
     size: self.texture_size
     size_hint_y: None
-    padding: 10, 10
+    padding: dp(10), dp(10)
     halign: 'justify'
     valign: 'top'
 
@@ -16,8 +16,7 @@
 
     MDGridLayout:
         cols: 1
-        padding: 10, 10
-        spacing: 10
+        padding: dp(10), dp(10)
 
         ScrollView:
             id: scroll
@@ -28,27 +27,27 @@
             MDGridLayout:
                 cols: 1
                 adaptive_height: True
-                padding: [0, 10, 0, 100]
-                spacing: [0, 20]
+                padding: [0, dp(10), 0, dp(100)]
+                spacing: [0, dp(20)]
 
                 MDLabel:
                     text: root.title
-                    font_style: 'H3'
+                    font_style: 'H5'
                     size_hint_y: None
                     height: self.texture_size[1]
 
                 MDGridLayout:
                     id: consent_labels
                     cols: 1
-                    spacing: 10
+                    spacing: dp(10)
                     size_hint_y: None
                     height: self.minimum_height
 
         MDSeparator:
 
         MDBoxLayout:
-            spacing: 10
-            padding: 10, 10
+            spacing: dp(12)
+            padding: dp(10), dp(5)
             size_hint_y: None
             height: self.minimum_height
             valign: 'middle'
@@ -56,12 +55,12 @@
             Widget:  # Push buttons to the right.
             MDRectangleFlatButton:
                 text: _("Decline")
-                font_size: 24
+                font_size: sp(12)
                 on_release:
                     root.manager.transition.direction = 'up'
                     root.manager.transition.duration = 0.5
                     root.manager.go_home()
             MDRaisedButton:
                 text: _("Agree")
-                font_size: 24
+                font_size: sp(12)
                 on_release: root.dispatch('on_consent')

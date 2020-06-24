@@ -6,15 +6,15 @@
     orientation: 'horizontal'
 
 <-SettingsPanel>:
-    spacing: 15
-    padding: 5
+    spacing: dp(15)
+    padding: dp(5)
     size_hint_y: None
     height: self.minimum_height
 
     MDLabel:
         size_hint_y: None
         text: root.title
-        height: max(50, self.texture_size[1] + 20)
+        height: max(dp(50), self.texture_size[1] + dp(20))
         font_style: 'H5'
 
     MDSeparator:
@@ -77,7 +77,7 @@
     close_button: button
     BoxLayout:
         orientation: "vertical"
-        padding: 10, 10
+        padding: dp(10), dp(10)
 
         MDTabs:
             id: tabs
@@ -87,7 +87,7 @@
         BoxLayout:
             size_hint_y: None
             height: self.minimum_height
-            padding: 10, 10
+            padding: dp(10), dp(10)
 
             Widget:  # Spacer.
             MDRaisedButton:

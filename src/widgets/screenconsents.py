@@ -34,12 +34,9 @@ class ScreenConsentCircleTask(BaseScreen):
         # Start collecting data for user_id.
         app = App.get_running_app()
         app.data_mgr.new_data_collection(app.settings.current_user)
-        # Advance to the instructions.
-        self.manager.transition.direction = 'up'
-        self.manager.transition.duration = 0.5
-        self.manager.current = self.manager.task_instructions[app.settings.current_task]
     
     def get_duration(self):
+        """ Estimate how long the study will take. """
         app = App.get_running_app()
         s = app.settings.circle_task
         duration = ((2 * s.n_practice_trials + s.n_blocks * s.n_trials)  # Number of total trials.
@@ -52,7 +49,6 @@ class ScreenConsentCircleTask(BaseScreen):
     
     def on_pre_enter(self, *args):
         """ Setup information screen before we see it. """
-        # Estimate how long will the study take.
         self.title = _("Consent")
         read_notice = _("Please read the following information carefully before proceeding.Use scrolling to go "
                         "through the text to the end.")
@@ -82,7 +78,8 @@ class ScreenConsentCircleTask(BaseScreen):
         privacy_notice = _("Please review the [ref=privacy][color=0000ff]Privacy Policy (press here)[/color][/ref] "
                            "carefully for information on what kind of data we collect and how we intend to use them.")
 
-        app_details = get_app_details()
+        app = App.get_running_app()
+        s = app.settings.circle_task
         contact = _("[b]Contact regarding this study:[/b]\n"
                     "Philipps-Universität Marburg\n"
                     "Department of Psychology\n"
@@ -95,8 +92,7 @@ class ScreenConsentCircleTask(BaseScreen):
                     "Tel .: +496421 - 2823818\n"
                     "[ref=mailto:dominik.endres@uni-marburg.de][color=0000ff]dominik.endres@uni-marburg.de"
                     "[/color][/ref]\n"
-                    "[ref=mailto:{1}][color=0000ff]{1}[/color][/ref]").format(app_details['author'],
-                                                                              app_details['contact'])
+                    "[ref=mailto:{1}][color=0000ff]{1}[/color][/ref]").format(s.researcher, s.email_recipient)
         
         consent = _("I hereby confirm that I have read and understood the participation information described "
                     "above as well as the [ref=privacy][color=0000ff]Privacy Policy[/color][/ref]. "

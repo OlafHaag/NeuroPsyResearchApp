@@ -84,12 +84,6 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
     
     def on_pre_enter(self, *args):
         """ Setup this run of the task and initiate start. """
-        # Switch to landscape without changing config.
-        try:
-            plyer.orientation.set_landscape()
-        except (NotImplementedError, ModuleNotFoundError):
-            pass
-        
         # Do we do practice trials?
         self.is_practice = bool(self.settings.circle_task.practice_block)
         if self.is_practice:
@@ -122,14 +116,6 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         self.count_down.set_label(_("PREPARE"))
         self.start_task()
     
-    def on_leave(self, *args):
-        # Set orientation back to config value.
-        try:
-            if self.manager.orientation == 'portrait':
-                plyer.orientation.set_portrait()
-        except (NotImplementedError, ModuleNotFoundError):
-            pass
-        
     # ToDo: only last touch ungrabbed, ungrab all lingering touches. Doesn't appear to cause problems so far.
     def slider_grab(self, instance, touch):
         """ Set reference to touch event for sliders. """
@@ -241,10 +227,15 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         self.disable_sliders()
         self.count_down.set_label(_("FINISHED"))
         # Record data for current trial.
-        self.data[self.settings.current_trial - 1, :] = (self.ids.df1.value_normalized, self.ids.df2.value_normalized,
-                                                         self.df1_grab_dt, self.df1_release_dt,
-                                                         self.df2_grab_dt, self.df2_release_dt)
-        self.check_slider_use()
+        try:
+            self.data[self.settings.current_trial - 1, :] = (self.ids.df1.value_normalized,
+                                                             self.ids.df2.value_normalized,
+                                                             self.df1_grab_dt, self.df1_release_dt,
+                                                             self.df2_grab_dt, self.df2_release_dt)
+            self.check_slider_use()
+        except TypeError:
+            # Trial was aborted and data set to None by self.clea_data().
+            pass
         self.clear_times()
         
     def check_slider_use(self):
@@ -307,11 +298,14 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
     
     def release_audio(self):
         """ Unload audio sources from memory. """
-        for sound in [self.sound_start, self.sound_stop]:
-            if sound:
-                sound.stop()
-                sound.unload()
-                sound = None
+        if self.sound_start:
+            self.sound_start.stop()
+            self.sound_start.unload()
+            self.sound_start = None
+        if self.sound_stop:
+            self.sound_stop.stop()
+            self.sound_stop.unload()
+            self.sound_stop = None
     
     def get_current_time_iso(self, fmt=None):
         """ Returns the current datetime as string.

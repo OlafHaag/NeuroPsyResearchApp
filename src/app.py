@@ -80,7 +80,7 @@ class NeuroPsyResearchApp(MDApp):
                            })
         config.setdefaults('CircleTask',
                            {
-                               'n_trials': 20,
+                               'n_trials': 25,
                                'n_blocks': 3,
                                'constrained_block': 2,
                                'warm_up_time': 1.0,

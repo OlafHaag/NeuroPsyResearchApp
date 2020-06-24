@@ -44,7 +44,7 @@ class SimplePopup(MDDialog):
         container = self.ids.container
         if container.height > Window.height:
             container.size_hint_y = 0.95
-            container.padding = ("24dp", "0dp", "8dp", "0dp")
+            container.padding = ('24dp', '0dp', '8dp', '0dp')
             self.ids.text.font_style = 'Body2'
             self._spacer_top = 0
     
@@ -345,6 +345,7 @@ class TextInputPopup(MDDialog):
         default_kwargs.update(kwargs)
         super(TextInputPopup, self).__init__(**default_kwargs)
         self.register_event_type('on_confirm')
+        self.ids.title.padding = (0, '12dp')
         # Link this class' input to content_cls' input.
         # Property events are not dispatched when the values are equal, so this doesn't result in endless recursion.
         self.bind(input=self.content_cls.setter('input'))
@@ -495,7 +496,8 @@ class DemographicsPopup(MDDialog):
         default_kwargs.update(kwargs)
         super(DemographicsPopup, self).__init__(**default_kwargs)
         self.register_event_type('on_confirm')
-        self.ids.spacer_top_box.padding = (0, 0, 0, 0)
+        self.ids.spacer_top_box.padding = (0, 0, 0, '8dp')
+        self.ids.root_button_box.height = '64dp'
     
     def confirm(self):
         self.dispatch('on_confirm', self.content_cls.get_age_group(), self.content_cls.get_gender_code())
@@ -578,7 +580,7 @@ class PolicyPopup(SimplePopup):
         self.ids.spacer_top_box.size_hint_y = 1
         self.ids.spacer_top_box.padding = (0, 0, 0, 0)
         self.ids.container.size_hint_y = 0.9
-        self.ids.container.padding = ("8dp", "8dp", "8dp", "0dp")  # left, top, right, bottom
+        self.ids.container.padding = ('8dp', '8dp', '8dp', '0dp')  # left, top, right, bottom
         
     def _get_text(self, content_md):
         details = get_app_details()

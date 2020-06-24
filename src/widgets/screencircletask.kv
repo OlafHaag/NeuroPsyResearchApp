@@ -11,7 +11,7 @@
     AnchorLayout:
         anchor_x: 'left'
         anchor_y: 'center'
-        padding: sp(20), 0
+        padding: dp(20), 0
 
         # Debug Label
         #Label:
@@ -42,7 +42,7 @@
     AnchorLayout:
         anchor_x: 'right'
         anchor_y: 'center'
-        padding: sp(20), 0
+        padding: dp(20), 0
 
         # Debug Label
         #Label:
@@ -116,7 +116,7 @@
     CountDownCircle:
         id: anim_label
         text: str(int(self.start_count - (self.angle*self.start_count//360)))
-        font_size: 50
+        font_size: sp(48)
         theme_text_color: 'Custom'
         text_color: [1, 0, 1, 1]
         canvas:

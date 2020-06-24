@@ -45,8 +45,8 @@ Root:
 
 <ContentNavigationDrawer>:
     orientation: "vertical"
-    padding: "8dp"
-    spacing: "8dp"
+    padding: dp(8)
+    spacing: dp(8)
 
     AnchorLayout:
         anchor_x: "left"
@@ -56,14 +56,14 @@ Root:
         BoxLayout:
             Image:
                 id: avatar
-                size: "56dp", "56dp"
+                size: dp(56), dp(56)
                 size_hint: None, None
                 source: "res/icons/mipmap-mdpi/ucmicon.png"
                 elevation: 0.1
 
             BoxLayout:
                 orientation: 'vertical'
-                spacing: 5
+                spacing: dp(5)
                 Widget:  # Spacer.
                 MDLabel:
                     # Get the app's name and separate words by upper case letters.

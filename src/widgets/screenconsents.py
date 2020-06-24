@@ -41,7 +41,7 @@ class ScreenConsentCircleTask(BaseScreen):
         s = app.settings.circle_task
         duration = ((2 * s.n_practice_trials + s.n_blocks * s.n_trials)  # Number of total trials.
                     * (s.warm_up + s.trial_duration + s.cool_down)  # Duration per trial.
-                    + (s.n_blocks * 120.0)  # Buffer for reading instructions.
+                    + ((bool(s.n_practice_trials) * 2 + s.n_blocks) * 90.0)  # Buffer for reading instructions.
                     )
         duration /= 60.0  # To minutes.
         duration = int(duration)  # Round.

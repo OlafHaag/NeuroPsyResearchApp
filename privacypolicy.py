@@ -6,7 +6,6 @@ Having only 1 source for the policy reduces maintenance and ensures consistency.
 """
 
 from src.i18n import _
-from src.utility import create_markdown_file
 
 
 # Wrap terms in getter so that translation kicks in when necessary.
@@ -100,6 +99,12 @@ def get_policy():
 
 if __name__ == '__main__':
     from pathlib import Path
+    from src.i18n import change_language_to, list_languages
+    from src.utility import create_markdown_file
     
-    destination = Path(__file__).with_suffix('.md')
-    create_markdown_file(destination, get_policy())
+    languages = list_languages()
+    for lang in languages:
+        change_language_to(lang)
+        this_file = Path(__file__)
+        destination = this_file.with_name(f"{this_file.stem}_{lang}").with_suffix('.md')
+        create_markdown_file(destination, get_policy())

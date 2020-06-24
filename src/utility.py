@@ -261,4 +261,4 @@ def create_markdown_file(path, content_md):
     """
     details = get_app_details()
     text = content_md.format(appname=details['appname'], author=details['author'], contact=details['contact'])
-    path.write_text(text)
+    path.write_text(text, encoding='UTF-8')

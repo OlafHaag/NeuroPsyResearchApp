@@ -84,12 +84,6 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
     
     def on_pre_enter(self, *args):
         """ Setup this run of the task and initiate start. """
-        # Switch to landscape without changing config.
-        try:
-            plyer.orientation.set_landscape()
-        except (NotImplementedError, ModuleNotFoundError):
-            pass
-        
         # Do we do practice trials?
         self.is_practice = bool(self.settings.circle_task.practice_block)
         if self.is_practice:
@@ -122,14 +116,6 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         self.count_down.set_label(_("PREPARE"))
         self.start_task()
     
-    def on_leave(self, *args):
-        # Set orientation back to config value.
-        try:
-            if self.manager.orientation == 'portrait':
-                plyer.orientation.set_portrait()
-        except (NotImplementedError, ModuleNotFoundError):
-            pass
-        
     # ToDo: only last touch ungrabbed, ungrab all lingering touches. Doesn't appear to cause problems so far.
     def slider_grab(self, instance, touch):
         """ Set reference to touch event for sliders. """

@@ -34,10 +34,6 @@ class ScreenConsentCircleTask(BaseScreen):
         # Start collecting data for user_id.
         app = App.get_running_app()
         app.data_mgr.new_data_collection(app.settings.current_user)
-        # Advance to the instructions.
-        self.manager.transition.direction = 'up'
-        self.manager.transition.duration = 0.5
-        self.manager.current = self.manager.task_instructions[app.settings.current_task]
     
     def get_duration(self):
         """ Estimate how long the study will take. """

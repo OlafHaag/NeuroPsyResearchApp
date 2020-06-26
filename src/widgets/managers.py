@@ -99,6 +99,8 @@ class UiManager(ScreenManager):
         # Circle
         if screen_name == 'Consent CT':
             self.get_screen(screen_name).bind(on_consent=lambda instance: self.show_instructions())
+        if screen_name == 'Instructions CT':
+            self.get_screen(screen_name).bind(on_proceed=lambda instance: self.start_task())
         elif screen_name == 'Circle Task':
             self.get_screen(screen_name).bind(
                 on_task_stopped=lambda instance, is_last_block: self.task_finished(is_last_block),
@@ -109,6 +111,7 @@ class UiManager(ScreenManager):
             self.get_screen(screen_name).bind(on_quit_screen=lambda instance: self.go_home())
     
     def show_instructions(self):
+        """ Show screen with instructions for current task. """
         # Switch to landscape without changing config.
         # Constantly switching orientation between instructions and task is really annoying and can lead to freezes.
         try:
@@ -121,6 +124,12 @@ class UiManager(ScreenManager):
         self.current = self.task_instructions[self.app.settings.current_task]
         # Collect demographic data.
         Clock.schedule_once(lambda dt: self.show_popup_demographics(), 1)
+    
+    def start_task(self):
+        """ Change to screen with current task. """
+        self.transition.direction = 'up'
+        self.transition.duration = 0.5
+        self.current = self.app.settings.current_task
         
     def toggle_orientation(self, instance):
         """ Toggles between portrait and landscape screen orientation. """
@@ -373,7 +382,7 @@ class UiManager(ScreenManager):
         self.sidebar.set_state('close')
         self.on_orientation(None, self.orientation)
     
-    def start_task(self, task):
+    def show_consent(self, task):
         # Make sure the correct user is selected.
         self.show_user_select()
         self.transition.direction = 'up'

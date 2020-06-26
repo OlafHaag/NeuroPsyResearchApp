@@ -34,13 +34,13 @@
                     font_style: 'H5'
                     size_hint_y: None
                     height: self.texture_size[1]
+                    padding: 0, dp(10)
 
-                MDGridLayout:
-                    id: instruct_text
-                    cols: 1
-                    spacing: dp(20)
+                MDLabel:
+                    id: intro
+                    markup: True
                     size_hint_y: None
-                    height: self.minimum_height
+                    halign: 'justify'
 
                 Image:
                     id: instruct_img
@@ -49,6 +49,13 @@
                     keep_ratio: True
                     size: self.texture_size
                     size_hint: (1, None)
+
+                MDGridLayout:
+                    id: instruct_text
+                    cols: 1
+                    spacing: dp(20)
+                    size_hint_y: None
+                    height: self.minimum_height
 
                 MDLabel:
                     text: _("When you are ready to begin press [b]{}[/b].").format(_("Start"))
@@ -69,8 +76,5 @@
                 text: _("Start")
                 font_size: sp(12)
                 halign: 'center'
-                on_release:
-                    root.manager.transition.direction = 'up'
-                    root.manager.transition.duration = 0.5
-                    root.manager.current = app.settings.current_task
+                on_release: root.dispatch('on_proceed')
             Widget:  # Spacer

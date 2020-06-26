@@ -1,3 +1,4 @@
+from kivy.clock import Clock
 from kivy.properties import ObjectProperty, StringProperty
 from kivymd.uix.label import MDLabel
 
@@ -16,14 +17,17 @@ class ScreenInstructCircleTask(BaseScreen):
     
     def __init__(self, **kwargs):
         super(ScreenInstructCircleTask, self).__init__(**kwargs)
+        self.register_event_type('on_proceed')
     
     def on_pre_enter(self, *args):
+        """ Prepare screen content. """
         self.settings.next_block()
         self.title = self.get_title()
         self.set_message()
         self.set_img()
 
     def get_title(self):
+        """ Set the title for this block. """
         ct = self.settings.circle_task
         if ct.practice_block:
             title = _("{}. Practice Block").format(ct.practice_block)
@@ -31,17 +35,32 @@ class ScreenInstructCircleTask(BaseScreen):
             block = (self.settings.current_block - bool(ct.n_practice_trials) * 2)
             title = _("{}. Testing Block").format(block)
         return title
+    
+    def _set_intro_height(self):
+        """ Set intro label's height. """
+        self.ids.intro.height = self.ids.intro.texture_size[1]
         
     def set_message(self):
+        """ Update the instruction according to the current task. """
         ct = self.settings.circle_task
+        intro_msg = _("Please read the following information carefully before proceeding. Use scrolling to go through "
+                      "the whole text. ")
+        # When we're not in a practice block, give a hint at which task from the practice run is up next.
+        if (not bool(ct.practice_block)) and bool(ct.n_practice_trials):  # Only if there were practice blocks.
+            intro_msg += ("\n" + _("This is the same task as in the first practice block.")) * (not ct.constraint) \
+                       + ("\n" + _("This is the same task as in the second practice block.")) * ct.constraint
+        elif bool(ct.practice_block):
+            intro_msg += "\n" + _("In this block you will practice to perform this task.")
+        intro_msg += " " + _("Below is an exemplary image of a successfully executed task.")
+        self.ids.intro.text = intro_msg
+        # The intro label still has its standard height, so we need to update it. When we get here for the first time,
+        # the label's texture size is not yet initialized. So we do it before the next frame.
+        Clock.schedule_once(lambda dt: self._set_intro_height(), 0)
+        
         if ct.practice_block:
             n_trials = ct.n_practice_trials
         else:
             n_trials = ct.n_trials
-        read_msg = _("Please read the following information carefully before proceeding. Use scrolling to go through "
-                     "the whole text. "
-                     "At the end of this text you'll find an exemplary image of the task in progress."
-                     )
         n_trials_msg = _("There are a total of {} trials in this block.").format(n_trials)
         n_tasks = int(ct.constraint) + 1
         # ToDo: ngettext for plurals
@@ -77,11 +96,11 @@ class ScreenInstructCircleTask(BaseScreen):
         task2_msg = _("In addition you'll have to fulfill another task concurrently to the first task. On top of the "
                       "[color=008000]green ring[/color] there's a [color=3f84f2]blue arch[/color] which length is "
                       "controlled only by the slider with the blue handle and bar. You have to make the "
-                      "[color=3f84f2]blue arch[/color] touch the small [color=3f84f2]blue dot[/color] that is sitting "
-                      "on the [color=008000]green ring[/color]. Note that the blue slider still influences the size of "
-                      "the [b]white disk[/b] as well. Accomplish both tasks at the same time!")
-        instructions = [read_msg,
-                        n_tasks_msg,
+                      "[color=3f84f2]blue arch[/color] reach the small [color=3f84f2]blue dot[/color] that "
+                      "is sitting on the [color=008000]green ring[/color] and not further. Note that the blue slider "
+                      "still influences the size of the [b]white disk[/b] as well. Accomplish both tasks at the same "
+                      "time!")
+        instructions = [n_tasks_msg,
                         task1_msg,
                         task2_msg * ct.constraint,
                         time_limit_msg,
@@ -95,7 +114,11 @@ class ScreenInstructCircleTask(BaseScreen):
             self.ids.instruct_text.add_widget(label)
     
     def set_img(self):
+        """ Set example image according to task condition. """
         if self.settings.circle_task.constraint:
             self.ids.instruct_img.source = 'res/CT_2tasks_trial.png'
         else:
             self.ids.instruct_img.source = 'res/CT_1task_trial.png'
+
+    def on_proceed(self, *args):
+        pass

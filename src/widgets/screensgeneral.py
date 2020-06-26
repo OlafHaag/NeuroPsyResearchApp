@@ -32,8 +32,11 @@ class ScreenHome(BaseScreen):
         app = App.get_running_app()
         # To get translation after language change, we have to trigger setting the texts.
         self.title = _("Welcome!")
-        self.msg = _("You can participate in a study by choosing from available studies below."
-                     "\n\n")
+        self.msg = _("There's currently 1 study available. You can participate in the study by clicking the button "
+                     "below."
+                     "\n"
+                     "Please create a separate user account through the menu for each person who wants to participate "
+                     "in the study on this device.")
         
 
 class ScreenOutro(BaseScreen):
@@ -54,6 +57,11 @@ class ScreenOutro(BaseScreen):
     
     def _set_msg(self):
         self.msg = _('[color=ff00ff][b]Thank you[/b][/color] for participating!') + "\n\n"
+        if self.upload_btn_enabled:
+            self.msg += _("You can now [b]upload[/b] the research data by pressing the button below. "
+                          "By uploading the data you are making an important contribution to scientific research."
+                          "Unless stated otherwise in the study's description we'd appreciate if you only upload "
+                          "your data the first time you participated in this study. Thank you.\n")
         # Local storage.
         app = App.get_running_app()
         dest = app.data_mgr.get_storage_path()
@@ -62,10 +70,6 @@ class ScreenOutro(BaseScreen):
         else:
             self.msg += _("Research data were [b]not[/b] locally stored as files. "
                           "You can enable storing research data on the device in the settings.\n")
-        if self.upload_btn_enabled:
-            self.msg += _("You can now [b]upload[/b] the research data by pressing the button below. "
-                          "Unless stated otherwise in the study's description we'd appreciate if you only upload "
-                          "your data the first time you participated in this study. Thank you.\n")
         
     def on_upload(self):
         # Show we're busy. Heroku dyno sleeps so it can take some time for the response.

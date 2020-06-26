@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-06-23 16:50+0200\n"
-"PO-Revision-Date: 2020-06-23 16:50+0200\n"
+"POT-Creation-Date: 2020-06-26 02:53+0200\n"
+"PO-Revision-Date: 2020-06-26 02:53+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: en\n"
@@ -22,91 +22,87 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-4: locales\n"
 "X-Poedit-SearchPathExcluded-5: res\n"
 
-#: src/widgets/navigation.kv:39
+#: src/widgets/navigation.kv:40
 msgid "MENU"
 msgstr ""
 
-#: src/widgets/navigation.kv:75
+#: src/widgets/navigation.kv:76
 msgid "Scientific Participation Software"
 msgstr ""
 
-#: src/widgets/navigation.kv:85
+#: src/widgets/navigation.kv:86
 msgid "Home"
 msgstr ""
 
-#: src/widgets/navigation.kv:90
+#: src/widgets/navigation.kv:91
 msgid "Users"
 msgstr ""
 
-#: src/widgets/navigation.kv:95
+#: src/widgets/navigation.kv:96
 msgid "Settings"
 msgstr ""
 
-#: src/widgets/navigation.kv:100
+#: src/widgets/navigation.kv:101
 msgid "Visit Online Analyses"
 msgstr ""
 
-#: src/widgets/navigation.kv:105 src/widgets/managers.py:200
+#: src/widgets/navigation.kv:106 src/widgets/managers.py:223
 msgid "About"
 msgstr ""
 
-#: src/widgets/navigation.kv:110
+#: src/widgets/navigation.kv:111
 msgid "Terms & Conditions"
 msgstr ""
 
-#: src/widgets/navigation.kv:115
+#: src/widgets/navigation.kv:116
 msgid "Privacy Policy"
 msgstr ""
 
-#: src/widgets/navigation.kv:120
+#: src/widgets/navigation.kv:121
 msgid "Exit"
 msgstr ""
 
-#: src/widgets/popups.kv:8
+#: src/widgets/popups.kv:7
 msgid "Enter a new value."
 msgstr ""
 
-#: src/widgets/popups.kv:19
+#: src/widgets/popups.kv:18
 msgid "New Value"
 msgstr ""
 
-#: src/widgets/popups.kv:20
+#: src/widgets/popups.kv:19
 msgid "Error: invalid input"
 msgstr ""
 
-#: src/widgets/popups.kv:30
+#: src/widgets/popups.kv:28
 msgid "You can voluntarily give us demographic information about yourself."
 msgstr ""
 
-#: src/widgets/popups.kv:39
+#: src/widgets/popups.kv:37
 msgid "Age"
 msgstr ""
 
-#: src/widgets/popups.kv:49
+#: src/widgets/popups.kv:47
 msgid "Gender"
 msgstr ""
 
-#: src/widgets/screencircletask.kv:18
-msgid "Please use this slider."
-msgstr ""
-
-#: src/widgets/screencircletask.kv:99
+#: src/widgets/screencircletask.kv:79
 msgid "Use sliders simultaneously."
 msgstr ""
 
-#: src/widgets/screenconsents.kv:58
+#: src/widgets/screenconsents.kv:57
 msgid "Decline"
 msgstr ""
 
-#: src/widgets/screenconsents.kv:65
+#: src/widgets/screenconsents.kv:64
 msgid "Agree"
 msgstr ""
 
-#: src/widgets/screeninstructions.kv:55
+#: src/widgets/screeninstructions.kv:62
 msgid "When you are ready to begin press [b]{}[/b]."
 msgstr ""
 
-#: src/widgets/screeninstructions.kv:55 src/widgets/screeninstructions.kv:69
+#: src/widgets/screeninstructions.kv:62 src/widgets/screeninstructions.kv:77
 msgid "Start"
 msgstr ""
 
@@ -118,7 +114,7 @@ msgstr ""
 msgid "Available Studies"
 msgstr ""
 
-#: src/widgets/screensgeneral.kv:68 src/app.py:105
+#: src/widgets/screensgeneral.kv:68 src/app.py:106
 msgid "Circle Task"
 msgstr ""
 
@@ -130,7 +126,11 @@ msgstr ""
 msgid "Send via E-Mail"
 msgstr ""
 
-#: privacypolicy.py:15
+#: src/widgets/sliders.kv:17
+msgid "Please use this slider."
+msgstr ""
+
+#: privacypolicy.py:14
 #, python-brace-format
 msgid ""
 "\n"
@@ -232,7 +232,7 @@ msgid ""
 "Society for Psychology (DGPs) for quality assurance in research.\n"
 msgstr ""
 
-#: src/app.py:102
+#: src/app.py:103
 msgid "General"
 msgstr ""
 
@@ -422,15 +422,15 @@ msgstr ""
 msgid "UNKNOWN."
 msgstr ""
 
-#: src/widgets/managers.py:170
+#: src/widgets/managers.py:193
 msgid "New User"
 msgstr ""
 
-#: src/widgets/managers.py:193
+#: src/widgets/managers.py:216
 msgid "Do you want to remove {}?"
 msgstr ""
 
-#: src/widgets/managers.py:201
+#: src/widgets/managers.py:224
 #, python-brace-format
 msgid ""
 "{appname}\n"
@@ -446,39 +446,39 @@ msgid ""
 "ref]"
 msgstr ""
 
-#: src/widgets/managers.py:238
+#: src/widgets/managers.py:261
 msgid "Warning"
 msgstr ""
 
-#: src/widgets/managers.py:248
+#: src/widgets/managers.py:271
 msgid "Error"
 msgstr ""
 
-#: src/widgets/managers.py:260
+#: src/widgets/managers.py:283
 msgid "Do you want to quit?"
 msgstr ""
 
-#: src/widgets/managers.py:290
+#: src/widgets/managers.py:313
 msgid "Success!"
 msgstr ""
 
-#: src/widgets/managers.py:290
+#: src/widgets/managers.py:313
 msgid "Upload successful!"
 msgstr ""
 
-#: src/widgets/managers.py:295
+#: src/widgets/managers.py:318
 msgid ""
 "Upload failed.\n"
 "Something went wrong."
 msgstr ""
 
-#: src/widgets/managers.py:296
+#: src/widgets/managers.py:319
 msgid "Please make sure the app is up-to-date."
 msgstr ""
 
 #: src/widgets/popups.py:33 src/widgets/popups.py:86 src/widgets/popups.py:114
 #: src/widgets/popups.py:177 src/widgets/popups.py:340
-#: src/widgets/popups.py:490 src/widgets/screensettings.py:157
+#: src/widgets/popups.py:491 src/widgets/screensettings.py:157
 msgid "OK"
 msgstr ""
 
@@ -511,87 +511,87 @@ msgstr ""
 msgid "Set New Value"
 msgstr ""
 
-#: src/widgets/popups.py:432 src/widgets/popups.py:446
+#: src/widgets/popups.py:433 src/widgets/popups.py:447
 msgid "Edit User"
 msgstr ""
 
-#: src/widgets/popups.py:446
+#: src/widgets/popups.py:447
 msgid "Add New User"
 msgstr ""
 
-#: src/widgets/popups.py:470
+#: src/widgets/popups.py:471
 msgid "This name is just for you. It won't be uploaded to the server."
 msgstr ""
 
-#: src/widgets/popups.py:471
+#: src/widgets/popups.py:472
 msgid "Enter Pseudonym"
 msgstr ""
 
-#: src/widgets/popups.py:483
+#: src/widgets/popups.py:484
 msgid "Demographic Information"
 msgstr ""
 
-#: src/widgets/popups.py:513
+#: src/widgets/popups.py:515
 msgid "no answer"
 msgstr ""
 
-#: src/widgets/popups.py:527 src/widgets/popups.py:552
+#: src/widgets/popups.py:529 src/widgets/popups.py:554
 msgid "male"
 msgstr ""
 
-#: src/widgets/popups.py:527 src/widgets/popups.py:554
+#: src/widgets/popups.py:529 src/widgets/popups.py:556
 msgid "female"
 msgstr ""
 
-#: src/widgets/popups.py:527 src/widgets/popups.py:556
+#: src/widgets/popups.py:529 src/widgets/popups.py:558
 msgid "diverse"
 msgstr ""
 
-#: src/widgets/popups.py:605
+#: src/widgets/popups.py:607
 msgid "DECLINE"
 msgstr ""
 
-#: src/widgets/popups.py:610
+#: src/widgets/popups.py:612
 msgid "ACCEPT"
 msgstr ""
 
-#: src/widgets/popups.py:641
+#: src/widgets/popups.py:643
 msgid "CLOSE"
 msgstr ""
 
-#: src/widgets/screencircletask.py:24 src/widgets/screencircletask.py:190
+#: src/widgets/screencircletask.py:24 src/widgets/screencircletask.py:176
 msgid "Trial: "
 msgstr ""
 
-#: src/widgets/screencircletask.py:122
+#: src/widgets/screencircletask.py:116
 msgid "PREPARE"
 msgstr ""
 
-#: src/widgets/screencircletask.py:210
+#: src/widgets/screencircletask.py:196
 msgid "GET READY"
 msgstr ""
 
-#: src/widgets/screencircletask.py:242
+#: src/widgets/screencircletask.py:228
 msgid "FINISHED"
 msgstr ""
 
-#: src/widgets/screencircletask.py:285
+#: src/widgets/screencircletask.py:276
 msgid ""
 "Please read instructions again carefully and perform task accordingly.\n"
 "Aborting Session..."
 msgstr ""
 
-#: src/widgets/screenconsents.py:56
+#: src/widgets/screenconsents.py:52
 msgid "Consent"
 msgstr ""
 
-#: src/widgets/screenconsents.py:57
+#: src/widgets/screenconsents.py:53
 msgid ""
 "Please read the following information carefully before proceeding.Use "
 "scrolling to go through the text to the end."
 msgstr ""
 
-#: src/widgets/screenconsents.py:60
+#: src/widgets/screenconsents.py:56
 msgid ""
 "[b]Explanation of the experiment:[/b]\n"
 "We are very pleased that you are interested in participating in our "
@@ -602,12 +602,12 @@ msgid ""
 "stress or even risks are to be expected when performing the tasks."
 msgstr ""
 
-#: src/widgets/screenconsents.py:68
+#: src/widgets/screenconsents.py:64
 #, python-brace-format
 msgid "The study will take approximately {0} minutes to complete."
 msgstr ""
 
-#: src/widgets/screenconsents.py:70
+#: src/widgets/screenconsents.py:66
 msgid ""
 "[b]Voluntary Participation:[/b]\n"
 "Participation in the study is voluntary.You can revoke your consent to "
@@ -621,14 +621,14 @@ msgid ""
 "completing the tasks, no data will be transmitted."
 msgstr ""
 
-#: src/widgets/screenconsents.py:82
+#: src/widgets/screenconsents.py:78
 msgid ""
 "Please review the [ref=privacy][color=0000ff]Privacy Policy (press here)[/"
 "color][/ref] carefully for information on what kind of data we collect and "
 "how we intend to use them."
 msgstr ""
 
-#: src/widgets/screenconsents.py:86
+#: src/widgets/screenconsents.py:83
 #, python-brace-format
 msgid ""
 "[b]Contact regarding this study:[/b]\n"
@@ -647,7 +647,7 @@ msgid ""
 "[ref=mailto:{1}][color=0000ff]{1}[/color][/ref]"
 msgstr ""
 
-#: src/widgets/screenconsents.py:101
+#: src/widgets/screenconsents.py:97
 msgid ""
 "I hereby confirm that I have read and understood the participation "
 "information described above as well as the [ref=privacy]"
@@ -655,41 +655,56 @@ msgid ""
 "participation and Privacy Policy."
 msgstr ""
 
-#: src/widgets/screeninstructions.py:29
+#: src/widgets/screeninstructions.py:33
 msgid "{}. Practice Block"
 msgstr ""
 
-#: src/widgets/screeninstructions.py:32
+#: src/widgets/screeninstructions.py:36
 msgid "{}. Testing Block"
 msgstr ""
 
-#: src/widgets/screeninstructions.py:41
+#: src/widgets/screeninstructions.py:46
 msgid ""
 "Please read the following information carefully before proceeding. Use "
-"scrolling to go through the whole text. At the end of this text you'll find "
-"an exemplary image of the task in progress."
+"scrolling to go through the whole text. "
 msgstr ""
 
-#: src/widgets/screeninstructions.py:45
+#: src/widgets/screeninstructions.py:50
+msgid "This is the same task as in the first practice block."
+msgstr ""
+
+#: src/widgets/screeninstructions.py:51
+msgid "This is the same task as in the second practice block."
+msgstr ""
+
+#: src/widgets/screeninstructions.py:53
+msgid "In this block you will practice to perform this task."
+msgstr ""
+
+#: src/widgets/screeninstructions.py:54
+msgid "Below is an exemplary image of a successfully executed task."
+msgstr ""
+
+#: src/widgets/screeninstructions.py:64
 msgid "There are a total of {} trials in this block."
 msgstr ""
 
-#: src/widgets/screeninstructions.py:48
+#: src/widgets/screeninstructions.py:67
 msgid "s"
 msgstr ""
 
-#: src/widgets/screeninstructions.py:49
+#: src/widgets/screeninstructions.py:68
 #, python-brace-format
 msgid ""
 "You have {0} task{1} in this block. Be as quick and as accurate as possible "
 "while performing the task{1}"
 msgstr ""
 
-#: src/widgets/screeninstructions.py:51
+#: src/widgets/screeninstructions.py:70
 msgid "This will also be signaled to you by a short vibration. "
 msgstr ""
 
-#: src/widgets/screeninstructions.py:53
+#: src/widgets/screeninstructions.py:72
 #, python-brace-format
 msgid ""
 "A trial starts by giving you {0} seconds time to prepare for the trial. "
@@ -705,13 +720,13 @@ msgid ""
 "next trial. "
 msgstr ""
 
-#: src/widgets/screeninstructions.py:63
+#: src/widgets/screeninstructions.py:82
 msgid ""
 "The events for the start and end of the countdown for each trial will play "
 "distinctive sounds. "
 msgstr ""
 
-#: src/widgets/screeninstructions.py:65
+#: src/widgets/screeninstructions.py:84
 msgid ""
 "When the task starts, please hold your device sideways with both hands, so "
 "your thumbs can reach their respective side of the screen comfortably.\n"
@@ -728,16 +743,16 @@ msgid ""
 "sliders are deactivated once you let go of them."
 msgstr ""
 
-#: src/widgets/screeninstructions.py:77
+#: src/widgets/screeninstructions.py:96
 msgid ""
 "In addition you'll have to fulfill another task concurrently to the first "
 "task. On top of the [color=008000]green ring[/color] there's a "
 "[color=3f84f2]blue arch[/color] which length is controlled only by the "
 "slider with the blue handle and bar. You have to make the [color=3f84f2]blue "
-"arch[/color] touch the small [color=3f84f2]blue dot[/color] that is sitting "
-"on the [color=008000]green ring[/color]. Note that the blue slider still "
-"influences the size of the [b]white disk[/b] as well. Accomplish both tasks "
-"at the same time!"
+"arch[/color] reach the small [color=3f84f2]blue dot[/color] that is sitting "
+"on the [color=008000]green ring[/color] and not further. Note that the blue "
+"slider still influences the size of the [b]white disk[/b] as well. "
+"Accomplish both tasks at the same time!"
 msgstr ""
 
 #: src/widgets/screensgeneral.py:34
@@ -746,45 +761,48 @@ msgstr ""
 
 #: src/widgets/screensgeneral.py:35
 msgid ""
-"You can participate in a study by choosing from available studies below.\n"
-"\n"
+"There's currently 1 study available. You can participate in the study by "
+"clicking the button below.\n"
+"Please create a separate user account through the menu for each person who "
+"wants to participate in the study on this device."
 msgstr ""
 
-#: src/widgets/screensgeneral.py:41 src/widgets/scrolllabel.py:43
+#: src/widgets/screensgeneral.py:44 src/widgets/scrolllabel.py:43
 msgid "Loading..."
 msgstr ""
 
-#: src/widgets/screensgeneral.py:56
+#: src/widgets/screensgeneral.py:59
 msgid "[color=ff00ff][b]Thank you[/b][/color] for participating!"
 msgstr ""
 
 #: src/widgets/screensgeneral.py:61
+msgid ""
+"You can now [b]upload[/b] the research data by pressing the button below. By "
+"uploading the data you are making an important contribution to scientific "
+"research.Unless stated otherwise in the study's description we'd appreciate "
+"if you only upload your data the first time you participated in this study. "
+"Thank you.\n"
+msgstr ""
+
+#: src/widgets/screensgeneral.py:69
 msgid "Files were{} saved to [i]{}[/i].\n"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:61
+#: src/widgets/screensgeneral.py:69
 msgid " [b]not[/b]"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:63
+#: src/widgets/screensgeneral.py:71
 msgid ""
 "Research data were [b]not[/b] locally stored as files. You can enable "
 "storing research data on the device in the settings.\n"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:66
-msgid ""
-"You can now [b]upload[/b] the research data by pressing the button below. "
-"Unless stated otherwise in the study's description we'd appreciate if you "
-"only upload your data the first time you participated in this study. Thank "
-"you.\n"
-msgstr ""
-
-#: src/widgets/screensgeneral.py:73
+#: src/widgets/screensgeneral.py:77
 msgid "Uploading..."
 msgstr ""
 
-#: src/widgets/screensgeneral.py:73
+#: src/widgets/screensgeneral.py:77
 msgid ""
 "Waking up server.\n"
 "Please be patient."
@@ -806,7 +824,7 @@ msgstr ""
 msgid "not found"
 msgstr ""
 
-#: terms.py:15
+#: terms.py:14
 #, python-brace-format
 msgid ""
 "\n"

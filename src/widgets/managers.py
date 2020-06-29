@@ -9,7 +9,8 @@ from kivy.clock import Clock
 
 import plyer
 
-from . import (ScreenConsentCircleTask,
+from . import (BaseScreen,
+               ScreenConsentCircleTask,
                ScreenInstructCircleTask,
                ScreenCircleTask,
                ScreenOutro,
@@ -60,7 +61,6 @@ class UiManager(ScreenManager):
         self.app = App.get_running_app()
         # Keep track of where we cae from.
         self.last_visited = 'Home'
-        self.n_home_esc = 0  # Counter on how many times the back button was pressed on home screen.
         # Keep track of what study we're currently performing.
         self.task_consents = {'Circle Task': 'Consent CT'}
         self.task_instructions = {'Circle Task': 'Instructions CT'}
@@ -121,7 +121,7 @@ class UiManager(ScreenManager):
         # Advance to the instructions.
         self.transition.direction = 'up'
         self.transition.duration = 0.5
-        self.current = self.task_instructions[self.app.settings.current_task]
+        self.current = self.task_instructions[self.settings.current_task]
         # Collect demographic data.
         Clock.schedule_once(lambda dt: self.show_popup_demographics(), 1)
     
@@ -129,7 +129,7 @@ class UiManager(ScreenManager):
         """ Change to screen with current task. """
         self.transition.direction = 'up'
         self.transition.duration = 0.5
-        self.current = self.app.settings.current_task
+        self.current = self.settings.current_task
         
     def toggle_orientation(self, instance):
         """ Toggles between portrait and landscape screen orientation. """
@@ -151,8 +151,28 @@ class UiManager(ScreenManager):
             pass
         
     def open_settings(self):
+        """ Leads to display_settings. """
         self.app.open_settings()
         self.sidebar.set_state('close')
+        
+    def display_settings(self, settings):
+        """ Show the settings screen.
+        
+        :param settings: Settings Widget to add to screen.
+        """
+        if not self.has_screen('Settings'):
+            s = BaseScreen(name='Settings', navbar_enabled=True)
+            s.add_widget(settings)
+            self.add_widget(s)
+        self.transition.direction = 'right'
+        self.transition.duration = 0.5
+        self.current = 'Settings'
+        
+    def close_settings(self):
+        """ Change the screen to where we came from. """
+        self.transition.direction = 'left'
+        self.transition.duration = 0.5
+        self.current = self.last_visited
         
     def open_website(self, url):
         webbrowser.open_new(url)
@@ -303,9 +323,6 @@ class UiManager(ScreenManager):
         except AttributeError:
             pass
         
-        # Handle reset of back button presses on home screen.
-        if screen != self.current_screen:
-            self.n_home_esc = 0
         super(UiManager, self).on_current(instance, value)
     
     def on_upload_response(self, status, error_msg=None):
@@ -352,17 +369,8 @@ class UiManager(ScreenManager):
             elif self.sidebar.state == 'open':
                 self.sidebar.set_state('close')
             # Handle back button on screens.
-            elif self.current == 'Home':
-                # Using back button to quit the app after 2 presses lead to a freeze when coming back from another
-                # screen and not touching the screen after first back-press. Odd, right?! So make user touch screen.
-                self.n_home_esc += 1
-                if self.n_home_esc >= 1:
-                    #plyer.notification.notify(message=_("Press again to quit."), toast=True)
-                    self.show_popup_exit()
-            elif self.current == 'Outro' and self.last_visited == 'Settings':
-                # self.current == 'Settings' would never get called,
-                # as screen already changed by app.close_settings() on esc.
-                return True
+            elif self.current == 'Settings':
+                self.app.close_settings()
             # If we are in a task, stop that task.
             elif self.current in ['Circle Task']:
                 self.get_screen(self.current).stop_task(interrupt=True)
@@ -370,6 +378,13 @@ class UiManager(ScreenManager):
             elif self.current == 'Webview':
                 self.get_screen('Webview').key_back_handler()
                 self.go_home()
+            elif self.current == 'Outro':
+                self.go_home()
+            elif self.current == 'Home':
+                # Using back button to quit the app after 2 presses lead to a freeze when coming back from another
+                # screen and not touching the screen after first back-press. Odd, right?! So make user touch screen.
+                #plyer.notification.notify(message=_("Press again to quit."), toast=True)
+                self.show_popup_exit()
             else:
                 self.go_home()
             return True  # override the default behaviour
@@ -387,7 +402,7 @@ class UiManager(ScreenManager):
         self.show_user_select()
         self.transition.direction = 'up'
         self.transition.duration = 0.5
-        self.app.settings.current_task = task
+        self.settings.current_task = task
         self.current = self.task_consents[task]
         
     def task_finished(self, was_last_block=False):

@@ -25,6 +25,7 @@ from . import (BaseScreen,
                TextInputPopup,
                NumericInputPopup,
                DemographicsPopup,
+               DifficultyRatingPopup,
                )
 from ..i18n import _
 from ..utility import get_app_details
@@ -130,7 +131,17 @@ class UiManager(ScreenManager):
         self.transition.direction = 'up'
         self.transition.duration = 0.5
         self.current = self.settings.current_task
-        
+
+    def task_finished(self, was_last_block=False):
+        # Outro after last block.
+        self.transition.direction = 'down'
+        if was_last_block:
+            # Set orientation back to config value.
+            self.on_orientation(None, self.orientation)
+            self.current = 'Outro'
+        else:
+            self.current = self.task_instructions[self.settings.current_task]
+            
     def toggle_orientation(self, instance):
         """ Toggles between portrait and landscape screen orientation. """
         # Update the icon.
@@ -364,6 +375,8 @@ class UiManager(ScreenManager):
             elif isinstance(self.app.root_window.children[0], DemographicsPopup):
                 self.app.root_window.children[0].dismiss()
                 self.go_home()
+            elif isinstance(self.app.root_window.children[0], DifficultyRatingPopup):
+                return True  # Could call confirm, but it's not clear if that would be the user's intent.
             elif isinstance(self.app.root_window.children[0], BlockingPopup):
                 return True  # Do nothing. # ToDo: prevent closing follow-up popup.
             elif self.sidebar.state == 'open':
@@ -404,16 +417,6 @@ class UiManager(ScreenManager):
         self.transition.duration = 0.5
         self.settings.current_task = task
         self.current = self.task_consents[task]
-        
-    def task_finished(self, was_last_block=False):
-        # Outro after last block.
-        if was_last_block:
-            # Set orientation back to config value.
-            self.on_orientation(None, self.orientation)
-            self.current = 'Outro'
-        else:
-            self.transition.direction = 'down'
-            self.current = self.task_instructions[self.settings.current_task]
     
     def on_invalid_session(self, *args):
         """ Default event implementation. """

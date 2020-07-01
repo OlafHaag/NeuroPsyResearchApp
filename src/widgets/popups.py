@@ -505,8 +505,14 @@ class DemographicsPopup(MDDialog):
         self.ids.spacer_top_box.padding = (0, 0, 0, '8dp')
         self.ids.root_button_box.height = '64dp'
     
+    def on_open(self):
+        self._spacer_top = self.content_cls.height + self.ids.title.height + self.ids.root_button_box.height
+    
     def confirm(self):
-        self.dispatch('on_confirm', self.content_cls.get_age_group(), self.content_cls.get_gender_code())
+        self.dispatch('on_confirm',
+                      self.content_cls.get_age_group(),
+                      self.content_cls.get_gender_code(),
+                      self.content_cls.get_exp_code())
         self.dismiss()
         
     def on_confirm(self, *args):
@@ -541,6 +547,22 @@ class DemographicsContent(MDBoxLayout):
             callback=self.set_gender_item,
             width_mult=4,
         )
+        # Gaming experience with touch devices.
+        self.exp_answers = (self._no_answer_txt,
+                            _("daily"),
+                            _("several times a week"),
+                            _("several times a month"),
+                            _("several times a year"),
+                            _("never"))
+        exp_items = [{'text': txt} for txt in self.exp_answers]
+        self.ids.exp_dropdown.text = exp_items[0]['text']
+        self.exp_menu = MDDropdownMenu(
+            caller=self.ids.exp_dropdown,
+            items=exp_items,
+            use_icon_item=False,
+            callback=self.set_exp_item,
+            width_mult=4,
+        )
 
     def set_age_item(self, instance):
         self.ids.age_dropdown.set_item(instance.text)
@@ -550,11 +572,15 @@ class DemographicsContent(MDBoxLayout):
         self.ids.gender_dropdown.set_item(instance.text)
         self.gender_menu.dismiss()
     
+    def set_exp_item(self, instance):
+        self.ids.exp_dropdown.set_item(instance.text)
+        self.exp_menu.dismiss()
+        
     def get_age_group(self):
         if self.ids.age_dropdown.current_item == self._no_answer_txt:
             return ""
         else:
-            return self.ids.age_dropdown.current_item
+            return self.ids.age_dropdown.current_item  # Is '' by default when nothing was selected.
         
     def get_gender_code(self):
         if self.ids.gender_dropdown.current_item == _("male"):
@@ -565,6 +591,70 @@ class DemographicsContent(MDBoxLayout):
             return 'd'
         else:
             return ""
+        
+    def get_exp_code(self):
+        for i, answer in enumerate(self.exp_answers):
+            if self.ids.exp_dropdown.current_item == answer:
+                return i - 1  # No answer is hence coded as -1 here.
+        else:
+            return -1
+        
+        
+class DifficultyRatingPopup(MDDialog):
+    """ Ask the user how they perceived the difficulty of the task as this may be a confounding variable. """
+
+    def __init__(self, **kwargs):
+        # Gather options. Likert scale.
+        options = [_("Very easy"),  _("Easy"),  _("Neutral"), _("Difficult"), _("Very difficult")]
+        items = [CheckItem(text=opt, value=i, height=dp(36)) for i, opt in enumerate(options)]
+        default_kwargs = dict(
+            title=_("How difficult did you find the task?"),
+            type="confirmation",
+            auto_dismiss=False,
+            items=items,
+            buttons=[MDRaisedButton(
+                text=_("OK"),
+                on_release=lambda instance: self.confirm(),
+            ),
+            ]
+        )
+        default_kwargs.update(kwargs)
+        super(DifficultyRatingPopup, self).__init__(**default_kwargs)
+        self.register_event_type('on_confirm')
+        # Make 'Neutral' default.
+        self.items[2].set_icon(self.items[2].ids.check)
+
+    def set_height(self):
+        """ Racalculate the height of the popup. """
+        height = 0
+        for item in self.items:
+            if issubclass(item.__class__, BaseListItem):
+                height += item.height  # calculate height contents
+    
+        if (height + self.get_normal_height()) > Window.height:
+            self.set_normal_height()
+            self.ids.scroll.height = self.get_normal_height()
+        else:
+            self.ids.scroll.height = height
+    
+    def on_kv_post(self, base_widget):
+        self.set_height()
+        
+    def on_pre_open(self):
+        self.ids.scroll.scroll_y = 0.5
+        
+    def get_current_rating(self):
+        """ Get active item. """
+        for item in self.items:
+            if item.active:
+                return item.value
+                
+    def confirm(self):
+        self.dispatch('on_confirm', self.get_current_rating())
+        self.dismiss()
+        
+    def on_confirm(self, *args):
+        pass
         
         
 class PolicyPopup(SimplePopup):

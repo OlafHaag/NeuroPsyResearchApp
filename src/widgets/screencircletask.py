@@ -13,7 +13,7 @@ from kivymd.uix.behaviors import BackgroundColorBehavior
 import numpy as np
 import plyer
 
-from . import BaseScreen
+from . import BaseScreen, DifficultyRatingPopup
 from ..i18n import _
 from ..utility import time_fmt, create_device_identifier
 
@@ -282,17 +282,31 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
             self.dispatch('on_task_stopped', True)
             return
         
+        rating_popup = DifficultyRatingPopup()
+        rating_popup.bind(on_confirm=lambda instance, rating: self.save_rating(rating),
+                          on_dismiss=lambda instance: self.pre_task_stopped())
+        rating_popup.open()
+    
+    def pre_task_stopped(self):
+        """ """
         was_last_block = self.settings.current_block == (self.settings.circle_task.n_blocks
                                                          + bool(self.settings.circle_task.n_practice_trials) * 2)
         # Only add data of session if we're not practicing anymore.
         if not self.is_practice:
             self.data_collection()
-            if was_last_block:
-                self.add_session_data()
-            
+        else:
+            if self.meta_data['rating'] > 3:
+                msg = _("If the task was too difficult for you, go back and start over to practice some more.\n"
+                        "You can also increase the number of practice trials in the settings, if you really need to.")
+                self.manager.dispatch('on_info', title=_("Info"), text=msg)
+        if was_last_block:
+            self.add_session_data_to_manager()
         self.dispatch('on_task_stopped', was_last_block)
-    
+        
     def on_task_stopped(self, was_last_block=False):
+        """ Gets called AFTER all bindings on this are through.
+        Therefore, data collection must happen before this.
+        """
         if was_last_block:
             self.clear_data()
     
@@ -321,6 +335,20 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
             t = datetime.now().isoformat()
         return t
     
+    def save_rating(self, rating):
+        """ Save difficulty rating to meta-data. """
+        self.meta_data['rating'] = rating  # This is not really meta data, but it's the best place to put it.
+    
+    def data_collection(self):
+        """ Gather all the data for current block. """
+        # Scale normalized data to 0-100.
+        self.data[:, :2] = self.data[:, :2] * 100
+        # When writing we save as %.5f. For hashing this must match.
+        self.data = np.around(self.data, decimals=5)
+        self.collect_meta_data()
+        self.add_block_to_session()
+        self.add_data_to_manager()
+    
     def collect_meta_data(self):
         """ Collect information about context of data acquisition. """
         constrained_df = 'df2' if self.target2_switch else 'df1'
@@ -341,24 +369,10 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         self.meta_data['hash'] = md5(self.data).hexdigest()
         self.meta_data['columns'] = ['df1', 'df2', 'df1_grab', 'df1_release', 'df2_grab', 'df2_release']
     
-    def data_collection(self):
-        # Scale normalized data to 0-100.
-        self.data[:, :2] = self.data[:, :2] * 100
-        # When writing we save as %.5f. For hashing this must match.
-        self.data = np.around(self.data, decimals=5)
-        self.collect_meta_data()
-        self.add_block_to_session()
-        self.collect_data()
-        self.collect_data_email()
-    
-    def collect_data(self):
-        """ Add data to be written or uploaded to app data member. """
+    def add_data_to_manager(self):
+        """ Add data to be written or uploaded to data manager. """
         app = App.get_running_app()
         app.data_mgr.add_data(self.meta_data['columns'], self.data, self.meta_data.copy())
-    
-    def collect_data_email(self):
-        """ Add data to be sent via e-mail. """
-        app = App.get_running_app()
         app.data_mgr.add_data_email(self.data, self.meta_data.copy())
     
     def add_block_to_session(self):
@@ -371,19 +385,21 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
                 self.meta_data['hash'],
                 self.settings.circle_task.warm_up,
                 self.settings.circle_task.trial_duration,
-                self.settings.circle_task.cool_down]
+                self.settings.circle_task.cool_down,
+                self.meta_data['rating']]
         self.session_data.append(data)
     
-    def add_session_data(self):
+    def add_session_data_to_manager(self):
+        """ Send session data to data manager. """
         data = np.array(self.session_data)
-        header = 'task,time,time_iso,block,treatment,hash,warm_up,trial_duration,cool_down'
         meta_data = dict()
         meta_data['table'] = 'session'
         meta_data['time'] = time.time()
         meta_data['time_iso'] = self.get_current_time_iso(time_fmt)
         meta_data['task'] = self.settings.current_task
         meta_data['user'] = self.settings.current_user
-        columns = ['task', 'time', 'time_iso', 'block', 'treatment', 'hash', 'warm_up', 'trial_duration', 'cool_down']
+        columns = ['task', 'time', 'time_iso', 'block', 'treatment', 'hash', 'warm_up', 'trial_duration', 'cool_down',
+                   'rating']
         app = App.get_running_app()
         app.data_mgr.add_data(columns, data, meta_data)
         app.data_mgr.add_data_email([columns] + self.session_data, meta_data.copy())

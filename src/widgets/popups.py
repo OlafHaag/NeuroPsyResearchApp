@@ -261,13 +261,16 @@ class UsersPopup(MDDialog):
                 selected_user_id = item.value
             if item.value == user_id:
                 instance = item
+            if selected_user_id and instance:
+                break
         try:
             self.dispatch('on_remove_user', instance.value, instance.text)
             self.ids.box_items.remove_widget(instance)  # Maybe do garbage collection with gc.collect()?
             # If removed item was current user, select first entry.
-            if instance.value == selected_user_id:
-                self.items[0].set_icon(self.items[0].ids.check)
+            removed_id = instance.value
             self.items.remove(instance)
+            if removed_id == selected_user_id:
+                self.items[0].set_icon(self.items[0].ids.check)
         except AttributeError:
             print(f"ERROR: Can't remove user {user_id} from list. Not found.")
         self.set_height()

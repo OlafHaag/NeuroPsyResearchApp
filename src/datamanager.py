@@ -114,21 +114,25 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         device_properties['platform'] = platform
         return device_properties
     
-    def add_user_data(self, age="", gender=""):
+    def add_user_data(self, age="", gender="", gaming_experience=-1):
         """ Create a dataset to identify the user when uploading to server.
         
         :param age: Age-group of user.
         :type age: str
         :param gender: code for user's gender identification.
         :type gender: str
+        :param gaming_experience: How much does the user play mobile games?
+        :type: int
         """
         meta_data = dict()
         meta_data['table'] = 'user'
         meta_data['user'] = self._user_id
         meta_data['task'] = self.app.settings.current_task
         meta_data['time'] = time.time()
-        columns = ['id', 'device_id', 'age_group', 'gender']
-        data = np.array([self._user_id, create_device_identifier(), age, gender])
+        columns = ['id', 'device_id', 'age_group', 'gender', 'gaming_exp']
+        if gaming_experience < 0:
+            gaming_experience = ""  # This will translate to null in dataframe when read from csv.
+        data = np.array([self._user_id, create_device_identifier(), age, gender, gaming_experience])
         data = data.reshape((1, len(columns)))
         
         self.add_data(columns, data, meta_data, fmt='%s')

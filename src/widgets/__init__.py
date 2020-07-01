@@ -13,6 +13,7 @@ from .popups import (SimplePopup,
                      TextInputPopup,
                      NumericInputPopup,
                      DemographicsPopup,
+                     DifficultyRatingPopup,
                      )
 from .countdowns import CountDownCircle
 from .sliders import ScaleSlider

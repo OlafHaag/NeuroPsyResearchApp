@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-06-26 02:53+0200\n"
-"PO-Revision-Date: 2020-06-26 02:53+0200\n"
+"POT-Creation-Date: 2020-06-30 02:15+0200\n"
+"PO-Revision-Date: 2020-06-30 02:15+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: en\n"
@@ -46,7 +46,7 @@ msgstr ""
 msgid "Visit Online Analyses"
 msgstr ""
 
-#: src/widgets/navigation.kv:106 src/widgets/managers.py:223
+#: src/widgets/navigation.kv:106 src/widgets/managers.py:254
 msgid "About"
 msgstr ""
 
@@ -78,12 +78,16 @@ msgstr ""
 msgid "You can voluntarily give us demographic information about yourself."
 msgstr ""
 
-#: src/widgets/popups.kv:37
+#: src/widgets/popups.kv:39
 msgid "Age"
 msgstr ""
 
-#: src/widgets/popups.kv:47
+#: src/widgets/popups.kv:50
 msgid "Gender"
+msgstr ""
+
+#: src/widgets/popups.kv:61
+msgid "How often do you play two-handed video games on a touch device?"
 msgstr ""
 
 #: src/widgets/screencircletask.kv:79
@@ -98,11 +102,11 @@ msgstr ""
 msgid "Agree"
 msgstr ""
 
-#: src/widgets/screeninstructions.kv:62
+#: src/widgets/screeninstructions.kv:61
 msgid "When you are ready to begin press [b]{}[/b]."
 msgstr ""
 
-#: src/widgets/screeninstructions.kv:62 src/widgets/screeninstructions.kv:77
+#: src/widgets/screeninstructions.kv:61 src/widgets/screeninstructions.kv:76
 msgid "Start"
 msgstr ""
 
@@ -110,11 +114,11 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: src/widgets/screensgeneral.kv:57
+#: src/widgets/screensgeneral.kv:58
 msgid "Available Studies"
 msgstr ""
 
-#: src/widgets/screensgeneral.kv:68 src/app.py:106
+#: src/widgets/screensgeneral.kv:70 src/app.py:106
 msgid "Circle Task"
 msgstr ""
 
@@ -122,7 +126,7 @@ msgstr ""
 msgid "Upload"
 msgstr ""
 
-#: src/widgets/screensgeneral.kv:122
+#: src/widgets/screensgeneral.kv:121
 msgid "Send via E-Mail"
 msgstr ""
 
@@ -236,45 +240,45 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: src/datamanager.py:238
+#: src/datamanager.py:242
 msgid ""
 "Unable to write to file:\n"
 "{}\n"
 "Unknown data format."
 msgstr ""
 
-#: src/datamanager.py:255 src/datamanager.py:287
+#: src/datamanager.py:259 src/datamanager.py:291
 msgid "KeyError in Meta Data."
 msgstr ""
 
-#: src/datamanager.py:266
+#: src/datamanager.py:270
 msgid ""
 "Data missing.\n"
 "Failed to write\n"
 "{}."
 msgstr ""
 
-#: src/datamanager.py:312
+#: src/datamanager.py:316
 msgid "ERROR: Server not reachable:"
 msgstr ""
 
-#: src/datamanager.py:314
+#: src/datamanager.py:318
 msgid "ERROR: There was an error processing the upload."
 msgstr ""
 
-#: src/datamanager.py:330 src/datamanager.py:342
+#: src/datamanager.py:334 src/datamanager.py:346
 msgid "ERROR: There was an unexpected error during upload."
 msgstr ""
 
-#: src/datamanager.py:355 src/datamanager.py:356
+#: src/datamanager.py:359 src/datamanager.py:360
 msgid "ERROR"
 msgstr ""
 
-#: src/datamanager.py:392
+#: src/datamanager.py:396
 msgid "Permission to access Internet denied."
 msgstr ""
 
-#: src/datamanager.py:398
+#: src/datamanager.py:402
 msgid ""
 "Disclaimer:\n"
 "By submitting this e-mail you agree to the data processing and evaluation "
@@ -422,15 +426,15 @@ msgstr ""
 msgid "UNKNOWN."
 msgstr ""
 
-#: src/widgets/managers.py:193
+#: src/widgets/managers.py:224
 msgid "New User"
 msgstr ""
 
-#: src/widgets/managers.py:216
+#: src/widgets/managers.py:247
 msgid "Do you want to remove {}?"
 msgstr ""
 
-#: src/widgets/managers.py:224
+#: src/widgets/managers.py:255
 #, python-brace-format
 msgid ""
 "{appname}\n"
@@ -446,116 +450,161 @@ msgid ""
 "ref]"
 msgstr ""
 
-#: src/widgets/managers.py:261
+#: src/widgets/managers.py:292
 msgid "Warning"
 msgstr ""
 
-#: src/widgets/managers.py:271
+#: src/widgets/managers.py:302
 msgid "Error"
 msgstr ""
 
-#: src/widgets/managers.py:283
+#: src/widgets/managers.py:314
 msgid "Do you want to quit?"
 msgstr ""
 
-#: src/widgets/managers.py:313
+#: src/widgets/managers.py:341
 msgid "Success!"
 msgstr ""
 
-#: src/widgets/managers.py:313
+#: src/widgets/managers.py:341
 msgid "Upload successful!"
 msgstr ""
 
-#: src/widgets/managers.py:318
+#: src/widgets/managers.py:346
 msgid ""
 "Upload failed.\n"
 "Something went wrong."
 msgstr ""
 
-#: src/widgets/managers.py:319
+#: src/widgets/managers.py:347
 msgid "Please make sure the app is up-to-date."
 msgstr ""
 
-#: src/widgets/popups.py:33 src/widgets/popups.py:86 src/widgets/popups.py:114
-#: src/widgets/popups.py:177 src/widgets/popups.py:340
-#: src/widgets/popups.py:491 src/widgets/screensettings.py:157
+#: src/widgets/popups.py:34 src/widgets/popups.py:87 src/widgets/popups.py:115
+#: src/widgets/popups.py:178 src/widgets/popups.py:344
+#: src/widgets/popups.py:495 src/widgets/popups.py:614
+#: src/widgets/screensettings.py:157
 msgid "OK"
 msgstr ""
 
-#: src/widgets/popups.py:77
+#: src/widgets/popups.py:78
 msgid "Do you want to continue?"
 msgstr ""
 
-#: src/widgets/popups.py:82 src/widgets/popups.py:336
+#: src/widgets/popups.py:83 src/widgets/popups.py:340
 #: src/widgets/screensettings.py:153
 msgid "CANCEL"
 msgstr ""
 
-#: src/widgets/popups.py:108
+#: src/widgets/popups.py:109
 msgid "Choose Language"
 msgstr ""
 
-#: src/widgets/popups.py:109
+#: src/widgets/popups.py:110
 msgid "You can also change the language in the settings later."
 msgstr ""
 
-#: src/widgets/popups.py:171 src/widgets/popups.py:311
+#: src/widgets/popups.py:172 src/widgets/popups.py:315
 msgid "Choose Active User"
 msgstr ""
 
-#: src/widgets/popups.py:202 src/widgets/popups.py:313
+#: src/widgets/popups.py:203 src/widgets/popups.py:317
 msgid "Add User"
 msgstr ""
 
-#: src/widgets/popups.py:330
+#: src/widgets/popups.py:334
 msgid "Set New Value"
 msgstr ""
 
-#: src/widgets/popups.py:433 src/widgets/popups.py:447
+#: src/widgets/popups.py:437 src/widgets/popups.py:451
 msgid "Edit User"
 msgstr ""
 
-#: src/widgets/popups.py:447
+#: src/widgets/popups.py:451
 msgid "Add New User"
 msgstr ""
 
-#: src/widgets/popups.py:471
+#: src/widgets/popups.py:475
 msgid "This name is just for you. It won't be uploaded to the server."
 msgstr ""
 
-#: src/widgets/popups.py:472
+#: src/widgets/popups.py:476
 msgid "Enter Pseudonym"
 msgstr ""
 
-#: src/widgets/popups.py:484
+#: src/widgets/popups.py:488
 msgid "Demographic Information"
 msgstr ""
 
-#: src/widgets/popups.py:515
+#: src/widgets/popups.py:525
 msgid "no answer"
 msgstr ""
 
-#: src/widgets/popups.py:529 src/widgets/popups.py:554
+#: src/widgets/popups.py:539 src/widgets/popups.py:584
 msgid "male"
 msgstr ""
 
-#: src/widgets/popups.py:529 src/widgets/popups.py:556
+#: src/widgets/popups.py:539 src/widgets/popups.py:586
 msgid "female"
 msgstr ""
 
-#: src/widgets/popups.py:529 src/widgets/popups.py:558
+#: src/widgets/popups.py:539 src/widgets/popups.py:588
 msgid "diverse"
 msgstr ""
 
-#: src/widgets/popups.py:607
+#: src/widgets/popups.py:550
+msgid "daily"
+msgstr ""
+
+#: src/widgets/popups.py:551
+msgid "several times a week"
+msgstr ""
+
+#: src/widgets/popups.py:552
+msgid "several times a month"
+msgstr ""
+
+#: src/widgets/popups.py:553
+msgid "several times a year"
+msgstr ""
+
+#: src/widgets/popups.py:554
+msgid "never"
+msgstr ""
+
+#: src/widgets/popups.py:606
+msgid "Very easy"
+msgstr ""
+
+#: src/widgets/popups.py:606
+msgid "Easy"
+msgstr ""
+
+#: src/widgets/popups.py:606
+msgid "Neutral"
+msgstr ""
+
+#: src/widgets/popups.py:606
+msgid "Difficult"
+msgstr ""
+
+#: src/widgets/popups.py:606
+msgid "Very difficult"
+msgstr ""
+
+#: src/widgets/popups.py:609
+msgid "How difficult did you find the task?"
+msgstr ""
+
+#: src/widgets/popups.py:682
 msgid "DECLINE"
 msgstr ""
 
-#: src/widgets/popups.py:612
+#: src/widgets/popups.py:687
 msgid "ACCEPT"
 msgstr ""
 
-#: src/widgets/popups.py:643
+#: src/widgets/popups.py:718
 msgid "CLOSE"
 msgstr ""
 
@@ -579,6 +628,18 @@ msgstr ""
 msgid ""
 "Please read instructions again carefully and perform task accordingly.\n"
 "Aborting Session..."
+msgstr ""
+
+#: src/widgets/screencircletask.py:299
+msgid ""
+"If the task was too difficult for you, go back and start over to practice "
+"some more.\n"
+"You can also increase the number of practice trials in the settings, if you "
+"really need to."
+msgstr ""
+
+#: src/widgets/screencircletask.py:301
+msgid "Info"
 msgstr ""
 
 #: src/widgets/screenconsents.py:52

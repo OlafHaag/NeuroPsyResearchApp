@@ -30,9 +30,11 @@
 
     MDBoxLayout:
         orientation: 'vertical'
-        spacing: dp(24)
+        spacing: dp(8)
+        adaptive_height: True
 
         MDBoxLayout:
+            adaptive_height: True
             MDLabel:
                 text: _("Age")
                 shorten: True
@@ -43,6 +45,7 @@
                 pos_hint: {"center_y": .5}
 
         MDBoxLayout:
+            adaptive_height: True
             MDLabel:
                 text: _("Gender")
                 shorten: True
@@ -50,4 +53,13 @@
             MDDropDownItem:
                 id: gender_dropdown
                 on_release: root.gender_menu.open()
+                pos_hint: {"center_y": .5}
+
+        MDBoxLayout:
+            adaptive_height: True
+            MDLabel:
+                text: _("How often do you play two-handed video games on a touch device?")
+            MDDropDownItem:
+                id: exp_dropdown
+                on_release: root.exp_menu.open()
                 pos_hint: {"center_y": .5}

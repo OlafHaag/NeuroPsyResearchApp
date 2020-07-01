@@ -10,7 +10,7 @@ from .utility import create_user_identifier, switch_language, get_app_details
 from .datamanager import DataManager
 from .i18n import _, DEFAULT_LANGUAGE
 from .settings import SettingsContainer
-from .widgets import BaseScreen, SettingsWithTabbedPanels
+from .widgets import SettingsWithTabbedPanels
 from .settingsjson import LANGUAGE_CODE, LANGUAGE_SECTION, get_settings_general_json, get_settings_circle_task_json
 
 
@@ -109,19 +109,20 @@ class NeuroPsyResearchApp(MDApp):
     
     def display_settings(self, settings):
         """ Display the settings panel. """
-        manager = self.manager
-        if not manager.has_screen('Settings'):
-            s = BaseScreen(name='Settings', navbar_enabled=True)
-            s.add_widget(settings)
-            manager.add_widget(s)
-        manager.current = 'Settings'
+        if self.manager.current == 'Settings':
+            return False
+        self.manager.display_settings(settings)
+        return True
     
     def close_settings(self, *args):
-        """ Always gets called on escape regardless of current screen. """
-        if self.manager.current == 'Settings':
-            self.manager.current = self.manager.last_visited
-            # Hack, since after this manager.key_input is executed and screen is 'home' by then.
-            self.manager.n_home_esc -= 1
+        """ Close the settings screen. """
+        self.manager.close_settings()
+        
+    def _on_keyboard_settings(self, window, *largs):
+        """ Disable the kivy built-in keyboard handling.
+        We don't want people calling the settings while running a study.
+        """
+        pass
     
     def on_config_change(self, config, section, key, value):
         """ Fired when the section's key-value pair of a ConfigParser changes. """

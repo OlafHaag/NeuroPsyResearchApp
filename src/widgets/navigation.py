@@ -1,5 +1,6 @@
 from kivy.app import App
-from kivy.properties import StringProperty
+from kivy.metrics import dp
+from kivy.properties import StringProperty, NumericProperty
 from kivy.uix.boxlayout import BoxLayout
 
 from kivymd.uix.toolbar import MDToolbar
@@ -24,6 +25,7 @@ class TopBar(MDToolbar):
 
 class NavigationDrawer(MDNavigationDrawer):
     """ Hide the navigation drawer and disable swipe when it's disabled. """
+    swipe_edge_width = NumericProperty(dp(40))
     
     def set_disabled(self, value):
         super(NavigationDrawer, self).set_disabled(value)
@@ -31,7 +33,7 @@ class NavigationDrawer(MDNavigationDrawer):
             self.swipe_edge_width = -10
             self.elevation = 0
         else:
-            self.swipe_edge_width = 20
+            self.swipe_edge_width = dp(40)
             self.elevation = 10
     
     

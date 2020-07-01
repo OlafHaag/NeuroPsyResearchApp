@@ -12,7 +12,9 @@ class CheckItem(OneLineAvatarIconListItem):
     def __init__(self, **kwargs):
         # Add a value keyword that's stored in the item. If none is given, use the text.
         self.value = kwargs.pop('value', self.text)
+        self._height = kwargs.pop('height', 0)
         super(CheckItem, self).__init__(**kwargs)
+        self._txt_bot_pad = self.height * 0.5 - dp(9)
         self.register_event_type('on_active')
         self.active = False
         self.ids.check.allow_no_selection = False

@@ -3,6 +3,7 @@ import webbrowser
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.core.window import Window
+from kivy.metrics import dp
 from kivy.properties import StringProperty, ConfigParserProperty
 
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -192,7 +193,7 @@ class UsersPopup(MDDialog):
         user_aliases = app.settings.user_aliases
         items = list()
         for user_id in user_ids:
-            item = UserItem(text=user_aliases[user_ids.index(user_id)], value=user_id)
+            item = UserItem(text=user_aliases[user_ids.index(user_id)], value=user_id, height=dp(40))
             item.bind(on_remove=lambda instance: self.dispatch('on_remove_user', instance.value, instance.text),
                       on_edit=lambda instance: self.dispatch('on_edit_user', instance.value, instance.text),
                       on_active=lambda instance, state: self.set_current_user(instance.value, state),
@@ -228,7 +229,7 @@ class UsersPopup(MDDialog):
         # Get (asymmetric) difference between the two. Only those, that aren't present yet.
         diff = set(ids).difference(item_ids)
         for user_id in diff:
-            item = UserItem(text=user_aliases[ids.index(user_id)], value=user_id)
+            item = UserItem(text=user_aliases[ids.index(user_id)], value=user_id, height=dp(40))
             item.bind(on_remove=lambda instance: self.dispatch('on_remove_user', instance.value, instance.text),
                       on_edit=lambda instance: self.dispatch('on_edit_user', instance.value, instance.text),
                       on_active=lambda instance, state: self.set_current_user(instance.value, state),

@@ -276,8 +276,8 @@ class UsersPopup(MDDialog):
         self.set_height()
     
     def set_height(self):
+        """ Racalculate the height of the popup. """
         height = 0
-    
         for item in self.items:
             if issubclass(item.__class__, BaseListItem):
                 height += item.height  # calculate height contents
@@ -318,6 +318,8 @@ class UsersPopup(MDDialog):
     
     def on_pre_open(self):
         self.select_item(self.current_user)
+        # In case the orientation was changed, we need to update the height.
+        self.set_height()
     
     def on_dismiss(self):
         pass

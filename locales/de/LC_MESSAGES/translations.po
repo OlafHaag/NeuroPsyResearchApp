@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-06-30 02:16+0200\n"
-"PO-Revision-Date: 2020-06-30 02:19+0200\n"
+"POT-Creation-Date: 2020-07-04 02:13+0200\n"
+"PO-Revision-Date: 2020-07-04 02:13+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: de_DE\n"
@@ -622,8 +622,8 @@ msgstr ""
 "Bitte stellen Sie sicher, dass die Software auf dem neuesten Stand ist."
 
 #: src/widgets/popups.py:34 src/widgets/popups.py:87 src/widgets/popups.py:115
-#: src/widgets/popups.py:178 src/widgets/popups.py:344
-#: src/widgets/popups.py:495 src/widgets/popups.py:614
+#: src/widgets/popups.py:178 src/widgets/popups.py:346
+#: src/widgets/popups.py:497 src/widgets/popups.py:616
 #: src/widgets/screensettings.py:157
 msgid "OK"
 msgstr "OK"
@@ -632,7 +632,7 @@ msgstr "OK"
 msgid "Do you want to continue?"
 msgstr "Möchten Sie fortfahren?"
 
-#: src/widgets/popups.py:83 src/widgets/popups.py:340
+#: src/widgets/popups.py:83 src/widgets/popups.py:342
 #: src/widgets/screensettings.py:153
 msgid "CANCEL"
 msgstr "ABBRECHEN"
@@ -653,99 +653,99 @@ msgstr "Aktives Nutzer*innenkonto wählen"
 msgid "Add User"
 msgstr "Nutzer*in hinzufügen"
 
-#: src/widgets/popups.py:334
+#: src/widgets/popups.py:336
 msgid "Set New Value"
 msgstr "Neuen Wert setzen"
 
-#: src/widgets/popups.py:437 src/widgets/popups.py:451
+#: src/widgets/popups.py:439 src/widgets/popups.py:453
 msgid "Edit User"
 msgstr "Nutzer*in bearbeiten"
 
-#: src/widgets/popups.py:451
+#: src/widgets/popups.py:453
 msgid "Add New User"
 msgstr "Nutzer*in hinzufügen"
 
-#: src/widgets/popups.py:475
+#: src/widgets/popups.py:477
 msgid "This name is just for you. It won't be uploaded to the server."
 msgstr "Dieser Name ist nur für Sie. Er wird nicht auf den Server übertragen."
 
-#: src/widgets/popups.py:476
+#: src/widgets/popups.py:478
 msgid "Enter Pseudonym"
 msgstr "Pseudonym eingeben"
 
-#: src/widgets/popups.py:488
+#: src/widgets/popups.py:490
 msgid "Demographic Information"
 msgstr "Demografische Information"
 
-#: src/widgets/popups.py:525
+#: src/widgets/popups.py:527
 msgid "no answer"
 msgstr "keine Angabe"
 
-#: src/widgets/popups.py:539 src/widgets/popups.py:584
+#: src/widgets/popups.py:541 src/widgets/popups.py:586
 msgid "male"
 msgstr "männlich"
 
-#: src/widgets/popups.py:539 src/widgets/popups.py:586
+#: src/widgets/popups.py:541 src/widgets/popups.py:588
 msgid "female"
 msgstr "weiblich"
 
-#: src/widgets/popups.py:539 src/widgets/popups.py:588
+#: src/widgets/popups.py:541 src/widgets/popups.py:590
 msgid "diverse"
 msgstr "divers"
 
-#: src/widgets/popups.py:550
+#: src/widgets/popups.py:552
 msgid "daily"
 msgstr "täglich"
 
-#: src/widgets/popups.py:551
+#: src/widgets/popups.py:553
 msgid "several times a week"
 msgstr "mehrmals in der Woche"
 
-#: src/widgets/popups.py:552
+#: src/widgets/popups.py:554
 msgid "several times a month"
 msgstr "mehrmals im Monat"
 
-#: src/widgets/popups.py:553
+#: src/widgets/popups.py:555
 msgid "several times a year"
 msgstr "mehrmals im Jahr"
 
-#: src/widgets/popups.py:554
+#: src/widgets/popups.py:556
 msgid "never"
 msgstr "niemals"
 
-#: src/widgets/popups.py:606
+#: src/widgets/popups.py:608
 msgid "Very easy"
 msgstr "Sehr leicht"
 
-#: src/widgets/popups.py:606
+#: src/widgets/popups.py:608
 msgid "Easy"
 msgstr "Leicht"
 
-#: src/widgets/popups.py:606
+#: src/widgets/popups.py:608
 msgid "Neutral"
 msgstr "Neutral"
 
-#: src/widgets/popups.py:606
+#: src/widgets/popups.py:608
 msgid "Difficult"
 msgstr "Schwierig"
 
-#: src/widgets/popups.py:606
+#: src/widgets/popups.py:608
 msgid "Very difficult"
 msgstr "Sehr schwierig"
 
-#: src/widgets/popups.py:609
+#: src/widgets/popups.py:611
 msgid "How difficult did you find the task?"
 msgstr "Wie schwierig fanden Sie die Aufgabe?"
 
-#: src/widgets/popups.py:682
+#: src/widgets/popups.py:703
 msgid "DECLINE"
 msgstr "ABLEHNEN"
 
-#: src/widgets/popups.py:687
+#: src/widgets/popups.py:708
 msgid "ACCEPT"
 msgstr "ZUSTIMMEN"
 
-#: src/widgets/popups.py:718
+#: src/widgets/popups.py:739
 msgid "CLOSE"
 msgstr "SCHLIESSEN"
 

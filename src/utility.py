@@ -225,8 +225,8 @@ def markdown_to_bbcode(s):
             """
             s = match_object.group(target_group)
             # Headers
-            s = re.sub(r"^#\s+(.*?)\s*$", "[size=24][b]\\1[/b][/size]", s)  # Header first level
-            s = re.sub(r"^##\s+(.*?)\s*$", "[size=20][b]\\1[/b][/size]", s)  # Header second level
+            s = re.sub(r"^#\s+(.*?)\s*$", "[size=24dp][b]\\1[/b][/size]", s)  # Header first level
+            s = re.sub(r"^##\s+(.*?)\s*$", "[size=20dp][b]\\1[/b][/size]", s)  # Header second level
             s = re.sub(r"^###\s+(.*?)\s*$", "[b]\\1[/b]", s)  # Header third level
             s = re.sub(r"^####\s+(.*?)\s*$", "[i][b]\\1[/b][/i]", s)  # Header fourth level
             

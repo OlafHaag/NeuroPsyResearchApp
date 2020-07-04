@@ -1,3 +1,4 @@
+Translations: [Deutsch](./terms_de)
 
 # Terms & Conditions
 By downloading or using the app, these terms will automatically apply to you - you should make sure therefore that you read them carefully before using the app.  
@@ -25,7 +26,7 @@ At some point, we may wish to update the app. The app is currently available on 
 This Service may contain links to other sites. If you click on a third-party link, you will be directed to that site. Note that these external sites may not be operated by me. Therefore, I strongly advise you to review the Privacy Policy of these websites. I have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services.
 
 ## Changes to This Terms and Conditions
-We may update the Terms and Conditions from time to time. 
+We may update the Terms and Conditions from time to time.
 
 ## Contact Us
 If you have any questions or suggestions about these Terms and Conditions, do not hesitate to contact us at [contact@olafhaag.com](mailto:contact@olafhaag.com).

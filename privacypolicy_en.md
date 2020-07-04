@@ -1,3 +1,4 @@
+Translations: [Deutsch](./privacypolicy_de)
 
 # Privacy Policy
 The purpose of the NeuroPsyResearch app is to collect anonymous research data that its users, like yourself, provide to us **voluntarily** by participating in the studies the NeuroPsyResearch app offers. Participation in these studies is completely voluntary and users have a choice to share the collected research data with us after each completed study.

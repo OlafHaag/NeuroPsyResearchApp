@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:export-ydpi="3072"
+   inkscape:export-xdpi="3072"
+   inkscape:export-filename="D:\eigene_Werke\Software\DataScience\NeuroPsyResearchApp\res\icons\appstore_icon.png"
+   sodipodi:docname="appstore_icon.svg"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   id="SVGRoot"
+   version="1.1"
+   viewBox="0 0 48 48"
+   height="16"
+   width="16">
+  <defs
+     id="defs5069">
+    <linearGradient
+       id="linearGradient853"
+       inkscape:collect="always">
+      <stop
+         id="stop849"
+         offset="0"
+         style="stop-color:#008080;stop-opacity:1;" />
+      <stop
+         id="stop851"
+         offset="1"
+         style="stop-color:#00d694;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="0.17585404"
+       x2="40.158615"
+       y1="47.832298"
+       x1="8.0808582"
+       id="linearGradient855"
+       xlink:href="#linearGradient853"
+       inkscape:collect="always" />
+  </defs>
+  <sodipodi:namedview
+     inkscape:bbox-nodes="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:snap-bbox="true"
+     inkscape:guide-bbox="true"
+     showguides="false"
+     inkscape:document-rotation="0"
+     inkscape:snap-tangential="true"
+     inkscape:snap-perpendicular="true"
+     inkscape:snap-path-clip="true"
+     inkscape:grid-bbox="true"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-8"
+     inkscape:window-x="-8"
+     inkscape:window-height="1017"
+     inkscape:window-width="1920"
+     showgrid="false"
+     inkscape:current-layer="g862"
+     inkscape:document-units="px"
+     inkscape:cy="7.400862"
+     inkscape:cx="9.1302887"
+     inkscape:zoom="45.254834"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base">
+    <sodipodi:guide
+       id="guide841"
+       orientation="1,0"
+       position="24,24" />
+    <sodipodi:guide
+       id="guide856"
+       orientation="0,-1"
+       position="24,24" />
+    <sodipodi:guide
+       id="guide926"
+       orientation="1,0"
+       position="8.0808584,35.62756" />
+    <sodipodi:guide
+       id="guide928"
+       orientation="1,0"
+       position="40.158617,35.62756" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5072">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <rect
+       inkscape:label="background"
+       style="opacity:1;fill:url(#linearGradient855);fill-opacity:1;stroke:none;stroke-width:47.7205;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect5629"
+       width="48"
+       height="48"
+       x="0"
+       y="0" />
+    <g
+       transform="matrix(2.3108196,0,0,2.3108196,5.5047217,5.4214229)"
+       inkscape:label="icon"
+       id="g828">
+      <path
+         inkscape:label="countdown"
+         sodipodi:open="true"
+         d="M 8.0038643,4.1453009 A 3.894722,3.894722 0 0 1 11.602118,6.5495774 3.894722,3.894722 0 0 1 10.757849,10.794007 3.894722,3.894722 0 0 1 6.5134186,11.638277 3.894722,3.894722 0 0 1 4.1091423,8.0400229"
+         sodipodi:arc-type="arc"
+         sodipodi:end="3.1415927"
+         sodipodi:start="4.712389"
+         sodipodi:ry="3.894722"
+         sodipodi:rx="3.894722"
+         sodipodi:cy="8.0400229"
+         sodipodi:cx="8.0038643"
+         sodipodi:type="arc"
+         id="path848"
+         style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#d65cd5;stroke-width:0.519296;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.846774;paint-order:normal" />
+      <g
+         inkscape:groupmode="layer"
+         transform="rotate(-90,8.0039065,7.9996854)"
+         style="stroke-width:1.03859;stroke-miterlimit:4;stroke-dasharray:none"
+         inkscape:label="sliders"
+         id="g862">
+        <path
+           inkscape:connector-curvature="0"
+           id="path5649"
+           d="M 2.9721159,1.5354498 H 12.955425"
+           style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:0.831635;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           inkscape:label="slider2" />
+        <circle
+           r="1.28125"
+           cy="1.5354499"
+           cx="10.665632"
+           id="path5655"
+           style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#e4e4e4;stroke-width:0.25964814;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           inkscape:label="sliderhandle2" />
+        <path
+           clip-path="none"
+           style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:0.831635;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M 2.9721159,14.56508 H 12.955425"
+           id="path5647"
+           inkscape:connector-curvature="0"
+           inkscape:label="slider1" />
+        <circle
+           style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#e5e5e5;stroke-width:0.25964814;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="circle901"
+           cx="5.2623544"
+           cy="14.565082"
+           r="1.28125"
+           inkscape:label="sliderhandle1" />
+      </g>
+      <circle
+         r="1.947361"
+         cy="8.0399942"
+         cx="8.0037746"
+         style="opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:#02ff02;stroke-width:0.389472;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.701613;paint-order:normal"
+         id="path854"
+         inkscape:label="circle" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:6.79573px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.169894"
+       x="8.156373"
+       y="43.397324"
+       id="text4534"
+       inkscape:label="title_bottom"><tspan
+         sodipodi:role="line"
+         id="tspan4532"
+         x="8.156373"
+         y="43.397324"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.70183px;font-family:'Reem Kufi';-inkscape-font-specification:'Reem Kufi';fill:#ffffff;fill-opacity:1;stroke-width:0.169894">Research</tspan></text>
+    <text
+       inkscape:label="title_top"
+       id="text932"
+       y="8.7609692"
+       x="7.28757"
+       style="font-style:normal;font-weight:normal;font-size:6.79573px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.169894"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.70183px;font-family:'Reem Kufi';-inkscape-font-specification:'Reem Kufi';fill:#ffffff;fill-opacity:1;stroke-width:0.169894"
+         y="8.7609692"
+         x="7.28757"
+         id="tspan930"
+         sodipodi:role="line">NeuroPsy</tspan></text>
+  </g>
+</svg>

@@ -49,7 +49,7 @@ requirements = hostpython3==3.7.7, python3==3.7.7, kivy==1.11.1, kivymd==0.104.1
 presplash.filename = %(source.dir)s/res/loading.png
 
 # (str) Icon of the application
-icon.filename = %(source.dir)s/res/icons/mipmap-mdpi/ucmicon.png
+icon.filename = %(source.dir)s/res/icons/web_hi_res_512.png
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
 orientation = portrait

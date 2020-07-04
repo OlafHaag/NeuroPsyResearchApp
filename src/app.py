@@ -28,7 +28,7 @@ class NeuroPsyResearchApp(MDApp):
         If this method returns a widget (tree), it will be used as the root widget and added to the window.
         """
         # Theme.
-        self.icon = 'res/icons/mipmap-mdpi/ucmicon.png'
+        self.icon = 'res/icons/mipmap-xxhdpi/npsy-icon.png'
         self.theme_cls.theme_style = "Light"
         self.theme_cls.primary_palette = "Teal"
         # Settings.

@@ -99,7 +99,7 @@ class SettingsContainer(Widget):
 
 class SettingsCircleTask(Widget):
     """ Circle Task settings and properties. """
-    n_trials = ConfigParserProperty('25', 'CircleTask', 'n_trials', 'app', val_type=int,
+    n_trials = ConfigParserProperty('30', 'CircleTask', 'n_trials', 'app', val_type=int,
                                     verify=lambda x: x > 0, errorvalue=20)
     n_blocks = ConfigParserProperty('3', 'CircleTask', 'n_blocks', 'app', val_type=int,
                                     verify=lambda x: x > 0, errorvalue=3)

@@ -98,20 +98,53 @@
                 width: 2.
                 circle: self.center_x, self.center_y, min(self.width, self.height) * 0.25
 
-    # Goal Circle Task constrained
+    # Constraint on single df.
     FloatLayout:
-        opacity: int(root.is_constrained)
+        opacity: int(root.is_constrained and (root.constraint == 1))
         canvas:
             Color:
-                rgb: 0.25, 0.52, 0.95
+                rgb: df2.value_track_color if root.target2_switch else df1.value_track_color
             Line:
                 width: 5
-                circle: self.center_x, self.center_y, min(self.width, self.height) * 0.25, 0, (int(not root.target2_switch) * df1.value_normalized + int(root.target2_switch) * df2.value_normalized) * 360
+                circle: self.center_x, self.center_y, min(self.width, self.height) * 0.255, 0, (int(not root.target2_switch) * df1.value_normalized + int(root.target2_switch) * df2.value_normalized) * 360
             Ellipse:
                 size: [min(self.width, self.height) * 0.05] * 2
                 # Target should be at half of 125=62.5, so that df1=df2. That's an arc of 360°*0.625=225°.
                 # x=r*cos(angle), y=r*sin(angle), add to center position and subtract radius.
                 pos: [(self.center_x + min(self.width, self.height) * 0.25 * math.cos(math.radians(225)))-min(self.width, self.height) * 0.025, (self.center_y + min(self.width, self.height) * 0.25 * math.sin(math.radians(225)))-min(self.width, self.height) * 0.025]
+
+    # Constraints on both df.
+    FloatLayout:
+        opacity: int(root.is_constrained and (root.constraint == 2)) * 0.75
+        canvas:
+            Color:
+                rgb: df2.value_track_color
+            Line:
+                width: 5
+                # When we want slider value 125/2 to be at 180°, slider value 1.0 must be 288°.
+                circle: self.center_x, self.center_y, min(self.width, self.height) * 0.255, 0, df2.value_normalized * 288
+            Ellipse:
+                size: [min(self.width, self.height) * 0.05] * 2
+                # Target should be at half of the circle.
+                pos: [self.center_x - min(self.width, self.height) * 0.025, self.center_y - min(self.width, self.height) * 0.275]
+                angle_start: 0
+                angle_end: 180
+
+    FloatLayout:
+        opacity: int(root.is_constrained and (root.constraint == 2)) * 0.75
+        canvas:
+            Color:
+                rgb: df1.value_track_color
+            Line:
+                width: 5
+                # When we want slider value 125/2 to be at 180°, slider value 1.0 must be 288°.
+                circle: self.center_x, self.center_y, min(self.width, self.height) * 0.255, 0, -df1.value_normalized * 288
+            Ellipse:
+                size: [min(self.width, self.height) * 0.05] * 2
+                # Target should be at half of the circle.
+                pos: [self.center_x - min(self.width, self.height) * 0.025, self.center_y - min(self.width, self.height) * 0.275]
+                angle_start: 180
+                angle_end: 360
 
     CountDownCircle:
         id: anim_label

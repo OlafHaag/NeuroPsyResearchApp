@@ -4,7 +4,7 @@ import time
 from hashlib import md5
 
 from kivy.app import App
-from kivy.properties import ObjectProperty, StringProperty, BooleanProperty
+from kivy.properties import ObjectProperty, StringProperty, BooleanProperty, NumericProperty
 from kivy.core.audio import SoundLoader
 from kivy.clock import Clock
 
@@ -24,10 +24,11 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
     progress = StringProperty(_("Trial: ") + "0/0")
     # Workaround, since self.settings.circle_task.constraint doesn't seem to exist at init.
     is_constrained = BooleanProperty(False)
+    constraint = NumericProperty(0)  # 0 = no constraint, 1 = single constraint, 2 = both constrained
+    target2_switch = BooleanProperty(False)  # Which slider is controlling the second target.
     is_practice = BooleanProperty(True)
     
     def __init__(self, **kwargs):
-        self.target2_switch = False  # Which slider is controlling the second target.
         # Procedure related.
         self.register_event_type('on_task_stopped')
         self.schedule = None
@@ -65,22 +66,21 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         self.df2_default = self.ids.df2.value_normalized
     
     def set_slider_colors(self, slider, status=False):
-        """ Set the slider's handle and track colors depending on status.
+        """ Set the slider's handle and track colors depending on status and target_switch.
         
         :param slider: Slider instance.
         :param status: True if colored, False if not.
         """
-        if slider.orientation == 'vertical':
-            o = 'v'
-        else:
-            o = 'h'
-        slider.value_track = status
         if status:
-            slider.cursor_image = f'res/sliderhandle_{o}_on_color.png'
-            slider.cursor_disabled_image = f'res/sliderhandle_{o}_off_color.png'
+            if slider is self.ids.df1:
+                color = [0.25, 0.52, 0.95, 1]
+            else:
+                color = [0.95, 0.52, 0.25, 1]
         else:
-            slider.cursor_image = f'res/sliderhandle_{o}_on.png'
-            slider.cursor_disabled_image = f'res/sliderhandle_{o}_off.png'
+            color = [1, 1, 1, 1]
+        slider.value_track = status
+        slider.value_track_color = color
+        slider.children[0].color = color
     
     def on_pre_enter(self, *args):
         """ Setup this run of the task and initiate start. """
@@ -91,11 +91,15 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         else:
             self.max_trials = self.settings.circle_task.n_trials
         self.is_constrained = self.settings.circle_task.constraint
+        self.constraint = int(self.settings.circle_task.constraint_type)
         # df that is constrained is randomly chosen.
         self.target2_switch = np.random.choice([True, False])
         # Set visual indicator for which df is constrained.
-        df1_colored = self.is_constrained and not self.target2_switch
-        df2_colored = self.is_constrained and self.target2_switch
+        if self.is_constrained:
+            df1_colored = (self.constraint == 2) or not self.target2_switch
+            df2_colored = (self.constraint == 2) or self.target2_switch
+        else:
+            df1_colored = df2_colored = False
         self.set_slider_colors(self.ids.df1, df1_colored)
         self.set_slider_colors(self.ids.df2, df2_colored)
         # Remind to use sliders.
@@ -351,7 +355,12 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
     
     def collect_meta_data(self):
         """ Collect information about context of data acquisition. """
-        constrained_df = 'df2' if self.target2_switch else 'df1'
+        if self.is_constrained and (self.constraint == 1):
+            constrained_df = 'df2' if self.target2_switch else 'df1'
+        elif self.is_constrained and (self.constraint == 2):
+            constrained_df = 'df1|df2'  # Can't use comma as it is the separator in CSV (comma separated values).
+        else:
+            constrained_df = ''
         
         self.meta_data['table'] = 'trials'
         self.meta_data['device'] = create_device_identifier()
@@ -363,7 +372,7 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         else:
             self.meta_data['block'] = self.settings.current_block \
                                       - (bool(self.settings.circle_task.n_practice_trials) * 2)
-        self.meta_data['treatment'] = constrained_df if self.is_constrained else ''
+        self.meta_data['treatment'] = constrained_df
         self.meta_data['time_iso'] = self.get_current_time_iso(time_fmt)
         self.meta_data['time'] = time.time()
         self.meta_data['hash'] = md5(self.data).hexdigest()

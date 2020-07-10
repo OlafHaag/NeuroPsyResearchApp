@@ -6,6 +6,7 @@ from kivy.properties import (NumericProperty,
                              ConfigParserProperty,
                              )
 from kivy.clock import Clock
+import numpy as np
 
 from .utility import get_app_details
 
@@ -118,16 +119,20 @@ class SettingsCircleTask(Widget):
     def __init__(self, **kwargs):
         super(SettingsCircleTask, self).__init__(**kwargs)
         self.constraint = False
+        self.constraint_type = 0  # 0 = no constraint, 1 = single constraint, 2 = both constrained
         self.practice_block = 0
 
     def set_practice_block(self, block):
-        if self.n_practice_trials:
-            # Don't advance practice_block when the current block gets reset to 0.
-            if 0 < block <= 3:
-                self.practice_block += 1
-            # If we've done our 2 practice blocks, we're ready for the big leagues.
-            if self.practice_block > 2 or block == 0:
-                self.practice_block = 0
+        """ Decide which practice block we're on. """
+        # We don't count practice blocks when no practice trials are set.
+        if not self.n_practice_trials:
+            return
+        # Don't advance practice_block when the current block gets reset to 0.
+        if 0 < block <= 3:
+            self.practice_block += 1
+        # If we've done our 2 practice blocks, we're ready for the big leagues.
+        if self.practice_block > 2 or block == 0:
+            self.practice_block = 0
 
     def set_constraint_setting(self, block):
         # Second practice block and adjusted constrained block.
@@ -135,6 +140,11 @@ class SettingsCircleTask(Widget):
                           or (block == (self.constrained_block + bool(self.n_practice_trials) * 2))
 
     def on_new_block(self, new_block):
-        # We don't count practice blocks.
+        # Choose a constraint type for this run and stick with it, so practice and test constraint match.
+        if not self.constraint_type:
+            self.constraint_type = np.random.choice((1, 2))
+        # Reset constraint type with new session.
+        if new_block == 0:
+            self.constraint_type = 0
         self.set_practice_block(new_block)
         self.set_constraint_setting(new_block)

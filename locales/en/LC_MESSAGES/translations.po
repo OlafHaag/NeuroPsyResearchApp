@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-07-04 02:13+0200\n"
-"PO-Revision-Date: 2020-07-04 02:13+0200\n"
+"POT-Creation-Date: 2020-07-10 22:00+0200\n"
+"PO-Revision-Date: 2020-07-10 22:00+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: en\n"
@@ -106,7 +106,8 @@ msgstr ""
 msgid "When you are ready to begin press [b]{}[/b]."
 msgstr ""
 
-#: src/widgets/screeninstructions.kv:61 src/widgets/screeninstructions.kv:76
+#: src/widgets/screeninstructions.kv:61 src/widgets/screeninstructions.kv:77
+#: src/widgets/screeninstructions.py:142
 msgid "Start"
 msgstr ""
 
@@ -130,7 +131,7 @@ msgstr ""
 msgid "Send via E-Mail"
 msgstr ""
 
-#: src/widgets/sliders.kv:17
+#: src/widgets/sliders.kv:19
 msgid "Please use this slider."
 msgstr ""
 
@@ -608,29 +609,29 @@ msgstr ""
 msgid "CLOSE"
 msgstr ""
 
-#: src/widgets/screencircletask.py:24 src/widgets/screencircletask.py:176
+#: src/widgets/screencircletask.py:24 src/widgets/screencircletask.py:180
 msgid "Trial: "
 msgstr ""
 
-#: src/widgets/screencircletask.py:116
+#: src/widgets/screencircletask.py:120
 msgid "PREPARE"
 msgstr ""
 
-#: src/widgets/screencircletask.py:196
+#: src/widgets/screencircletask.py:200
 msgid "GET READY"
 msgstr ""
 
-#: src/widgets/screencircletask.py:228
+#: src/widgets/screencircletask.py:232
 msgid "FINISHED"
 msgstr ""
 
-#: src/widgets/screencircletask.py:276
+#: src/widgets/screencircletask.py:280
 msgid ""
 "Please read instructions again carefully and perform task accordingly.\n"
 "Aborting Session..."
 msgstr ""
 
-#: src/widgets/screencircletask.py:299
+#: src/widgets/screencircletask.py:303
 msgid ""
 "If the task was too difficult for you, go back and start over to practice "
 "some more.\n"
@@ -638,7 +639,7 @@ msgid ""
 "really need to."
 msgstr ""
 
-#: src/widgets/screencircletask.py:301
+#: src/widgets/screencircletask.py:305
 msgid "Info"
 msgstr ""
 
@@ -654,24 +655,30 @@ msgstr ""
 
 #: src/widgets/screenconsents.py:56
 msgid ""
-"[b]Explanation of the experiment:[/b]\n"
-"We are very pleased that you are interested in participating in our "
-"experiment. The goal of this experiment is to investigate how the accuracy "
-"of performing a motion task changes when the range of motion for solving the "
-"task gets limited by an additional, concurrent task. The respective tasks "
-"are described and explained to you in detail beforehand. No particular "
-"stress or even risks are to be expected when performing the tasks."
+"[b]Explanation of the study:[/b]\n"
+"We are very pleased that you are interested in participating in our study. "
+"The neuromotor system of our human bodies has more elements (such as joints, "
+"digits, and muscles) than are needed for accomplishing most typical tasks. "
+"For example, when pointing your finger at a position, there's still room for "
+"your elbow and shoulder to move. You could also reach that same position "
+"with either weak or strong muscle force. The goal of this study is to "
+"investigate how the accuracy of performing a motion task changes when the "
+"range of motion for solving the task gets limited by an additional "
+"concurrent task. Such information could be beneficial for athlete training "
+"or rehabilitation. The respective tasks are described and explained to you "
+"in detail beforehand. No particular stress or even risks are to be expected "
+"when performing the tasks."
 msgstr ""
 
-#: src/widgets/screenconsents.py:64
+#: src/widgets/screenconsents.py:69
 #, python-brace-format
 msgid "The study will take approximately {0} minutes to complete."
 msgstr ""
 
-#: src/widgets/screenconsents.py:66
+#: src/widgets/screenconsents.py:71
 msgid ""
 "[b]Voluntary Participation:[/b]\n"
-"Participation in the study is voluntary.You can revoke your consent to "
+"Participation in the study is voluntary. You can revoke your consent to "
 "participate in this study at any time while performing the tasks and without "
 "giving reasons, without incurring any disadvantages. To do so just press the "
 "back button during the study or close the app.After completing all the tasks "
@@ -679,17 +686,19 @@ msgid ""
 "can therefore withdraw your consent to the online storage and processing of "
 "the data until the end of task completion. If you cancel your participation "
 "before completion, or if you decide not to transmit the data after "
-"completing the tasks, no data will be transmitted."
+"completing the tasks, no data will be transmitted. You personally will not "
+"receive any benefits, financial or otherwise, from participating in this "
+"study."
 msgstr ""
 
-#: src/widgets/screenconsents.py:78
+#: src/widgets/screenconsents.py:85
 msgid ""
 "Please review the [ref=privacy][color=0000ff]Privacy Policy (press here)[/"
 "color][/ref] carefully for information on what kind of data we collect and "
 "how we intend to use them."
 msgstr ""
 
-#: src/widgets/screenconsents.py:83
+#: src/widgets/screenconsents.py:90
 #, python-brace-format
 msgid ""
 "[b]Contact regarding this study:[/b]\n"
@@ -708,7 +717,7 @@ msgid ""
 "[ref=mailto:{1}][color=0000ff]{1}[/color][/ref]"
 msgstr ""
 
-#: src/widgets/screenconsents.py:97
+#: src/widgets/screenconsents.py:104
 msgid ""
 "I hereby confirm that I have read and understood the participation "
 "information described above as well as the [ref=privacy]"
@@ -716,78 +725,78 @@ msgid ""
 "participation and Privacy Policy."
 msgstr ""
 
-#: src/widgets/screeninstructions.py:33
+#: src/widgets/screeninstructions.py:34
 msgid "{}. Practice Block"
 msgstr ""
 
-#: src/widgets/screeninstructions.py:36
+#: src/widgets/screeninstructions.py:37
 msgid "{}. Testing Block"
 msgstr ""
 
-#: src/widgets/screeninstructions.py:46
+#: src/widgets/screeninstructions.py:47
 msgid ""
 "Please read the following information carefully before proceeding. Use "
 "scrolling to go through the whole text. "
 msgstr ""
 
-#: src/widgets/screeninstructions.py:50
+#: src/widgets/screeninstructions.py:51
 msgid "This is the same task as in the first practice block."
 msgstr ""
 
-#: src/widgets/screeninstructions.py:51
+#: src/widgets/screeninstructions.py:52
 msgid "This is the same task as in the second practice block."
 msgstr ""
 
-#: src/widgets/screeninstructions.py:53
+#: src/widgets/screeninstructions.py:54
 msgid "In this block you will practice to perform this task."
 msgstr ""
 
-#: src/widgets/screeninstructions.py:54
+#: src/widgets/screeninstructions.py:55
 msgid "Below is an exemplary image of a successfully executed task."
 msgstr ""
 
-#: src/widgets/screeninstructions.py:64
+#: src/widgets/screeninstructions.py:65
 msgid "There are a total of {} trials in this block."
 msgstr ""
 
-#: src/widgets/screeninstructions.py:67
+#: src/widgets/screeninstructions.py:68
 msgid "s"
 msgstr ""
 
-#: src/widgets/screeninstructions.py:68
+#: src/widgets/screeninstructions.py:69
 #, python-brace-format
 msgid ""
 "You have {0} task{1} in this block. Be as quick and as accurate as possible "
 "while performing the task{1}"
 msgstr ""
 
-#: src/widgets/screeninstructions.py:70
+#: src/widgets/screeninstructions.py:71
 msgid "This will also be signaled to you by a short vibration. "
 msgstr ""
 
-#: src/widgets/screeninstructions.py:72
+#: src/widgets/screeninstructions.py:73
 #, python-brace-format
 msgid ""
-"A trial starts by giving you {0} seconds time to prepare for the trial. "
-"During this time the sliders are inactive and can't be moved. This is "
-"indicated by their dimmed color. After this preparation phase the sliders "
-"become active. You can then touch and move them. {4}You'll have {1} seconds "
-"time to complete the task{3}. The time limitation is visualized by counting "
-"down the seconds in the middle of the screen, as well as by an outer "
-"[color=ff00ff]purple ring[/color] that will close as the time runs out. A "
-"trial ends when the outer [color=ff00ff]purple ring[/color] closes and the "
-"countdown reaches 0.\n"
+"A trial starts by giving you {0} seconds to prepare for the trial. During "
+"this time, the sliders are inactive and can't be moved, which is indicated "
+"by their dimmed color. Do not touch the sliders yet during this preparation "
+"phase! Right after the preparation phase, the sliders become active. You can "
+"then touch and move them. {4}You'll have {1} seconds time to complete the "
+"task{3}. The time limitation is visualized by counting down the seconds in "
+"the middle of the screen, as well as by an outer [color=ff00ff]purple ring[/"
+"color] that will close as the time runs out. A trial ends when the outer "
+"[color=ff00ff]purple ring[/color] closes and the countdown reaches 0.\n"
 "Shortly thereafter ({2} seconds) you will be prompted to get ready for the "
 "next trial. "
 msgstr ""
 
-#: src/widgets/screeninstructions.py:82
+#: src/widgets/screeninstructions.py:85
 msgid ""
 "The events for the start and end of the countdown for each trial will play "
 "distinctive sounds. "
 msgstr ""
 
-#: src/widgets/screeninstructions.py:84
+#: src/widgets/screeninstructions.py:87
 msgid ""
 "When the task starts, please hold your device sideways with both hands, so "
 "your thumbs can reach their respective side of the screen comfortably.\n"
@@ -804,16 +813,32 @@ msgid ""
 "sliders are deactivated once you let go of them."
 msgstr ""
 
-#: src/widgets/screeninstructions.py:96
+#: src/widgets/screeninstructions.py:100
 msgid ""
 "In addition you'll have to fulfill another task concurrently to the first "
-"task. On top of the [color=008000]green ring[/color] there's a "
-"[color=3f84f2]blue arch[/color] which length is controlled only by the "
-"slider with the blue handle and bar. You have to make the [color=3f84f2]blue "
-"arch[/color] reach the small [color=3f84f2]blue dot[/color] that is sitting "
-"on the [color=008000]green ring[/color] and not further. Note that the blue "
-"slider still influences the size of the [b]white disk[/b] as well. "
-"Accomplish both tasks at the same time!"
+"task. Around the [color=008000]green ring[/color] there's a "
+"[color=3f84f2]colored arch[/color] which length is controlled only by the "
+"slider with the same colored handle and bar. You have to make the "
+"[color=3f84f2]colored arch[/color] reach the small [color=3f84f2]colored "
+"marker[/color] that is sitting on the [color=008000]green ring[/color] and "
+"not further. Note that the colored slider still influences the size of the "
+"[b]white disk[/b] as well. Accomplish both tasks at the same time!"
+msgstr ""
+
+#: src/widgets/screeninstructions.py:108
+msgid ""
+"In addition you'll have to fulfill another task concurrently to the first "
+"task. Around the [color=008000]green ring[/color] there're "
+"[color=3f84f2]colored archs[/color] which lengths are controlled only by the "
+"sliders with the same colored handle and bar. You have to make each of the "
+"[color=3f84f2]colored archs[/color] reach the small [color=3f84f2]marker[/"
+"color] of the same color that is sitting on the [color=008000]green ring[/"
+"color] and not further. Note that the sliders still influences the size of "
+"the [b]white disk[/b] as well. Accomplish both tasks at the same time!"
+msgstr ""
+
+#: src/widgets/screeninstructions.py:140
+msgid "Start Practice"
 msgstr ""
 
 #: src/widgets/screensgeneral.py:34

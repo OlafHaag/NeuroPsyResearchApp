@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-07-04 02:13+0200\n"
-"PO-Revision-Date: 2020-07-04 02:13+0200\n"
+"POT-Creation-Date: 2020-07-10 22:10+0200\n"
+"PO-Revision-Date: 2020-07-10 22:13+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: de_DE\n"
@@ -108,7 +108,8 @@ msgstr "Zustimmen"
 msgid "When you are ready to begin press [b]{}[/b]."
 msgstr "Wenn Sie bereit sind zu beginnen, drücken Sie [b]{}[/b]."
 
-#: src/widgets/screeninstructions.kv:61 src/widgets/screeninstructions.kv:76
+#: src/widgets/screeninstructions.kv:61 src/widgets/screeninstructions.kv:77
+#: src/widgets/screeninstructions.py:142
 msgid "Start"
 msgstr "Anfangen"
 
@@ -132,7 +133,7 @@ msgstr "Hochladen"
 msgid "Send via E-Mail"
 msgstr "E-Mail senden"
 
-#: src/widgets/sliders.kv:17
+#: src/widgets/sliders.kv:19
 msgid "Please use this slider."
 msgstr "Bitte diesen Regler nutzen."
 
@@ -749,25 +750,25 @@ msgstr "ZUSTIMMEN"
 msgid "CLOSE"
 msgstr "SCHLIESSEN"
 
-#: src/widgets/screencircletask.py:24 src/widgets/screencircletask.py:176
+#: src/widgets/screencircletask.py:24 src/widgets/screencircletask.py:180
 msgid "Trial: "
 msgstr "Durchgang: "
 
-#: src/widgets/screencircletask.py:116
+#: src/widgets/screencircletask.py:120
 msgid "PREPARE"
 msgstr "ACHTUNG"
 
-#: src/widgets/screencircletask.py:196
+#: src/widgets/screencircletask.py:200
 msgid "GET READY"
 msgstr ""
 "Bereit\n"
 "machen"
 
-#: src/widgets/screencircletask.py:228
+#: src/widgets/screencircletask.py:232
 msgid "FINISHED"
 msgstr "FERTIG"
 
-#: src/widgets/screencircletask.py:276
+#: src/widgets/screencircletask.py:280
 msgid ""
 "Please read instructions again carefully and perform task accordingly.\n"
 "Aborting Session..."
@@ -776,7 +777,7 @@ msgstr ""
 "die Aufgabe entsprechend aus.\n"
 "Sitzung wird abgebrochen ..."
 
-#: src/widgets/screencircletask.py:299
+#: src/widgets/screencircletask.py:303
 msgid ""
 "If the task was too difficult for you, go back and start over to practice "
 "some more.\n"
@@ -788,7 +789,7 @@ msgstr ""
 "Sie können auch die Anzahl der Übungsdurchgänge in den Einstellungen "
 "erhöhen, sollten Sie dies wirklich benötigen."
 
-#: src/widgets/screencircletask.py:301
+#: src/widgets/screencircletask.py:305
 msgid "Info"
 msgstr "Info"
 
@@ -806,32 +807,45 @@ msgstr ""
 
 #: src/widgets/screenconsents.py:56
 msgid ""
-"[b]Explanation of the experiment:[/b]\n"
-"We are very pleased that you are interested in participating in our "
-"experiment. The goal of this experiment is to investigate how the accuracy "
-"of performing a motion task changes when the range of motion for solving the "
-"task gets limited by an additional, concurrent task. The respective tasks "
-"are described and explained to you in detail beforehand. No particular "
-"stress or even risks are to be expected when performing the tasks."
+"[b]Explanation of the study:[/b]\n"
+"We are very pleased that you are interested in participating in our study. "
+"The neuromotor system of our human bodies has more elements (such as joints, "
+"digits, and muscles) than are needed for accomplishing most typical tasks. "
+"For example, when pointing your finger at a position, there's still room for "
+"your elbow and shoulder to move. You could also reach that same position "
+"with either weak or strong muscle force. The goal of this study is to "
+"investigate how the accuracy of performing a motion task changes when the "
+"range of motion for solving the task gets limited by an additional "
+"concurrent task. Such information could be beneficial for athlete training "
+"or rehabilitation. The respective tasks are described and explained to you "
+"in detail beforehand. No particular stress or even risks are to be expected "
+"when performing the tasks."
 msgstr ""
 "[b]Erklärung des Experiments:[/b]\n"
 "Es freut uns sehr, dass Sie Interesse daran haben, an unserem Experiment "
-"teilzunehmen. Dieses Experiment hat zum Ziel zu erforschen, wie sich die "
-"Genauigkeit bei der Ausführung einer Bewegungsaufgabe ändert, wenn die "
-"Bewegungsfreiheit zur Erfüllung dieser Aufgabe gleichzeitig durch eine "
-"zusätzliche Aufgabe eingeschränkt wird. Die jeweilige Aufgabe wird Ihnen "
-"zuvor genau beschrieben und erklärt. Bei der Ausführung der Aufgaben sind "
-"keinerlei besondere Belastungen oder gar Risiken zu erwarten."
+"teilzunehmen. Das neuromotorische System unseres menschlichen Körpers "
+"enthält mehr Elemente (wie Gelenke, Finger und Muskeln), als zur Erfüllung "
+"der meisten typischen Aufgaben nötig wäre. Wenn Sie beispielsweise mit Ihrem "
+"Finger auf eine Position zeigen, haben Ihr Ellbogen und Schulter noch etwas "
+"Spielraum für Bewegung. Sie können dieselbe Position auch entweder mit "
+"schwacher oder starker Muskelkraft erreichen. Dieses Experiment hat zum Ziel "
+"zu erforschen, wie sich die Genauigkeit bei der Ausführung einer "
+"Bewegungsaufgabe ändert, wenn die Bewegungsfreiheit zur Erfüllung dieser "
+"Aufgabe gleichzeitig durch eine zusätzliche Aufgabe eingeschränkt wird. "
+"Solche grundlegenden Informationen könnten für das Training von Sportlern "
+"oder in der Rehabilitation von Vorteil sein. Die jeweilige Aufgabe wird "
+"Ihnen zuvor genau beschrieben und erklärt. Bei der Ausführung der Aufgaben "
+"sind keinerlei besondere Belastungen oder gar Risiken zu erwarten."
 
-#: src/widgets/screenconsents.py:64
+#: src/widgets/screenconsents.py:69
 #, python-brace-format
 msgid "The study will take approximately {0} minutes to complete."
 msgstr "Die Dauer dieser Studie beträgt ungefähr {0} Minuten."
 
-#: src/widgets/screenconsents.py:66
+#: src/widgets/screenconsents.py:71
 msgid ""
 "[b]Voluntary Participation:[/b]\n"
-"Participation in the study is voluntary.You can revoke your consent to "
+"Participation in the study is voluntary. You can revoke your consent to "
 "participate in this study at any time while performing the tasks and without "
 "giving reasons, without incurring any disadvantages. To do so just press the "
 "back button during the study or close the app.After completing all the tasks "
@@ -839,7 +853,9 @@ msgid ""
 "can therefore withdraw your consent to the online storage and processing of "
 "the data until the end of task completion. If you cancel your participation "
 "before completion, or if you decide not to transmit the data after "
-"completing the tasks, no data will be transmitted."
+"completing the tasks, no data will be transmitted. You personally will not "
+"receive any benefits, financial or otherwise, from participating in this "
+"study."
 msgstr ""
 "[b]Freiwillige Teilnahme:[/b]\n"
 "Die Teilnahme an der Studie ist freiwillig. Sie können Ihre Einwilligung zur "
@@ -854,7 +870,7 @@ msgstr ""
 "Sie sich dazu, die Forschungsdaten nicht hochzuladen, werden keine Daten "
 "übertragen."
 
-#: src/widgets/screenconsents.py:78
+#: src/widgets/screenconsents.py:85
 msgid ""
 "Please review the [ref=privacy][color=0000ff]Privacy Policy (press here)[/"
 "color][/ref] carefully for information on what kind of data we collect and "
@@ -864,7 +880,7 @@ msgstr ""
 "drücken)[/color][/ref] sorgfältig durch, um Informationen darüber zu "
 "erhalten, welche Art von Daten wir sammeln und wie wir sie verwenden."
 
-#: src/widgets/screenconsents.py:83
+#: src/widgets/screenconsents.py:90
 #, python-brace-format
 msgid ""
 "[b]Contact regarding this study:[/b]\n"
@@ -887,7 +903,7 @@ msgstr ""
 "Fachbereich Psychologie\n"
 "AG Allgemeine und Biologische Psychologie\n"
 "AE Theoretische Neurowissenschaft\n"
-"PI: Prof. Dr. Dominik Endres\n"
+"Projektleitung: Prof. Dr. Dominik Endres\n"
 "Studienleitung: {0}\n"
 "\n"
 "Gutenbergstraße 18\n"
@@ -897,7 +913,7 @@ msgstr ""
 "marburg.de[/color][/ref]\n"
 "[ref=mailto:{1}][color=0000ff]{1}[/color][/ref]"
 
-#: src/widgets/screenconsents.py:97
+#: src/widgets/screenconsents.py:104
 msgid ""
 "I hereby confirm that I have read and understood the participation "
 "information described above as well as the [ref=privacy]"
@@ -909,15 +925,15 @@ msgstr ""
 "[color=0000ff]Datenschutzerklärung[/color][/ref] gelesen und verstanden "
 "habe. Ich stimme den Teilnahmebedingungen und den Datenschutzbestimmungen zu."
 
-#: src/widgets/screeninstructions.py:33
+#: src/widgets/screeninstructions.py:34
 msgid "{}. Practice Block"
 msgstr "{}. Übungsblock"
 
-#: src/widgets/screeninstructions.py:36
+#: src/widgets/screeninstructions.py:37
 msgid "{}. Testing Block"
 msgstr "{}. Testblock"
 
-#: src/widgets/screeninstructions.py:46
+#: src/widgets/screeninstructions.py:47
 msgid ""
 "Please read the following information carefully before proceeding. Use "
 "scrolling to go through the whole text. "
@@ -925,32 +941,32 @@ msgstr ""
 "Bitte lesen Sie die folgenden Informationen sorgfältig durch, bevor Sie "
 "fortfahren. Verwenden Sie den Bildlauf, um den gesamten Text durchzugehen. "
 
-#: src/widgets/screeninstructions.py:50
+#: src/widgets/screeninstructions.py:51
 msgid "This is the same task as in the first practice block."
 msgstr "Es folgt die gleiche Aufgabe wie im ersten Übungsblock."
 
-#: src/widgets/screeninstructions.py:51
+#: src/widgets/screeninstructions.py:52
 msgid "This is the same task as in the second practice block."
 msgstr "Es folgt die gleiche Aufgabe wie im zweiten Übungsblock."
 
-#: src/widgets/screeninstructions.py:53
+#: src/widgets/screeninstructions.py:54
 msgid "In this block you will practice to perform this task."
 msgstr "In diesem Block werden Sie die Ausführung der Aufgabe üben."
 
-#: src/widgets/screeninstructions.py:54
+#: src/widgets/screeninstructions.py:55
 msgid "Below is an exemplary image of a successfully executed task."
 msgstr ""
 "Unten sehen Sie ein beispielhaftes Bild der erfolgreich ausgeführten Aufgabe."
 
-#: src/widgets/screeninstructions.py:64
+#: src/widgets/screeninstructions.py:65
 msgid "There are a total of {} trials in this block."
 msgstr "In diesem Block absolvieren Sie insgesamt {} Durchgänge."
 
-#: src/widgets/screeninstructions.py:67
+#: src/widgets/screeninstructions.py:68
 msgid "s"
 msgstr "n"
 
-#: src/widgets/screeninstructions.py:68
+#: src/widgets/screeninstructions.py:69
 #, python-brace-format
 msgid ""
 "You have {0} task{1} in this block. Be as quick and as accurate as possible "
@@ -959,39 +975,40 @@ msgstr ""
 "Sie haben {0} Aufgabe{1} in diesem Block. Seien Sie so schnell und so genau "
 "wie möglich, während Sie die Aufgabe{1} ausführen."
 
-#: src/widgets/screeninstructions.py:70
+#: src/widgets/screeninstructions.py:71
 msgid "This will also be signaled to you by a short vibration. "
 msgstr "Dies wird Ihnen auch über eine kurze Vibration signalisiert. "
 
-#: src/widgets/screeninstructions.py:72
+#: src/widgets/screeninstructions.py:73
 #, python-brace-format
 msgid ""
-"A trial starts by giving you {0} seconds time to prepare for the trial. "
-"During this time the sliders are inactive and can't be moved. This is "
-"indicated by their dimmed color. After this preparation phase the sliders "
-"become active. You can then touch and move them. {4}You'll have {1} seconds "
-"time to complete the task{3}. The time limitation is visualized by counting "
-"down the seconds in the middle of the screen, as well as by an outer "
-"[color=ff00ff]purple ring[/color] that will close as the time runs out. A "
-"trial ends when the outer [color=ff00ff]purple ring[/color] closes and the "
-"countdown reaches 0.\n"
+"A trial starts by giving you {0} seconds to prepare for the trial. During "
+"this time, the sliders are inactive and can't be moved, which is indicated "
+"by their dimmed color. Do not touch the sliders yet during this preparation "
+"phase! Right after the preparation phase, the sliders become active. You can "
+"then touch and move them. {4}You'll have {1} seconds time to complete the "
+"task{3}. The time limitation is visualized by counting down the seconds in "
+"the middle of the screen, as well as by an outer [color=ff00ff]purple ring[/"
+"color] that will close as the time runs out. A trial ends when the outer "
+"[color=ff00ff]purple ring[/color] closes and the countdown reaches 0.\n"
 "Shortly thereafter ({2} seconds) you will be prompted to get ready for the "
 "next trial. "
 msgstr ""
 "Ein Durchgang beginnt damit, dass Sie {0} Sekunden Zeit haben, sich auf ihn "
 "vorzubereiten. Während dieser Zeit sind die Schieberegler inaktiv und können "
-"nicht verschoben werden. Nach dieser Vorbereitungsphase werden die "
-"Schieberegler aktiv und Sie können diese nun durch Berühren und halten "
-"bewegen. {4}Sie haben {1} Sekunden Zeit, um die Aufgabe{3} auszuführen. Die "
-"zeitliche Begrenzung wird durch Herunterzählen der Sekunden in der Mitte des "
-"Bildschirms sowie durch einen äußeren [color=ff00ff]lila Ring[/color] "
-"angezeigt, der sich mit Ablauf der Zeit langsam schließt. Ein Versuch endet, "
-"wenn sich der äußere [color=ff00ff]lila Ring[/color] schließt und der "
-"Countdown 0 erreicht.\n"
+"nicht verschoben werden, was durch ihre abgeschwächte Farbe angezeigt wird. "
+"Berühren Sie während dieser Vorbereitungsphase noch nicht die Schieberegler! "
+"Direkt nach der Vorbereitungsphase werden die Schieberegler aktiv und Sie "
+"können diese nun durch Berühren und halten bewegen. {4}Sie haben {1} "
+"Sekunden Zeit, um die Aufgabe{3} auszuführen. Die zeitliche Begrenzung wird "
+"durch Herunterzählen der Sekunden in der Mitte des Bildschirms sowie durch "
+"einen äußeren [color=ff00ff]lila Ring[/color] angezeigt, der sich mit Ablauf "
+"der Zeit langsam schließt. Ein Versuch endet, wenn sich der äußere "
+"[color=ff00ff]lila Ring[/color] schließt und der Countdown 0 erreicht.\n"
 "Kurz danach ({2} Sekunden) werden Sie aufgefordert, sich auf den nächsten "
 "Durchgang vorzubereiten. "
 
-#: src/widgets/screeninstructions.py:82
+#: src/widgets/screeninstructions.py:85
 msgid ""
 "The events for the start and end of the countdown for each trial will play "
 "distinctive sounds. "
@@ -999,7 +1016,7 @@ msgstr ""
 "Die Ereignisse für den Beginn und das Ende des Countdowns für jeden "
 "Durchgang geben jeweils einen speziellen Ton wieder. "
 
-#: src/widgets/screeninstructions.py:84
+#: src/widgets/screeninstructions.py:87
 msgid ""
 "When the task starts, please hold your device sideways with both hands, so "
 "your thumbs can reach their respective side of the screen comfortably.\n"
@@ -1031,26 +1048,51 @@ msgstr ""
 "and lassen Sie die Schieberegler los, wenn sie denken die Aufgabe erfüllt zu "
 "haben. Die Schieberegler werden deaktiviert, sobald Sie diese loslassen."
 
-#: src/widgets/screeninstructions.py:96
+#: src/widgets/screeninstructions.py:100
 msgid ""
 "In addition you'll have to fulfill another task concurrently to the first "
-"task. On top of the [color=008000]green ring[/color] there's a "
-"[color=3f84f2]blue arch[/color] which length is controlled only by the "
-"slider with the blue handle and bar. You have to make the [color=3f84f2]blue "
-"arch[/color] reach the small [color=3f84f2]blue dot[/color] that is sitting "
-"on the [color=008000]green ring[/color] and not further. Note that the blue "
-"slider still influences the size of the [b]white disk[/b] as well. "
-"Accomplish both tasks at the same time!"
+"task. Around the [color=008000]green ring[/color] there's a "
+"[color=3f84f2]colored arch[/color] which length is controlled only by the "
+"slider with the same colored handle and bar. You have to make the "
+"[color=3f84f2]colored arch[/color] reach the small [color=3f84f2]colored "
+"marker[/color] that is sitting on the [color=008000]green ring[/color] and "
+"not further. Note that the colored slider still influences the size of the "
+"[b]white disk[/b] as well. Accomplish both tasks at the same time!"
 msgstr ""
 "Außerdem müssen Sie zeitgleich zur ersten Aufgabe eine weitere Aufgabe "
-"erfüllen. Auf dem [color=008000]grünen Ring[/color] befindet sich ein "
-"[color=3f84f2]blauer Bogen[/color], dessen Länge nur durch den blau "
+"erfüllen. Um den [color=008000]grünen Ring[/color] befindet sich ein "
+"[color=3f84f2]farbiger Bogen[/color], dessen Länge nur durch den farbig "
 "markierten Schieberegler gesteuert wird. Sie müssen dafür sorgen, dass der "
-"[color=3f84f2]blaue Bogen[/color] den kleinen [color=3f84f2]blauen Punkt[/"
-"color] berührt, der auf dem [color=008000]grünen Ring[/color] sitzt und "
-"nicht darüber hinaus. Beachten Sie, dass der blaue Schieberegler auch "
+"[color=3f84f2]farbige Bogen[/color] den kleinen [color=3f84f2]farbigen "
+"Punkt[/color] berührt, der auf dem [color=008000]grünen Ring[/color] sitzt "
+"und nicht darüber hinaus. Beachten Sie, dass der farbige Schieberegler auch "
 "weiterhin die Größe der [b]weißen Scheibe[/b] beeinflusst. Erfüllen Sie "
 "beide Aufgaben gleichzeitig!"
+
+#: src/widgets/screeninstructions.py:108
+msgid ""
+"In addition you'll have to fulfill another task concurrently to the first "
+"task. Around the [color=008000]green ring[/color] there're "
+"[color=3f84f2]colored archs[/color] which lengths are controlled only by the "
+"sliders with the same colored handle and bar. You have to make each of the "
+"[color=3f84f2]colored archs[/color] reach the small [color=3f84f2]marker[/"
+"color] of the same color that is sitting on the [color=008000]green ring[/"
+"color] and not further. Note that the sliders still influences the size of "
+"the [b]white disk[/b] as well. Accomplish all tasks at the same time!"
+msgstr ""
+"Außerdem müssen Sie zeitgleich zur ersten Aufgabe eine weitere Aufgabe "
+"erfüllen. Um den [color=008000]grünen Ring[/color] befinden sich "
+"[color=3f84f2]farbige Bögen[/color], deren Längen nur durch die jeweils "
+"gleichfarbig markierten Schieberegler gesteuert werden. Sie müssen dafür "
+"sorgen, dass jeder der [color=3f84f2]farbigen Bögen[/color] die jeweilige "
+"kleine [color=3f84f2]gleichfarbige Markierung[/color] berührt, die auf dem "
+"[color=008000]grünen Ring[/color] liegt und nicht darüber hinaus. Beachten "
+"Sie, dass die Schieberegler auch weiterhin die Größe der [b]weißen Scheibe[/"
+"b] beeinflussen. Erfüllen Sie alle Aufgaben gleichzeitig!"
+
+#: src/widgets/screeninstructions.py:140
+msgid "Start Practice"
+msgstr "Übung anfangen"
 
 #: src/widgets/screensgeneral.py:34
 msgid "Welcome!"

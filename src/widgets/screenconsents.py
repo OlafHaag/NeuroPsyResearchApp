@@ -53,18 +53,23 @@ class ScreenConsentCircleTask(BaseScreen):
         read_notice = _("Please read the following information carefully before proceeding.Use scrolling to go "
                         "through the text to the end.")
         
-        explanation = _("[b]Explanation of the experiment:[/b]\n"
-                        "We are very pleased that you are interested in participating in our experiment. The goal "
-                        "of this experiment is to investigate how the accuracy of performing a motion task "
-                        "changes when the range of motion for solving the task gets limited by an additional, "
-                        "concurrent task. The respective tasks are described and explained to you in detail "
+        explanation = _("[b]Explanation of the study:[/b]\n"
+                        "We are very pleased that you are interested in participating in our study. "
+                        "The neuromotor system of our human bodies has more elements (such as joints, digits, and "
+                        "muscles) than are needed for accomplishing most typical tasks. For example, when pointing "
+                        "your finger at a position, there's still room for your elbow and shoulder to move. You could "
+                        "also reach that same position with either weak or strong muscle force. "
+                        "The goal of this study is to investigate how the accuracy of performing a motion task "
+                        "changes when the range of motion for solving the task gets limited by an additional "
+                        "concurrent task. Such information could be beneficial for athlete training or rehabilitation. "
+                        "The respective tasks are described and explained to you in detail "
                         "beforehand. No particular stress or even risks are to be expected when performing the "
                         "tasks.")
                              
         duration_msg = _("The study will take approximately {0} minutes to complete.").format(self.get_duration())
 
         voluntariness = _("[b]Voluntary Participation:[/b]\n"
-                          "Participation in the study is voluntary."
+                          "Participation in the study is voluntary. "
                           "You can revoke your consent to participate in this study at any time while performing "
                           "the tasks and without giving reasons, without incurring any disadvantages. To do so just "
                           "press the back button during the study or close the app."
@@ -73,7 +78,9 @@ class ScreenConsentCircleTask(BaseScreen):
                           "You can therefore withdraw your consent to the online storage and processing of the data "
                           "until the end of task completion. "
                           "If you cancel your participation before completion, or if you decide not to transmit the "
-                          "data after completing the tasks, no data will be transmitted.")
+                          "data after completing the tasks, no data will be transmitted. "
+                          "You personally will not receive any benefits, financial or otherwise, from participating in "
+                          "this study.")
         
         privacy_notice = _("Please review the [ref=privacy][color=0000ff]Privacy Policy (press here)[/color][/ref] "
                            "carefully for information on what kind of data we collect and how we intend to use them.")

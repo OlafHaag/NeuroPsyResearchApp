@@ -25,6 +25,7 @@ class ScreenInstructCircleTask(BaseScreen):
         self.title = self.get_title()
         self.set_message()
         self.set_img()
+        self.set_btn_text()
 
     def get_title(self):
         """ Set the title for this block. """
@@ -69,9 +70,11 @@ class ScreenInstructCircleTask(BaseScreen):
                         "the task{1}").format(n_tasks, task_suffix)
         vibration_msg = _("This will also be signaled to you by a short vibration. ") \
                         * self.settings.is_vibrate_enabled
-        time_limit_msg = _("A trial starts by giving you {0} seconds time to prepare for the trial. During this time "
-                           "the sliders are inactive and can't be moved. This is indicated by their dimmed color. "
-                           "After this preparation phase the sliders become active. You can then touch and move them. "
+        time_limit_msg = _("A trial starts by giving you {0} seconds to prepare for the trial. During this time, "
+                           "the sliders are inactive and can't be moved, which is indicated by their dimmed color. "
+                           "Do not touch the sliders yet during this preparation phase! "
+                           "Right after the preparation phase, the sliders become active. You can then touch and move "
+                           "them. "
                            "{4}"
                            "You'll have {1} seconds time to complete the task{3}. The time limitation is visualized "
                            "by counting down the seconds in the middle of the screen, as well as by an outer "
@@ -93,13 +96,24 @@ class ScreenInstructCircleTask(BaseScreen):
                       "task in a continuous motion and let go of the sliders when you think you reached the goal. "
                       "The sliders are deactivated once you let go of them."
                       )
-        task2_msg = _("In addition you'll have to fulfill another task concurrently to the first task. On top of the "
-                      "[color=008000]green ring[/color] there's a [color=3f84f2]blue arch[/color] which length is "
-                      "controlled only by the slider with the blue handle and bar. You have to make the "
-                      "[color=3f84f2]blue arch[/color] reach the small [color=3f84f2]blue dot[/color] that "
-                      "is sitting on the [color=008000]green ring[/color] and not further. Note that the blue slider "
-                      "still influences the size of the [b]white disk[/b] as well. Accomplish both tasks at the same "
-                      "time!")
+        if ct.constraint_type == 1:
+            task2_msg = _("In addition you'll have to fulfill another task concurrently to the first task. Around the "
+                      "[color=008000]green ring[/color] there's a [color=3f84f2]colored arch[/color] which length is "
+                      "controlled only by the slider with the same colored handle and bar. You have to make the "
+                      "[color=3f84f2]colored arch[/color] reach the small [color=3f84f2]colored marker[/color] that "
+                      "is sitting on the [color=008000]green ring[/color] and not further. Note that the colored "
+                      "slider still influences the size of the [b]white disk[/b] as well. Accomplish both tasks at the "
+                      "same time!")
+        elif ct.constraint_type == 2:
+            task2_msg = _("In addition you'll have to fulfill another task concurrently to the first task. Around the "
+                      "[color=008000]green ring[/color] there're [color=3f84f2]colored archs[/color] which lengths are "
+                      "controlled only by the sliders with the same colored handle and bar. You have to make each of "
+                      "the [color=3f84f2]colored archs[/color] reach the small [color=3f84f2]marker[/color] of the "
+                      "same color that is sitting on the [color=008000]green ring[/color] and not further. Note that "
+                      "the sliders still influences the size of the [b]white disk[/b] as well. Accomplish all tasks "
+                      "at the same time!")
+        else:
+            task2_msg = ""
         instructions = [n_tasks_msg,
                         task1_msg,
                         task2_msg * ct.constraint,
@@ -115,10 +129,19 @@ class ScreenInstructCircleTask(BaseScreen):
     
     def set_img(self):
         """ Set example image according to task condition. """
-        if self.settings.circle_task.constraint:
+        if self.settings.circle_task.constraint and self.settings.circle_task.constraint_type == 1:
             self.ids.instruct_img.source = 'res/CT_2tasks_trial.png'
+        elif self.settings.circle_task.constraint and self.settings.circle_task.constraint_type == 2:
+            self.ids.instruct_img.source = 'res/CT_3tasks_trial.png'
         else:
             self.ids.instruct_img.source = 'res/CT_1task_trial.png'
 
+    def set_btn_text(self):
+        ct = self.settings.circle_task
+        if ct.practice_block:
+            self.ids.start_btn.text = _("Start Practice")
+        else:
+            self.ids.start_btn.text = _("Start")
+        
     def on_proceed(self, *args):
         pass

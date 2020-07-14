@@ -87,7 +87,8 @@ class ScreenConsentCircleTask(BaseScreen):
 
         app = App.get_running_app()
         s = app.settings.circle_task
-        contact = _("[b]Contact regarding this study:[/b]\n"
+        contact = _("If you have any questions regarding this study, please direct them to the contacts listed below.\n"
+                    "[b]Contact regarding this study:[/b]\n"
                     "Philipps-Universität Marburg\n"
                     "Department of Psychology\n"
                     "Work group: General and Biological Psychology\n"

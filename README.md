@@ -49,3 +49,4 @@ Todorov, Emmanuel (2004). "Optimality principles in sensorimotor control". Natur
 ## Translation
 - Use PoEdit to extract strings wrapped in _("...") function calls.
 - In PoEdit add a new extractor for the kivy language files.
+- To export the Terms of Use and Privacy Policy to markdown files for all translated languages, run the terms.py and privacypolicy.py files respectively.

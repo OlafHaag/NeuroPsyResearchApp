@@ -1,4 +1,4 @@
-title=UCMResearch
+title=Your App Name
 author=Your Name
 contact=you@yourdomain.com
 source=https://your-repo.com/yoursourcecode

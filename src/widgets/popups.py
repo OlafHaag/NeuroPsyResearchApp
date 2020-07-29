@@ -682,7 +682,8 @@ class PolicyPopup(SimplePopup):
         details = get_app_details()
         text = markdown_to_bbcode(content_md).format(appname=details['appname'],
                                                      author=details['author'],
-                                                     contact=details['contact'])
+                                                     contact=details['contact'],
+                                                     source=details['source'])
         return text
 
     def on_pre_open(self):

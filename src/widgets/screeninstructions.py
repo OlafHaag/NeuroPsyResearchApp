@@ -49,25 +49,62 @@ class ScreenInstructCircleTask(BaseScreen):
         # When we're not in a practice block, give a hint at which task from the practice run is up next.
         if (not bool(ct.practice_block)) and bool(ct.n_practice_trials):  # Only if there were practice blocks.
             intro_msg += ("\n" + _("This is the same task as in the first practice block.")) * (not ct.constraint) \
-                       + ("\n" + _("This is the same task as in the second practice block.")) * ct.constraint
+                         + ("\n" + _("This is the same task as in the second practice block.")) * ct.constraint
         elif bool(ct.practice_block):
-            intro_msg += "\n" + _("In this block you will practice to perform this task.")
+            intro_msg += "\n" + _("In this block you will practice to perform this task. The instructions may sound "
+                                  "complicated, but it's easier understood once you practiced a bit.")
         intro_msg += " " + _("Below is an exemplary image of a successfully executed task.")
         self.ids.intro.text = intro_msg
         # The intro label still has its standard height, so we need to update it. When we get here for the first time,
         # the label's texture size is not yet initialized. So we do it before the next frame.
         Clock.schedule_once(lambda dt: self._set_intro_height(), 0)
-        
+    
         if ct.practice_block:
             n_trials = ct.n_practice_trials
         else:
             n_trials = ct.n_trials
-        n_trials_msg = _("There are a total of {} trials in this block.").format(n_trials)
         n_tasks = int(ct.constraint) + 1
         # ToDo: ngettext for plurals
         task_suffix = ct.constraint * _("s")
         n_tasks_msg = _("You have {0} task{1} in this block. Be as quick and as accurate as possible while performing "
                         "the task{1}").format(n_tasks, task_suffix)
+        task1_msg = _("When the task starts, please hold your device sideways with both hands, so your thumbs can "
+                      "reach their respective side of the screen comfortably.\n"
+                      "In the middle of the screen you'll see a [b]white disk[/b] enclosed by a larger "
+                      "[color=008000]green ring[/color]. On each side of the screen is a [b]slider[/b] with its handle "
+                      "near the lower end. Moving either of the slider handles upwards increases the radius of the "
+                      "[b]white disk[/b]. Your task in each trial is to enlarge the [b]white disk[/b] to the size of "
+                      "the [color=008000]green ring[/color] by using the [b]2 slider handles simultaneously[/b] with "
+                      "your thumbs. Use both sliders at the same time to make the [b]white disk[/b] touch the "
+                      "[color=008000]green ring[/color] accurately. "
+                      "Please perform the task in a continuous motion and let go of the sliders when you think you "
+                      "reached the goal. The sliders are deactivated once you let go of them, so take care not to "
+                      "lose touch to them by accident beforehand."
+                      )
+        if ct.constraint_type == 1:
+            task2_msg = _("In addition you'll have to fulfill another task concurrently to the first task. "
+                          "On the top of the [color=008000]green ring[/color] there's a short "
+                          "[color=3f84f2]colored arch[/color] as well as a marker of the same color some distance "
+                          "apart. One of the sliders is also marked by the same color. Moving this "
+                          "[color=3f84f2]colored slider[/color] upwards now also increases the length of the "
+                          "[color=3f84f2]colored arch[/color] in addition to increasing the radius of the "
+                          "[b]white disk[/b]. You have to make the [color=3f84f2]colored arch[/color] reach the "
+                          "small [color=3f84f2]colored marker[/color] on the [color=008000]green ring[/color] and "
+                          "not further. Accomplish both tasks at the same time!")
+        elif ct.constraint_type == 2:
+            task2_msg = _("In addition you'll have to fulfill another task concurrently to the first task. "
+                          "On the top of the [color=008000]green ring[/color] there are 2 short "
+                          "[color=3f84f2]colored archs[/color] going in opposite directions, as well as "
+                          "a marker with both colors at the bottom of the [color=008000]green ring[/color]. "
+                          "Each slider is also marked by one of the colors. Moving a "
+                          "[color=3f84f2]colored slider[/color] upwards now also increases the length of the "
+                          "respective [color=3f84f2]same colored arch[/color] in addition to increasing the radius of "
+                          "the [b]white disk[/b]. You have to make both [color=3f84f2]colored archs[/color] reach "
+                          "the small [color=3f84f2]colored marker[/color] and not further. Accomplish all tasks "
+                          "at the same time!")
+        else:
+            task2_msg = ""
+    
         vibration_msg = _("This will also be signaled to you by a short vibration. ") \
                         * self.settings.is_vibrate_enabled
         time_limit_msg = _("A trial starts by giving you {0} seconds to prepare for the trial. During this time, "
@@ -84,36 +121,8 @@ class ScreenInstructCircleTask(BaseScreen):
                            ).format(ct.warm_up, ct.trial_duration, ct.cool_down, task_suffix, vibration_msg)
         time_limit_msg += _("The events for the start and end of the countdown for each trial will play distinctive "
                             "sounds. ") * self.settings.is_sound_enabled
-        task1_msg = _("When the task starts, please hold your device sideways with both hands, so your thumbs can "
-                      "reach their respective side of the screen comfortably.\n"
-                      "In the middle of the screen you'll see a [b]white disk[/b] enclosed by a larger "
-                      "[color=008000]green ring[/color]. Your task in each trial is to match the size of this "
-                      "[b]white disk[/b] to the size of the [color=008000]green ring[/color], so the [b]white disk[/b] "
-                      "accurately touches the [color=008000]green ring[/color]. You control the size of the disc by "
-                      "using the [b]2 sliders[/b] located to the left and right side of the display with your thumbs. "
-                      "Both sliders have an influence on the size of the disc and you'll need both at the same time to "
-                      "get the [b]white disk[/b] to touch the [color=008000]green ring[/color]. Please perform the "
-                      "task in a continuous motion and let go of the sliders when you think you reached the goal. "
-                      "The sliders are deactivated once you let go of them."
-                      )
-        if ct.constraint_type == 1:
-            task2_msg = _("In addition you'll have to fulfill another task concurrently to the first task. Around the "
-                      "[color=008000]green ring[/color] there's a [color=3f84f2]colored arch[/color] which length is "
-                      "controlled only by the slider with the same colored handle and bar. You have to make the "
-                      "[color=3f84f2]colored arch[/color] reach the small [color=3f84f2]colored marker[/color] that "
-                      "is sitting on the [color=008000]green ring[/color] and not further. Note that the colored "
-                      "slider still influences the size of the [b]white disk[/b] as well. Accomplish both tasks at the "
-                      "same time!")
-        elif ct.constraint_type == 2:
-            task2_msg = _("In addition you'll have to fulfill another task concurrently to the first task. Around the "
-                      "[color=008000]green ring[/color] there're [color=3f84f2]colored archs[/color] which lengths are "
-                      "controlled only by the sliders with the same colored handle and bar. You have to make each of "
-                      "the [color=3f84f2]colored archs[/color] reach the small [color=3f84f2]marker[/color] of the "
-                      "same color that is sitting on the [color=008000]green ring[/color] and not further. Note that "
-                      "the sliders still influences the size of the [b]white disk[/b] as well. Accomplish all tasks "
-                      "at the same time!")
-        else:
-            task2_msg = ""
+        n_trials_msg = _("There are a total of {} trials in this block.").format(n_trials)
+        
         instructions = [n_tasks_msg,
                         task1_msg,
                         task2_msg * ct.constraint,

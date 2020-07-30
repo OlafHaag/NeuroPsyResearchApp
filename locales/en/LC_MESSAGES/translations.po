@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-07-29 18:49+0200\n"
-"PO-Revision-Date: 2020-07-29 18:49+0200\n"
+"POT-Creation-Date: 2020-07-30 00:19+0200\n"
+"PO-Revision-Date: 2020-07-30 00:19+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: en\n"
@@ -107,7 +107,7 @@ msgid "When you are ready to begin press [b]{}[/b]."
 msgstr ""
 
 #: src/widgets/screeninstructions.kv:61 src/widgets/screeninstructions.kv:77
-#: src/widgets/screeninstructions.py:144
+#: src/widgets/screeninstructions.py:153
 msgid "Start"
 msgstr ""
 
@@ -758,15 +758,13 @@ msgid "This is the same task as in the second practice block."
 msgstr ""
 
 #: src/widgets/screeninstructions.py:54
-msgid "In this block you will practice to perform this task."
+msgid ""
+"In this block you will practice to perform this task. The instructions may "
+"sound complicated, but it's easier understood once you practiced a bit."
 msgstr ""
 
-#: src/widgets/screeninstructions.py:55
+#: src/widgets/screeninstructions.py:56
 msgid "Below is an exemplary image of a successfully executed task."
-msgstr ""
-
-#: src/widgets/screeninstructions.py:65
-msgid "There are a total of {} trials in this block."
 msgstr ""
 
 #: src/widgets/screeninstructions.py:68
@@ -781,10 +779,55 @@ msgid ""
 msgstr ""
 
 #: src/widgets/screeninstructions.py:71
+msgid ""
+"When the task starts, please hold your device sideways with both hands, so "
+"your thumbs can reach their respective side of the screen comfortably.\n"
+"In the middle of the screen you'll see a [b]white disk[/b] enclosed by a "
+"larger [color=008000]green ring[/color]. On each side of the screen is a "
+"[b]slider[/b] with its handle near the lower end. Moving either of the "
+"slider handles upwards increases the radius of the [b]white disk[/b]. Your "
+"task in each trial is to enlarge the [b]white disk[/b] to the size of the "
+"[color=008000]green ring[/color] by using the [b]2 slider handles "
+"simultaneously[/b] with your thumbs. Use both sliders at the same time to "
+"make the [b]white disk[/b] touch the [color=008000]green ring[/color] "
+"accurately. Please perform the task in a continuous motion and let go of the "
+"sliders when you think you reached the goal. The sliders are deactivated "
+"once you let go of them, so take care not to lose touch to them by accident."
+msgstr ""
+
+#: src/widgets/screeninstructions.py:85
+msgid ""
+"In addition you'll have to fulfill another task concurrently to the first "
+"task.On the top of the [color=008000]green ring[/color] there's a short "
+"[color=3f84f2]colored arch[/color] as well as a marker of the same color "
+"some distance apart. One of the sliders is also marked by the same color. "
+"Moving this [color=3f84f2]colored slider[/color] upwards now also increases "
+"the length of the [color=3f84f2]colored arch[/color] in addition to "
+"increasing the radius of the [b]white disk[/b]. You have to make the "
+"[color=3f84f2]colored arch[/color] reach the small [color=3f84f2]colored "
+"marker[/color] on the [color=008000]green ring[/color] and not further. "
+"Accomplish both tasks at the same time!"
+msgstr ""
+
+#: src/widgets/screeninstructions.py:95
+msgid ""
+"In addition you'll have to fulfill another task concurrently to the first "
+"task. On the top of the [color=008000]green ring[/color] there are 2 short "
+"[color=3f84f2]colored archs[/color] going in opposite directions, as well as "
+"a marker with both colors at the bottom of the [color=008000]green ring[/"
+"color]. Each slider is also marked by one of the colors. Moving a "
+"[color=3f84f2]colored slider[/color] upwards now also increases the length "
+"of the respective [color=3f84f2]same colored arch[/color] in addition to "
+"increasing the radius of the [b]white disk[/b]. You have to make both "
+"[color=3f84f2]colored archs[/color] reach the small [color=3f84f2]colored "
+"marker[/color] and not further.  Accomplish all tasks at the same time!"
+msgstr ""
+
+#: src/widgets/screeninstructions.py:108
 msgid "This will also be signaled to you by a short vibration. "
 msgstr ""
 
-#: src/widgets/screeninstructions.py:73
+#: src/widgets/screeninstructions.py:110
 #, python-brace-format
 msgid ""
 "A trial starts by giving you {0} seconds to prepare for the trial. During "
@@ -800,54 +843,17 @@ msgid ""
 "next trial. "
 msgstr ""
 
-#: src/widgets/screeninstructions.py:85
+#: src/widgets/screeninstructions.py:122
 msgid ""
 "The events for the start and end of the countdown for each trial will play "
 "distinctive sounds. "
 msgstr ""
 
-#: src/widgets/screeninstructions.py:87
-msgid ""
-"When the task starts, please hold your device sideways with both hands, so "
-"your thumbs can reach their respective side of the screen comfortably.\n"
-"In the middle of the screen you'll see a [b]white disk[/b] enclosed by a "
-"larger [color=008000]green ring[/color]. Your task in each trial is to match "
-"the size of this [b]white disk[/b] to the size of the [color=008000]green "
-"ring[/color], so the [b]white disk[/b] accurately touches the "
-"[color=008000]green ring[/color]. You control the size of the disc by using "
-"the [b]2 sliders[/b] located to the left and right side of the display with "
-"your thumbs. Both sliders have an influence on the size of the disc and "
-"you'll need both at the same time to get the [b]white disk[/b] to touch the "
-"[color=008000]green ring[/color]. Please perform the task in a continuous "
-"motion and let go of the sliders when you think you reached the goal. The "
-"sliders are deactivated once you let go of them."
+#: src/widgets/screeninstructions.py:124
+msgid "There are a total of {} trials in this block."
 msgstr ""
 
-#: src/widgets/screeninstructions.py:100
-msgid ""
-"In addition you'll have to fulfill another task concurrently to the first "
-"task. Around the [color=008000]green ring[/color] there's a "
-"[color=3f84f2]colored arch[/color] which length is controlled only by the "
-"slider with the same colored handle and bar. You have to make the "
-"[color=3f84f2]colored arch[/color] reach the small [color=3f84f2]colored "
-"marker[/color] that is sitting on the [color=008000]green ring[/color] and "
-"not further. Note that the colored slider still influences the size of the "
-"[b]white disk[/b] as well. Accomplish both tasks at the same time!"
-msgstr ""
-
-#: src/widgets/screeninstructions.py:108
-msgid ""
-"In addition you'll have to fulfill another task concurrently to the first "
-"task. Around the [color=008000]green ring[/color] there're "
-"[color=3f84f2]colored archs[/color] which lengths are controlled only by the "
-"sliders with the same colored handle and bar. You have to make each of the "
-"[color=3f84f2]colored archs[/color] reach the small [color=3f84f2]marker[/"
-"color] of the same color that is sitting on the [color=008000]green ring[/"
-"color] and not further. Note that the sliders still influences the size of "
-"the [b]white disk[/b] as well. Accomplish all tasks at the same time!"
-msgstr ""
-
-#: src/widgets/screeninstructions.py:142
+#: src/widgets/screeninstructions.py:151
 msgid "Start Practice"
 msgstr ""
 

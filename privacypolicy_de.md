@@ -1,6 +1,6 @@
 
 # Datenschutzerklärung
-Der Zweck der NeuroPsyResearch App besteht darin, anonyme Forschungsdaten zu sammeln, die Nutzende wie Sie uns **freiwillig** zur Verfügung stellen, indem sie an den Studien teilnehmen, die die NeuroPsyResearch App anbietet. Die Teilnahme an diesen Studien ist vollkommen freiwillig und die Nutzenden haben die Wahl, die gesammelten Forschungsdaten nach jeder abgeschlossenen Studie mit uns zu teilen.
+Der Zweck der NeuroPsyResearch App besteht darin, anonyme Forschungsdaten zu sammeln, die Nutzende wie Sie uns **freiwillig** zur Verfügung stellen, indem sie an den Studien teilnehmen, die die NeuroPsyResearch App anbietet. Die Teilnahme an diesen Studien ist vollkommen freiwillig und die Nutzenden haben die Wahl, die gesammelten Forschungsdaten nach jeder abgeschlossenen Studie mit uns zu teilen. Diese Datenschutzerklärung erläutert unseren Umgang mit, die Verwendung und die Offenlegung bestimmter Informationen.
 
 ## Arten der gesammelten Daten
 - Forschungsdaten
@@ -9,7 +9,7 @@ Der Zweck der NeuroPsyResearch App besteht darin, anonyme Forschungsdaten zu sam
 
 
 ### Forschungsdaten
-Für jede Studie, an der ein\*e Nutzer\*in teilnimmt, sammelt die NeuroPsyResearch App Forschungsdaten, die für die Forschungsfrage der Studie relevant sind. Diese Daten können beispielsweise die Tageszeit, zu der die Studie durchgeführt wurde, psychometrische Messdaten wie Reaktionszeiten und erreichte Punkte umfassen, sind jedoch nicht darauf beschränkt.
+Für jede Studie, an der ein\*e Nutzer\*in teilnimmt, sammelt die NeuroPsyResearch App Forschungsdaten, die für die Forschungsfrage der Studie relevant sind. Diese Daten können beispielsweise die Tageszeit, zu der die Studie durchgeführt wurde, Messdaten wie Reaktionszeiten und erreichte Punkte umfassen, sind jedoch nicht darauf beschränkt.
 
 Für jedes in der Anwendung erstellte Nutzendenkonto wird als Teil der Forschungsdaten eine zufällig generierte Zeichenfolge erstellt, damit die Daten einer anonym teilnehmenden Person zugeordnet werden können. Der für das Nutzendenkonto gewählte Name ist nicht Teil der Forschungsdaten und wird beim Hochladen der Daten nicht übertragen.
 Die gesammelten Forschungsdaten geben keine Auskunft über die Identitäten der Teilnehmenden.
@@ -20,7 +20,7 @@ Es liegt in der Verantwortung der Teilnehmenden, ihr Nutzendenkonto und das Ger�
 Um Forschungsdaten einander zuzuordnen, die auf demselben Gerät aufgezeichnet wurden, wird eine Zeichenfolge übertragen, die keine persönliche Identifizierung des Geräts oder seiner Nutzenden ermöglicht. Wir erfassen auch Geräteinformationen wie die Bildschirmauflösung und den Betriebssystemtyp, auf dem die NeuroPsyResearch App ausgeführt wird. Diese Daten werden als Teil der Forschungsdaten betrachtet.
 
 ### Persönliche Daten
-Die NeuroPsyResearch App sammelt freiwillige Angaben über die Altersgruppe und das Geschlecht der Teilnehmenden. Die NeuroPsyResearch App sammelt **keine** sensiblen oder persönlich identifizierende Informationen wie Name, Adresse, Telefonnummer, IP-Adresse, Passwörter, Zahlungsdetails oder Sozialversicherungsnummer der Nutzenden. Daher können die Informationen nicht zur Identifizierung einer natürlichen Person verwendet werden und gelten daher nicht als personenbezogene Daten (Erwägungsgrund 26 DSGVO). 
+Die NeuroPsyResearch App sammelt freiwillige Angaben über die Altersgruppe und das Geschlecht der Teilnehmenden. Die NeuroPsyResearch App sammelt **keine** sensiblen oder persönlich identifizierende Informationen wie Name, Adresse, Telefonnummer, Passwörter, Zahlungsdetails oder Sozialversicherungsnummer der Nutzenden. Daher können die Informationen nicht zur Identifizierung einer natürlichen Person verwendet werden und gelten daher nicht als personenbezogene Daten (Erwägungsgrund 26 DSGVO). 
 Wenn sich ein\*e Benutzer\*in jedoch dazu entscheidet, uns per E-Mail zu kontaktieren, was völlig optional ist, verarbeiten wir und die Drittanbieter, die die E-Mail-Dienste bereitstellen, die E-Mail-Adresse und ihren Inhalt, um den Dienst bereitzustellen. Nach Erhalt einer E-Mail durch eine\*n Benutzer\*in werden alle in ihr enthaltenen Forschungsdaten extrahiert und daher von allen personenbezogenen Daten getrennt, die möglicherweise freiwillig in der E-Mail mit uns geteilt wurden. Die E-Mail wird zusammen mit allen persönlichen Informationen gelöscht, die uns innerhalb von 10 Tagen nach Erhalt der E-Mail zur Verfügung gestellt wurden. Auf diese Weise können die Forschungsdaten nicht zur Offenlegung der Identitäten der Nutzenden verwendet werden. Wir werden keine E-Mail-Adresse oder persönlichen Informationen von Nutzenden an andere Dritte weitergeben.
 
 ## Lokale Speicherung von Forschungsdaten
@@ -40,3 +40,5 @@ Die Ergebnisse und gesammelten Forschungsdaten aus jeder Studie in der NeuroPsyR
 Die gesammelten Forschungsdaten werden verarbeitet, um halbautomatisch ausgeführte statistische Analysen für wissenschaftliche Untersuchungen durchzuführen. In der NeuroPsyResearch App befindet sich ein Link zur Weboberfläche für die Analyse der Forschungsdaten.
 
 Nach Abschluss einer Studie werden die Daten möglicherweise in einem nationalen oder internationalen Datenarchiv gespeichert und veröffentlicht. Diese Studien folgen somit den Empfehlungen der Deutschen Forschungsgemeinschaft (DFG) und der Deutschen Gesellschaft für Psychologie (DGPs) zur Qualitätssicherung in der Forschung.
+
+**Zuletzt Aktualisiert:** 29. Juli 2020

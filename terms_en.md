@@ -1,15 +1,18 @@
-Translations: [Deutsch](./terms_de)
+Translations: [Deutsch](./terms_de)  
 
-# Terms & Conditions
-By downloading or using the app, these terms will automatically apply to you - you should make sure therefore that you read them carefully before using the app.  
-By using or accessing the NeuroPsyResearch you agree (i) that you are 13 years of age and the minimum age of digital consent in your country, (ii) if you are the age of majority in your jurisdiction or over, that you have read, understood, and accept to be bound by the Terms, and (iii) if you are between 13 (or the minimum age of digital consent, as applicable) and the age of majority in your jurisdiction, that your legal guardian has reviewed and agrees to these Terms.
+# Terms of Use
+## Definitions
+"You", "Your" and "User" refer to you, the person using the Service of Olaf Haag, including the software of the Service downloaded on Your personal device.  
+"We", "Us" and "Our" refer to the official web-site of the Service and the software of the Service, as well as the authors.  
+"Service" means the software NeuroPsyResearch.
 
+## Acceptance of Terms of Use
+By downloading or using the app, these Terms as well as our privacy policy and all applicable laws will automatically apply to you - you should make sure therefore that you read them carefully before using the app.  
+You must be 13 years of age or older and the minimum age of digital consent in your country to use this Service. If you are the age of majority in your jurisdiction or over, you consent that you have read, understood, and accept to be bound by the Terms, and if you are between 13 (or the minimum age of digital consent, as applicable) and the age of majority in your jurisdiction, you confirm that your legal guardian has reviewed and agrees to these Terms. If you do not agree to these terms and all applicable additional terms, then you have no right to access or use any of the Service.
+
+## Disclaimers and Warranties
 You are granted a nonexclusive, worldwide, and perpetual license to perform, display, and use the Product on the Device.  
-Olaf Haag built the NeuroPsyResearch app as an Open Source app. This SERVICE is provided by Olaf Haag at no cost and is intended for use as is.
-You're not allowed to attempt to extract the source code of the app from its binary distribution and installation. The source code is provided separately under the open MIT license. The app itself, and all the trade marks, copyright, database rights and other intellectual property rights related to it, still belong to Olaf Haag.
-
-Olaf Haag is committed to ensuring that the app is as useful and efficient as possible. For that reason, we reserve the right to make changes to the app.
-
+Olaf Haag built the NeuroPsyResearch app as an Open Source app. This Service is provided by Olaf Haag at no cost and is intended for use as is.  
 The NeuroPsyResearch app stores and processes de-identified data that you have provided to us, in order to provide the Service. As it is with internet based services, a 100% anonymity cannot be guaranteed. It's your responsibility to keep your phone and access to the app secure. We therefore recommend that you do not jailbreak or root your phone, which is the process of removing software restrictions and limitations imposed by the official operating system of your device. It could make your phone vulnerable to malware/viruses/malicious programs, compromise your phone's security features and it could mean that the NeuroPsyResearch app won't work properly or at all.
 
 You should be aware that there are certain things that Olaf Haag will not take responsibility for. Certain functions of the app will require the app to have an active internet connection. The connection can be Wi-Fi, or provided by your mobile network provider, but Olaf Haag cannot take responsibility for the app not working at full functionality if you don't have access to Wi-Fi, and you don't have any of your data allowance left.
@@ -20,15 +23,24 @@ Along the same lines, Olaf Haag cannot always take responsibility for the way yo
 
 With respect to Olaf Haag's responsibility for your use of the app, when you're using the app, it's important to bear in mind that although we endeavour to ensure that it is updated and correct at all times, we do rely on third parties to provide information to us so that we can make it available to you. Olaf Haag accepts no liability for any loss, direct or indirect, you experience as a result of relying wholly on this functionality of the app.
 
-At some point, we may wish to update the app. The app is currently available on Android - the requirements for system (and for any additional systems we decide to extend the availability of the app to) may change, and you'll need to download the updates if you want to keep using the app. Olaf Haag does not promise that the app will always be updated so that it is relevant to you and/or works with the Android version that you have installed on your device. However, you promise to always accept updates to the application when offered to you, We may also wish to stop providing the app, and may terminate use of it at any time without giving notice of termination to you. Unless we tell you otherwise, upon any termination, (a) the rights and licenses granted to you in these terms will end; (b) you must stop using the app, and (if needed) delete it from your device.
-
 ## Links to Other Sites
-This Service may contain links to other sites. If you click on a third-party link, you will be directed to that site. Note that these external sites may not be operated by me. Therefore, I strongly advise you to review the Privacy Policy of these websites. I have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services.
+This Service may contain links to other sites. If you click on a third-party link, you will be directed to that site. Note that these external sites may not be operated by Olaf Haag. Therefore, Olaf Haag strongly advises you to review the Privacy Policy of these websites. Olaf Haag has no control over and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services.
 
-## Changes to This Terms and Conditions
-We may update the Terms and Conditions from time to time.
+## Intellectual Property Rights
+The source code to this Service is provided separately under the open MIT license at: 
+[https://github.com/OlafHaag/NeuroPsyResearchApp](https://github.com/OlafHaag/NeuroPsyResearchApp).
+The app itself, and all the trade marks, copyright, database rights and other intellectual property rights related to it, still belong to Olaf Haag.
+
+## Updates And Availability
+Olaf Haag is committed to ensuring that the app is as useful and efficient as possible. For that reason, we reserve the right to make changes to the app. The app is currently available on Android - the requirements for system (and for any additional systems we decide to extend the availability of the app to) may change, and you'll need to download the updates if you want to keep using the app. If you do not accept updates to the application, your right to use and access the Services will immediately cease. Olaf Haag does not promise that the app will always be updated so that it is relevant to you and/or works with the Android version that you have installed on your device.
+
+## Termination
+Olaf Haag may wish to stop providing the app and may terminate or suspend any and all Services immediately, without prior notice or liability, for any reason whatsoever. Unless we tell you otherwise, upon any termination, (a) the rights and licenses granted to you in these Terms will end; (b) you must stop using the app, and (if needed) delete it from your device.You may terminate this Agreement yourself by ceasing to use the Services and removing the application from your devices. All provisions of the Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership and rights provisions and warranties, warranty disclaimers, indemnity and limitations of liability.
+
+## Changes to This Terms of Use
+We may revise the Terms of Use from time to time. These changes will not be retroactive. The user should look at the Agreement regularly. Olaf Haag will also update the “Last updated” date at the bottom of this Agreement. By continuing to use the Service or retaining access to the Service after the revisions are in effect, the user agrees to be bound by the revised Agreement. If the modified Agreement is not acceptable to the user, user’s only recourse is to cease using the Service.
 
 ## Contact Us
-If you have any questions or suggestions about these Terms and Conditions, do not hesitate to contact us at [contact@olafhaag.com](mailto:contact@olafhaag.com).
+If you have any questions or suggestions about these Terms of Use, do not hesitate to contact us at [contact@olafhaag.com](mailto:contact@olafhaag.com).
 
-This Terms and Conditions page was partly generated by [App Privacy Policy Generator](https://app-privacy-policy-generator.firebaseapp.com/).
+**Last Updated:** July 29th 2020

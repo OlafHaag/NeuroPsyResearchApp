@@ -1,4 +1,3 @@
-import pickle
 from datetime import datetime
 import time
 from hashlib import md5

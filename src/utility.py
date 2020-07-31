@@ -260,5 +260,6 @@ def create_markdown_file(path, content_md):
     This is useful in production when you want to have in-app policies synchronized with online policies.
     """
     details = get_app_details()
-    text = content_md.format(appname=details['appname'], author=details['author'], contact=details['contact'])
+    text = content_md.format(appname=details['appname'], author=details['author'], contact=details['contact'],
+                             source=details['source'])
     path.write_text(text, encoding='UTF-8')

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-07-30 00:50+0200\n"
-"PO-Revision-Date: 2020-07-31 02:30+0200\n"
+"POT-Creation-Date: 2020-08-02 17:53+0200\n"
+"PO-Revision-Date: 2020-08-02 17:55+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: de_DE\n"
@@ -767,25 +767,25 @@ msgstr "ZUSTIMMEN"
 msgid "CLOSE"
 msgstr "SCHLIESSEN"
 
-#: src/widgets/screencircletask.py:24 src/widgets/screencircletask.py:180
+#: src/widgets/screencircletask.py:23 src/widgets/screencircletask.py:179
 msgid "Trial: "
 msgstr "Durchgang: "
 
-#: src/widgets/screencircletask.py:120
+#: src/widgets/screencircletask.py:119
 msgid "PREPARE"
 msgstr "ACHTUNG"
 
-#: src/widgets/screencircletask.py:200
+#: src/widgets/screencircletask.py:199
 msgid "GET READY"
 msgstr ""
 "Bereit\n"
 "machen"
 
-#: src/widgets/screencircletask.py:232
+#: src/widgets/screencircletask.py:231
 msgid "FINISHED"
 msgstr "FERTIG"
 
-#: src/widgets/screencircletask.py:280
+#: src/widgets/screencircletask.py:279
 msgid ""
 "Please read instructions again carefully and perform task accordingly.\n"
 "Aborting Session..."
@@ -794,7 +794,7 @@ msgstr ""
 "die Aufgabe entsprechend aus.\n"
 "Sitzung wird abgebrochen ..."
 
-#: src/widgets/screencircletask.py:303
+#: src/widgets/screencircletask.py:302
 msgid ""
 "If the task was too difficult for you, go back and start over to practice "
 "some more.\n"
@@ -806,7 +806,7 @@ msgstr ""
 "Sie können auch die Anzahl der Übungsdurchgänge in den Einstellungen "
 "erhöhen, sollten Sie dies wirklich benötigen."
 
-#: src/widgets/screencircletask.py:305
+#: src/widgets/screencircletask.py:304
 msgid "Info"
 msgstr "Info"
 
@@ -1157,40 +1157,45 @@ msgstr "[color=ff00ff][b]Vielen Dank[/b][/color] für Ihre Teilnahme!"
 
 #: src/widgets/screensgeneral.py:61
 msgid ""
-"You can now [b]upload[/b] the research data by pressing the button below. By "
-"uploading the data you are making an important contribution to scientific "
-"research.Unless stated otherwise in the study's description we'd appreciate "
-"if you only upload your data the first time you participated in this study. "
-"Thank you.\n"
+"You can now [b]upload[/b] the research data by pressing the button below. "
+"This may take up to [i]30 seconds[/i], because the receiving server may have "
+"to start up first. By uploading the data you are making an important "
+"contribution to scientific research.Unless stated otherwise in the study's "
+"description we'd appreciate if you only upload your data the first time you "
+"participated in this study. Thank you.\n"
 msgstr ""
 "Sie können nun die Forschungsdaten [b]hochladen[/b], indem Sie die "
-"Schaltfläche unten drücken. Mit dem Hochladen der Daten leisten Sie einen "
-"wichtigen Beitrag zur wissenschaftlichen Forschung. Sofern in der "
-"Beschreibung der Studie nicht anders angegeben, wären wir Ihnen dankbar, "
-"wenn Sie Ihre Daten nur nach Ihrer ersten Teilnahme an dieser Studie "
-"hochladen. Vielen Dank.\n"
+"Schaltfläche unten drücken. Dies kann bis zu [i]30 Sekunden[/i] dauern, da "
+"der Empfangsserver möglicherweise erst gestartet werden muss. Mit dem "
+"Hochladen der Daten leisten Sie einen wichtigen Beitrag zur "
+"wissenschaftlichen Forschung. Sofern in der Beschreibung der Studie nicht "
+"anders angegeben, wären wir Ihnen dankbar, wenn Sie Ihre Daten nur nach "
+"Ihrer ersten Teilnahme an dieser Studie hochladen. Vielen Dank.\n"
 
-#: src/widgets/screensgeneral.py:69
+#: src/widgets/screensgeneral.py:70
 msgid "Files were{} saved to [i]{}[/i].\n"
 msgstr "Daten wurden {}gespeichert in [i]{}[/i].\n"
 
-#: src/widgets/screensgeneral.py:69
+#: src/widgets/screensgeneral.py:70
 msgid " [b]not[/b]"
 msgstr " [b]nicht[/b]"
 
-#: src/widgets/screensgeneral.py:71
+#: src/widgets/screensgeneral.py:72
 msgid ""
 "Research data were [b]not[/b] locally stored as files. You can enable "
-"storing research data on the device in the settings.\n"
+"storing research data on the device in the settings. This, however, is only "
+"useful to researchers in a laboratory setting with access to the files.\n"
 msgstr ""
 "Die Forschungsdaten wurden [b]nicht[/b] lokal gespeichert. Sie können das "
-"Speichern der Daten auf dem Gerät in den Einstellungen aktivieren.\n"
+"Speichern der Daten auf dem Gerät in den Einstellungen aktivieren. Dies ist "
+"jedoch nur nützlich für Forschende in einer Laborumgebung mit Zugriff auf "
+"die Dateien.\n"
 
-#: src/widgets/screensgeneral.py:77
+#: src/widgets/screensgeneral.py:79
 msgid "Uploading..."
 msgstr "Hochladen..."
 
-#: src/widgets/screensgeneral.py:77
+#: src/widgets/screensgeneral.py:79
 msgid ""
 "Waking up server.\n"
 "Please be patient."

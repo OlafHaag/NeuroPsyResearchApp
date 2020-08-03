@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-07-30 00:19+0200\n"
-"PO-Revision-Date: 2020-07-30 00:19+0200\n"
+"POT-Creation-Date: 2020-08-02 17:52+0200\n"
+"PO-Revision-Date: 2020-08-02 17:53+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: en\n"
@@ -617,29 +617,29 @@ msgstr ""
 msgid "CLOSE"
 msgstr ""
 
-#: src/widgets/screencircletask.py:24 src/widgets/screencircletask.py:180
+#: src/widgets/screencircletask.py:23 src/widgets/screencircletask.py:179
 msgid "Trial: "
 msgstr ""
 
-#: src/widgets/screencircletask.py:120
+#: src/widgets/screencircletask.py:119
 msgid "PREPARE"
 msgstr ""
 
-#: src/widgets/screencircletask.py:200
+#: src/widgets/screencircletask.py:199
 msgid "GET READY"
 msgstr ""
 
-#: src/widgets/screencircletask.py:232
+#: src/widgets/screencircletask.py:231
 msgid "FINISHED"
 msgstr ""
 
-#: src/widgets/screencircletask.py:280
+#: src/widgets/screencircletask.py:279
 msgid ""
 "Please read instructions again carefully and perform task accordingly.\n"
 "Aborting Session..."
 msgstr ""
 
-#: src/widgets/screencircletask.py:303
+#: src/widgets/screencircletask.py:302
 msgid ""
 "If the task was too difficult for you, go back and start over to practice "
 "some more.\n"
@@ -647,7 +647,7 @@ msgid ""
 "really need to."
 msgstr ""
 
-#: src/widgets/screencircletask.py:305
+#: src/widgets/screencircletask.py:304
 msgid "Info"
 msgstr ""
 
@@ -792,13 +792,14 @@ msgid ""
 "make the [b]white disk[/b] touch the [color=008000]green ring[/color] "
 "accurately. Please perform the task in a continuous motion and let go of the "
 "sliders when you think you reached the goal. The sliders are deactivated "
-"once you let go of them, so take care not to lose touch to them by accident."
+"once you let go of them, so take care not to lose touch to them by accident "
+"beforehand."
 msgstr ""
 
 #: src/widgets/screeninstructions.py:85
 msgid ""
 "In addition you'll have to fulfill another task concurrently to the first "
-"task.On the top of the [color=008000]green ring[/color] there's a short "
+"task. On the top of the [color=008000]green ring[/color] there's a short "
 "[color=3f84f2]colored arch[/color] as well as a marker of the same color "
 "some distance apart. One of the sliders is also marked by the same color. "
 "Moving this [color=3f84f2]colored slider[/color] upwards now also increases "
@@ -820,7 +821,7 @@ msgid ""
 "of the respective [color=3f84f2]same colored arch[/color] in addition to "
 "increasing the radius of the [b]white disk[/b]. You have to make both "
 "[color=3f84f2]colored archs[/color] reach the small [color=3f84f2]colored "
-"marker[/color] and not further.  Accomplish all tasks at the same time!"
+"marker[/color] and not further. Accomplish all tasks at the same time!"
 msgstr ""
 
 #: src/widgets/screeninstructions.py:108
@@ -879,32 +880,34 @@ msgstr ""
 
 #: src/widgets/screensgeneral.py:61
 msgid ""
-"You can now [b]upload[/b] the research data by pressing the button below. By "
-"uploading the data you are making an important contribution to scientific "
-"research.Unless stated otherwise in the study's description we'd appreciate "
-"if you only upload your data the first time you participated in this study. "
-"Thank you.\n"
+"You can now [b]upload[/b] the research data by pressing the button below. "
+"This may take up to [i]30 seconds[/i], because the receiving server may have "
+"to start up first. By uploading the data you are making an important "
+"contribution to scientific research.Unless stated otherwise in the study's "
+"description we'd appreciate if you only upload your data the first time you "
+"participated in this study. Thank you.\n"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:69
+#: src/widgets/screensgeneral.py:70
 msgid "Files were{} saved to [i]{}[/i].\n"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:69
+#: src/widgets/screensgeneral.py:70
 msgid " [b]not[/b]"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:71
+#: src/widgets/screensgeneral.py:72
 msgid ""
 "Research data were [b]not[/b] locally stored as files. You can enable "
-"storing research data on the device in the settings.\n"
+"storing research data on the device in the settings. This, however, is only "
+"useful to researchers in a laboratory setting with access to the files.\n"
 msgstr ""
 
-#: src/widgets/screensgeneral.py:77
+#: src/widgets/screensgeneral.py:79
 msgid "Uploading..."
 msgstr ""
 
-#: src/widgets/screensgeneral.py:77
+#: src/widgets/screensgeneral.py:79
 msgid ""
 "Waking up server.\n"
 "Please be patient."

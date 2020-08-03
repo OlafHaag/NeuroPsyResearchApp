@@ -58,7 +58,8 @@ class ScreenOutro(BaseScreen):
     def _set_msg(self):
         self.msg = _('[color=ff00ff][b]Thank you[/b][/color] for participating!') + "\n\n"
         if self.upload_btn_enabled:
-            self.msg += _("You can now [b]upload[/b] the research data by pressing the button below. "
+            self.msg += _("You can now [b]upload[/b] the research data by pressing the button below. This may take up "
+                          "to [i]30 seconds[/i], because the receiving server may have to start up first. "
                           "By uploading the data you are making an important contribution to scientific research."
                           "Unless stated otherwise in the study's description we'd appreciate if you only upload "
                           "your data the first time you participated in this study. Thank you.\n")
@@ -69,7 +70,8 @@ class ScreenOutro(BaseScreen):
             self.msg += _("Files were{} saved to [i]{}[/i].\n").format('' if dest.exists() else _(' [b]not[/b]'), dest)
         else:
             self.msg += _("Research data were [b]not[/b] locally stored as files. "
-                          "You can enable storing research data on the device in the settings.\n")
+                          "You can enable storing research data on the device in the settings. This, however, is only "
+                          "useful to researchers in a laboratory setting with access to the files.\n")
         
     def on_upload(self):
         # Show we're busy. Heroku dyno sleeps so it can take some time for the response.

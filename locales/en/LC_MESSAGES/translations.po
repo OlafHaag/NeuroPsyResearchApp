@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NeuroPsyResearch\n"
-"POT-Creation-Date: 2020-08-02 17:52+0200\n"
-"PO-Revision-Date: 2020-08-02 17:53+0200\n"
+"POT-Creation-Date: 2020-08-09 00:58+0200\n"
+"PO-Revision-Date: 2020-08-09 00:58+0200\n"
 "Last-Translator: Olaf Haag <contact@olafhaag.com>\n"
 "Language-Team: contact@olafhaag.com\n"
 "Language: en\n"
@@ -119,7 +119,7 @@ msgstr ""
 msgid "Available Studies"
 msgstr ""
 
-#: src/widgets/screensgeneral.kv:70 src/app.py:106
+#: src/widgets/screensgeneral.kv:70 src/app.py:107
 msgid "Circle Task"
 msgstr ""
 
@@ -245,49 +245,49 @@ msgid ""
 "**Last Updated:** July 29th 2020\n"
 msgstr ""
 
-#: src/app.py:103
+#: src/app.py:104
 msgid "General"
 msgstr ""
 
-#: src/datamanager.py:242
+#: src/datamanager.py:260
 msgid ""
 "Unable to write to file:\n"
 "{}\n"
 "Unknown data format."
 msgstr ""
 
-#: src/datamanager.py:259 src/datamanager.py:291
+#: src/datamanager.py:277 src/datamanager.py:309
 msgid "KeyError in Meta Data."
 msgstr ""
 
-#: src/datamanager.py:270
+#: src/datamanager.py:288
 msgid ""
 "Data missing.\n"
 "Failed to write\n"
 "{}."
 msgstr ""
 
-#: src/datamanager.py:316
+#: src/datamanager.py:334
 msgid "ERROR: Server not reachable:"
 msgstr ""
 
-#: src/datamanager.py:318
+#: src/datamanager.py:336
 msgid "ERROR: There was an error processing the upload."
 msgstr ""
 
-#: src/datamanager.py:334 src/datamanager.py:346
+#: src/datamanager.py:352 src/datamanager.py:364
 msgid "ERROR: There was an unexpected error during upload."
 msgstr ""
 
-#: src/datamanager.py:359 src/datamanager.py:360
+#: src/datamanager.py:377 src/datamanager.py:378
 msgid "ERROR"
 msgstr ""
 
-#: src/datamanager.py:396
+#: src/datamanager.py:415
 msgid "Permission to access Internet denied."
 msgstr ""
 
-#: src/datamanager.py:402
+#: src/datamanager.py:421
 msgid ""
 "Disclaimer:\n"
 "By submitting this e-mail you agree to the data processing and evaluation "
@@ -651,17 +651,17 @@ msgstr ""
 msgid "Info"
 msgstr ""
 
-#: src/widgets/screenconsents.py:52
+#: src/widgets/screenconsents.py:61
 msgid "Consent"
 msgstr ""
 
-#: src/widgets/screenconsents.py:53
+#: src/widgets/screenconsents.py:62
 msgid ""
 "Please read the following information carefully before proceeding.Use "
 "scrolling to go through the text to the end."
 msgstr ""
 
-#: src/widgets/screenconsents.py:56
+#: src/widgets/screenconsents.py:65
 msgid ""
 "[b]Explanation of the study:[/b]\n"
 "We are very pleased that you are interested in participating in our study. "
@@ -678,12 +678,22 @@ msgid ""
 "when performing the tasks."
 msgstr ""
 
-#: src/widgets/screenconsents.py:69
+#: src/widgets/screenconsents.py:78
 #, python-brace-format
-msgid "The study will take approximately {0} minutes to complete."
+msgid "The study will take approximately {0} minutes to complete. "
 msgstr ""
 
-#: src/widgets/screenconsents.py:71
+#: src/widgets/screenconsents.py:80
+#, python-brace-format
+msgid "First, you will practice the tasks in {0} blocks. "
+msgstr ""
+
+#: src/widgets/screenconsents.py:81
+#, python-brace-format
+msgid "There will be {0} blocks to test your performance. "
+msgstr ""
+
+#: src/widgets/screenconsents.py:83
 msgid ""
 "[b]Voluntary Participation:[/b]\n"
 "Participation in the study is voluntary. You can revoke your consent to "
@@ -699,14 +709,14 @@ msgid ""
 "study."
 msgstr ""
 
-#: src/widgets/screenconsents.py:85
+#: src/widgets/screenconsents.py:97
 msgid ""
 "Please review the [ref=privacy][color=0000ff]Privacy Policy (press here)[/"
 "color][/ref] carefully for information on what kind of data we collect and "
 "how we intend to use them."
 msgstr ""
 
-#: src/widgets/screenconsents.py:90
+#: src/widgets/screenconsents.py:102
 #, python-brace-format
 msgid ""
 "If you have any questions regarding this study, please direct them to the "
@@ -727,7 +737,7 @@ msgid ""
 "[ref=mailto:{1}][color=0000ff]{1}[/color][/ref]"
 msgstr ""
 
-#: src/widgets/screenconsents.py:105
+#: src/widgets/screenconsents.py:117
 msgid ""
 "I hereby confirm that I have read and understood the participation "
 "information described above as well as the [ref=privacy]"
@@ -736,11 +746,12 @@ msgid ""
 msgstr ""
 
 #: src/widgets/screeninstructions.py:34
-msgid "{}. Practice Block"
+msgid "{}. Practice Block (of 2)"
 msgstr ""
 
 #: src/widgets/screeninstructions.py:37
-msgid "{}. Testing Block"
+#, python-brace-format
+msgid "{0}. Testing Block (of {1})"
 msgstr ""
 
 #: src/widgets/screeninstructions.py:47

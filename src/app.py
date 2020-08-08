@@ -27,6 +27,7 @@ class NeuroPsyResearchApp(MDApp):
         """ Initializes the application; it will be called only once.
         If this method returns a widget (tree), it will be used as the root widget and added to the window.
         """
+        self.title = get_app_details()['appname']
         # Theme.
         self.icon = 'res/icons/mipmap-xxhdpi/npsy-icon.png'
         self.theme_cls.theme_style = "Light"

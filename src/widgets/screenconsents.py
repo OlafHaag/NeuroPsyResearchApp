@@ -9,6 +9,7 @@ from ..utility import get_app_details
 
 
 class ConsentLabel(MDLabel):
+    """ Class with Pre-defined label style. Style defined in KV language. """
     pass
 
 
@@ -47,6 +48,14 @@ class ScreenConsentCircleTask(BaseScreen):
         duration = int(duration)  # Round.
         return duration
     
+    def get_n_blocks(self):
+        """ Get number of blocks for practice and tests. """
+        app = App.get_running_app()
+        s = app.settings.circle_task
+        n_practice = 2 * bool(s.n_practice_trials)
+        n_tests = s.n_blocks
+        return n_practice, n_tests
+        
     def on_pre_enter(self, *args):
         """ Setup information screen before we see it. """
         self.title = _("Consent")
@@ -66,7 +75,10 @@ class ScreenConsentCircleTask(BaseScreen):
                         "beforehand. No particular stress or even risks are to be expected when performing the "
                         "tasks.")
                              
-        duration_msg = _("The study will take approximately {0} minutes to complete.").format(self.get_duration())
+        duration_msg = _("The study will take approximately {0} minutes to complete. ").format(self.get_duration())
+        n_practice, n_tests = self.get_n_blocks()
+        duration_msg += _("First, you will practice the tasks in {0} blocks. ").format(n_practice) * bool(n_practice)
+        duration_msg += _("There will be {0} blocks to test your performance. ").format(n_tests)
 
         voluntariness = _("[b]Voluntary Participation:[/b]\n"
                           "Participation in the study is voluntary. "

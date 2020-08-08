@@ -31,10 +31,10 @@ class ScreenInstructCircleTask(BaseScreen):
         """ Set the title for this block. """
         ct = self.settings.circle_task
         if ct.practice_block:
-            title = _("{}. Practice Block").format(ct.practice_block)
+            title = _("{}. Practice Block (of 2)").format(ct.practice_block)
         else:
             block = (self.settings.current_block - bool(ct.n_practice_trials) * 2)
-            title = _("{}. Testing Block").format(block)
+            title = _("{0}. Testing Block (of {1})").format(block, ct.n_blocks)
         return title
     
     def _set_intro_height(self):

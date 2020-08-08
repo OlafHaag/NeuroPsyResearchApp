@@ -42,7 +42,6 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         self.app = App.get_running_app()
         # Containers for data.
         self._data = list()  # type: List[dict]
-        self._data_email = list()
         self.is_invalid = False
         # For which user to collect data. Set after given consent.
         self._user_id = ''
@@ -68,7 +67,6 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
     def clear_data_collection(self):
         """ Clear data. """
         self._data.clear()
-        self._data_email.clear()
         self.is_invalid = False
         self.is_data_sent = False
         self.is_data_saved = False
@@ -92,10 +90,6 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         # Data for storage and upload.
         data = np.array([props[k] for k in columns]).reshape((1, len(columns)))
         self.add_data(columns, data, meta_data, fmt='%s')
-    
-        # Data for e-mail.
-        meta_data_email = meta_data.copy()
-        self.add_data_email(props, meta_data_email)
     
     def get_device_data(self):
         """ Acquire properties of the device in use. """
@@ -136,8 +130,6 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         data = data.reshape((1, len(columns)))
         
         self.add_data(columns, data, meta_data, fmt='%s')
-        # Data for e-mail.
-        self.add_data_email([columns] + [data], meta_data.copy())
         
     def add_data(self, columns, data, meta_data, fmt='%s'):
         """ Adds a data set to current collection.
@@ -155,10 +147,36 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
         meta_data['data'] = self._data2bytes(data, header=header, fmt=fmt)
         self._data.append(meta_data)
 
-    def add_data_email(self, data, meta_data):
-        meta_data['data'] = pickle.dumps(data)
-        self._data_email.append(meta_data)
-    
+    def load_email_data(self, data):
+        """ After receiving an e-mail, parse the received text after ### Data ###.
+        There's no UI yet implemented for this. So use as follows:
+        
+        - Run in debug mode.
+        
+        - Set break point at convenient line, e.g. in navigation 'on_home'.
+        
+        - Cause break, e.g. clock on 'home' in sidebar menu.
+        
+        - Copy e-mail content to clipboard.
+        
+        - In debug console enter:
+        
+            > from kivy.app import App  # If not already imported.
+            
+            > app = App.get_running_app()
+            
+            > mgr = app.data_mgr
+            
+            > mgr.load_email_data(b'...')  # Paste the copied data.
+            
+            > mgr.upload_data(app.get_upload_route() + '/circletask/_dash-update-component')
+            
+         
+        :param data: E-mail content following ### Data ###. Don't encapsulate in quotes, it's a pickled bytes object.
+        :type data: bytes
+        """
+        self._data = pickle.loads(data)
+        
     # ## Data Local Storage ## #
     def get_storage_path(self):
         """ Return path we want to save data to.
@@ -375,6 +393,7 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
             self.is_data_sent = status
             # Inform any listeners about the result.
             self.dispatch('on_data_upload', status, res_msg)
+            return status, res_msg
 
     def _on_internet_permission_request(self, permissions, grant_results):
         """ Callback receiving results of permission request.
@@ -411,9 +430,8 @@ class DataManager(Widget):  # Inherit from Widget so we can dispatch events.
                        "or sensitive information that could be used to identify you.\n")
     
         text = "\n\n### Data ###\n\n"
-        for d in self._data_email:
-            text += "\n".join(k + ": " + str(v) for k, v in d.items())
-            text += "\n\n"
+        # Dump everything as 1 big chunk.
+        text += str(pickle.dumps(self._data))
     
         create_chooser = True
         plyer.email.send(recipient=recipient, subject=subject, text=disclaimer + text, create_chooser=create_chooser)

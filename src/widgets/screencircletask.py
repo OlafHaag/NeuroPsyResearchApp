@@ -378,10 +378,9 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
         self.meta_data['columns'] = ['df1', 'df2', 'df1_grab', 'df1_release', 'df2_grab', 'df2_release']
     
     def add_data_to_manager(self):
-        """ Add data to be written or uploaded to data manager. """
+        """ Add trials data to be written or uploaded to data manager. """
         app = App.get_running_app()
         app.data_mgr.add_data(self.meta_data['columns'], self.data, self.meta_data.copy())
-        app.data_mgr.add_data_email(self.data, self.meta_data.copy())
     
     def add_block_to_session(self):
         """ Collects meta data about the current block. """
@@ -410,7 +409,6 @@ class ScreenCircleTask(BackgroundColorBehavior, BaseScreen):
                    'rating']
         app = App.get_running_app()
         app.data_mgr.add_data(columns, data, meta_data)
-        app.data_mgr.add_data_email([columns] + self.session_data, meta_data.copy())
     
     def clear_data(self):
         """ Clear data for the next session. """

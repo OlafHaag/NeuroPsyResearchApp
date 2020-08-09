@@ -1,6 +1,9 @@
 # NeuroPsy Research App
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+
+<a href='https://play.google.com/store/apps/details?id=com.olafhaag.neuropsyresearch&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
+
 This app should serve as a starting point for neuropsychological research on mobile devices.  
 The necessity for conducting research outside of a laboratory became more paramount during the COVID-19 pandemic when 
 face-to-face contact was restricted as a safety measure.
@@ -42,11 +45,15 @@ Todorov, Emmanuel (2004). "Optimality principles in sensorimotor control". Natur
 
 
 ## Installation
+- Available on Google Play: https://play.google.com/store/apps/details?id=com.olafhaag.neuropsyresearch  
+OR 
 - compile using buildozer
 - Install apk to Android device
-
 
 ## Translation
 - Use PoEdit to extract strings wrapped in _("...") function calls.
 - In PoEdit add a new extractor for the kivy language files.
 - To export the Terms of Use and Privacy Policy to markdown files for all translated languages, run the terms.py and privacypolicy.py files respectively.
+
+## Legal attribution
+Google Play and the Google Play logo are trademarks of Google LLC.
